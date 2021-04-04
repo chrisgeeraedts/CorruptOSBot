@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29123.88
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot", "CorruptOSBot\CorruptOSBot.csproj", "{B8029EA2-E30C-45AD-BB9F-87FE190B79CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8029EA2-E30C-45AD-BB9F-87FE190B79CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8029EA2-E30C-45AD-BB9F-87FE190B79CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8029EA2-E30C-45AD-BB9F-87FE190B79CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8029EA2-E30C-45AD-BB9F-87FE190B79CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {88466010-5BC3-410F-87B0-EB68A0E0892C}
+	EndGlobalSection
+EndGlobal
