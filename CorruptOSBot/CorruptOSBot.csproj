@@ -86,22 +86,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\EventManager.cs" />
     <Compile Include="Extensions\WOM\Clan.cs" />
+    <Compile Include="Extensions\WOM\ClanMemberDetails\ClanMemberDetails.cs" />
     <Compile Include="Extensions\WOM\Competition.cs" />
     <Compile Include="Extensions\WOM\Participation.cs" />
     <Compile Include="Extensions\WOM\TeamCompParticipation.cs" />
     <Compile Include="Extensions\WOM\WiseOldManClient.cs" />
+    <Compile Include="Helpers\ChannelHelper.cs" />
+    <Compile Include="Helpers\CommandHelper.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\EmbedHelper.cs" />
+    <Compile Include="Interceptors\InterceptorFunctions.cs" />
     <Compile Include="Modules\AdminModule.cs" />
     <Compile Include="Modules\HelpModule.cs" />
-    <Compile Include="Modules\InviteModule.cs" />
     <Compile Include="Modules\KcModule.cs" />
+    <Compile Include="Modules\PVMModule.cs" />
     <Compile Include="Modules\RSNModule.cs" />
     <Compile Include="Modules\ScoreModule.cs" />
     <Compile Include="Modules\TestModule.cs" />
     <Compile Include="Modules\WoMModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\PVMRoleService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

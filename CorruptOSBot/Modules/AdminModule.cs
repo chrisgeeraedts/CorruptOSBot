@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using CorruptOSBot.Helpers;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Threading.Tasks;
@@ -10,28 +11,33 @@ namespace CorruptOSBot.Modules
     {
         [Command("poll")]
         [Summary("(your question) - Creates a yes/no poll.")]
-        public Task SayPollAsync(string playerName)
-            => ReplyAsync("Placeholder for [poll] content");
+        public async Task SayPollAsync([Remainder]string pollquestion)
+        {
+            string title = string.Format("{0} has started a poll", (Context.User).Username);
+            string description = pollquestion;
+
+            // Post the poll
+            var sent = await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultPollEmbed(title, description));
+            
+            // Add thumbs up emoji
+            var emojiUp = new Emoji("\uD83D\uDC4D");
+            await sent.AddReactionAsync(emojiUp);
+
+            // Add thumbs down emoji
+            var emojiDown = new Emoji("\uD83D\uDC4E");
+            await sent.AddReactionAsync(emojiDown);
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
 
 
         [Command("clear")]
         [Summary("(number) - Clears posts above it.")]
-        public Task SayClearAsync(int number)
-            => ReplyAsync("Placeholder for [clear] content");
-
-
-        [Command("whois")]
-        [Summary("@member - Gives detailed info on a member in the server")]
-        public async Task SayWhoisAsync(SocketUser user = null)
+        public async Task SayClearAsync(int number)
         {
-            var userInfo = user ?? Context.Client.CurrentUser;
-            await ReplyAsync($"{userInfo.Username}#{userInfo.Discriminator}");
+            var messages = await Context.Channel.GetMessagesAsync(number).FlattenAsync();
+            await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
         }
-
-
-        [Command("info")]
-        [Summary("Displays information about the server/bot")]
-        public Task SayInfoAsync()
-            => ReplyAsync("Placeholder for [whois] content");
     }
 }

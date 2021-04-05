@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -35,6 +36,7 @@ namespace CorruptOSBot.Extensions
             }
             return product;
         }
+
 
         public void AddCompParticipant(Competition competition, Participation participation)
         {
@@ -132,6 +134,44 @@ namespace CorruptOSBot.Extensions
             }
             return product;
         }
+
+        public List<ClanMember> GetClanMembers(int clanId)
+        {
+            List<ClanMember> clanMembers = null;
+            HttpResponseMessage response = client.GetAsync(path + string.Format("/groups/{0}/members", clanId)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                clanMembers = JsonConvert.DeserializeObject<List<ClanMember>>(result);
+            }
+            return clanMembers;
+        }
+
+
+        internal ClanMemberDetail GetPlayerDetails(int id)
+        {
+            ClanMemberDetail clanMemberDetail = null;
+            HttpResponseMessage response = client.GetAsync(path + string.Format("/players/{0}", id)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                clanMemberDetail = JsonConvert.DeserializeObject<ClanMemberDetail>(result);
+            }
+            return clanMemberDetail;
+        }
+
+
+        public List<Achievement> GetAchievements(int id)
+        {
+            List<Achievement> achievements = null;
+            HttpResponseMessage response = client.GetAsync(path + string.Format("/players/{0}/achievements", clanId)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                achievements = JsonConvert.DeserializeObject<List<Achievement>>(result);
+            }
+            return achievements;
+        }
     }
 
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
@@ -154,6 +194,36 @@ namespace CorruptOSBot.Extensions
         public string newName { get; set; }
     }
 
+    public class ClanMember
+    {
+        public int exp { get; set; }
+        public int id { get; set; }
+        public string username { get; set; }
+        public string displayName { get; set; }
+        public string type { get; set; }
+        public string build { get; set; }
+        public string country { get; set; }
+        public bool flagged { get; set; }
+        public double ehp { get; set; }
+        public double ehb { get; set; }
+        public double ttm { get; set; }
+        public double tt200m { get; set; }
+        public DateTime? lastImportedAt { get; set; }
+        public DateTime? lastChangedAt { get; set; }
+        public DateTime registeredAt { get; set; }
+        public DateTime updatedAt { get; set; }
+        public string role { get; set; }
+        public DateTime joinedAt { get; set; }
+    }
 
-
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class Achievement
+    {
+        public int threshold { get; set; }
+        public int playerId { get; set; }
+        public string name { get; set; }
+        public string metric { get; set; }
+        public DateTime createdAt { get; set; }
+        public string measure { get; set; }
+    }
 }

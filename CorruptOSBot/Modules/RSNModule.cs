@@ -11,7 +11,7 @@ namespace CorruptOSBot.Modules
     public class RSNModule : ModuleBase<SocketCommandContext>
     {
         [Command("rsn")]
-        [Summary("(your new name) - changes your nickname in the server.")]
+        [Summary("!rns [your new name] - changes your nickname in the server.")]
         public async Task SayRSNAsync(string username)
         {
 
@@ -32,8 +32,6 @@ namespace CorruptOSBot.Modules
             {
                 await NameChangeMember(currentUser, preferedNickname);
             }
-            
-
         }
 
         private async Task NameChangeMember(SocketUser currentUser, string preferedNickname)
@@ -47,9 +45,9 @@ namespace CorruptOSBot.Modules
             });
 
             // post to recruiting channel
-            var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == 827967957371060264);
+            var recruitingChannel =  Context.Guild.Channels.FirstOrDefault(x => x.Id == 827967957371060264);
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member name change",
-                string.Format("{0} has changed their name to <@{1}>", previousName, preferedNickname)));
+                string.Format("{0} has changed their name to <@{1}>", previousName, ((SocketGuildUser)currentUser).Id)));
 
             // update WOM
             new WiseOldManClient().PostNameChange(previousName, preferedNickname);

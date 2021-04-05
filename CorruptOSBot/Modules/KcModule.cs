@@ -12,7 +12,7 @@ namespace CorruptOSBot.Modules
 
         [Command("mykc")]
         [Summary("Generates your own KC.")]
-        public Task SayMyKcAsync(string playerName)
+        public Task SayMyKcAsync()
         => ReplyAsync("Placeholder for [mykc] content");
 
     }

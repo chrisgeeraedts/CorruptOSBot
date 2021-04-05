@@ -8,8 +8,16 @@ namespace CorruptOSBot.Modules
     {
         [Command("score")]
         [Summary("Generates a leaderboard for the current SOTW event.")]
-        public Task SayScoreAsync()
-            => ReplyAsync("Placeholder for [score] content");
+        public async Task SayScoreAsync()
+        {
+            // load current event
+
+
+
+            await ReplyAsync("Placeholder for [score] content");
+
+        }
+
 
 
 

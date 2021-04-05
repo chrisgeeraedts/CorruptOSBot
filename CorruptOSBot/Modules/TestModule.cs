@@ -10,69 +10,70 @@ namespace CorruptOSBot.Modules
 {
     public class TestModule : ModuleBase<SocketCommandContext>
     {
+        [Command("channelId")]
+        [Summary("channelId")]
+        public async Task SaychannelIdAsync()
+        {
+            var channel = Context.Channel.Id.ToString();
+
+            await ReplyAsync(channel);
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+
+        [Command("guildid")]
+        [Summary("guildid")]
+        public async Task SayguildidAsync()
+        {
+            var channel = Context.Guild.Id.ToString();
+
+            await ReplyAsync(channel);
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+
+
         [Command("test")]
         [Summary("test")]
-        public async Task SayTestAsync()
+        public async Task SayTestAsync(string testmessage)
         {
-            //await ReplyAsync(embed: EmbedHelper.CreateDefaultEmbed("testTitle", "http://wwww.google.com"));
-
-            Clan clan = new WiseOldManClient().GetClan(128);
-
-            //Competition comp =
-            //    new WiseOldManClient().GetCompetitions(2085);
+            // post to general channel
+            var channelId = ChannelHelper.GetChannelId("general");
+            var generalChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == channelId);
+            await ((IMessageChannel)generalChannel).SendMessageAsync("test to recruitment with channel logic enabled");
 
 
-            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(clan.name, 
-                "https://wiseoldman.net/groups/128",
-                new System.Collections.Generic.Dictionary<string, string> {
-                { "description (from WOM)",clan.description},
-                { "homeworld (from WOM)" ,clan.homeworld.ToString()},
-                { "members (from WOM)" ,clan.memberCount.ToString()},
-                }));
+            var channel2Id = ChannelHelper.GetChannelId("recruiting");
+            var recruitmentChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == channel2Id);
+            await ((IMessageChannel)recruitmentChannel).SendMessageAsync("test to general with channel logic enabled");
+
+
+
+            //await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("title", testmessage));
         }
 
-        [Command("setrank")]
-        [Summary("setrank")]
-        public async Task SaySetRankAsync(Discord.IGuildUser user)
+   
+        public void foo()
         {
-            var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == "Smiley");
-            if (role != null && user != null)
-            {
-                await user.AddRoleAsync(role);
-                await ReplyAsync("Role " + role + " added to " + user.Username);
-            }
-        }
+            ////await ReplyAsync(embed: EmbedHelper.CreateDefaultEmbed("testTitle", "http://wwww.google.com"));
 
-        [Command("testRSN")]
-        [Summary("testRSN")]
-        public async Task SaySetRank2Async(string username)
-        {
-            
-           
-        }
+            //Clan clan = new WiseOldManClient().GetClan(128);
+
+            ////Competition comp =
+            ////    new WiseOldManClient().GetCompetitions(2085);
 
 
-        [Command("getrank")]
-        [Summary("getrank")]
-        public async Task SayGetRankAsync(Discord.IGuildUser user)
-        {
-            //var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == "Smiley");
-
-
-
-            // get roles of mentioned player
-            string result = string.Empty;
-            foreach (var item in ((SocketGuildUser)user).Roles)
-            {
-                if (!item.Name.StartsWith("@"))
-                {
-                    result += item.Name + ";";
-                }
-            }
-            
-
-            await Context.Channel.SendMessageAsync(result);
-
+            //await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(clan.name,
+            //    "https://wiseoldman.net/groups/128",
+            //    new System.Collections.Generic.Dictionary<string, string> {
+            //    { "description (from WOM)",clan.description},
+            //    { "homeworld (from WOM)" ,clan.homeworld.ToString()},
+            //    { "members (from WOM)" ,clan.memberCount.ToString()},
+            //    }));
         }
     }
 }
