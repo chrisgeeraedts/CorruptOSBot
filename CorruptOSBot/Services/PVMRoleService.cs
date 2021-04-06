@@ -9,12 +9,14 @@ namespace CorruptOSBot.Services
 {
     public class PVMRoleService : IService
     {
-        public int TriggerTimeInMS { get => 60000; }
+        public int TriggerTimeInMS { get => 1000 * 60 * 5; }
+        private int _triggerTimeInMS;
         private ulong GuildId;
 
 
         public PVMRoleService(Discord.IDiscordClient client)
         {
+            Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: created, trigering every" + _triggerTimeInMS + "MS"));
             GuildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
         }
 
@@ -22,7 +24,7 @@ namespace CorruptOSBot.Services
         {
             if (RootAdminManager.GetToggleState(nameof(PVMRoleService)))
             {
-                Console.WriteLine("PVMRoleService: triggered");
+                Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: triggered"));
 
                 try
                 {
@@ -31,8 +33,7 @@ namespace CorruptOSBot.Services
 
                     // Get all players in WOM
                     var clanMembers = WomClient.GetClanMembers(128);
-
-                    Console.WriteLine("PVMRoleService: Loaded clanmembers");
+                    Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Loaded clanmembers"));
 
                     // iterate through all discord users
                     var allUsers = guild.GetUsersAsync().Result;
@@ -45,7 +46,7 @@ namespace CorruptOSBot.Services
                             // Per WOM player, get the boss kc
                             var details = WomClient.GetPlayerDetails(clanMemberWom.id);
 
-                            Console.WriteLine("PVMRoleService: Loaded details for :" + details.displayName);
+                            Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Loaded details for :" + details.displayName));
 
                             // check if role change is needed
                             if (discordUser != null)
@@ -56,7 +57,7 @@ namespace CorruptOSBot.Services
                                 }
                                 catch (Exception e)
                                 {
-                                    Console.WriteLine("PVMRoleService failed at CoX roles: " + e.Message);
+                                    Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService failed at CoX roles: " + e.Message));
                                 }
 
                                 try
@@ -65,7 +66,7 @@ namespace CorruptOSBot.Services
                                 }
                                 catch (Exception e)
                                 {
-                                    Console.WriteLine("PVMRoleService failed at ToB roles: " + e.Message);
+                                    Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService failed at Tob roles: " + e.Message));
                                 }
 
                                 try
@@ -74,19 +75,19 @@ namespace CorruptOSBot.Services
                                 }
                                 catch (Exception e)
                                 {
-                                    Console.WriteLine("PVMRoleService failed at Nm roles: " + e.Message);
+                                    Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService failed at Nm roles: " + e.Message));
                                 }
-
-
                             }
                         }
                     }
+
+
+                    Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService completed"));
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("PVMRoleService failed: " + e.Message);
+                    Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService failed: " + e.Message));
                 }
-
             }
         }
 
@@ -141,7 +142,5 @@ namespace CorruptOSBot.Services
                 true,
                 false);
         }
-
-       
     }
 }

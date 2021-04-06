@@ -103,7 +103,7 @@ namespace CorruptOSBot
 
         // Example of a logging handler. This can be re-used by addons
         // that ask for a Func<LogMessage, Task>.
-        private static Task Log(LogMessage message)
+        public static Task Log(LogMessage message)
         {
             switch (message.Severity)
             {
@@ -230,22 +230,23 @@ namespace CorruptOSBot
 
         private async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)
         {
-
+            await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("User banned: {0}", arg1.Username)));
         }
 
         private async Task _client_ReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
         {
-            Console.WriteLine(string.Format("{0}: {1}", arg3.Emote.Name, arg3.Emote.ToString()));
+            await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("Reaction: {0}: {1}", arg3.Emote.Name, arg3.Emote.ToString())));
         }
 
         private async Task _client_UserJoined(SocketGuildUser arg)
         {
-            
+            await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("User joined: {0}", arg.Username)));
         }
 
         private async Task _client_UserLeft(SocketGuildUser arg)
         {
             if (arg.IsBot || arg.IsWebhook) return;
+            await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("User left: {0}", arg.Username)));
             await EventManager.LeavingGuild(arg);
         }
 
@@ -262,7 +263,7 @@ namespace CorruptOSBot
 
             try
             {
-                Console.WriteLine(string.Format("{0}: {1}", arg.Author, arg.Content));
+                await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("{0}: {1}", arg.Author, arg.Content)));
             }
             catch (Exception)
             {

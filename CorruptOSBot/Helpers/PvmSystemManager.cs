@@ -47,11 +47,26 @@ namespace CorruptOSBot.Helpers
                     RemoveRole(currentUser, guild, learnerRole);
                     currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.intermediate));
                 }
-                else if (overrideTrigger || (!haslearnerRole && !hasIntermediate && !hasAdvanced))
+                else if ((overrideTrigger && !hasIntermediate && !hasAdvanced) || (!haslearnerRole && !hasIntermediate && !hasAdvanced))
                 {
                     // upgrade role
                     SetRole(currentUser, guild, pvmSet.learner, IntermediateRoleId.Id, pvmSet.imageUrl, false);
                     currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.learner));
+                }
+                else
+                {
+                    if (overrideTrigger && hasAdvanced)
+                    {
+                        currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.advanced));
+                    }
+                    else if (overrideTrigger && hasIntermediate)
+                    {
+                        currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.intermediate));
+                    } else if (overrideTrigger && haslearnerRole)
+                    {
+                        currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.learner));
+                    }
+
                 }
             }
         }
@@ -61,7 +76,8 @@ namespace CorruptOSBot.Helpers
             try
             {
                 currentUser.RemoveRoleAsync(role);
-                Console.WriteLine("PVMRoleService: Removed role for:" + currentUser.Nickname);
+
+                Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Removed role for:" + currentUser.Nickname));
             }
             catch (Exception)
             {
@@ -73,7 +89,7 @@ namespace CorruptOSBot.Helpers
             var role = guild.Roles.FirstOrDefault(x => x.Name == roleName);
             currentUser.AddRoleAsync(role);
             string message = string.Format("<@{0}> just got promoted to <@&{1}>!", currentUser.Id, roleId);
-            Console.WriteLine("PVMRoleService: Updated role for:" + currentUser.Nickname);
+            Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Updated role for:" + currentUser.Nickname));
             if (showMessage)
             {
                 var pvmgeneralChannel = guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("pvm-general"));
