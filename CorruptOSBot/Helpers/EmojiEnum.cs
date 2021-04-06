@@ -1,0 +1,53 @@
+﻿namespace CorruptOSBot.Helpers
+{
+    public enum EmojiEnum
+    {
+        sire,
+        hydra,
+        barrows,
+        bryophyta,
+        callisto,
+        cerb,
+        chamber,
+        chambercm,
+        chaosele,
+        fanatic,
+        sara,
+        corp,
+        prime,
+        rex,
+        supreme,
+        crazyarc,
+        derangedarc,
+        bandos,
+        mole,
+        gargs,
+        hespori,
+        kq,
+        kbd,
+        kraken,
+        kree,
+        kril,
+        mimic,
+        nightmare,
+        obor,
+        sarachnis,
+        scorpia,
+        skotizo,
+        tempor,
+        gaunt,
+        corruptgaunt,
+        tob,
+        thermy,
+        zuk,
+        jad,
+        venny,
+        vetion,
+        vorkath,
+        todt,
+        zalcano,
+        zulrah
+    }
+
+
+}

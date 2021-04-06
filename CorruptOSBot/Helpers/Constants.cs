@@ -13,11 +13,12 @@ namespace CorruptOSBot.Helpers
         public const string NmLearner = "Nightmare Learner";
 
         public const string CoxIntermediate = "CoX Intermediate";
-        public const string CoxAdvanced = "CoX Advanced";
-        public const string NmIntermediate = "Nightmare Intermediate";
-        public const string NmAdvanced = "Nightmare Advanced";
         public const string ToBIntermediate = "ToB Intermediate";
+        public const string NmIntermediate = "Nightmare Intermediate";
+
+        public const string CoxAdvanced = "CoX Advanced";
         public const string ToBAdvanced = "ToB Advanced";
+        public const string NmAdvanced = "Nightmare Advanced";
 
         public const string CoxImage = "https://cdnb.artstation.com/p/assets/images/images/011/329/063/large/j-alexander-legend-arts-olm4k.jpg?1529007874";
         public const string TobImage = "https://i.imgur.com/bAuF9Zu.png";

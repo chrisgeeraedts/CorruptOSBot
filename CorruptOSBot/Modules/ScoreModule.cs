@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Extensions;
+using CorruptOSBot.Helpers;
 using Discord.Commands;
 using System.Threading.Tasks;
 
@@ -10,26 +11,14 @@ namespace CorruptOSBot.Modules
         [Summary("Generates a leaderboard for the current SOTW event.")]
         public async Task SayScoreAsync()
         {
-            // load current event
+            if (RootAdminManager.GetToggleState("score") && RootAdminManager.HasAnyRole(Context.User))
+            {
+                // load current event
 
 
 
-            await ReplyAsync("Placeholder for [score] content");
-
+                await ReplyAsync("Placeholder for [score] content");
+            }
         }
-
-
-
-
-
-
-        //private string GetContent()
-        //{
-        //    Clan clan = new WiseOldManClient().GetClan(128);
-            
-        //    Competition comp =
-        //        new WiseOldManClient().GetCompetitions(2085);
-        //}
-
     }
 }

@@ -1,161 +1,147 @@
 ﻿using CorruptOSBot.Extensions;
 using CorruptOSBot.Helpers;
 using Discord;
-using Discord.WebSocket;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CorruptOSBot.Services
 {
     public class PVMRoleService : IService
     {
-        public int TriggerTimeInMS { get => 300000; }
-        private int intermediateRole = 50;
-        private int advancedRole = 250;
+        public int TriggerTimeInMS { get => 60000; }
         private ulong GuildId;
 
 
         public PVMRoleService(Discord.IDiscordClient client)
         {
-            GuildId = Convert.ToUInt64(ConfigurationManager.AppSettings["GuildId"]);
+            GuildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
         }
 
         public void Trigger(Discord.IDiscordClient client)
         {
-            Console.WriteLine("trigger PVMRoleService");
-
-            var WomClient = new WiseOldManClient();            
-            var guild = client.GetGuildAsync(GuildId).Result;
-
-            // Get all players in WOM
-            var clanMembers = WomClient.GetClanMembers(128);
-
-            // iterate through all discord users
-            var allUsers = guild.GetUsersAsync().Result;
-            foreach (var discordUser in allUsers.Where(x => !string.IsNullOrEmpty(x.Nickname)))
+            if (RootAdminManager.GetToggleState(nameof(PVMRoleService)))
             {
-                var clanMemberWom = clanMembers.FirstOrDefault(x => x.displayName.ToLower() == discordUser.Nickname.ToLower());
+                Console.WriteLine("PVMRoleService: triggered");
 
-                if (clanMemberWom != null)
+                try
                 {
-                    // Per WOM player, get the boss kc
-                    var details = WomClient.GetPlayerDetails(clanMemberWom.id);
+                    var WomClient = new WiseOldManClient();
+                    var guild = client.GetGuildAsync(GuildId).Result;
 
-                    // check if role change is needed
-                    if (discordUser != null)
+                    // Get all players in WOM
+                    var clanMembers = WomClient.GetClanMembers(128);
+
+                    Console.WriteLine("PVMRoleService: Loaded clanmembers");
+
+                    // iterate through all discord users
+                    var allUsers = guild.GetUsersAsync().Result;
+                    foreach (var discordUser in allUsers.Where(x => !string.IsNullOrEmpty(x.Nickname)))
                     {
-                        SetRolesCox(discordUser, guild, details.latestSnapshot.chambers_of_xeric.kills);
-                        SetRolesTob(discordUser, guild, details.latestSnapshot.theatre_of_blood.kills);
-                        SetRolesNm(discordUser, guild, details.latestSnapshot.nightmare.kills);
+                        var clanMemberWom = clanMembers.FirstOrDefault(x => x.displayName.ToLower() == discordUser.Nickname.ToLower());
+
+                        if (clanMemberWom != null)
+                        {
+                            // Per WOM player, get the boss kc
+                            var details = WomClient.GetPlayerDetails(clanMemberWom.id);
+
+                            Console.WriteLine("PVMRoleService: Loaded details for :" + details.displayName);
+
+                            // check if role change is needed
+                            if (discordUser != null)
+                            {
+                                try
+                                {
+                                    SetRolesCox(discordUser, guild, details.latestSnapshot.chambers_of_xeric.kills);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("PVMRoleService failed at CoX roles: " + e.Message);
+                                }
+
+                                try
+                                {
+                                    SetRolesTob(discordUser, guild, details.latestSnapshot.theatre_of_blood.kills);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("PVMRoleService failed at ToB roles: " + e.Message);
+                                }
+
+                                try
+                                {
+                                    SetRolesNm(discordUser, guild, details.latestSnapshot.nightmare.kills);
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.WriteLine("PVMRoleService failed at Nm roles: " + e.Message);
+                                }
+
+
+                            }
+                        }
                     }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine("PVMRoleService failed: " + e.Message);
+                }
+
             }
         }
 
 
         private void SetRolesCox(IGuildUser currentUser, IGuild guild, int kills)
         {
-            var CoxlearnerRole = guild.Roles.FirstOrDefault(x => x.Name == Constants.CoxLearner);
-            var hasCoxlearnerRole = currentUser.RoleIds.Any(x => x == CoxlearnerRole.Id);
-
-            if (hasCoxlearnerRole)
-            {
-                var CoxIntermediateRoleId = guild.Roles.FirstOrDefault(x => x.Name == Constants.CoxIntermediate);
-                var CoxAdvancedRoleId = guild.Roles.FirstOrDefault(x => x.Name == Constants.CoxAdvanced);
-
-                if (CoxIntermediateRoleId != null && CoxAdvancedRoleId != null)
+            PvmSystemManager.CheckAndUpdateAccount(
+                currentUser,
+                guild,
+                kills,
+                new PvmSet()
                 {
-                    var hasCoxIntermediate = currentUser.RoleIds.Any(x => x == CoxIntermediateRoleId.Id);
-                    var hasCoxAdvanced = currentUser.RoleIds.Any(x => x == CoxAdvancedRoleId.Id);
-
-                    if (kills > intermediateRole && !hasCoxIntermediate)
-                    {
-                        // upgrade role
-                        SetRole(currentUser, guild, Constants.CoxIntermediate, CoxIntermediateRoleId.Id, Constants.CoxImage);
-                    }
-
-                    if (kills > advancedRole && !hasCoxAdvanced)
-                    {
-                        // upgrade role
-                        SetRole(currentUser, guild, Constants.CoxAdvanced, CoxAdvancedRoleId.Id, Constants.CoxImage);
-                    }
-                }
-            }
+                    learner = Constants.CoxLearner,
+                    intermediate = Constants.CoxIntermediate,
+                    advanced = Constants.CoxAdvanced,
+                    imageUrl = Constants.CoxImage
+                },
+                true,
+                false);
         }
 
         private void SetRolesTob(IGuildUser currentUser, IGuild guild, int kills)
         {
-            var ToBlearnerRole = guild.Roles.FirstOrDefault(x => x.Name == Constants.TobLearner);
-            var hasToBlearnerRole = currentUser.RoleIds.Any(x => x == ToBlearnerRole.Id);
-
-            if (hasToBlearnerRole)
-            {
-                var ToBIntermediateRoleId = guild.Roles.FirstOrDefault(x => x.Name == Constants.ToBIntermediate);
-                var ToBAdvancedRoleId = guild.Roles.FirstOrDefault(x => x.Name == Constants.ToBAdvanced);
-
-                if (ToBIntermediateRoleId != null && ToBAdvancedRoleId != null)
+            PvmSystemManager.CheckAndUpdateAccount(
+                currentUser,
+                guild,
+                kills,
+                new PvmSet()
                 {
-                    var hasToBIntermediate = currentUser.RoleIds.Any(x => x == ToBIntermediateRoleId.Id);
-                    var hasToBAdvanced = currentUser.RoleIds.Any(x => x == ToBAdvancedRoleId.Id);
-
-                    if (kills > intermediateRole && !hasToBIntermediate)
-                    {
-                        // upgrade role
-                        SetRole(currentUser, guild, Constants.ToBIntermediate, ToBIntermediateRoleId.Id, Constants.TobImage);
-                    }
-
-                    if (kills > advancedRole && !hasToBAdvanced)
-                    {
-                        // upgrade role
-                        SetRole(currentUser, guild, Constants.ToBAdvanced, ToBAdvancedRoleId.Id, Constants.TobImage);
-                    }
-                }
-            }
+                    learner = Constants.TobLearner,
+                    intermediate = Constants.ToBIntermediate,
+                    advanced = Constants.ToBAdvanced,
+                    imageUrl = Constants.TobImage
+                },
+                true,
+                false);
         }
 
         private void SetRolesNm(IGuildUser currentUser, IGuild guild, int kills)
         {
-            var NmlearnerRole = guild.Roles.FirstOrDefault(x => x.Name == Constants.NmLearner);
-            var hasNmlearnerRole = currentUser.RoleIds.Any(x => x == NmlearnerRole.Id);
-
-            if (hasNmlearnerRole)
-            {
-                var NmIntermediateRoleId = guild.Roles.FirstOrDefault(x => x.Name == Constants.NmIntermediate);
-                var NmAdvancedRoleId = guild.Roles.FirstOrDefault(x => x.Name == Constants.NmAdvanced);
-
-                if (NmIntermediateRoleId != null && NmAdvancedRoleId != null)
+            PvmSystemManager.CheckAndUpdateAccount(
+                currentUser,
+                guild,
+                kills,
+                new PvmSet()
                 {
-                    var hasNmIntermediate = currentUser.RoleIds.Any(x => x == NmIntermediateRoleId.Id);
-                    var hasNmAdvanced = currentUser.RoleIds.Any(x => x == NmAdvancedRoleId.Id);
-
-                    if (kills > intermediateRole && !hasNmIntermediate)
-                    {
-                        // upgrade role
-                        SetRole(currentUser, guild, Constants.NmIntermediate, NmIntermediateRoleId.Id, Constants.nmImage);
-                    }
-
-                    if (kills > advancedRole && !hasNmAdvanced)
-                    {
-                        // upgrade role
-                        SetRole(currentUser, guild, Constants.NmAdvanced, NmAdvancedRoleId.Id, Constants.nmImage);
-                    }
-                }
-            }
+                    learner = Constants.NmLearner,
+                    intermediate = Constants.NmIntermediate,
+                    advanced = Constants.NmAdvanced,
+                    imageUrl = Constants.nmImage
+                },
+                true,
+                false);
         }
 
-        private void SetRole(IGuildUser currentUser, IGuild guild, string roleName, ulong roleId, string imageUrl)
-        {
-            var role = guild.Roles.FirstOrDefault(x => x.Name == roleName);
-            currentUser.AddRoleAsync(role);
-
-            var pvmgeneralChannel = guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("pvm-general"));
-            
-            ((IMessageChannel)pvmgeneralChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("PVM promotion!", string.Format("<@{0}> just got promoted to <@&{1}>!", currentUser.Id, roleId),
-                imageUrl));
-        }
+       
     }
 }

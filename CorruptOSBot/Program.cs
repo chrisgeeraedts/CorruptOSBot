@@ -139,11 +139,12 @@ namespace CorruptOSBot
             // Centralize the logic for commands into a separate method.
             await InitCommands();
 
+            RootAdminManager.Init();
 
             // Login and connect.
             await _client.LoginAsync(TokenType.Bot,
-                // < DO NOT HARDCODE YOUR TOKEN >
-                ConfigurationManager.AppSettings["DiscordToken"]);
+                 // < DO NOT HARDCODE YOUR TOKEN >
+                 ConfigHelper.GetSettingProperty("DiscordToken"));
             await _client.StartAsync();
 
             StartServiceThreads(_client);
@@ -223,8 +224,19 @@ namespace CorruptOSBot
             _client.MessageReceived += HandleCommandAsync;
             _client.UserJoined += _client_UserJoined;
             _client.UserLeft += _client_UserLeft;
+            _client.UserBanned += _client_UserBanned;
+            _client.ReactionAdded += _client_ReactionAdded;
         }
 
+        private async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)
+        {
+
+        }
+
+        private async Task _client_ReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
+        {
+            Console.WriteLine(string.Format("{0}: {1}", arg3.Emote.Name, arg3.Emote.ToString()));
+        }
 
         private async Task _client_UserJoined(SocketGuildUser arg)
         {
@@ -247,6 +259,15 @@ namespace CorruptOSBot
 
             // We don't want the bot to respond to itself or other bots.
             if (msg.Author.Id == _client.CurrentUser.Id || msg.Author.IsBot) return;
+
+            try
+            {
+                Console.WriteLine(string.Format("{0}: {1}", arg.Author, arg.Content));
+            }
+            catch (Exception)
+            {
+
+            }
 
             // check for channels, if its for a targeted channel, intercept
             int posX = 0;

@@ -11,26 +11,28 @@ namespace CorruptOSBot.Modules
     public class RSNModule : ModuleBase<SocketCommandContext>
     {
         [Command("rsn")]
-        [Summary("!rns [your new name] - changes your nickname in the server.")]
-        public async Task SayRSNAsync(string username)
+        [Summary("!rsn {your new name} - changes your nickname in the server and Wise Old Man.")]
+        public async Task SayRSNAsync([Remainder]string username)
         {
-
-            //user that actually started the command
-            var currentUser = Context.User;
-
-            // the prefered rsn name the user posted
-            var preferedNickname = username;
-
-            // check rank, if he has a smiley, its a namechange, otherwise, a new member
-            var hasSmileyRole = ((SocketGuildUser)currentUser).Roles.Any(x => x.Name == "Smiley");
-
-            if (!hasSmileyRole)
+            if (RootAdminManager.GetToggleState("rsn"))
             {
-                await CreateNewMember(currentUser, preferedNickname);
-            }
-            else
-            {
-                await NameChangeMember(currentUser, preferedNickname);
+                //user that actually started the command
+                var currentUser = Context.User;
+
+                // the prefered rsn name the user posted
+                var preferedNickname = username;
+
+                // check rank, if he has a smiley, its a namechange, otherwise, a new member
+                var hasSmileyRole = ((SocketGuildUser)currentUser).Roles.Any(x => x.Name == "Smiley");
+
+                if (!hasSmileyRole)
+                {
+                    await CreateNewMember(currentUser, preferedNickname);
+                }
+                else
+                {
+                    await NameChangeMember(currentUser, preferedNickname);
+                }
             }
         }
 
@@ -45,7 +47,7 @@ namespace CorruptOSBot.Modules
             });
 
             // post to recruiting channel
-            var recruitingChannel =  Context.Guild.Channels.FirstOrDefault(x => x.Id == 827967957371060264);
+            var recruitingChannel =  Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member name change",
                 string.Format("{0} has changed their name to <@{1}>", previousName, ((SocketGuildUser)currentUser).Id)));
 
@@ -59,7 +61,11 @@ namespace CorruptOSBot.Modules
         private async Task CreateNewMember(SocketUser currentUser, string preferedNickname)
         {
             // check runewatch
-            bool isSafeAccount = true;
+            var runewatchEntries = new RunewatchClient().GetRunewatchEntries();
+
+
+            var runewatchEntry = runewatchEntries.FirstOrDefault(x => x.accused_rsn == preferedNickname);
+            bool isSafeAccount = runewatchEntry == null;
 
             if (isSafeAccount)
             {
@@ -74,12 +80,14 @@ namespace CorruptOSBot.Modules
                 });
 
                 // post to general channel
-                var generalChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == 827967957694283797);
-                await ((IMessageChannel)generalChannel).SendMessageAsync(string.Format("<@{0}> Welcome to Corrupt OS", currentUser.Id));
+                var generalChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("general"));
+                await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member joined", 
+                    string.Format("<@{0}> Welcome to Corrupt OS", currentUser.Id)));
 
-                // post to general channel
-                var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == 827967957371060264);
-                await ((IMessageChannel)recruitingChannel).SendMessageAsync(string.Format("{0} has joined!", preferedNickname));
+                // post to recruitment channel
+                var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member joined",
+                    string.Format("<@{0}> has joined!", currentUser.Id)));
 
                 // add to WOM
                 new WiseOldManClient().AddGroupMember(preferedNickname);
@@ -90,8 +98,20 @@ namespace CorruptOSBot.Modules
             else
             {
                 // kick user
+                var guildUser = Context.Guild.GetUser(Context.User.Id);
+                await guildUser.KickAsync();
 
                 // post that user got kicked due to runewatch
+                // post to recruitment channel
+                var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member kicked!", 
+                    string.Format("{0} joined but was on RuneWatch - Therefor kicked! Reasoning: {1} | Evidence rating: {2} | Date: {3}",
+                    preferedNickname,
+                    runewatchEntry.reason,
+                    runewatchEntry.evidence_rating,
+                    runewatchEntry.published_date),
+                    null,
+                    "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/32/Actions-im-kick-user-icon.png"));
             }
         }
     }

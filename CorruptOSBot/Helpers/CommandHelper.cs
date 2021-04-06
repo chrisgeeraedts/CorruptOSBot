@@ -40,9 +40,28 @@ namespace CorruptOSBot.Helpers
 
                 CommandAttribute attrCommand = (CommandAttribute)method.GetCustomAttributes(typeof(CommandAttribute), true)[0];
                 string valueCommand = attrCommand.Text;
-                result.Add(string.Format("!{0}", valueCommand), valueSummary);
+
+                string commandLine = string.Format("!{0}", valueCommand);
+                if (!result.ContainsKey(commandLine))
+                {
+                    result.Add(commandLine, valueSummary);
+                }
             }
 
+            return result;
+        }
+
+        internal static Dictionary<string, string> GetEnabledCommandsFromCode()
+        {
+            var result = new Dictionary<string, string>();
+
+            foreach (var item in GetCommandsFromCode())
+            {
+                if (RootAdminManager.GetToggleState(item.Key.Replace("!", string.Empty)))
+                {
+                    result.Add(item.Key, item.Value);
+                }
+            }
 
             return result;
         }

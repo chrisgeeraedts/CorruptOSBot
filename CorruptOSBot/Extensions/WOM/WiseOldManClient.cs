@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
+using CorruptOSBot.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace CorruptOSBot.Extensions
             client = new HttpClient();
             path = "https://api.wiseoldman.net";
             clanId = 128;
-            verificationCode = ConfigurationManager.AppSettings["WOMCode"];
+            verificationCode = ConfigHelper.GetSettingProperty("WOMCode");
         }
 
 

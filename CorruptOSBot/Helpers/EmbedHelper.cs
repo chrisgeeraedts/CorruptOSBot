@@ -59,11 +59,12 @@ namespace CorruptOSBot.Helpers
             return builder.Build();
         }
 
-        public static Embed CreateDefaultSuggestionEmbed(string title, string message)
+        public static Embed CreateDefaultSuggestionEmbed(string title, string message, string imageUri)
         {
             var builder = new EmbedBuilder();
             builder.Color = Color.Blue;
-            builder.ThumbnailUrl = "https://icons.iconarchive.com/icons/umut-pulat/tulliana-2/32/important-icon.png";
+            builder.ThumbnailUrl = imageUri;
+            //builder.ThumbnailUrl = "https://icons.iconarchive.com/icons/umut-pulat/tulliana-2/32/important-icon.png";
             builder.Title = title;
             builder.Footer = new EmbedFooterBuilder()
             {

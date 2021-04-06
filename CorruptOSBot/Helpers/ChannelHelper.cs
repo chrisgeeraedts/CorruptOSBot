@@ -17,7 +17,8 @@ namespace CorruptOSBot.Helpers
                 try
                 {
                     string channelSettingProp = string.Format("channel_{0}", name);
-                    var potentialResult = ConfigurationManager.AppSettings[channelSettingProp];
+
+                    var potentialResult = ConfigHelper.GetSettingProperty(channelSettingProp);
                     var result = Convert.ToUInt64(potentialResult);
                     KnownChannels.Add(name, result);
                 }
