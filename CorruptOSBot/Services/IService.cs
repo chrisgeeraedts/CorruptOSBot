@@ -1,8 +1,10 @@
-﻿namespace CorruptOSBot.Services
+﻿using System.Threading.Tasks;
+
+namespace CorruptOSBot.Services
 {
     public interface IService
     {
-        void Trigger(Discord.IDiscordClient client);
+        Task Trigger(Discord.IDiscordClient client);
         int TriggerTimeInMS { get; }
     }
 }

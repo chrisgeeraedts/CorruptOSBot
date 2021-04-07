@@ -104,6 +104,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events\EventManager.cs" />
+    <Compile Include="Events\ReactionHandlers\PVMReactionHandler.cs" />
+    <Compile Include="Events\ReactionManager.cs" />
     <Compile Include="Extensions\Runewatch\RunewatchClient.cs" />
     <Compile Include="Extensions\WOM\Clan.cs" />
     <Compile Include="Extensions\WOM\ClanMemberDetails\ClanMemberDetails.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="Helpers\EmbedHelper.cs" />
     <Compile Include="Helpers\EmojiEnum.cs" />
     <Compile Include="Helpers\EmojiHelper.cs" />
+    <Compile Include="Helpers\PostHelper.cs" />
     <Compile Include="Helpers\PvmSystemManager.cs" />
     <Compile Include="Helpers\RootAdminManager.cs" />
     <Compile Include="Interceptors\SuggestionInterceptor.cs" />

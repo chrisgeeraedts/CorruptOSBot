@@ -35,7 +35,7 @@ namespace CorruptOSBot.Modules
                                 var kills = user.latestSnapshot.chambers_of_xeric_challenge_mode.kills + user.latestSnapshot.chambers_of_xeric.kills;
 
                                 // set the role appriate
-                                PvmSystemManager.CheckAndUpdateAccount(
+                                PvmSystemManager.CheckAndUpdateAccountAsync(
                                 currentUser,
                                 Context.Guild,
                                 kills,
@@ -85,7 +85,7 @@ namespace CorruptOSBot.Modules
                                 var kills = user.latestSnapshot.theatre_of_blood.kills;
 
                                 // set the role appriate
-                                PvmSystemManager.CheckAndUpdateAccount(
+                                PvmSystemManager.CheckAndUpdateAccountAsync(
                                 currentUser,
                                 Context.Guild,
                                 kills,
@@ -135,7 +135,7 @@ namespace CorruptOSBot.Modules
                                 var kills = user.latestSnapshot.nightmare.kills;
 
                                 // set the role appriate
-                                PvmSystemManager.CheckAndUpdateAccount(
+                                PvmSystemManager.CheckAndUpdateAccountAsync(
                                 currentUser,
                                 Context.Guild,
                                 kills,

@@ -13,14 +13,13 @@ namespace CorruptOSBot.Helpers
         public string learner { get; set; }
         public string intermediate { get; set; }
         public string advanced { get; set; }
-
         public string imageUrl { get; set; }
     }
     public static class PvmSystemManager
     {
         private static int intermediateRole = 50;
         private static int advancedRole = 250;
-        internal static void CheckAndUpdateAccount(IGuildUser currentUser, IGuild guild, int kills, PvmSet pvmSet, bool message, bool overrideTrigger)
+        internal static async Task CheckAndUpdateAccountAsync(IGuildUser currentUser, IGuild guild, int kills, PvmSet pvmSet, bool message, bool overrideTrigger)
         {
             var learnerRole = guild.Roles.FirstOrDefault(x => x.Name == pvmSet.learner);
             var IntermediateRoleId = guild.Roles.FirstOrDefault(x => x.Name == pvmSet.intermediate);
@@ -35,68 +34,72 @@ namespace CorruptOSBot.Helpers
                 if (kills > advancedRole && !hasAdvanced)
                 {
                     // upgrade role
-                    SetRole(currentUser, guild, pvmSet.advanced, AdvancedRoleId.Id, pvmSet.imageUrl, message);
-                    RemoveRole(currentUser, guild, IntermediateRoleId);
-                    RemoveRole(currentUser, guild, learnerRole);
-                    currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.advanced));
+                    await SetRole(currentUser, guild, pvmSet.advanced, AdvancedRoleId.Id, pvmSet.imageUrl, message);
+                    await RemoveRole(currentUser, guild, IntermediateRoleId);
+                    await RemoveRole(currentUser, guild, learnerRole);
+                    await currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.advanced));
                 }
                 else if (kills > intermediateRole && !hasIntermediate && !hasAdvanced)
                 {
                     // upgrade role
-                    SetRole(currentUser, guild, pvmSet.intermediate, IntermediateRoleId.Id, pvmSet.imageUrl, message);
-                    RemoveRole(currentUser, guild, learnerRole);
-                    currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.intermediate));
+                    await SetRole(currentUser, guild, pvmSet.intermediate, IntermediateRoleId.Id, pvmSet.imageUrl, message);
+                    await RemoveRole(currentUser, guild, learnerRole);
+                    await currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.intermediate));
                 }
-                else if ((overrideTrigger && !hasIntermediate && !hasAdvanced) || (!haslearnerRole && !hasIntermediate && !hasAdvanced))
+                else if ((overrideTrigger && !haslearnerRole && !hasIntermediate && !hasAdvanced) || (!haslearnerRole && !hasIntermediate && !hasAdvanced))
                 {
                     // upgrade role
-                    SetRole(currentUser, guild, pvmSet.learner, IntermediateRoleId.Id, pvmSet.imageUrl, false);
-                    currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.learner));
+                    await SetRole(currentUser, guild, pvmSet.learner, IntermediateRoleId.Id, pvmSet.imageUrl, false);
+                    await currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.learner));
                 }
                 else
                 {
                     if (overrideTrigger && hasAdvanced)
                     {
-                        currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.advanced));
+                        await currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.advanced));
                     }
                     else if (overrideTrigger && hasIntermediate)
                     {
-                        currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.intermediate));
+                        await currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.intermediate));
                     } else if (overrideTrigger && haslearnerRole)
                     {
-                        currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.learner));
+                        await currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.learner));
                     }
-
                 }
             }
         }
 
-        private static void RemoveRole(IGuildUser currentUser, IGuild guild, IRole role)
+        private static async Task RemoveRole(IGuildUser currentUser, IGuild guild, IRole role)
         {
             try
             {
-                currentUser.RemoveRoleAsync(role);
-
-                Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Removed role for:" + currentUser.Nickname));
+                await currentUser.RemoveRoleAsync(role);
+                await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Removed role for:" + currentUser.Nickname));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                await Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService: Failed to remove role - " + e.Message));
             }
         }
-        private static void SetRole(IGuildUser currentUser, IGuild guild, string roleName, ulong roleId, string imageUrl, bool showMessage)
+        private static async Task SetRole(IGuildUser currentUser, IGuild guild, string roleName, ulong roleId, string imageUrl, bool showMessage)
         {
-            var role = guild.Roles.FirstOrDefault(x => x.Name == roleName);
-            currentUser.AddRoleAsync(role);
-            string message = string.Format("<@{0}> just got promoted to <@&{1}>!", currentUser.Id, roleId);
-            Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Updated role for:" + currentUser.Nickname));
-            if (showMessage)
+            try
             {
-                var pvmgeneralChannel = guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("pvm-general"));
-                ((IMessageChannel)pvmgeneralChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("PVM promotion!", message,
-                    imageUrl));
+                var role = guild.Roles.FirstOrDefault(x => x.Name == roleName);
+                await currentUser.AddRoleAsync(role);
+                await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Updated role for:" + currentUser.Nickname));
+                if (showMessage)
+                {
+                    var pvmgeneralChannel = guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("pvm-general"));
+                    await ((IMessageChannel)pvmgeneralChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("PVM promotion!",
+                        string.Format("<@{0}> just got promoted to <@&{1}>!", currentUser.Id, roleId),
+                        imageUrl));
+                }
             }
-
+            catch (Exception e)
+            {
+                await Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService: Failed to remove role - " + e.Message));
+            }
         }
     }
 }

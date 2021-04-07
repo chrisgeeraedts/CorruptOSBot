@@ -15,6 +15,32 @@ namespace CorruptOSBot.Modules
     [RequireOwner(Group = "Staff")]
     public class TestModule : ModuleBase<SocketCommandContext>
     {
+        [Command("postid")]
+        [Summary("(admin) Gets the current post's Id")]
+        public async Task SaypostidAsync()
+        {
+            if (RootAdminManager.GetToggleState("postid"))
+            {
+
+                var messages = await Context.Channel
+                   .GetMessagesAsync(Context.Message, Direction.Before, 1)
+                   .FlattenAsync();
+
+                var message = messages.FirstOrDefault();
+                if (message != null)
+                {
+                    var messageId = ((IUserMessage)message).Id;
+
+                    await ReplyAsync(messageId.ToString());
+                }
+
+                
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
         [Command("channelid")]
         [Summary("(admin) Gets the current channel's Id")]
         public async Task SaychannelIdAsync()

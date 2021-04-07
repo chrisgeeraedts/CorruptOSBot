@@ -147,7 +147,10 @@ namespace CorruptOSBot
                  ConfigHelper.GetSettingProperty("DiscordToken"));
             await _client.StartAsync();
 
+            ReactionManager.Init();
+
             StartServiceThreads(_client);
+
 
             // Wait infinitely so your bot actually stays connected.
             await Task.Delay(Timeout.Infinite);
@@ -215,7 +218,6 @@ namespace CorruptOSBot
             await _commands.AddModuleAsync<WoMModule>(_services);
             await _commands.AddModuleAsync<PVMModule>(_services);
 
-
             await _commands.AddModuleAsync<TestModule>(_services);
 
             // Note that the first one is 'Modules' (plural) and the second is 'Module' (singular).
@@ -236,6 +238,7 @@ namespace CorruptOSBot
         private async Task _client_ReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
         {
             await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("Reaction: {0}: {1}", arg3.Emote.Name, arg3.Emote.ToString())));
+            await ReactionManager.ReactionPosted(_client, arg1, arg2, arg3);
         }
 
         private async Task _client_UserJoined(SocketGuildUser arg)

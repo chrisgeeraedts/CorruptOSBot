@@ -80,59 +80,59 @@ namespace CorruptOSBot.Modules
 
                 AddLine(builder, new Dictionary<string, int>()
                 {
-                    { EmojiHelper.GetEmojiString(EmojiEnum.sire), user.latestSnapshot.abyssal_sire.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.bryophyta), user.latestSnapshot.bryophyta.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.chamber), user.latestSnapshot.chambers_of_xeric.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.fanatic), user.latestSnapshot.chaos_fanatic.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.prime), user.latestSnapshot.dagannoth_prime.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.crazyarc), user.latestSnapshot.crazy_archaeologist.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.mole), user.latestSnapshot.giant_mole.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.kq), user.latestSnapshot.kalphite_queen.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.kree), user.latestSnapshot.kreearra.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.nightmare), user.latestSnapshot.nightmare.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.scorpia), user.latestSnapshot.scorpia.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.gaunt), user.latestSnapshot.the_gauntlet.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.thermy), user.latestSnapshot.thermonuclear_smoke_devil.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.venny), user.latestSnapshot.venenatis.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.todt), user.latestSnapshot.wintertodt.kills }
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.sire), user.latestSnapshot.abyssal_sire.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.bryophyta), user.latestSnapshot.bryophyta.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.chamber), user.latestSnapshot.chambers_of_xeric.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.fanatic), user.latestSnapshot.chaos_fanatic.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.prime), user.latestSnapshot.dagannoth_prime.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.crazyarc), user.latestSnapshot.crazy_archaeologist.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.mole), user.latestSnapshot.giant_mole.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.kq), user.latestSnapshot.kalphite_queen.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.kree), user.latestSnapshot.kreearra.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.nightmare), user.latestSnapshot.nightmare.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.scorpia), user.latestSnapshot.scorpia.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.gaunt), user.latestSnapshot.the_gauntlet.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.thermy), user.latestSnapshot.thermonuclear_smoke_devil.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.venny), user.latestSnapshot.venenatis.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.todt), user.latestSnapshot.wintertodt.kills }
                 });
 
                 AddLine(builder, new Dictionary<string, int>()
                 {
-                    { EmojiHelper.GetEmojiString(EmojiEnum.hydra), user.latestSnapshot.alchemical_hydra.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.callisto), user.latestSnapshot.callisto.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.chambercm), user.latestSnapshot.chambers_of_xeric_challenge_mode.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.sara), user.latestSnapshot.commander_zilyana.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.rex), user.latestSnapshot.dagannoth_rex.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.derangedarc), user.latestSnapshot.deranged_archaeologist.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.gargs), user.latestSnapshot.grotesque_guardians.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.kbd), user.latestSnapshot.king_black_dragon.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.kril), user.latestSnapshot.kril_tsutsaroth.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.obor), user.latestSnapshot.obor.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.skotizo), user.latestSnapshot.skotizo.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.corruptgaunt), user.latestSnapshot.scorpia.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.zuk), user.latestSnapshot.tzkal_zuk.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.vetion), user.latestSnapshot.vetion.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.zalcano), user.latestSnapshot.zalcano.kills }
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.hydra), user.latestSnapshot.alchemical_hydra.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.callisto), user.latestSnapshot.callisto.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.chambercm), user.latestSnapshot.chambers_of_xeric_challenge_mode.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.sara), user.latestSnapshot.commander_zilyana.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.rex), user.latestSnapshot.dagannoth_rex.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.derangedarc), user.latestSnapshot.deranged_archaeologist.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.gargs), user.latestSnapshot.grotesque_guardians.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.kbd), user.latestSnapshot.king_black_dragon.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.kril), user.latestSnapshot.kril_tsutsaroth.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.obor), user.latestSnapshot.obor.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.skotizo), user.latestSnapshot.skotizo.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.corruptgaunt), user.latestSnapshot.the_corrupted_gauntlet.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.zuk), user.latestSnapshot.tzkal_zuk.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.vetion), user.latestSnapshot.vetion.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.zalcano), user.latestSnapshot.zalcano.kills }
                 });
 
                 AddLine(builder, new Dictionary<string, int>()
                 {
-                    { EmojiHelper.GetEmojiString(EmojiEnum.barrows), user.latestSnapshot.barrows_chests.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.cerb), user.latestSnapshot.cerberus.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.chaosele), user.latestSnapshot.chaos_elemental.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.corp), user.latestSnapshot.corporeal_beast.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.supreme), user.latestSnapshot.dagannoth_supreme.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.bandos), user.latestSnapshot.general_graardor.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.hespori), user.latestSnapshot.hespori.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.kraken), user.latestSnapshot.kraken.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.mimic), user.latestSnapshot.mimic.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.sarachnis), user.latestSnapshot.sarachnis.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.tempor), user.latestSnapshot.tempoross.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.tob), user.latestSnapshot.theatre_of_blood.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.jad), user.latestSnapshot.tztok_jad.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.vorkath), user.latestSnapshot.vorkath.kills },
-                    { EmojiHelper.GetEmojiString(EmojiEnum.zulrah), user.latestSnapshot.zulrah.kills }
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.barrows), user.latestSnapshot.barrows_chests.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.cerb), user.latestSnapshot.cerberus.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.chaosele), user.latestSnapshot.chaos_elemental.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.corp), user.latestSnapshot.corporeal_beast.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.supreme), user.latestSnapshot.dagannoth_supreme.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.bandos), user.latestSnapshot.general_graardor.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.hespori), user.latestSnapshot.hespori.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.kraken), user.latestSnapshot.kraken.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.mimic), user.latestSnapshot.mimic.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.sarachnis), user.latestSnapshot.sarachnis.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.tempor), user.latestSnapshot.tempoross.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.tob), user.latestSnapshot.theatre_of_blood.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.jad), user.latestSnapshot.tztok_jad.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.vorkath), user.latestSnapshot.vorkath.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.zulrah), user.latestSnapshot.zulrah.kills }
                 });
 
                 var result = builder.Build();

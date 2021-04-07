@@ -46,7 +46,7 @@ namespace CorruptOSBot.Modules
         public async Task SayClearAsync(int number)
         { 
             var hasDevRole = ((SocketGuildUser)Context.User).Roles.Any(x => x.Name == "Developer");
-            if (hasDevRole)
+            if (RootAdminManager.GetToggleState("clear") && hasDevRole)
             {
                 // max it 
                 if (number > 100)
