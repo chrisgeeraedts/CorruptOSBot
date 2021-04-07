@@ -730,3 +730,5 @@ packages/System.Threading.Tasks.Extensions.4.5.4/version.txt
 CorruptOSBot/obj/Debug/CorruptOSBot.pdb
 CorruptOSBot/obj/Debug/CorruptOSBot.pdb
 CorruptOSBot/obj/Debug/CorruptOSBot.pdb
+*.pdb
+CorruptOSBot/obj/Debug/CorruptOSBot.pdb
