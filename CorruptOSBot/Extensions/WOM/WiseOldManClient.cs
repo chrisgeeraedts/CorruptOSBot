@@ -21,7 +21,7 @@ namespace CorruptOSBot.Extensions
         {
             client = new HttpClient();
             path = "https://api.wiseoldman.net";
-            clanId = 128;
+            clanId = Convert.ToInt32(ConfigHelper.GetSettingProperty("WOMClanId"));
             verificationCode = ConfigHelper.GetSettingProperty("WOMCode");
         }
 
@@ -124,7 +124,7 @@ namespace CorruptOSBot.Extensions
         }
 
 
-        public Clan GetClan(int clanId)
+        public Clan GetClan()
         {
             Clan product = null;
             HttpResponseMessage response = client.GetAsync(path + string.Format("/groups/{0}", clanId)).Result;
@@ -136,7 +136,7 @@ namespace CorruptOSBot.Extensions
             return product;
         }
 
-        public List<ClanMember> GetClanMembers(int clanId)
+        public List<ClanMember> GetClanMembers()
         {
             List<ClanMember> clanMembers = null;
             HttpResponseMessage response = client.GetAsync(path + string.Format("/groups/{0}/members", clanId)).Result;
@@ -173,58 +173,5 @@ namespace CorruptOSBot.Extensions
             }
             return achievements;
         }
-    }
-
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class Member
-    {
-        public string username { get; set; }
-        public string role { get; set; }
-    }
-
-    public class Root
-    {
-        public string verificationCode { get; set; }
-        public List<Member> members { get; set; }
-    }
-
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class NameChangeRoot
-    {
-        public string oldName { get; set; }
-        public string newName { get; set; }
-    }
-
-    public class ClanMember
-    {
-        public int exp { get; set; }
-        public int id { get; set; }
-        public string username { get; set; }
-        public string displayName { get; set; }
-        public string type { get; set; }
-        public string build { get; set; }
-        public string country { get; set; }
-        public bool flagged { get; set; }
-        public double ehp { get; set; }
-        public double ehb { get; set; }
-        public double ttm { get; set; }
-        public double tt200m { get; set; }
-        public DateTime? lastImportedAt { get; set; }
-        public DateTime? lastChangedAt { get; set; }
-        public DateTime registeredAt { get; set; }
-        public DateTime updatedAt { get; set; }
-        public string role { get; set; }
-        public DateTime joinedAt { get; set; }
-    }
-
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class Achievement
-    {
-        public int threshold { get; set; }
-        public int playerId { get; set; }
-        public string name { get; set; }
-        public string metric { get; set; }
-        public DateTime createdAt { get; set; }
-        public string measure { get; set; }
     }
 }

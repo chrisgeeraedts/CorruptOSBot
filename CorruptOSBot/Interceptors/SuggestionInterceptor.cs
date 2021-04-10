@@ -14,9 +14,10 @@ namespace CorruptOSBot
                 if (RootAdminManager.GetToggleState(nameof(SuggestionInterceptor)))
                 {
                     var currentUser = ((SocketGuildUser)arg.Author);
-                    if (!string.IsNullOrEmpty(currentUser.Nickname))
+                    var name = DiscordHelper.GetAccountNameOrNickname(currentUser);
+                    if (!string.IsNullOrEmpty(name))
                     {
-                        string title = string.Format("{0} suggested", currentUser.Nickname);
+                        string title = string.Format("{0} suggested", name);
                         string description = arg.Content;
 
                         // Post the poll

@@ -1,21 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Discord;
 
 namespace CorruptOSBot.Helpers
 {
-
-    public class PvmSet
-    {
-        public string learner { get; set; }
-        public string intermediate { get; set; }
-        public string advanced { get; set; }
-        public string imageUrl { get; set; }
-    }
-    public static class PvmSystemManager
+    public static class PvmSystemHelper
     {
         private static int intermediateRole = 50;
         private static int advancedRole = 250;
@@ -74,11 +64,11 @@ namespace CorruptOSBot.Helpers
             try
             {
                 await currentUser.RemoveRoleAsync(role);
-                await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Removed role for:" + currentUser.Nickname));
+                await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Removed role for:" + DiscordHelper.GetAccountNameOrNickname(currentUser)));
             }
             catch (Exception e)
             {
-                await Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService: Failed to remove role - " + e.Message));
+                await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "Failed to remove role - " + e.Message));
             }
         }
         private static async Task SetRole(IGuildUser currentUser, IGuild guild, string roleName, ulong roleId, string imageUrl, bool showMessage)
@@ -87,7 +77,7 @@ namespace CorruptOSBot.Helpers
             {
                 var role = guild.Roles.FirstOrDefault(x => x.Name == roleName);
                 await currentUser.AddRoleAsync(role);
-                await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Updated role for:" + currentUser.Nickname));
+                await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Updated role for:" + DiscordHelper.GetAccountNameOrNickname(currentUser)));
                 if (showMessage)
                 {
                     var pvmgeneralChannel = guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("pvm-general"));
@@ -98,7 +88,7 @@ namespace CorruptOSBot.Helpers
             }
             catch (Exception e)
             {
-                await Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService: Failed to remove role - " + e.Message));
+                await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "Failed to remove role - " + e.Message));
             }
         }
     }

@@ -80,11 +80,8 @@ namespace CorruptOSBot.Modules
         {
             if (RootAdminManager.GetToggleState("test"))
             {
-                //await ReplyAsync(embed: CreateEmbedForMessage("of the abbys"));
-
+                await ReplyAsync("test placeholder");
             }
         }
-
-        
     }
 }

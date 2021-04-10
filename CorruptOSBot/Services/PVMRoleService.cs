@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Extensions;
+using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
 using Discord;
 using System;
@@ -16,7 +17,7 @@ namespace CorruptOSBot.Services
 
         public PVMRoleService(Discord.IDiscordClient client)
         {
-            Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: created, trigering every " + TriggerTimeInMS + "MS"));
+            Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Created, trigering every " + TriggerTimeInMS + "MS"));
             GuildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
         }
 
@@ -24,69 +25,67 @@ namespace CorruptOSBot.Services
         {
             if (RootAdminManager.GetToggleState(nameof(PVMRoleService)))
             {
-                await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: triggered"));
+                await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Triggered"));
 
                 try
                 {
-                    var WomClient = new WiseOldManClient();
                     var guild = client.GetGuildAsync(GuildId).Result;
 
                     // Get all players in WOM
-                    var clanMembers = WomClient.GetClanMembers(128);
-                    await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Loaded clanmembers"));
+                    await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
+                    var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
+                    await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Loaded clanmembers"));
 
                     // iterate through all discord users
                     var allUsers = guild.GetUsersAsync().Result;
-                    foreach (var discordUser in allUsers.Where(x => !string.IsNullOrEmpty(x.Nickname)))
+                    foreach (var discordUser in allUsers)
                     {
-                        var clanMemberWom = clanMembers.FirstOrDefault(x => x.displayName.ToLower() == discordUser.Nickname.ToLower());
+                        var name = DiscordHelper.GetAccountNameOrNickname(discordUser);
+                        var clanMemberWom = clanMembers.FirstOrDefault(x => x.displayName.ToLower() == name.ToLower());
 
                         if (clanMemberWom != null)
                         {
-                            // Per WOM player, get the boss kc
-                            var details = WomClient.GetPlayerDetails(clanMemberWom.id);
-
-                            await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService: Loaded details for :" + details.displayName));
+                            await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Loaded details for :" + clanMemberWom.displayName));
 
                             // check if role change is needed
                             if (discordUser != null)
                             {
                                 try
                                 {
-                                    await SetRolesCox(discordUser, guild, details.latestSnapshot.chambers_of_xeric.kills);
+                                    await SetRolesCox(discordUser, guild, clanMemberWom.latestSnapshot.chambers_of_xeric.kills);
                                 }
                                 catch (Exception e)
                                 {
-                                    await Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService failed at CoX roles: " + e.Message));
+                                    await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "Failed at CoX roles: " + e.Message));
                                 }
 
                                 try
                                 {
-                                    await SetRolesTob(discordUser, guild, details.latestSnapshot.theatre_of_blood.kills);
+                                    await SetRolesTob(discordUser, guild, clanMemberWom.latestSnapshot.theatre_of_blood.kills);
                                 }
                                 catch (Exception e)
                                 {
-                                    await Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService failed at Tob roles: " + e.Message));
+                                    await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "Failed at Tob roles: " + e.Message));
                                 }
 
                                 try
                                 {
-                                    await SetRolesNm(discordUser, guild, details.latestSnapshot.nightmare.kills);
+                                    await SetRolesNm(discordUser, guild, clanMemberWom.latestSnapshot.nightmare.kills);
                                 }
                                 catch (Exception e)
                                 {
-                                    await Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService failed at Nm roles: " + e.Message));
+                                    await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "Failed at Nm roles: " + e.Message));
                                 }
                             }
                         }
                     }
 
 
-                    Program.Log(new LogMessage(LogSeverity.Info, string.Empty, "PVMRoleService completed"));
+                    await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "PVMRoleService completed"));
                 }
                 catch (Exception e)
                 {
-                    Program.Log(new LogMessage(LogSeverity.Error, string.Empty, "PVMRoleService failed: " + e.Message));
+                    await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "PVMRoleService failed: " + e.Message));
                 }
             }
         }
@@ -94,7 +93,7 @@ namespace CorruptOSBot.Services
 
         private async Task SetRolesCox(IGuildUser currentUser, IGuild guild, int kills)
         {
-            await PvmSystemManager.CheckAndUpdateAccountAsync(
+            await PvmSystemHelper.CheckAndUpdateAccountAsync(
                 currentUser,
                 guild,
                 kills,
@@ -111,7 +110,7 @@ namespace CorruptOSBot.Services
 
         private async Task SetRolesTob(IGuildUser currentUser, IGuild guild, int kills)
         {
-            await PvmSystemManager.CheckAndUpdateAccountAsync(
+            await PvmSystemHelper.CheckAndUpdateAccountAsync(
                 currentUser,
                 guild,
                 kills,
@@ -128,7 +127,7 @@ namespace CorruptOSBot.Services
 
         private async Task SetRolesNm(IGuildUser currentUser, IGuild guild, int kills)
         {
-            await PvmSystemManager.CheckAndUpdateAccountAsync(
+            await PvmSystemHelper.CheckAndUpdateAccountAsync(
                 currentUser,
                 guild,
                 kills,

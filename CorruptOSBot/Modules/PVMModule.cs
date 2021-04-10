@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Extensions;
+using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -19,37 +20,32 @@ namespace CorruptOSBot.Modules
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
-                    var rsn = currentUser.Nickname;
+                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
                         // Get KC in WOM
-                        var client = new WiseOldManClient();
-                        var clanMember = client.GetClanMembers(128).FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
+                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
+                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
 
                         if (clanMember != null)
                         {
-                            var user = client.GetPlayerDetails(clanMember.id);
-                            if (user != null)
+                            var kills = clanMember.latestSnapshot.chambers_of_xeric_challenge_mode.kills + clanMember.latestSnapshot.chambers_of_xeric.kills;
+
+                            // set the role appriate
+                            await PvmSystemHelper.CheckAndUpdateAccountAsync(
+                            currentUser,
+                            Context.Guild,
+                            kills,
+                            new PvmSet()
                             {
-                                var kills = user.latestSnapshot.chambers_of_xeric_challenge_mode.kills + user.latestSnapshot.chambers_of_xeric.kills;
-
-                                // set the role appriate
-                                PvmSystemManager.CheckAndUpdateAccountAsync(
-                                currentUser,
-                                Context.Guild,
-                                kills,
-                                new PvmSet()
-                                {
-                                    learner = Constants.CoxLearner,
-                                    intermediate = Constants.CoxIntermediate,
-                                    advanced = Constants.CoxAdvanced,
-                                    imageUrl = Constants.CoxImage
-                                },
-                                false,
-                                true);
-
-                            }
+                                learner = Constants.CoxLearner,
+                                intermediate = Constants.CoxIntermediate,
+                                advanced = Constants.CoxAdvanced,
+                                imageUrl = Constants.CoxImage
+                            },
+                            false,
+                            true);
                         }
                     }
                 }
@@ -69,39 +65,37 @@ namespace CorruptOSBot.Modules
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
-                    var rsn = currentUser.Nickname;
+                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
                         // Get KC in WOM
-                        var client = new WiseOldManClient();
-                        var clanMember = client.GetClanMembers(128).FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
+                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
+                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
 
                         if (clanMember != null)
                         {
-                            var user = client.GetPlayerDetails(clanMember.id);
-                            if (user != null)
+
+                            var kills = clanMember.latestSnapshot.theatre_of_blood.kills;
+
+                            // set the role appriate
+                            await PvmSystemHelper.CheckAndUpdateAccountAsync(
+                            currentUser,
+                            Context.Guild,
+                            kills,
+                            new PvmSet()
                             {
-                                var kills = user.latestSnapshot.theatre_of_blood.kills;
+                                learner = Constants.TobLearner,
+                                intermediate = Constants.ToBIntermediate,
+                                advanced = Constants.ToBAdvanced,
+                                imageUrl = Constants.TobImage
+                            },
+                            false,
+                            true);
 
-                                // set the role appriate
-                                PvmSystemManager.CheckAndUpdateAccountAsync(
-                                currentUser,
-                                Context.Guild,
-                                kills,
-                                new PvmSet()
-                                {
-                                    learner = Constants.TobLearner,
-                                    intermediate = Constants.ToBIntermediate,
-                                    advanced = Constants.ToBAdvanced,
-                                    imageUrl = Constants.TobImage
-                                },
-                                false,
-                                true);
-
-                            }
                         }
                     }
+
                 }
 
                 // delete the command posted
@@ -119,40 +113,38 @@ namespace CorruptOSBot.Modules
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
-                    var rsn = currentUser.Nickname;
+                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
                         // Get KC in WOM
-                        var client = new WiseOldManClient();
-                        var clanMember = client.GetClanMembers(128).FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
+                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
+                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
 
                         if (clanMember != null)
                         {
-                            var user = client.GetPlayerDetails(clanMember.id);
-                            if (user != null)
+
+                            var kills = clanMember.latestSnapshot.nightmare.kills;
+
+                            // set the role appriate
+                            await PvmSystemHelper.CheckAndUpdateAccountAsync(
+                            currentUser,
+                            Context.Guild,
+                            kills,
+                            new PvmSet()
                             {
-                                var kills = user.latestSnapshot.nightmare.kills;
+                                learner = Constants.NmLearner,
+                                intermediate = Constants.NmIntermediate,
+                                advanced = Constants.NmAdvanced,
+                                imageUrl = Constants.nmImage
+                            },
+                            false,
+                            true);
 
-                                // set the role appriate
-                                PvmSystemManager.CheckAndUpdateAccountAsync(
-                                currentUser,
-                                Context.Guild,
-                                kills,
-                                new PvmSet()
-                                {
-                                    learner = Constants.NmLearner,
-                                    intermediate = Constants.NmIntermediate,
-                                    advanced = Constants.NmAdvanced,
-                                    imageUrl = Constants.nmImage
-                                },
-                                false,
-                                true);
-
-                            }
                         }
                     }
                 }
+
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
@@ -160,5 +152,3 @@ namespace CorruptOSBot.Modules
         }
     }
 }
-
-

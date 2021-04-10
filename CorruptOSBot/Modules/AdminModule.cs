@@ -18,9 +18,10 @@ namespace CorruptOSBot.Modules
                 RootAdminManager.HasSpecificRole(Context.User, "Moderator")))
             {
                 var currentUser = ((SocketGuildUser)Context.User);
-                if (!string.IsNullOrEmpty(currentUser.Nickname))
+                var name = DiscordHelper.GetAccountNameOrNickname(currentUser);
+                if (!string.IsNullOrEmpty(name))
                 {
-                    string title = string.Format("{0} has started a poll", currentUser.Nickname);
+                    string title = string.Format("{0} has started a poll", name);
                     string description = pollquestion;
 
                     // Post the poll

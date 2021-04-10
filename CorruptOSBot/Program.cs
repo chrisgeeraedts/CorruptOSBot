@@ -80,6 +80,7 @@ namespace CorruptOSBot
             var result = new List<IService>();
 
             result.Add(new PVMRoleService(_client));
+            result.Add(new TopKCService(_client));
 
             return result;
         }
@@ -151,6 +152,10 @@ namespace CorruptOSBot
 
             StartServiceThreads(_client);
 
+            foreach (var item in RootAdminManager.GetToggleStates())
+            {
+                await Log(new LogMessage(LogSeverity.Info, "Toggle states:", string.Format("{0}: {1}", item.Key, item.Value)));
+            }
 
             // Wait infinitely so your bot actually stays connected.
             await Task.Delay(Timeout.Infinite);
@@ -175,10 +180,6 @@ namespace CorruptOSBot
                     
                 }).Start();
             }
-
-
-
-            
         }
 
         private Dictionary<ulong, Func<SocketMessage, Task>> ConfigureChannelInterceptors()
@@ -232,24 +233,24 @@ namespace CorruptOSBot
 
         private async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)
         {
-            await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("User banned: {0}", arg1.Username)));
+            await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User banned: {0}", arg1.Username)));
         }
 
         private async Task _client_ReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
         {
-            await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("Reaction: {0}: {1}", arg3.Emote.Name, arg3.Emote.ToString())));
+            await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("Reaction: {0}: {1}", arg3.Emote.Name, arg3.Emote.ToString())));
             await ReactionManager.ReactionPosted(_client, arg1, arg2, arg3);
         }
 
         private async Task _client_UserJoined(SocketGuildUser arg)
         {
-            await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("User joined: {0}", arg.Username)));
+            await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User joined: {0}", arg.Username)));
         }
 
         private async Task _client_UserLeft(SocketGuildUser arg)
         {
             if (arg.IsBot || arg.IsWebhook) return;
-            await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("User left: {0}", arg.Username)));
+            await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User left: {0}", arg.Username)));
             await EventManager.LeavingGuild(arg);
         }
 
@@ -266,7 +267,7 @@ namespace CorruptOSBot
 
             try
             {
-                await Program.Log(new LogMessage(LogSeverity.Info, string.Empty, string.Format("{0}: {1}", arg.Author, arg.Content)));
+                await Program.Log(new LogMessage(LogSeverity.Info, "Chat", string.Format("[{2}] {0}: {1}", arg.Author, arg.Content, arg.Channel.Name)));
             }
             catch (Exception)
             {
