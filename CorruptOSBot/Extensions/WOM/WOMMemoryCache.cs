@@ -118,7 +118,7 @@ namespace CorruptOSBot.Extensions.WOM
             var tempList = new List<ClanMemberDetail>();
             int index = 1;
             int max = updatedClanMembers.Count;
-            foreach (var updatedClanMember in updatedClanMembers.Take(5))
+            foreach (var updatedClanMember in updatedClanMembers)
             {
                 var data = WomClient.GetPlayerDetails(updatedClanMember.id);
                 await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Updating ({1}/{2}) {0}", data.displayName, index, max)));
