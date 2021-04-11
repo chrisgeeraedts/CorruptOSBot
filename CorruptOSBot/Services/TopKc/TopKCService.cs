@@ -43,14 +43,14 @@ namespace CorruptOSBot.Services
 
                     // find the message or create a new one
                     var channel = await client.GetChannelAsync(ChannelHelper.GetChannelId("top-boss-kc"));
-                    foreach (var item in result.Take(5))
+                    foreach (var item in result)
                     {
                         var embed = new EmbedBuilder();
                         int rank = 1;
                         var sb = new StringBuilder();
-                        foreach (var itemPlayer in item.KcPlayers)
+                        foreach (var itemPlayer in item.KcPlayers.Take(3))
                         {
-                            embed.AddField("\u200b" , string.Format("{2} {0}:{1}", itemPlayer.Player, itemPlayer.Kc, GetRankString(rank)), false);
+                            embed.AddField("\u200b" , string.Format("{2} **{0}: {1}**", itemPlayer.Player, itemPlayer.Kc, GetRankString(rank)), false);
                             rank++;
                         }
                         embed.Title = item.Boss;
@@ -91,14 +91,6 @@ namespace CorruptOSBot.Services
             if (rank == 3)
             {
                 return "\U0001f949";
-            }
-            if (rank == 4)
-            {
-                return "4";
-            }
-            if (rank == 5)
-            {
-                return "5";
             }
             return string.Empty;
         }

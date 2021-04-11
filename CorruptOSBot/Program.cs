@@ -150,17 +150,15 @@ namespace CorruptOSBot
             await _client.StartAsync();
 
             ReactionManager.Init();
-
-            StartServiceThreads(_client);
-
+            
             await LoadMemoryCache();
+
+            await StartServiceThreads(_client);
 
             foreach (var item in RootAdminManager.GetToggleStates())
             {
                 await Log(new LogMessage(LogSeverity.Info, "Toggle states:", string.Format("{0}: {1}", item.Key, item.Value)));
             }
-
-            
 
             // Wait infinitely so your bot actually stays connected.
             await Task.Delay(Timeout.Infinite);
@@ -172,7 +170,7 @@ namespace CorruptOSBot
             await WOMMemoryCache.UpdateClan(WOMMemoryCache.OneHourMS);
         }
 
-        private void StartServiceThreads(DiscordSocketClient client)
+        private async Task StartServiceThreads(DiscordSocketClient client)
         {
             foreach (var _activeService in _activeServices)
             {

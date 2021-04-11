@@ -45,8 +45,6 @@ namespace CorruptOSBot.Services
 
                         if (clanMemberWom != null)
                         {
-                            //await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Loaded details for :" + clanMemberWom.displayName));
-
                             // check if role change is needed
                             if (discordUser != null)
                             {

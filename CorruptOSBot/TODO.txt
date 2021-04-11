@@ -1,0 +1,4 @@
+﻿- fix the event !score so it doesnt show newer events that havent started yet :)
+- Make the !kc command only available in the proper channel
+- !score event-general only available in the proper channel
+- !endscore leaderboard only available in the proper channel

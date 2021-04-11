@@ -34,8 +34,11 @@ namespace CorruptOSBot.Extensions.WOM
 
         public class ClanMemberCache
         {
+            public ClanMemberCache()
+            {
+                _clanMemberDetails = new List<ClanMemberDetail>();
+            }
             public DateTime LastUpdated { get; set; }
-
             private List<ClanMemberDetail> _clanMemberDetails { get; set; }
             public List<ClanMemberDetail> ClanMemberDetails
             {
@@ -52,7 +55,7 @@ namespace CorruptOSBot.Extensions.WOM
         }
 
         public static ClanCache Clan = new ClanCache();
-        public static ClanMemberCache ClanMemberDetails = new ClanMemberCache() { ClanMemberDetails = new List<ClanMemberDetail>() };
+        public static ClanMemberCache ClanMemberDetails = new ClanMemberCache();
 
         public static int OneMinuteMS { get => 1000 * 60; }
         public static int OneHourMS { get => 1000 * 60 * 60; }
@@ -126,7 +129,7 @@ namespace CorruptOSBot.Extensions.WOM
                 tempList.Add(data);
             }
             ClanMemberDetails.ClanMemberDetails = tempList;
-
+            ClanMemberDetails.LastUpdated = DateTime.Now;
             await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmembers cache")));
         }
 
