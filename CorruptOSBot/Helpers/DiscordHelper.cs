@@ -1,15 +1,14 @@
 ﻿using Discord;
 using Discord.WebSocket;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CorruptOSBot.Helpers
 {
     public static class DiscordHelper
     {
+        public static List<string> DiscordUsers { get; set; }
+
+
         public static string GetAccountNameOrNickname(SocketUser user)
         {
             var currentUser = ((SocketGuildUser)user);

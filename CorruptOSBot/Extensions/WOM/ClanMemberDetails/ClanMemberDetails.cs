@@ -6,238 +6,238 @@ using System.Threading.Tasks;
 namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
 {
 
-    public class Bryophyta
+    public class Bryophyta : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Callisto
+    public class Callisto : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Cerberus
+    public class Cerberus : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class ChambersOfXeric
+    public class ChambersOfXeric : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class ChambersOfXericChallengeMode
+    public class ChambersOfXericChallengeMode : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class ChaosElemental
+    public class ChaosElemental : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class ChaosFanatic
+    public class ChaosFanatic : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class CommanderZilyana
+    public class CommanderZilyana : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class CorporealBeast
+    public class CorporealBeast : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class CrazyArchaeologist
+    public class CrazyArchaeologist : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class DagannothPrime
+    public class DagannothPrime : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class DagannothRex
+    public class DagannothRex : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class DagannothSupreme
+    public class DagannothSupreme : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class DerangedArchaeologist
+    public class DerangedArchaeologist : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class GeneralGraardor
+    public class GeneralGraardor : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class GiantMole
+    public class GiantMole : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class GrotesqueGuardians
+    public class GrotesqueGuardians : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Hespori
+    public class Hespori : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class KalphiteQueen
+    public class KalphiteQueen : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class KingBlackDragon
+    public class KingBlackDragon : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Kraken
+    public class Kraken : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Kreearra
+    public class Kreearra : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class KrilTsutsaroth
+    public class KrilTsutsaroth : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Mimic
+    public class Mimic : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Nightmare
+    public class Nightmare : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Obor
+    public class Obor : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Sarachnis
+    public class Sarachnis : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Scorpia
+    public class Scorpia : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Skotizo
+    public class Skotizo : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class Tempoross
+    public class Tempoross : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class TheGauntlet
+    public class TheGauntlet : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class TheCorruptedGauntlet
+    public class TheCorruptedGauntlet : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class TheatreOfBlood
+    public class TheatreOfBlood : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
         public double ehb { get; set; }
     }
 
-    public class ThermonuclearSmokeDevil
+    public class ThermonuclearSmokeDevil : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }

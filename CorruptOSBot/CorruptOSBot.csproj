@@ -110,6 +110,7 @@
     <Compile Include="Events\ReactionHandlers\PVMReactionHandler.cs" />
     <Compile Include="Events\ReactionManager.cs" />
     <Compile Include="Extensions\Runewatch\RunewatchClient.cs" />
+    <Compile Include="Extensions\Runewatch\RunewatchEntry.cs" />
     <Compile Include="Extensions\WOM\Achievement.cs" />
     <Compile Include="Extensions\WOM\Clan.cs" />
     <Compile Include="Extensions\WOM\ClanMember.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Extensions\WOM\ClanMemberDetails\Herblore.cs" />
     <Compile Include="Extensions\WOM\ClanMemberDetails\Hitpoints.cs" />
     <Compile Include="Extensions\WOM\ClanMemberDetails\Hunter.cs" />
+    <Compile Include="Extensions\WOM\ClanMemberDetails\IBossKc.cs" />
     <Compile Include="Extensions\WOM\ClanMemberDetails\LastManStanding.cs" />
     <Compile Include="Extensions\WOM\ClanMemberDetails\LatestSnapshot.cs" />
     <Compile Include="Extensions\WOM\ClanMemberDetails\LeaguePoints.cs" />
@@ -197,8 +199,10 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IService.cs" />
-    <Compile Include="Services\PVMRoleService.cs" />
-    <Compile Include="Services\TopKCService.cs" />
+    <Compile Include="Services\PVMRoles\PVMRoleService.cs" />
+    <Compile Include="Services\TopKc\KcPlayer.cs" />
+    <Compile Include="Services\TopKc\KcTopList.cs" />
+    <Compile Include="Services\TopKc\TopKCService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -1,6 +1,6 @@
 ﻿namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
 {
-    public class TzkalZuk
+    public class TzkalZuk : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }

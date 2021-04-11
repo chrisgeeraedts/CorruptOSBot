@@ -46,8 +46,9 @@
         vorkath,
         todt,
         zalcano,
-        zulrah
+        zulrah,
+        FirstPlace,
+        SecondPlace,
+        ThirdPlace
     }
-
-
 }

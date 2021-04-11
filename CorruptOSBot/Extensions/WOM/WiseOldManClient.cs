@@ -26,14 +26,27 @@ namespace CorruptOSBot.Extensions
         }
 
 
-        public Competition GetCompetitions(int compId)
+        public List<Competition> GetClanCompetitions()
         {
-            Competition product = null;
+            List<Competition> product = null;
+            HttpResponseMessage response = client.GetAsync(path + string.Format("/groups/{0}/competitions", clanId)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                product = JsonConvert.DeserializeObject<List<Competition>>(result);
+            }
+            return product;
+        }
+
+
+        public CompetitionDetail GetCompetition(int compId)
+        {
+            CompetitionDetail product = null;
             HttpResponseMessage response = client.GetAsync(path + string.Format("/competitions/{0}", compId)).Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                product = JsonConvert.DeserializeObject<Competition>(result);
+                product = JsonConvert.DeserializeObject<CompetitionDetail>(result);
             }
             return product;
         }
@@ -173,5 +186,59 @@ namespace CorruptOSBot.Extensions
             }
             return achievements;
         }
+    }
+
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class Progress
+    {
+        public int start { get; set; }
+        public int end { get; set; }
+        public int gained { get; set; }
+    }
+
+    public class History
+    {
+        public DateTime? date { get; set; }
+        public int value { get; set; }
+    }
+
+    public class Participant
+    {
+        public int exp { get; set; }
+        public int id { get; set; }
+        public string username { get; set; }
+        public string displayName { get; set; }
+        public string type { get; set; }
+        public string build { get; set; }
+        public object country { get; set; }
+        public bool flagged { get; set; }
+        public double ehp { get; set; }
+        public double ehb { get; set; }
+        public double ttm { get; set; }
+        public double tt200m { get; set; }
+        public DateTime? lastImportedAt { get; set; }
+        public DateTime? lastChangedAt { get; set; }
+        public DateTime? registeredAt { get; set; }
+        public DateTime? updatedAt { get; set; }
+        public Progress progress { get; set; }
+        public List<History> history { get; set; }
+    }
+
+    public class CompetitionDetail
+    {
+        public int id { get; set; }
+        public string title { get; set; }
+        public string metric { get; set; }
+        public string type { get; set; }
+        public int score { get; set; }
+        public DateTime? startsAt { get; set; }
+        public DateTime? endsAt { get; set; }
+        public object groupId { get; set; }
+        public DateTime? createdAt { get; set; }
+        public DateTime? updatedAt { get; set; }
+        public object group { get; set; }
+        public string duration { get; set; }
+        public int totalGained { get; set; }
+        public List<Participant> participants { get; set; }
     }
 }

@@ -35,12 +35,14 @@ namespace CorruptOSBot
                         var emojiQuestion = new Emoji("❓");
                         await sent.AddReactionAsync(emojiQuestion);
                     }
+
+                    await Program.Log(new LogMessage(LogSeverity.Info, nameof(SuggestionInterceptor), "New suggestion: " + arg.Content));
                 }
 
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
-
+                await Program.Log(new LogMessage(LogSeverity.Info, nameof(SuggestionInterceptor), "Posting a new suggestion failed: " + e.Message));
             }
             // delete the command posted
             await arg.DeleteAsync();

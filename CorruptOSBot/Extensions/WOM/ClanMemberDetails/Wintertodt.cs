@@ -1,6 +1,6 @@
 ﻿namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
 {
-    public class Wintertodt
+    public class Wintertodt : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }

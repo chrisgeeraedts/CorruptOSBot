@@ -2,7 +2,10 @@
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Modules
@@ -99,6 +102,57 @@ namespace CorruptOSBot.Modules
             }
             // delete the command posted
             await Context.Message.DeleteAsync();
+        }
+
+
+        [Command("getusers")]
+        [Summary("(admin) Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
+        public async Task SayGetUsersAsync()
+        {
+            var hasDevRole = ((SocketGuildUser)Context.User).Roles.Any(x => x.Name == "Developer");
+            if (RootAdminManager.GetToggleState("getusers") &&
+                hasDevRole)
+            {
+                try
+                {
+                    StringBuilder builder = new StringBuilder();
+
+                    DiscordHelper.DiscordUsers = new List<string>();
+                    var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+                    var guild = await ((IDiscordClient)Context.Client).GetGuildAsync(guildId);
+                    var allUsers = await guild.GetUsersAsync();
+                    foreach (var discordUser in allUsers.Where(x => !x.IsBot && !x.IsWebhook))
+                    {
+                        DiscordHelper.DiscordUsers.Add(DiscordHelper.GetAccountNameOrNickname(discordUser));
+                    }
+
+                    foreach (var discordUser in DiscordHelper.DiscordUsers)
+                    {
+                        if (!string.IsNullOrEmpty(discordUser))
+                        {
+                            string s = string.Format("{0}", discordUser);
+                            builder.AppendLine(s);
+                        }
+
+                        // ensure that we do not go over the 2k content cap
+                        if (builder.ToString().Length > 1900)
+                        {
+                            // reset, since we can only post 2000 characters
+                            await Context.Channel.SendMessageAsync(builder.ToString());
+                            builder = new StringBuilder();
+                        }
+                    }
+
+                    await Context.Channel.SendMessageAsync(builder.ToString());
+                }
+                catch (Exception e)
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Info, nameof(SayGetUsersAsync), string.Format("Failed: {0}", e.Message)));
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
         }
     }
 }

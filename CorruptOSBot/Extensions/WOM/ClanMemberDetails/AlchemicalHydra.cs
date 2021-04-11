@@ -1,6 +1,6 @@
 ﻿namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
 {
-    public class AlchemicalHydra
+    public class AlchemicalHydra : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }

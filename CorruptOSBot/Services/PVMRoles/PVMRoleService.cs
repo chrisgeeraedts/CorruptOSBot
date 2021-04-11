@@ -45,7 +45,7 @@ namespace CorruptOSBot.Services
 
                         if (clanMemberWom != null)
                         {
-                            await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Loaded details for :" + clanMemberWom.displayName));
+                            //await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Loaded details for :" + clanMemberWom.displayName));
 
                             // check if role change is needed
                             if (discordUser != null)
@@ -81,11 +81,11 @@ namespace CorruptOSBot.Services
                     }
 
 
-                    await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "PVMRoleService completed"));
+                    await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Completed"));
                 }
                 catch (Exception e)
                 {
-                    await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "PVMRoleService failed: " + e.Message));
+                    await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "Failed: " + e.Message));
                 }
             }
         }

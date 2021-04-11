@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CorruptOSBot.Helpers
 {
@@ -30,9 +28,6 @@ namespace CorruptOSBot.Helpers
                       .Where(m => m.GetCustomAttributes(typeof(CommandAttribute), false).Length > 0)
                       .ToArray();
 
-
-
-
             foreach (var method in commandMethods)
             {
                 SummaryAttribute attrSummary = (SummaryAttribute)method.GetCustomAttributes(typeof(SummaryAttribute), true)[0];
@@ -47,7 +42,6 @@ namespace CorruptOSBot.Helpers
                     result.Add(commandLine, valueSummary);
                 }
             }
-
             return result;
         }
 
@@ -62,7 +56,6 @@ namespace CorruptOSBot.Helpers
                     result.Add(item.Key, item.Value);
                 }
             }
-
             return result;
         }
     }

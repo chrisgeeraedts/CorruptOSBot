@@ -1,9 +1,6 @@
 ﻿using Discord;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CorruptOSBot.Helpers
 {
@@ -49,7 +46,7 @@ namespace CorruptOSBot.Helpers
         {
             var builder = new EmbedBuilder();
             builder.Color = Color.Blue;
-            builder.ThumbnailUrl = "https://icons.iconarchive.com/icons/tatice/cristal-intense/32/FAQ-icon.png";
+            builder.ThumbnailUrl = Constants.PollIcon;
             builder.Title = title;
             builder.Footer = new EmbedFooterBuilder()
             {
@@ -64,7 +61,6 @@ namespace CorruptOSBot.Helpers
             var builder = new EmbedBuilder();
             builder.Color = Color.Blue;
             builder.ThumbnailUrl = imageUri;
-            //builder.ThumbnailUrl = "https://icons.iconarchive.com/icons/umut-pulat/tulliana-2/32/important-icon.png";
             builder.Title = title;
             builder.Footer = new EmbedFooterBuilder()
             {

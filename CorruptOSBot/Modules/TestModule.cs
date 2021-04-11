@@ -80,8 +80,22 @@ namespace CorruptOSBot.Modules
         {
             if (RootAdminManager.GetToggleState("test"))
             {
-                await ReplyAsync("test placeholder");
+                
+                var builder = new EmbedBuilder();
+                builder.Color = Color.Blue;
+                builder.Title = string.Format("{0} Top 5 {1} kc", EmojiHelper.GetFullEmojiString(EmojiEnum.tob) , "Scorpia");
+
+                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 1", "155"));
+                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 2", "145"));
+                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 3", "135"));
+                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 4", "125"));
+                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 5", "115"));
+
+                await ReplyAsync(embed: builder.Build());
             }
         }
+
+
+       
     }
 }

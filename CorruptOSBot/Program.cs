@@ -157,9 +157,13 @@ namespace CorruptOSBot
                 await Log(new LogMessage(LogSeverity.Info, "Toggle states:", string.Format("{0}: {1}", item.Key, item.Value)));
             }
 
+            
+
             // Wait infinitely so your bot actually stays connected.
             await Task.Delay(Timeout.Infinite);
         }
+
+
 
         private void StartServiceThreads(DiscordSocketClient client)
         {
@@ -260,8 +264,6 @@ namespace CorruptOSBot
             var msg = arg as SocketUserMessage;
             if (msg == null) return;
 
-            //Console.WriteLine(arg.Author.Username + ": " + msg.ToString());
-
             // We don't want the bot to respond to itself or other bots.
             if (msg.Author.Id == _client.CurrentUser.Id || msg.Author.IsBot) return;
 
@@ -290,6 +292,8 @@ namespace CorruptOSBot
                 // commands to be invoked by mentioning the bot instead.
                 if (msg.HasCharPrefix('!', ref pos) /* || msg.HasMentionPrefix(_client.CurrentUser, ref pos) */)
                 {
+
+
                     // Create a Command Context.
                     var context = new SocketCommandContext(_client, msg);
 

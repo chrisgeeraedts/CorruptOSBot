@@ -14,7 +14,7 @@ namespace CorruptOSBot.Modules
         {
             if (RootAdminManager.GetToggleState("wom") && RootAdminManager.HasAnyRole(Context.User))
             {
-                var clan = new WiseOldManClient().GetClan(128);
+                var clan = new WiseOldManClient().GetClan();
 
                 var builder = new EmbedBuilder();
                 builder.Color = Color.Blue;

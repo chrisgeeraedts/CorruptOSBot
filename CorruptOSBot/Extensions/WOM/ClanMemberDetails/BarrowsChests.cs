@@ -1,6 +1,6 @@
 ﻿namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
 {
-    public class BarrowsChests
+    public class BarrowsChests : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }
