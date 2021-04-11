@@ -21,6 +21,9 @@ namespace CorruptOSBot.Modules
             {
                 await ReplyAsync(embed: await CreateEmbedForMessage(playerName));
             }
+            
+            // delete the command posted
+            await Context.Message.DeleteAsync();
         }
 
         [Command("kc")]
@@ -42,6 +45,10 @@ namespace CorruptOSBot.Modules
                     await ReplyAsync(embed: await CreateEmbedForMessage(Context.User.Username));
                 }
             }
+
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
         }
 
 

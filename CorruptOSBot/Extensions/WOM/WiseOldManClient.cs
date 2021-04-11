@@ -174,6 +174,17 @@ namespace CorruptOSBot.Extensions
             return clanMemberDetail;
         }
 
+        public List<ClanMember> SearchUsersByName(string clanMemberRsn)
+        {
+            List<ClanMember> foundClanMembers = null;
+            HttpResponseMessage response = client.GetAsync(path + string.Format("/players/search?username={0}", clanMemberRsn)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                foundClanMembers = JsonConvert.DeserializeObject<List<ClanMember>>(result);
+            }
+            return foundClanMembers;
+        }
 
         public List<Achievement> GetAchievements(int id)
         {

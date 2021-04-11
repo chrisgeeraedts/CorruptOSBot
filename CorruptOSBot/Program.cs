@@ -12,6 +12,7 @@ using CorruptOSBot.Events;
 using System.Collections.Generic;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Services;
+using CorruptOSBot.Extensions.WOM;
 
 namespace CorruptOSBot
 {
@@ -152,6 +153,8 @@ namespace CorruptOSBot
 
             StartServiceThreads(_client);
 
+            await LoadMemoryCache();
+
             foreach (var item in RootAdminManager.GetToggleStates())
             {
                 await Log(new LogMessage(LogSeverity.Info, "Toggle states:", string.Format("{0}: {1}", item.Key, item.Value)));
@@ -163,7 +166,11 @@ namespace CorruptOSBot
             await Task.Delay(Timeout.Infinite);
         }
 
-
+        private async Task LoadMemoryCache()
+        {
+            await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
+            await WOMMemoryCache.UpdateClan(WOMMemoryCache.OneHourMS);
+        }
 
         private void StartServiceThreads(DiscordSocketClient client)
         {
@@ -269,7 +276,7 @@ namespace CorruptOSBot
 
             try
             {
-                await Program.Log(new LogMessage(LogSeverity.Info, "Chat", string.Format("[{2}] {0}: {1}", arg.Author, arg.Content, arg.Channel.Name)));
+                await Program.Log(new LogMessage(LogSeverity.Info, "Chat", string.Format("[{2}] {0}: {1}", DiscordHelper.GetAccountNameOrNickname(arg.Author), arg.Content, arg.Channel.Name)));
             }
             catch (Exception)
             {

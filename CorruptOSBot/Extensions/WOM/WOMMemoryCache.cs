@@ -52,7 +52,7 @@ namespace CorruptOSBot.Extensions.WOM
         }
 
         public static ClanCache Clan = new ClanCache();
-        public static ClanMemberCache ClanMemberDetails = new ClanMemberCache();
+        public static ClanMemberCache ClanMemberDetails = new ClanMemberCache() { ClanMemberDetails = new List<ClanMemberDetail>() };
 
         public static int OneMinuteMS { get => 1000 * 60; }
         public static int OneHourMS { get => 1000 * 60 * 60; }
@@ -85,7 +85,7 @@ namespace CorruptOSBot.Extensions.WOM
         public static async Task UpdateClanMember(int refreshIfAfterThisTimeInMs, int clanMemberId)
         {
             var details = ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.id == clanMemberId);
-            if (CanUpdate(refreshIfAfterThisTimeInMs, details.LastUpdated))
+            if (details == null || CanUpdate(refreshIfAfterThisTimeInMs, details.LastUpdated))
             {
                 await ForceUpdateClanMember(clanMemberId);
             }
@@ -93,8 +93,8 @@ namespace CorruptOSBot.Extensions.WOM
 
         public static async Task UpdateClanMember(int refreshIfAfterThisTimeInMs, string clanMemberRsn)
         {
-            var details = ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName == clanMemberRsn);
-            if (CanUpdate(refreshIfAfterThisTimeInMs, details.LastUpdated))
+            var details = ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == clanMemberRsn.ToLower());
+            if (details == null || CanUpdate(refreshIfAfterThisTimeInMs, details.LastUpdated))
             {
                 await ForceUpdateClanMember(clanMemberRsn);
             }
@@ -145,22 +145,40 @@ namespace CorruptOSBot.Extensions.WOM
 
         public static async Task ForceUpdateClanMember(string clanMemberRsn)
         {
-            var WomClient = new WiseOldManClient();
+            var womClient = new WiseOldManClient();
             await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clanmember({0}) cache", clanMemberRsn)));
 
-            var id = ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName == clanMemberRsn)?.id;
-            if (id.HasValue)
+            var clanMember = ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName == clanMemberRsn);
+            try
             {
-                var playerdetails = WomClient.GetPlayerDetails(id.Value);
-                var detailToRemove = ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName == clanMemberRsn);
-                ClanMemberDetails.ClanMemberDetails.Remove(detailToRemove);
-                ClanMemberDetails.ClanMemberDetails.Add(playerdetails);
-                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmember({0}) cache", clanMemberRsn)));
-            }            
-            else
+                if (clanMember == null)
+                {
+                    // we dont have him yet (why?!?) Find player by username
+                    var baseClanmember = womClient.SearchUsersByName(clanMemberRsn);
+                    if (baseClanmember.Count == 1)
+                    {
+                        await TryAndUpdateClanMember(womClient, baseClanmember[0].id);
+                    }
+                }
+                else
+                {
+                    await TryAndUpdateClanMember(womClient, clanMember.id);
+                }
+                //welp - quess not
+            }
+            catch (Exception e)
             {
-                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failed reloading memory Clanmember({0}) cache", clanMemberRsn)));
-            }            
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failed reloading memory Clanmember({0}) cache due to : {1}", clanMemberRsn, e.Message)));
+            }
+        }
+
+        private static async Task TryAndUpdateClanMember(WiseOldManClient womClient, int id)
+        {
+            var playerdetails = womClient.GetPlayerDetails(id);
+            var detailToRemove = ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.id == id);
+            ClanMemberDetails.ClanMemberDetails.Remove(detailToRemove);
+            ClanMemberDetails.ClanMemberDetails.Add(playerdetails);
+            await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmember({0}) cache", id)));
         }
     }
 }
