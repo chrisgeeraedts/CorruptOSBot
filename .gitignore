@@ -859,3 +859,5 @@ LocalRunner/Active/System.Xml.XmlDocument.dll
 LocalRunner/Active/System.Xml.XmlSerializer.dll
 LocalRunner/Active/System.Xml.XPath.dll
 LocalRunner/Active/System.Xml.XPath.XDocument.dll
+CorruptOSBot/obj/Debug/CorruptOSBot.csprojAssemblyReference.cache
+CorruptOSBot/obj/Debug/CorruptOSBot.pdb

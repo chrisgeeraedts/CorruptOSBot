@@ -2,3 +2,5 @@
 - Make the !kc command only available in the proper channel
 - !score event-general only available in the proper channel
 - !endscore leaderboard only available in the proper channel
+- polling to discord channel if bot is online
+- 

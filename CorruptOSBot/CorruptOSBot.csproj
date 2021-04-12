@@ -183,6 +183,7 @@
     <Compile Include="Helpers\EmbedHelper.cs" />
     <Compile Include="Helpers\EmojiEnum.cs" />
     <Compile Include="Helpers\EmojiHelper.cs" />
+    <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\PostHelper.cs" />
     <Compile Include="Helpers\PvmSet.cs" />
     <Compile Include="Helpers\PvmSystemHelper.cs" />

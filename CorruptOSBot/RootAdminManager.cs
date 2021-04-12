@@ -17,8 +17,7 @@ namespace CorruptOSBot.Helpers
             AddAvailableServices();
             AddAvailableInterceptors();
 
-            UpdateToggleStatesFromConfig();
-                
+            UpdateToggleStatesFromConfig();                
         }
 
         internal static bool HasAnyRole(SocketUser user)
@@ -99,6 +98,4 @@ namespace CorruptOSBot.Helpers
             return toggleStates;
         }
     }
-
-
 }

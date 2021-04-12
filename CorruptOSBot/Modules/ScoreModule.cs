@@ -23,12 +23,16 @@ namespace CorruptOSBot.Modules
                 var comps = new WiseOldManClient().GetClanCompetitions();
 
                 // Filter on comps that have started and arent finished yet
-                var f1 = comps.Where(x => x.startsAt < DateTime.Now && x.endsAt > DateTime.Now);
+                var f1 = comps.Where(x => 
+                x.startsAt < DateTime.Now && 
+                x.endsAt > DateTime.Now);
+                // 12-04-2021 < 13-04-2021   ==> TRUE
+                // 17-04-2021 > 13-04-2021   ==> TRUE
 
                 if (f1.Any())
                 {
                     // get the last one in that list
-                    var f2 = comps.OrderBy(x => x.id).Last();
+                    var f2 = comps.OrderBy(x => x.id).First();
 
                     // get details of this comp
                     CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
@@ -42,6 +46,7 @@ namespace CorruptOSBot.Modules
                     embedBuilder.Description = string.Format("**Total XP: {0}**", s);
                     
                     AddFields(embedBuilder, detailedComp.participants);
+                    AddImage(embedBuilder, detailedComp.title);
 
                     await ReplyAsync(string.Format("Current results for **{0}**", detailedComp.title), embed: embedBuilder.Build());
                 }
@@ -57,6 +62,7 @@ namespace CorruptOSBot.Modules
                         embedBuilder.Description = string.Format("No active event is running at this moment. The next event is **{0}** and will start at **{1}**, which is in **{2}** hours!",
                             nextComp.title, nextComp.startsAt, Convert.ToInt32(nextComp.startsAt.Subtract(DateTime.Now).TotalHours));
                         embedBuilder.ImageUrl = Constants.EventImage;
+                       
 
                         await ReplyAsync(embed: embedBuilder.Build());
                     }
@@ -102,6 +108,7 @@ namespace CorruptOSBot.Modules
 
                 // get top 3 partipants
                 AddFields(embedBuilder, detailedComp.participants);
+                AddImage(embedBuilder, detailedComp.title);
 
                 await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
 
@@ -130,7 +137,7 @@ namespace CorruptOSBot.Modules
                     embedBuilder.Description = string.Format("**Total XP: {0}**", s);
 
                     AddFields(embedBuilder, detailedComp.participants);
-
+                    AddImage(embedBuilder, detailedComp.title);
                     await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
                 }
                 
@@ -138,6 +145,19 @@ namespace CorruptOSBot.Modules
                 // delete the command posted
                 await Context.Message.DeleteAsync();
             }
+        }
+
+        private void AddImage(EmbedBuilder embedBuilder, string title)
+        {
+            //var titleLower = title.ToLower();
+            //if (titleLower.Contains("fish"))
+            //{
+            //  embedBuilder.ImageUrl = "https://oldschool.runescape.wiki/images/thumb/5/56/Fishing_Skill_Boss_and_Easter_Event_%281%29.jpg/600px-Fishing_Skill_Boss_and_Easter_Event_%281%29.jpg?3a727";
+            //}
+            //else if (titleLower.Contains("thiev"))
+            //{
+            //    embedBuilder.ImageUrl = "https://oldschool.runescape.wiki/images/thumb/5/5a/Rocky_pet.png/280px-Rocky_pet.png?5bf2f";
+            //}
         }
 
         private void AddFields(EmbedBuilder embedBuilder, List<Participant> participants)

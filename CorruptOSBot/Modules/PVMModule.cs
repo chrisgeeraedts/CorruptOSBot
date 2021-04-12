@@ -92,10 +92,8 @@ namespace CorruptOSBot.Modules
                             },
                             false,
                             true);
-
                         }
                     }
-
                 }
 
                 // delete the command posted
@@ -140,11 +138,9 @@ namespace CorruptOSBot.Modules
                             },
                             false,
                             true);
-
                         }
                     }
                 }
-
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
