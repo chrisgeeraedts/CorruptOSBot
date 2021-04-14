@@ -11,11 +11,11 @@ namespace CorruptOSBot.Modules
 {
     public class PromotionModule : ModuleBase<SocketCommandContext>
     {
-        [Command("promotions2")]
+        [Command("promotions")]
         [Summary("Gets a list of accounts that need promotions")]
         public async Task SayPromotionsAsync()
         {
-            if (RootAdminManager.GetToggleState("promotions2") &&
+            if (RootAdminManager.GetToggleState("promotions") &&
                 (RootAdminManager.HasSpecificRole(Context.User, "Staff")))
             {
                 // get players 
