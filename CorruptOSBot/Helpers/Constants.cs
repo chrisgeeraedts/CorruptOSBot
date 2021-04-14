@@ -26,5 +26,12 @@ namespace CorruptOSBot.Helpers
 
         public const string EventImage = "https://wallpapercave.com/wp/wp7068337.png";
         public const string PollIcon = "https://icons.iconarchive.com/icons/tatice/cristal-intense/32/FAQ-icon.png";
+
+        public const string SergeantImage = "https://cdn2.iconfinder.com/data/icons/files-and-folders-vol-4/64/lieutenant-512.png";
+        public const string CorporalImage = "https://cdn2.iconfinder.com/data/icons/files-and-folders-vol-4/64/lieutenant-2-512.png";
+        public const string RecruitImage = "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/48/Actions-list-add-user-icon.png";
+        public const string OGImage = "https://icon-library.com/images/og-icon/og-icon-1.jpg";
+        public const string SmileyImage = "https://m.media-amazon.com/images/I/61PnaNFtmNL._AC_SX466_.jpg";
+        public const string InactiveImage = "https://icons.iconarchive.com/icons/emoticonshd.com/emoji/48/Emoticon-Sleeping-Sleep-Zzz-icon.png";
     }
 }

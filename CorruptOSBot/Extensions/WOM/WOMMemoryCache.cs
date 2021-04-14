@@ -118,19 +118,30 @@ namespace CorruptOSBot.Extensions.WOM
             await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clanmembers cache")));
 
             var updatedClanMembers = WomClient.GetClanMembers();
-            var tempList = new List<ClanMemberDetail>();
-            int index = 1;
-            int max = updatedClanMembers.Count;
-            foreach (var updatedClanMember in updatedClanMembers)
+            if (updatedClanMembers != null)
             {
-                var data = WomClient.GetPlayerDetails(updatedClanMember.id);
-                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Updating ({1}/{2}) {0}", data.displayName, index, max)));
-                index++;
-                tempList.Add(data);
+                var tempList = new List<ClanMemberDetail>();
+                int index = 1;
+                int max = updatedClanMembers.Count;
+                foreach (var updatedClanMember in updatedClanMembers)
+                {
+                    var data = WomClient.GetPlayerDetails(updatedClanMember.id);
+                    if (data != null)
+                    {
+                        await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Updating ({1}/{2}) {0}", data.displayName, index, max)));
+                        tempList.Add(data);
+                    }
+                    index++;
+                }
+                ClanMemberDetails.ClanMemberDetails = tempList;
+                ClanMemberDetails.LastUpdated = DateTime.Now;
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmembers cache")));
             }
-            ClanMemberDetails.ClanMemberDetails = tempList;
-            ClanMemberDetails.LastUpdated = DateTime.Now;
-            await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmembers cache")));
+            else
+            {
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating")));
+            }
+
         }
 
         public static async Task ForceUpdateClanMember(int clanMemberId)

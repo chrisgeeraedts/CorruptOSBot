@@ -201,6 +201,7 @@ namespace CorruptOSBot
             await _commands.AddModuleAsync<ScoreModule>(_services);
             await _commands.AddModuleAsync<WoMModule>(_services);
             await _commands.AddModuleAsync<PVMModule>(_services);
+            await _commands.AddModuleAsync<PromotionModule>(_services);
 
             await _commands.AddModuleAsync<TestModule>(_services);
 

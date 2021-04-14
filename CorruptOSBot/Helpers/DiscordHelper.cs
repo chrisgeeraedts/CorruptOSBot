@@ -1,6 +1,7 @@
 ﻿using Discord;
 using Discord.WebSocket;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CorruptOSBot.Helpers
 {
@@ -28,6 +29,12 @@ namespace CorruptOSBot.Helpers
             var currentUser = user;
             var name = currentUser.Nickname ?? user.Username;
             return name;
+        }
+
+        public static bool HasRole(IGuildUser user, IGuild guild, string roleName)
+        {
+            var roleId_Inactive = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
+            return user.RoleIds.ToList().Contains(roleId_Inactive.Id);
         }
     }
 }

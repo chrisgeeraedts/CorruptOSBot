@@ -1,6 +1,7 @@
-﻿- fix the event !score so it doesnt show newer events that havent started yet :)
-- Make the !kc command only available in the proper channel
-- !score event-general only available in the proper channel
-- !endscore leaderboard only available in the proper channel
-- polling to discord channel if bot is online
-- 
+﻿[ ] fix the event !score so it doesnt show newer events that havent started yet :)
+[ ] Make the !kc command only available in the proper channel
+[ ] !score event-general only available in the proper channel
+[ ] !endscore leaderboard only available in the proper channel
+[ ] polling to discord channel if bot is online
+[X] list of promotions required
+[ ] Drops ingame, transfer data to ?, Bot retrieve data from ?, Show cool stuff

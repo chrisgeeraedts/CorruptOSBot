@@ -75,7 +75,6 @@ namespace CorruptOSBot.Modules
 
                         if (clanMember != null)
                         {
-
                             var kills = clanMember.latestSnapshot.theatre_of_blood.kills;
 
                             // set the role appriate
@@ -121,7 +120,6 @@ namespace CorruptOSBot.Modules
 
                         if (clanMember != null)
                         {
-
                             var kills = clanMember.latestSnapshot.nightmare.kills;
 
                             // set the role appriate
