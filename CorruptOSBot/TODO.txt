@@ -2,7 +2,7 @@
 [ ] Make the !kc command only available in the proper channel
 [ ] !score event-general only available in the proper channel
 [ ] !endscore leaderboard only available in the proper channel
-[ ] removing when account leaves
-[ ] polling to discord channel if bot is online
+[ ] removing WOM when account leaves
+[ ] polling to discord channel if bot is online (heartbeat)
 [X] list of promotions required
 [ ] Drops ingame, transfer data to ?, Bot retrieve data from ?, Show cool stuff

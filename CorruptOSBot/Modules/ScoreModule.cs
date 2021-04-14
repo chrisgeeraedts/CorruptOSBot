@@ -32,7 +32,7 @@ namespace CorruptOSBot.Modules
                 if (f1.Any())
                 {
                     // get the last one in that list
-                    var f2 = comps.OrderBy(x => x.id).First();
+                    var f2 = f1.OrderBy(x => x.id).First();
 
                     // get details of this comp
                     CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
