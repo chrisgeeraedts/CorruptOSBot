@@ -11,11 +11,11 @@ namespace CorruptOSBot.Modules
 {
     public class PromotionModule : ModuleBase<SocketCommandContext>
     {
-        [Command("promotions")]
+        [Command("promotions2")]
         [Summary("Gets a list of accounts that need promotions")]
         public async Task SayPromotionsAsync()
         {
-            if (RootAdminManager.GetToggleState("promotions") &&
+            if (RootAdminManager.GetToggleState("promotions2") &&
                 (RootAdminManager.HasSpecificRole(Context.User, "Staff")))
             {
                 // get players 
@@ -25,6 +25,8 @@ namespace CorruptOSBot.Modules
                 // iterate through all discord users
                 var allUsers = guild.GetUsersAsync().Result;
 
+
+
                 var promotionSet = GetSupposedRank(allUsers, guild);
                 var updatedPromotionSet = GetCurrentRank(promotionSet, guild);
 
@@ -32,7 +34,7 @@ namespace CorruptOSBot.Modules
                 await SendEmbedMessages(updatedPromotionSet, Rank.Sergeant);
                 await SendEmbedMessages(updatedPromotionSet, Rank.Corperal);
                 await SendEmbedMessages(updatedPromotionSet, Rank.Recruit);
-                await SendInactivityEmbedMessage(updatedPromotionSet);
+                //await SendInactivityEmbedMessage(updatedPromotionSet);
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
@@ -60,6 +62,11 @@ namespace CorruptOSBot.Modules
             {
                 await Context.Channel.SendMessageAsync(embed: result);
             }
+        }
+
+        private DateTime GetLastDayOfMonth(DateTime dateTime)
+        {
+            return new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month));
         }
 
         private List<Discord.Embed> BuildMessageForRank(List<PromotionSet> differences, Rank rank, out bool hasUsers)
@@ -122,6 +129,9 @@ namespace CorruptOSBot.Modules
             var daysIn6Months = Convert.ToInt32(daysInYear / 2);
             var daysIn3Months = Convert.ToInt32(daysIn6Months / 2);
             var daysIn1Month = Convert.ToInt32(daysIn6Months / 3);
+
+            var dateTimeCurrent = GetLastDayOfMonth(DateTime.Now);
+
             foreach (var user in users.Where(x=> !x.IsBot && !x.IsWebhook))
             {
                 if (user.JoinedAt.HasValue &&
@@ -133,7 +143,7 @@ namespace CorruptOSBot.Modules
                     // check if inactive
                     if (!IsInactive(user, out daysInactive))
                     {
-                        var daysFromJoining = Convert.ToInt32(DateTime.Now.Subtract(user.JoinedAt.Value.DateTime).TotalDays);
+                        var daysFromJoining = Convert.ToInt32(dateTimeCurrent.Subtract(user.JoinedAt.Value.DateTime).TotalDays);
                        
                         if (daysFromJoining >= daysInYear)
                         {
