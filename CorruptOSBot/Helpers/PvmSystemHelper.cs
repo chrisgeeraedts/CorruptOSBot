@@ -84,6 +84,10 @@ namespace CorruptOSBot.Helpers
                         }
                     }
                 }
+                else
+                {
+                    await currentUser.SendMessageAsync(String.Format("You dont have enough KC for the {0} role!", pvmSet.role));
+                }
             }
         }
 
