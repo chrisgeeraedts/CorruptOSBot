@@ -144,5 +144,48 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
+
+        [Command("cm")]
+        [Summary("Enables a player to earn the 'Challenge Mode' role")]
+        public async Task SayCMAsync()
+        {
+            if (RootAdminManager.GetToggleState("cm") && RootAdminManager.HasAnyRole(Context.User))
+            {
+                if (Context.Channel.Id == ChannelHelper.GetChannelId("set-pvm-roles"))
+                {
+                    // check if user has learner/intermediate/advanced
+                    var currentUser = ((SocketGuildUser)Context.User);
+                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
+
+                    if (!string.IsNullOrEmpty(rsn))
+                    {
+                        // Get KC in WOM
+                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
+                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
+
+                        if (clanMember != null)
+                        {
+                            var kills = clanMember.latestSnapshot.chambers_of_xeric_challenge_mode.kills;
+
+                            // set the role appriate
+                            await PvmSystemHelper.CheckAndUpdateAccountCMAsync(
+                            currentUser,
+                            Context.Guild,
+                            kills,
+                            new PvmSetCM()
+                            {
+                                role = Constants.CM,
+                                imageUrl = Constants.CoxImage
+                            },
+                            false,
+                            true);
+                        }
+                    }
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
     }
 }

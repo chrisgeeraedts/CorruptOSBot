@@ -59,6 +59,34 @@ namespace CorruptOSBot.Helpers
             }
         }
 
+
+        internal static async Task CheckAndUpdateAccountCMAsync(IGuildUser currentUser, IGuild guild, int kills, PvmSetCM pvmSet, bool message, bool overrideTrigger)
+        {
+            var roleId = guild.Roles.FirstOrDefault(x => x.Name == pvmSet.role);
+
+            var hasRole = currentUser.RoleIds.Any(x => x == roleId.Id);
+
+            if (overrideTrigger || (hasRole))
+            {
+                if (kills > 0)
+                {
+                    if (!hasRole)
+                    {
+                        // upgrade role
+                        await SetRole(currentUser, guild, pvmSet.role, roleId.Id, pvmSet.imageUrl, message);
+                        await currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.role));
+                    }
+                    else
+                    {
+                        if (overrideTrigger && hasRole)
+                        {
+                            await currentUser.SendMessageAsync(String.Format("You already have the {0} role!", pvmSet.role));
+                        }
+                    }
+                }
+            }
+        }
+
         private static async Task RemoveRole(IGuildUser currentUser, IGuild guild, IRole role)
         {
             try

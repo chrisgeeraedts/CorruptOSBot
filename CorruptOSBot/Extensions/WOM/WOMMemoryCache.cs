@@ -168,7 +168,7 @@ namespace CorruptOSBot.Extensions.WOM
                 if (clanMember == null)
                 {
                     // we dont have him yet (why?!?) Find player by username
-                    var baseClanmember = womClient.SearchUsersByName(clanMemberRsn);
+                    var baseClanmember = womClient.SearchUsersByName(clanMemberRsn).Where(x => x.displayName.ToLower() == clanMemberRsn.ToLower()).ToList();
                     if (baseClanmember.Count == 1)
                     {
                         await TryAndUpdateClanMember(womClient, baseClanmember[0].id);

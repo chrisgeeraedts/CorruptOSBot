@@ -20,6 +20,8 @@ namespace CorruptOSBot.Helpers
         public const string ToBAdvanced = "ToB Advanced";
         public const string NmAdvanced = "Nightmare Advanced";
 
+        public const string CM = "Challenge Mode";
+
         public const string CoxImage = "https://cdnb.artstation.com/p/assets/images/images/011/329/063/large/j-alexander-legend-arts-olm4k.jpg?1529007874";
         public const string TobImage = "https://i.imgur.com/bAuF9Zu.png";
         public const string nmImage = "https://cdn.runescape.com/assets/img/external/oldschool/2020/newsposts/2020-02-06/nightmareart.jpg";

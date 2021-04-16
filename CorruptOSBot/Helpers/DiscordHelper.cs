@@ -51,7 +51,7 @@ namespace CorruptOSBot.Helpers
 
         public static bool HasRole(SocketUser user, IGuild guild, string roleName)
         {
-            return HasRole(((SocketGuildUser)user), guild, roleName);
+            return HasRole(((IGuildUser)user), guild, roleName);
         }
     }
 }
