@@ -188,6 +188,7 @@
     <Compile Include="Helpers\LogHelper.cs" />
     <Compile Include="Helpers\PostHelper.cs" />
     <Compile Include="Helpers\PvmSet.cs" />
+    <Compile Include="Helpers\PvmSetCM.cs" />
     <Compile Include="Helpers\PvmSystemHelper.cs" />
     <Compile Include="Modules\PromotionModule.cs" />
     <Compile Include="RootAdminManager.cs" />

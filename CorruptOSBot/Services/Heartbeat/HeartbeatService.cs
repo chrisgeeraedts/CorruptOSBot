@@ -28,6 +28,10 @@ namespace CorruptOSBot.Services
             {
                 await DiscordHelper.PostHeartbeat(Channel);
             }
+            else if(Channel == null)
+            {
+                await Setup(client);
+            }
         }
 
         private async Task Setup(Discord.IDiscordClient client)
