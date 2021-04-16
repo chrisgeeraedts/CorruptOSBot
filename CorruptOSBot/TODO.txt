@@ -1,13 +1,12 @@
-﻿[ ] Top 5 KC command (Pull top 5kc for every boss via WOM. Keeps updating daily in a separate channel. )
-[ ] Loot splits (People post drop. Put in another channel who they got it with and items and gets confirmed by staff to then show how much each person has made while being with clan gp wise. )
-[/] Reaction roles for !kc (Set the !kc commands as reaction roles. Will end up removing the set pvm roles and have a full reaction role channel for all stuff in clan including pings for events. )
-[X] Ranks (If possible, A command that shows who needs to be ranked up. We normally use a spreadsheet but alot of manual work has to go into it. Maybe a command like !rankups And it pulls who needs to be ranked up for that month? We do it 1st month in clan, 3rd month in clan, 6 months in clan and OG role. Might be worth waiting on this till clan system update as ranks and times will change )
-[ ] fix the event !score so it doesnt show newer events that havent started yet :)
-[X] Fix the events !score bug
+﻿[ ] Add !cm command. Only gives role if WOM shows they ranked 
 [ ] Make the !kc command only available in the proper channel
 [ ] !score event-general only available in the proper channel
 [ ] !endscore leaderboard only available in the proper channel
 [ ] removing WOM when account leaves
+﻿[ ] Top 5 KC command (Pull top 5kc for every boss via WOM. Keeps updating daily in a separate channel. )
 [ ] polling to discord channel if bot is online (heartbeat)
+[X] Ranks (If possible, A command that shows who needs to be ranked up. We normally use a spreadsheet but alot of manual work has to go into it. Maybe a command like !rankups And it pulls who needs to be ranked up for that month? We do it 1st month in clan, 3rd month in clan, 6 months in clan and OG role. Might be worth waiting on this till clan system update as ranks and times will change )
+[ ] fix the event !score so it doesnt show newer events that havent started yet :slight_smile:
+[X] Fix the events !score bug
 [ ] Drops ingame, transfer data to ?, Bot retrieve data from ?, Show cool stuff in drops channel
 [ ] Runelite plugin (Runelite plugin for clan. Means we will be able to pull drops, pet drops, achievements and more directly from the clan members! Also functions for pvm bingo.)
