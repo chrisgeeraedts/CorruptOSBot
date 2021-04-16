@@ -202,6 +202,7 @@
     <Compile Include="Modules\WoMModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Heartbeat\HeartbeatService.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Services\PVMRoles\PVMRoleService.cs" />
     <Compile Include="Services\TopKc\KcPlayer.cs" />

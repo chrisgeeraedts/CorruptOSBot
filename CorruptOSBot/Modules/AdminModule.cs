@@ -49,8 +49,8 @@ namespace CorruptOSBot.Modules
         [Summary("(number) - Clears posts above it. (max 100)")]
         public async Task SayClearAsync(int number)
         { 
-            var hasDevRole = ((SocketGuildUser)Context.User).Roles.Any(x => x.Name == "Developer");
-            if (RootAdminManager.GetToggleState("clear") && hasDevRole)
+            if (RootAdminManager.GetToggleState("clear") && 
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 // max it 
                 if (number > 100)
@@ -65,10 +65,9 @@ namespace CorruptOSBot.Modules
         [Command("toggle")]
         [Summary("(command string) - Toggles a command to be available.")]
         public async Task SayTogglecommandAsync(string command)
-        {
-            var hasDevRole = ((SocketGuildUser)Context.User).Roles.Any(x => x.Name == "Developer");
-
-            if (hasDevRole && RootAdminManager.GetCommandExist(command))
+        {   
+            if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer")
+                && RootAdminManager.GetCommandExist(command))
             {
                 var currentState = RootAdminManager.GetToggleState(command);
                 RootAdminManager.ToggleModuleCommand(command, !currentState);
@@ -84,9 +83,7 @@ namespace CorruptOSBot.Modules
         [Summary("Shows the current enabled and disabled commands")]
         public async Task SaytogglestatescommandAsync()
         {
-            var hasDevRole = ((SocketGuildUser)Context.User).Roles.Any(x => x.Name == "Developer");
-
-            if (hasDevRole)
+            if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 var builder = new EmbedBuilder();
                 builder.Color = Color.Blue;
@@ -106,12 +103,11 @@ namespace CorruptOSBot.Modules
 
 
         [Command("getusers")]
-        [Summary("(admin) Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
+        [Summary("(Staff) Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
         public async Task SayGetUsersAsync()
         {
-            var hasDevRole = ((SocketGuildUser)Context.User).Roles.Any(x => x.Name == "Developer");
             if (RootAdminManager.GetToggleState("getusers") &&
-                hasDevRole)
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 try
                 {
@@ -153,6 +149,112 @@ namespace CorruptOSBot.Modules
                 // delete the command posted
                 await Context.Message.DeleteAsync();
             }
+        }
+
+
+        [Command("getuser")]
+        [Summary("(admin) Gets a single users on discord, showing their available information.")]
+        public async Task SayGetUserAsync(IGuildUser user)
+        {
+            if (RootAdminManager.GetToggleState("getuser") &&
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Staff"))
+            {
+                try
+                {
+                    await Context.Channel.SendMessageAsync(embed: BuildEmbedForUserInfo(user).Build());
+                }
+                catch (Exception e)
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Info, nameof(SayGetUserAsync), string.Format("Failed: {0}", e.Message)));
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
+        [Command("getuser")]
+        [Summary("(admin) Gets a single users on discord, showing their available information.")]
+        public async Task SayGetUserAsync(string username)
+        {
+            if (RootAdminManager.GetToggleState("getuser") &&
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Staff"))
+            {
+                try
+                {
+                    var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+                    var guild = await ((IDiscordClient)Context.Client).GetGuildAsync(guildId);
+                    var allUsers = await guild.GetUsersAsync();
+                    var user = allUsers.FirstOrDefault(x => x.Nickname == username);
+                    if (user != null)
+                    {
+                        await Context.Channel.SendMessageAsync(embed: BuildEmbedForUserInfo(user).Build());
+                    }
+                    else
+                    {
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} not found", username), string.Empty));
+                    }
+                   
+                }
+                catch (Exception e)
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Info, nameof(SayGetUserAsync), string.Format("Failed: {0}", e.Message)));
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
+        private EmbedBuilder BuildEmbedForUserInfo(IGuildUser user)
+        {
+            var embedBuilder = new EmbedBuilder();
+            embedBuilder.Title = DiscordHelper.GetAccountNameOrNickname(user);
+
+            var sb = new StringBuilder();
+            sb.AppendLine(string.Format("**ID:** {0}", user.Id));
+            sb.AppendLine(string.Format("**Name:** {0}", user.Username));
+            sb.AppendLine(string.Format("**Nickname:** {0}", user.Nickname));
+            sb.AppendLine(string.Format("**Status:** {0}", user.Status));
+
+
+            sb.AppendLine(Environment.NewLine);
+            sb.AppendLine("**Roles:**");
+
+            foreach (var roleId in user.RoleIds)
+            {
+                sb.AppendLine(string.Format("- {0}", Context.Guild.GetRole(roleId).Name).Replace("@", string.Empty));
+            }
+
+
+            sb.AppendLine(Environment.NewLine);
+            sb.AppendLine("**Additional:**");
+            sb.AppendLine(string.Format("**Created at:** {0}", user.CreatedAt));
+            sb.AppendLine(string.Format("**Joined at:** {0}", user.JoinedAt));
+            sb.AppendLine(string.Format("**Premium since:** {0}", user.PremiumSince));
+            sb.AppendLine(string.Format("**Webhook:** {0}", user.IsWebhook));
+            sb.AppendLine(string.Format("**Bot:** {0}", user.IsBot));
+
+            sb.AppendLine(Environment.NewLine);
+            sb.AppendLine("**Activities:**");
+
+            if (user.Activities.Any())
+            {
+                foreach (var activity in user.Activities)
+                {
+                    sb.AppendLine(string.Format("{0} : {1}", activity.Name, activity.Details));
+                }
+            }
+            else
+            {
+                sb.AppendLine("< no activities >");
+            }
+
+
+            embedBuilder.Description = sb.ToString();
+            embedBuilder.ThumbnailUrl = user.GetAvatarUrl();
+
+            return embedBuilder;
         }
     }
 }

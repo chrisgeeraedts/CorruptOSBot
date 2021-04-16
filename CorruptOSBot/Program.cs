@@ -82,6 +82,7 @@ namespace CorruptOSBot
 
             result.Add(new PVMRoleService(_client));
             result.Add(new TopKCService(_client));
+            result.Add(new HeartbeatService(_client));
 
             return result;
         }
@@ -125,7 +126,7 @@ namespace CorruptOSBot
 
             ReactionManager.Init();
             
-            await LoadMemoryCache();
+            //await LoadMemoryCache();
 
             await StartServiceThreads(_client);
 

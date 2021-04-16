@@ -83,7 +83,7 @@ namespace CorruptOSBot.Modules
 
 
         [Command("endscore")]
-        [Summary("Generates a leaderboard for the last completed event.")]
+        [Summary("(Staff) Generates a leaderboard for the last completed event.")]
         public async Task SayEndScoreAsync()
         {
             if (RootAdminManager.GetToggleState("endscore") && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
@@ -95,22 +95,26 @@ namespace CorruptOSBot.Modules
                 // get the last one in that list
                 var f2 = comps.Where(x => x.endsAt < DateTime.Now).OrderBy(x => x.id).Last();
 
-                // get details of this comp
-                CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
+                if (f2 != null)
+                {
+                    // get details of this comp
+                    CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
 
-                // create embed with data
-                var embedBuilder = new EmbedBuilder();
-                embedBuilder.Color = Color.Gold;
-                embedBuilder.Title = f2.title;
-                embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
-                string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
-                embedBuilder.Description = string.Format("**Total XP: {0}**", s);
+                    // create embed with data
+                    var embedBuilder = new EmbedBuilder();
+                    embedBuilder.Color = Color.Gold;
+                    embedBuilder.Title = f2.title;
+                    embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
+                    string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
+                    embedBuilder.Description = string.Format("**Total XP: {0}**", s);
 
-                // get top 3 partipants
-                AddFields(embedBuilder, detailedComp.participants);
-                AddImage(embedBuilder, detailedComp.title);
+                    // get top 3 partipants
+                    AddFields(embedBuilder, detailedComp.participants);
+                    AddImage(embedBuilder, detailedComp.title);
 
-                await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
+                    await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
+
+                }
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
