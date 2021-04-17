@@ -63,7 +63,6 @@ namespace CorruptOSBot.Modules
             // check runewatch
             var runewatchEntries = new RunewatchClient().GetRunewatchEntries();
 
-
             var runewatchEntry = runewatchEntries.FirstOrDefault(x => x.accused_rsn == preferedNickname);
             bool isSafeAccount = runewatchEntry == null;
 
@@ -86,11 +85,15 @@ namespace CorruptOSBot.Modules
 
                 // post to recruitment channel
                 var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
-                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member joined",
-                    string.Format("<@{0}> has joined!", currentUser.Id)));
+                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: 
+                    EmbedHelper.CreateDefaultEmbed("Member joined",
+                    string.Format("<@{0}> has set their RSN to **{1}**!", currentUser.Id, preferedNickname)));
 
                 // add to WOM
                 new WiseOldManClient().AddGroupMember(preferedNickname);
+
+                // send welcome message
+                await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild);
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();

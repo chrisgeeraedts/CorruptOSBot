@@ -90,6 +90,29 @@ namespace CorruptOSBot.Extensions
             }
         }
 
+        public void RemoveGroupMember(string rsn)
+        {
+            var content = JsonConvert.SerializeObject(new RemoveMemberRoot()
+            {
+                verificationCode = verificationCode,
+                members = new List<string>()
+                {
+                    rsn
+                }                
+            });
+
+            HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = client.PostAsync(path + string.Format("/groups/{0}/remove-members", clanId), c).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+            }
+            else
+            {
+                var result = response.ReasonPhrase;
+            }
+        }
 
         public void AddGroupMember(string rsn)
         {
@@ -198,6 +221,14 @@ namespace CorruptOSBot.Extensions
             return achievements;
         }
     }
+
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class RemoveMemberRoot
+    {
+        public string verificationCode { get; set; }
+        public List<string> members { get; set; }
+    }
+
 
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class Progress

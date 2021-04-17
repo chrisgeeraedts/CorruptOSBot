@@ -11,7 +11,7 @@ namespace CorruptOSBot.Modules
     public class PVMModule : ModuleBase<SocketCommandContext>
     {
         [Command("cox")]
-        [Summary("Enables a player to earn the 'CoX learner' role")]
+        [Summary("Enables a player to earn the 'CoX learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayCoxAsync()
         {
             if (RootAdminManager.GetToggleState("cox") && RootAdminManager.HasAnyRole(Context.User))
@@ -56,7 +56,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Command("tob")]
-        [Summary("Enables a player to earn the 'ToB learner' role")]
+        [Summary("Enables a player to earn the 'ToB learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayTobAsync()
         {
             if (RootAdminManager.GetToggleState("tob") && RootAdminManager.HasAnyRole(Context.User))
@@ -101,7 +101,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Command("nm")]
-        [Summary("Enables a player to earn the 'nm learner' role")]
+        [Summary("Enables a player to earn the 'nm learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayNmAsync()
         {
             if (RootAdminManager.GetToggleState("nm") && RootAdminManager.HasAnyRole(Context.User))
@@ -146,7 +146,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Command("cm")]
-        [Summary("Enables a player to earn the 'Challenge Mode' role")]
+        [Summary("Enables a player to earn the 'Challenge Mode' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayCMAsync()
         {
             if (RootAdminManager.GetToggleState("cm") && RootAdminManager.HasAnyRole(Context.User))

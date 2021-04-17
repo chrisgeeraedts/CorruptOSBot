@@ -13,20 +13,23 @@ namespace CorruptOSBot.Services
 
     public class HeartbeatService : IService
     {
+        public TimeSpan TimeOnline { get; set; }
+        public DateTime TimeStarted { get; set; }
         public int TriggerTimeInMS { get => 1000 * 60; } // every minute
         private IGuild Guild { get; set; }
         private IMessageChannel Channel { get; set; }
 
-        public HeartbeatService(Discord.IDiscordClient client)
+        public HeartbeatService(IDiscordClient client)
         {
-            Task.Delay(10000).ContinueWith(t => Setup(client));            
+            //Task.Delay(10000).ContinueWith(t => Setup(client));            
         }
 
-        public async Task Trigger(Discord.IDiscordClient client)
+        public async Task Trigger(IDiscordClient client)
         {
             if (RootAdminManager.GetToggleState(nameof(HeartbeatService)) && Channel != null)
             {
-                await DiscordHelper.PostHeartbeat(Channel);
+                TimeOnline = DateTime.Now.Subtract(TimeStarted);
+                await DiscordHelper.PostHeartbeat(Channel, TimeOnline);
             }
             else if(Channel == null)
             {
@@ -44,6 +47,7 @@ namespace CorruptOSBot.Services
                 if (Channel != null)
                 {
                     await DiscordHelper.PostComeOnline(Channel);
+                    TimeStarted = DateTime.Now;
                 }
             }
         }

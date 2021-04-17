@@ -209,7 +209,7 @@ namespace CorruptOSBot
             // Note that the first one is 'Modules' (plural) and the second is 'Module' (singular).
 
             // Subscribe a handler to see if a message invokes a command.
-            _client.MessageReceived += HandleCommandAsync;
+            _client.MessageReceived += HandleCommandAsync;            
             _client.UserJoined += _client_UserJoined;
             _client.UserLeft += _client_UserLeft;
             _client.UserBanned += _client_UserBanned;
@@ -218,7 +218,11 @@ namespace CorruptOSBot
 
         private async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)
         {
-            await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User banned: {0}", arg1.Username)));
+            if (RootAdminManager.GetToggleState(Constants.EventUserBanned))
+            {
+                await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User banned: {0}", arg1.Username)));
+                await EventManager.BannedFromGuild(arg1, arg2);
+            }
         }
 
         private async Task _client_ReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
@@ -229,14 +233,21 @@ namespace CorruptOSBot
 
         private async Task _client_UserJoined(SocketGuildUser arg)
         {
-            await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User joined: {0}", arg.Username)));
+            if (RootAdminManager.GetToggleState(Constants.EventUserJoined))
+            {
+                await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User joined: {0}", arg.Username)));
+                await EventManager.JoinedGuild(arg);
+            }
         }
 
         private async Task _client_UserLeft(SocketGuildUser arg)
         {
-            if (arg.IsBot || arg.IsWebhook) return;
-            await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User left: {0}", arg.Username)));
-            await EventManager.LeavingGuild(arg);
+            if (RootAdminManager.GetToggleState(Constants.EventUserLeft))
+            {
+                if (arg.IsBot || arg.IsWebhook) return;
+                await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User left: {0}", arg.Username)));
+                await EventManager.LeavingGuild(arg);
+            }
         }
 
         private async Task HandleCommandAsync(SocketMessage arg)

@@ -14,12 +14,19 @@ namespace CorruptOSBot.Modules
     public class KcModule : ModuleBase<SocketCommandContext>
     {
         [Command("kc")]
-        [Summary("{player name} (optional) - Generates KC's for the specified player or, if left empty, your own.")]
+        [Summary("{player name} (optional) - Generates KC's for the specified player or, if left empty, your own. (Only allowed in **pvm-general**)")]
         public async Task SayKcAsync([Remainder]string playerName)
         {
-            if (RootAdminManager.GetToggleState("kc") && RootAdminManager.HasAnyRole(Context.User))
+            if (ChannelHelper.GetChannelId("pvm-general") == Context.Channel.Id)
             {
-                await ReplyAsync(embed: await CreateEmbedForMessage(playerName));
+                if (RootAdminManager.GetToggleState("kc") && RootAdminManager.HasAnyRole(Context.User))
+                {
+                    await ReplyAsync(embed: await CreateEmbedForMessage(playerName));
+                }
+            }
+            else
+            {
+                await DiscordHelper.NotAlloweddMessageToUser(Context.User);
             }
             
             // delete the command posted
@@ -27,24 +34,33 @@ namespace CorruptOSBot.Modules
         }
 
         [Command("kc")]
-        [Summary("Generates your own KC.")]
+        [Summary("Generates your own KC. (Only allowed in **pvm-general**)")]
         public async Task SayKcAsync()
         {
-            if (RootAdminManager.GetToggleState("kc") && RootAdminManager.HasAnyRole(Context.User))
+            if (ChannelHelper.GetChannelId("pvm-general") == Context.Channel.Id)
             {
-                // get current user
-                var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
-                if (!string.IsNullOrEmpty(rsn))
+                if (RootAdminManager.GetToggleState("kc") && RootAdminManager.HasAnyRole(Context.User))
                 {
-                    // reply with username
-                    await ReplyAsync(embed: await CreateEmbedForMessage(rsn));
-                }
-                else
-                {
-                    // reply with username
-                    await ReplyAsync(embed: await CreateEmbedForMessage(Context.User.Username));
+                    // get current user
+                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
+                    if (!string.IsNullOrEmpty(rsn))
+                    {
+                        // reply with username
+                        await ReplyAsync(embed: await CreateEmbedForMessage(rsn));
+                    }
+                    else
+                    {
+                        // reply with username
+                        await ReplyAsync(embed: await CreateEmbedForMessage(Context.User.Username));
+                    }
                 }
             }
+            else
+            {
+                await DiscordHelper.NotAlloweddMessageToUser(Context.User);
+            }
+
+            
 
 
             // delete the command posted

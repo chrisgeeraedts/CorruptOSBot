@@ -35,5 +35,10 @@ namespace CorruptOSBot.Helpers
         public const string OGImage = "https://icon-library.com/images/og-icon/og-icon-1.jpg";
         public const string SmileyImage = "https://m.media-amazon.com/images/I/61PnaNFtmNL._AC_SX466_.jpg";
         public const string InactiveImage = "https://icons.iconarchive.com/icons/emoticonshd.com/emoji/48/Emoticon-Sleeping-Sleep-Zzz-icon.png";
+
+
+        public const string EventUserJoined = "event_user-joined";
+        public const string EventUserLeft = "event_user-left";
+        public const string EventUserBanned = "event_user-banned";
     }
 }

@@ -15,6 +15,7 @@ namespace CorruptOSBot.Helpers
 
             AddAvailableCommands();
             AddAvailableServices();
+            AddAvailableEvents();
             AddAvailableInterceptors();
 
             UpdateToggleStatesFromConfig();                
@@ -61,6 +62,13 @@ namespace CorruptOSBot.Helpers
             toggleStates.Add(nameof(TopKCService), true);
             toggleStates.Add(nameof(HeartbeatService), true);
         }
+        private static void AddAvailableEvents()
+        {
+            toggleStates.Add(Constants.EventUserJoined, true);
+            toggleStates.Add(Constants.EventUserBanned, true);
+            toggleStates.Add(Constants.EventUserLeft, true);
+        }
+        
 
         private static void AddAvailableCommands()
         {

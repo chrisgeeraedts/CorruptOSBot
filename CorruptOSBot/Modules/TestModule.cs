@@ -12,9 +12,44 @@ using System.Threading.Tasks;
 
 namespace CorruptOSBot.Modules
 {
-    [RequireOwner(Group = "Staff")]
+
     public class TestModule : ModuleBase<SocketCommandContext>
     {
+        [Command("test")]
+        [Summary("(admin) A test command hosting different functionality - only used during development")]
+        public async Task SayTestAsync()
+        {
+            if (RootAdminManager.GetToggleState("test") && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
+            {
+                
+                //await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild);
+
+
+
+
+                //var builder = new EmbedBuilder();
+                //builder.Color = Color.Blue;
+                //builder.Title = string.Format("{0} Top 5 {1} kc", EmojiHelper.GetFullEmojiString(EmojiEnum.tob), "Scorpia");
+
+                //builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 1", "155"));
+                //builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 2", "145"));
+                //builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 3", "135"));
+                //builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 4", "125"));
+                //builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 5", "115"));
+
+                //await ReplyAsync(embed: builder.Build());
+            }
+        }
+
+
+
+
+
+
+
+
+
+
         [Command("postid")]
         [Summary("(admin) Gets the current post's Id")]
         public async Task SaypostidAsync()
@@ -71,31 +106,5 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
-
-
-
-        [Command("test")]
-        [Summary("(admin) A test command hosting different functionality - only used during development")]
-        public async Task SayTestAsync()
-        {
-            if (RootAdminManager.GetToggleState("test"))
-            {
-                
-                var builder = new EmbedBuilder();
-                builder.Color = Color.Blue;
-                builder.Title = string.Format("{0} Top 5 {1} kc", EmojiHelper.GetFullEmojiString(EmojiEnum.tob) , "Scorpia");
-
-                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 1", "155"));
-                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 2", "145"));
-                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 3", "135"));
-                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 4", "125"));
-                builder.AddField("\u200b", string.Format("{0}\u200b **{1}**", "Player 5", "115"));
-
-                await ReplyAsync(embed: builder.Build());
-            }
-        }
-
-
-       
     }
 }
