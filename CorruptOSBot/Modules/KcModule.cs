@@ -26,7 +26,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context.User);
+                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!kc", "pvm-general");
             }
             
             // delete the command posted
@@ -57,7 +57,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context.User);
+                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!kc", "pvm-general");
             }
 
             

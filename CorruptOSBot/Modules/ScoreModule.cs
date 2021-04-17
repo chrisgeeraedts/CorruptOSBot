@@ -83,7 +83,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context.User);               
+                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!score", "event-general");               
             }
 
             // delete the command posted
@@ -130,7 +130,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context.User);
+                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!endscore", "leaderboard");
             }
 
             // delete the command posted

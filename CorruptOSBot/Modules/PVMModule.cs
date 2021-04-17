@@ -49,6 +49,10 @@ namespace CorruptOSBot.Modules
                         }
                     }
                 }
+                else
+                {
+                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!cox", "set-pvm-roles");
+                }
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
@@ -93,6 +97,10 @@ namespace CorruptOSBot.Modules
                             true);
                         }
                     }
+                }
+                else
+                {
+                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!tob", "set-pvm-roles");
                 }
 
                 // delete the command posted
@@ -139,6 +147,10 @@ namespace CorruptOSBot.Modules
                         }
                     }
                 }
+                else
+                {
+                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!nm", "set-pvm-roles");
+                }
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
@@ -181,6 +193,10 @@ namespace CorruptOSBot.Modules
                             true);
                         }
                     }
+                }
+                else
+                {
+                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!cm", "set-pvm-roles");
                 }
 
                 // delete the command posted
