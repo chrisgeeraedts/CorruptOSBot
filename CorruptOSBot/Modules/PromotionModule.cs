@@ -15,7 +15,7 @@ namespace CorruptOSBot.Modules
         [Summary("Gets a list of accounts that need promotions")]
         public async Task SayPromotionsAsync()
         {
-            if (RootAdminManager.GetToggleState("promotions") &&
+            if (RootAdminManager.GetToggleState("promotions", Context.User) &&
                 (RootAdminManager.HasSpecificRole(Context.User, "Staff")))
             {
                 // get players 

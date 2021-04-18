@@ -12,7 +12,7 @@ namespace CorruptOSBot.Modules
         [Summary("Generates links to our Wise Old Man clan page.")]
         public async Task SayWoMAsync()
         {
-            if (RootAdminManager.GetToggleState("wom") && RootAdminManager.HasAnyRole(Context.User))
+            if (RootAdminManager.GetToggleState("wom", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
                 var clan = new WiseOldManClient().GetClan();
 

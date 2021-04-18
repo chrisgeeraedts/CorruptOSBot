@@ -17,9 +17,9 @@ namespace CorruptOSBot.Modules
         [Summary("Generates a leaderboard for the current SOTW event. (Only allowed in **event-general**)")]
         public async Task SayScoreAsync()
         {
-            if (ChannelHelper.GetChannelId("event-general") == Context.Channel.Id)
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "event-general", Context.User))
             {
-                if (RootAdminManager.GetToggleState("score")
+                if (RootAdminManager.GetToggleState("score", Context.User)
                     && RootAdminManager.HasAnyRole(Context.User))
                 {
                     // load current event
@@ -95,9 +95,9 @@ namespace CorruptOSBot.Modules
         [Summary("(Staff) Generates a leaderboard for the last completed event. (Only allowed in **leaderboard**)")]
         public async Task SayEndScoreAsync()
         {
-            if (ChannelHelper.GetChannelId("leaderboard") == Context.Channel.Id)
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "leaderboard", Context.User))
             {
-                if (RootAdminManager.GetToggleState("endscore") && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
+                if (RootAdminManager.GetToggleState("endscore", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
                 {
                     // load current event
                     // First, get all comps
@@ -141,9 +141,9 @@ namespace CorruptOSBot.Modules
         [Summary("(eventid) Generates a leaderboard for the last completed event. (Only allowed in **leaderboard**)")]
         public async Task SayEndScoreAsync(int compId)
         {
-            if (ChannelHelper.GetChannelId("leaderboard") == Context.Channel.Id)
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "leaderboard", Context.User))
             {
-                if (RootAdminManager.GetToggleState("endscore") && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
+                if (RootAdminManager.GetToggleState("endscore", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
                 {
                     // get details of this comp
                     CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(compId);

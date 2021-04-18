@@ -17,9 +17,9 @@ namespace CorruptOSBot.Modules
         [Summary("{player name} (optional) - Generates KC's for the specified player or, if left empty, your own. (Only allowed in **pvm-general**)")]
         public async Task SayKcAsync([Remainder]string playerName)
         {
-            if (ChannelHelper.GetChannelId("pvm-general") == Context.Channel.Id)
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
             {
-                if (RootAdminManager.GetToggleState("kc") && RootAdminManager.HasAnyRole(Context.User))
+                if (RootAdminManager.GetToggleState("kc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
                 {
                     await ReplyAsync(embed: await CreateEmbedForMessage(playerName));
                 }
@@ -37,9 +37,9 @@ namespace CorruptOSBot.Modules
         [Summary("Generates your own KC. (Only allowed in **pvm-general**)")]
         public async Task SayKcAsync()
         {
-            if (ChannelHelper.GetChannelId("pvm-general") == Context.Channel.Id)
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
             {
-                if (RootAdminManager.GetToggleState("kc") && RootAdminManager.HasAnyRole(Context.User))
+                if (RootAdminManager.GetToggleState("kc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
                 {
                     // get current user
                     var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);

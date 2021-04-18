@@ -16,7 +16,7 @@ namespace CorruptOSBot.Modules
         [Summary("(your question) - Creates a yes/no poll.")]
         public async Task SayPollAsync([Remainder]string pollquestion)
         {
-            if (RootAdminManager.GetToggleState("poll") &&
+            if (RootAdminManager.GetToggleState("poll", Context.User) &&
                 (RootAdminManager.HasSpecificRole(Context.User, "Staff") ||
                 RootAdminManager.HasSpecificRole(Context.User, "Moderator")))
             {
@@ -49,7 +49,7 @@ namespace CorruptOSBot.Modules
         [Summary("(number) - Clears posts above it. (max 100)")]
         public async Task SayClearAsync(int number)
         { 
-            if (RootAdminManager.GetToggleState("clear") && 
+            if (RootAdminManager.GetToggleState("clear", Context.User) && 
                 DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 // max it 
@@ -106,7 +106,7 @@ namespace CorruptOSBot.Modules
         [Summary("(Staff) Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
         public async Task SayGetUsersAsync()
         {
-            if (RootAdminManager.GetToggleState("getusers") &&
+            if (RootAdminManager.GetToggleState("getusers", Context.User) &&
                 DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 try
@@ -156,7 +156,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) Gets a single users on discord, showing their available information.")]
         public async Task SayGetUserAsync(IGuildUser user)
         {
-            if (RootAdminManager.GetToggleState("getuser") &&
+            if (RootAdminManager.GetToggleState("getuser", Context.User) &&
                 DiscordHelper.HasRole(Context.User, Context.Guild, "Staff"))
             {
                 try
@@ -177,7 +177,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) Gets a single users on discord, showing their available information.")]
         public async Task SayGetUserAsync(string username)
         {
-            if (RootAdminManager.GetToggleState("getuser") &&
+            if (RootAdminManager.GetToggleState("getuser", Context.User) &&
                 DiscordHelper.HasRole(Context.User, Context.Guild, "Staff"))
             {
                 try

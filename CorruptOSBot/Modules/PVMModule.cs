@@ -14,9 +14,9 @@ namespace CorruptOSBot.Modules
         [Summary("Enables a player to earn the 'CoX learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayCoxAsync()
         {
-            if (RootAdminManager.GetToggleState("cox") && RootAdminManager.HasAnyRole(Context.User))
+            if (RootAdminManager.GetToggleState("cox", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
-                if (Context.Channel.Id == ChannelHelper.GetChannelId("set-pvm-roles"))
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
@@ -63,9 +63,9 @@ namespace CorruptOSBot.Modules
         [Summary("Enables a player to earn the 'ToB learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayTobAsync()
         {
-            if (RootAdminManager.GetToggleState("tob") && RootAdminManager.HasAnyRole(Context.User))
+            if (RootAdminManager.GetToggleState("tob", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
-                if (Context.Channel.Id == ChannelHelper.GetChannelId("set-pvm-roles"))
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
@@ -112,9 +112,9 @@ namespace CorruptOSBot.Modules
         [Summary("Enables a player to earn the 'nm learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayNmAsync()
         {
-            if (RootAdminManager.GetToggleState("nm") && RootAdminManager.HasAnyRole(Context.User))
+            if (RootAdminManager.GetToggleState("nm", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
-                if (Context.Channel.Id == ChannelHelper.GetChannelId("set-pvm-roles"))
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
@@ -161,9 +161,9 @@ namespace CorruptOSBot.Modules
         [Summary("Enables a player to earn the 'Challenge Mode' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayCMAsync()
         {
-            if (RootAdminManager.GetToggleState("cm") && RootAdminManager.HasAnyRole(Context.User))
+            if (RootAdminManager.GetToggleState("cm", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
-                if (Context.Channel.Id == ChannelHelper.GetChannelId("set-pvm-roles"))
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);

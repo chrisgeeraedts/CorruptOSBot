@@ -16,7 +16,6 @@ namespace CorruptOSBot.Services
         public TimeSpan TimeOnline { get; set; }
         public DateTime TimeStarted { get; set; }
         public int TriggerTimeInMS { get => 1000 * 60; } // every minute
-        private IGuild Guild { get; set; }
         private IMessageChannel Channel { get; set; }
 
         public HeartbeatService(IDiscordClient client)
@@ -40,10 +39,10 @@ namespace CorruptOSBot.Services
         private async Task Setup(Discord.IDiscordClient client)
         {
             var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
-            Guild = client.GetGuildAsync(guildId).Result;
-            if (Guild != null)
+            var guild = client.GetGuildAsync(guildId).Result;
+            if (guild != null)
             {
-                Channel = (IMessageChannel)Guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("bot-heartbeat"));
+                Channel = (IMessageChannel)guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("bot-heartbeat"));
                 if (Channel != null)
                 {
                     await DiscordHelper.PostComeOnline(Channel);

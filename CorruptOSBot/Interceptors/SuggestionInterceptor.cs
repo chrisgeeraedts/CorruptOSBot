@@ -11,7 +11,7 @@ namespace CorruptOSBot
         {
             try
             {
-                if (RootAdminManager.GetToggleState(nameof(SuggestionInterceptor)))
+                if (RootAdminManager.GetToggleState(nameof(SuggestionInterceptor), arg.Author))
                 {
                     var currentUser = ((SocketGuildUser)arg.Author);
                     var name = DiscordHelper.GetAccountNameOrNickname(currentUser);

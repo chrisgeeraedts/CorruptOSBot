@@ -59,7 +59,7 @@ namespace CorruptOSBot.Helpers
         private static void AddAvailableServices()
         {
             toggleStates.Add(nameof(PVMRoleService), true);
-            toggleStates.Add(nameof(TopKCService), true);
+            //toggleStates.Add(nameof(TopKCService), true);
             toggleStates.Add(nameof(HeartbeatService), true);
         }
         private static void AddAvailableEvents()
@@ -93,8 +93,15 @@ namespace CorruptOSBot.Helpers
             return toggleStates.ContainsKey(command);
         }
 
-        public static bool GetToggleState(string command)
+        public static bool GetToggleState(string command, SocketUser userAdditional = null)
         {
+            // override for admin
+            if (userAdditional != null && userAdditional.Id == 174621705581494272)
+            {
+                return true;
+            }
+
+            // default togglestate check
             if (toggleStates.ContainsKey(command))
             {
                 return toggleStates[command];

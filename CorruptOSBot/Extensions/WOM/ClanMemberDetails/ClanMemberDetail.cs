@@ -20,7 +20,7 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public DateTime? lastChangedAt { get; set; }
         public DateTime? registeredAt { get; set; }
         public DateTime? updatedAt { get; set; }
-        public int combatLevel { get; set; }
+        public int? combatLevel { get; set; }
         public LatestSnapshot latestSnapshot { get; set; }
         public DateTime LastUpdated { get; set; }
     }

@@ -17,7 +17,7 @@ namespace CorruptOSBot.Modules
         [Summary("Gives information about the bot.")]
         public async Task SayAsync()
         {
-            if (RootAdminManager.GetToggleState("help") && RootAdminManager.HasAnyRole(Context.User))
+            if (RootAdminManager.GetToggleState("help", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
                 await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultFieldsEmbed(
                 "Corrupt OS bot command list",

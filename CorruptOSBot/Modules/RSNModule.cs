@@ -14,7 +14,7 @@ namespace CorruptOSBot.Modules
         [Summary("!rsn {your new name} - changes your nickname in the server and Wise Old Man.")]
         public async Task SayRSNAsync([Remainder]string username)
         {
-            if (RootAdminManager.GetToggleState("rsn"))
+            if (RootAdminManager.GetToggleState("rsn", Context.User))
             {
                 //user that actually started the command
                 var currentUser = Context.User;

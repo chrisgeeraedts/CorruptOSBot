@@ -27,6 +27,17 @@ namespace CorruptOSBot.Helpers
             return name;
         }
 
+        internal static bool IsInChannel(ulong channelId, string channelName, SocketUser userAdditional = null)
+        {
+            // override for admin
+            if (userAdditional != null && userAdditional.Id == 174621705581494272)
+            {
+                return true;
+            }
+
+            return ChannelHelper.GetChannelId(channelName) == channelId;
+        }
+
         public static string GetAccountNameOrNickname(IGuildUser user)
         {
             var currentUser = user;

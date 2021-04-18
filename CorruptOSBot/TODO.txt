@@ -4,9 +4,11 @@
 [X] Make the !kc command only available in the proper channel
 [X] !score event-general only available in the proper channel
 [X] !endscore leaderboard only available in the proper channel
+[X] !cox, !tob, !nm and !cm only available in the proper channel
 [X] removing WOM when account leaves
 [X] Message a user a cool message when they join
-[ ] Fix double 'Come online heartbeat'
+[X] Fix double 'Come online heartbeat'
+[ ] Add override permission to command and channel
 ﻿[ ] Top 5 KC leaderboard (Pull top 5kc for every boss via WOM. Keeps updating daily in a separate channel. )
 [X] polling to discord channel if bot is online (heartbeat)
 [X] Ranks (If possible, A command that shows who needs to be ranked up. We normally use a spreadsheet but alot of manual work has to go into it. Maybe a command like !rankups And it pulls who needs to be ranked up for that month? We do it 1st month in clan, 3rd month in clan, 6 months in clan and OG role. Might be worth waiting on this till clan system update as ranks and times will change )
