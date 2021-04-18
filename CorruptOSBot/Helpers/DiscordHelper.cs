@@ -68,7 +68,7 @@ namespace CorruptOSBot.Helpers
 
         internal static async Task NotAlloweddMessageToUser(SocketUser user, string command, string allowedChannel)
         {
-            await ((SocketGuildUser)user).SendMessageAsync(string.Format("That command (**{0}**) is **not allowed** in this channel but only in te following channel(s): **{1}**!", command, allowedChannel));
+            await ((SocketGuildUser)user).SendMessageAsync(string.Format("That command (**{0}**) is **not allowed** in this channel but only in the following channel(s): **{1}**!", command, allowedChannel));
         }
 
         internal static async Task SendWelcomeMessageToUser(SocketUser user, SocketGuild guild)

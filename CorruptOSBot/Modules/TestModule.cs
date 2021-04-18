@@ -31,26 +31,40 @@ namespace CorruptOSBot.Modules
                 FillListWithBosses(result);
                 UpdateListWithKc(result, clanMembers);
 
+                int charPerRow = 30;
 
-                var builder = new EmbedBuilder();
-                builder.Color = Color.DarkGreen;
+                foreach (var item in result)
+                {
+                    var player1String = string.Format("{0}{1} **({2})**", "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc);
+                    var player1Append = GetRemainingSpaces(player1String, charPerRow);
 
-                builder.AddField("\u200b", "**Boss**", true);
-                builder.AddField("\u200b", "**Top 3**", true);
-                builder.AddField("\u200b", "\u200b", true);
+                    var player2String = string.Format("{0}{1} ({2})", "\U0001f948", item.KcPlayers.Skip(1).First().Player, item.KcPlayers.Skip(1).First().Kc);
+                    var player2Append = GetRemainingSpaces(player2String, charPerRow);
 
-                BuildSet(result.Take(10), builder);
-                BuildSet(result.Skip(10).Take(10), builder);
-                BuildSet(result.Skip(20).Take(10), builder);
-                BuildSet(result.Skip(30).Take(10), builder);
-                BuildSet(result.Skip(40).Take(5), builder);
+                    var player3String = string.Format("{0}{1} ({2})", "\U0001f949", item.KcPlayers.Skip(2).First().Player, item.KcPlayers.Skip(2).First().Kc);
+                    var player3Append = GetRemainingSpaces(player3String, charPerRow);
 
-
-                builder.Title = "Top boss KC";
-                //builder.Description = sb.ToString();
-
-                await ReplyAsync(embed: builder.Build());
+                    await ReplyAsync(string.Format("{0} {1}{2}{3}{4}{5}{6}", 
+                        EmojiHelper.GetFullEmojiString(item.Boss),
+                        player1String,
+                        player1Append,
+                        player2String,
+                        player2Append,
+                        player3String,
+                        player3Append));
+                }
             }
+        }
+
+        private string GetRemainingSpaces(string name, int totalSpaces)
+        {
+            string result = string.Empty;
+            var spacesRemaining = totalSpaces - name.Length;
+            for (int i = 0; i < spacesRemaining; i++)
+            {
+                result += " ";
+            }
+            return result;
         }
 
         private void BuildSet(IEnumerable<KcTopList> result, EmbedBuilder builder)
@@ -61,11 +75,11 @@ namespace CorruptOSBot.Modules
             {
                 if (item.KcPlayers.Count() > 0)
                 {
-                    sb.AppendLine(string.Format("{0} | {1} {2} **({3})**", EmojiHelper.GetFullEmojiString(item.Boss), "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc));
+                    sb.AppendLine(string.Format("{0} {1} {2} **({3})**", EmojiHelper.GetFullEmojiString(item.Boss), "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc));
                 }
                 else
                 {
-                    sb.AppendLine(string.Format("<:{0}:> | {1} {2}", EmojiHelper.GetFullEmojiString(item.Boss), "\U0001f947", "---"));
+                    sb.AppendLine(string.Format("<:{0}:> {1} {2}", EmojiHelper.GetFullEmojiString(item.Boss), "\U0001f947", "---"));
                 }
             }
             builder.AddField("\u200b", sb.ToString(), true);
@@ -97,7 +111,7 @@ namespace CorruptOSBot.Modules
                 {
                     sb3.AppendLine(string.Format("{0} {1}", "\U0001f949", "---"));
                 }
-                
+
             }
             builder.AddField("\u200b", sb3.ToString(), true);
         }
@@ -221,7 +235,6 @@ namespace CorruptOSBot.Modules
             }
             return bossKills.OrderByDescending(x => x.Kc).ToList();
         }
-
 
 
         [Command("postid")]
