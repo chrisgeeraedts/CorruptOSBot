@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,7 @@ namespace CorruptOSBot.Modules
             blackListedCommands.Add("!toggle");
             blackListedCommands.Add("!togglestates");
             blackListedCommands.Add("!channelid");
+            blackListedCommands.Add("!overthrownathan");
 
             Dictionary<string, string> result = new Dictionary<string, string>();
 

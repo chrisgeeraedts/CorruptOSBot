@@ -1,9 +1,10 @@
-﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Extensions.WOM;
+﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Helpers.PVM;
 using Discord;
 using System;
-using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 

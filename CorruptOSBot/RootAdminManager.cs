@@ -1,4 +1,5 @@
-﻿using CorruptOSBot.Services;
+﻿using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Services;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace CorruptOSBot.Helpers
     public static class RootAdminManager
     {
         private static Dictionary<string, bool> toggleStates;
+        private static string BotVersion;
         public static void Init()
         {
             toggleStates = new Dictionary<string, bool>();
@@ -18,7 +20,9 @@ namespace CorruptOSBot.Helpers
             AddAvailableEvents();
             AddAvailableInterceptors();
 
-            UpdateToggleStatesFromConfig();                
+            UpdateToggleStatesFromConfig();
+
+            BotVersion = ConfigHelper.GetSettingProperty("bot-version");
         }
 
         internal static bool HasAnyRole(SocketUser user)
@@ -49,6 +53,11 @@ namespace CorruptOSBot.Helpers
                 }
             }
             toggleStates = tempToggleStates;
+        }
+
+        internal static string GetBotVersion()
+        {
+            return BotVersion;
         }
 
         private static void AddAvailableInterceptors()

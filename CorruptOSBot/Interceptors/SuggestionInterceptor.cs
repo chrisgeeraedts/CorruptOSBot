@@ -1,4 +1,6 @@
 ﻿using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Helpers.Discord;
 using Discord;
 using Discord.WebSocket;
 using System.Threading.Tasks;

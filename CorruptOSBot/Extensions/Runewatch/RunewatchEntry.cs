@@ -1,6 +1,5 @@
 ﻿namespace CorruptOSBot.Extensions
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class RunewatchEntry
     {
         public string accused_rsn { get; set; }

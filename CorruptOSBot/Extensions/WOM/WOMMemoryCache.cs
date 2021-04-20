@@ -3,56 +3,12 @@ using Discord;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Extensions.WOM
 {
-
-
-
-    public static class WOMMemoryCache
+    public static partial class WOMMemoryCache
     {
-        public class ClanCache
-        {
-            public DateTime LastUpdated { get; set; }
-
-            public Clan _clan { get; set; }
-            public Clan Clan
-            {
-                get
-                {
-                    return _clan;
-                }
-                set
-                {
-                    _clan = value;
-                    LastUpdated = DateTime.Now;
-                }
-            }
-        }
-
-        public class ClanMemberCache
-        {
-            public ClanMemberCache()
-            {
-                _clanMemberDetails = new List<ClanMemberDetail>();
-            }
-            public DateTime LastUpdated { get; set; }
-            private List<ClanMemberDetail> _clanMemberDetails { get; set; }
-            public List<ClanMemberDetail> ClanMemberDetails
-            {
-                get
-                {
-                    return _clanMemberDetails;
-                }
-                set
-                {
-                    _clanMemberDetails = value;
-                    LastUpdated = DateTime.Now;
-                }
-            }
-        }
 
         public static ClanCache Clan = new ClanCache();
         public static ClanMemberCache ClanMemberDetails = new ClanMemberCache();

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CorruptOSBot.Helpers
+namespace CorruptOSBot.Helpers.Bot
 {
     public static class EmbedHelper
     {

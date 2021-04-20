@@ -1,5 +1,7 @@
 ﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Helpers.Discord;
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
@@ -94,7 +96,11 @@ namespace CorruptOSBot.Modules
                     }
                     else
                     {
-                        sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days in Discord", DiscordHelper.GetAccountNameOrNickname(item.User), item.CurrentRank, item.ShouldHaveRank, item.DaysInDiscord));
+                        sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days in Discord", 
+                            DiscordHelper.GetAccountNameOrNickname(item.User), 
+                            item.CurrentRank, 
+                            item.ShouldHaveRank, 
+                            item.DaysInDiscord));
                     }
                 }
                 result.Add(EmbedHelper.CreateDefaultEmbed(rank.ToString(), sb.ToString()));

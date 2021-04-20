@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 
-namespace CorruptOSBot.Helpers
+namespace CorruptOSBot.Helpers.Bot
 {
     public static class ConfigHelper
     {

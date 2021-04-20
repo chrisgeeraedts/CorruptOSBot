@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace CorruptOSBot.Helpers
+namespace CorruptOSBot.Helpers.Bot
 {
     public static class LogHelper
     {
@@ -12,8 +12,6 @@ namespace CorruptOSBot.Helpers
 
             // check the settings if we should log outside
 
-
-            // 
 
             switch (message.Severity)
             {

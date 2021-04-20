@@ -1,4 +1,6 @@
 ﻿using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -85,15 +87,19 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
+                var states = RootAdminManager.GetToggleStates();
+
                 var builder = new EmbedBuilder();
                 builder.Color = Color.Blue;
-                builder.Description = "Shows the current enabled and disabled commands, services and interceptors";
+                builder.WithFooter("Shows the current enabled and disabled commands, services and interceptors");
                 builder.Title = "Toggle states";
+                var sb = new StringBuilder();
 
-                foreach (var item in RootAdminManager.GetToggleStates())
+                foreach (var item in states.Take(25))
                 {
-                    builder.AddField(item.Key, item.Value, true);
+                    sb.AppendLine(string.Format("**{0}**: {1}", item.Key, item.Value));
                 }
+                builder.Description = sb.ToString();
 
                 await ReplyAsync(embed: builder.Build());
             }
@@ -205,6 +211,25 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
+
+
+
+        [Command("overthrownathan")]
+        [Summary("Prepare!")]
+        public async Task SayOverthrowNathanAsync()
+        {
+            if (RootAdminManager.GetToggleState("overthrownathan", Context.User))
+            {
+                var currentUser = ((SocketGuildUser)Context.User);
+
+                var message = await Context.Channel.SendMessageAsync("**Now is not yet the time...** | this message will selfdestruct in 5 seconds... ;)");
+
+                await Context.Message.DeleteAsync();
+                await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
+                
+            }
+        }
+
 
         private EmbedBuilder BuildEmbedForUserInfo(IGuildUser user)
         {

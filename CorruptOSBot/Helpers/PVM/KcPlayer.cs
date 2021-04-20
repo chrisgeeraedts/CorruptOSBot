@@ -1,4 +1,4 @@
-﻿namespace CorruptOSBot.Services
+﻿namespace CorruptOSBot.Helpers.PVM
 {
     public class KcPlayer
     {

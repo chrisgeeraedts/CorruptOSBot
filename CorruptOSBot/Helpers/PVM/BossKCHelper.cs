@@ -1,217 +1,28 @@
-﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Extensions.WOM;
+﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
-using CorruptOSBot.Helpers;
-using CorruptOSBot.Helpers.PVM;
-using CorruptOSBot.Services;
-using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace CorruptOSBot.Modules
+namespace CorruptOSBot.Helpers.PVM
 {
-
-    public class TestModule : ModuleBase<SocketCommandContext>
+    public static class BossKCHelper
     {
-
-        [Command("test3")]
-        [Summary("(admin) A test command hosting different functionality - only used during development")]
-        public async Task SayTest3Async()
+        public static async Task<List<KcTopList>> GetTopBossKC(int refreshIfAfterThisTimeInMs)
         {
-            if (RootAdminManager.GetToggleState("test3", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
-            {
-                await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
-                var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
-
-                await ReplyAsync(embed: CreateFullLeaderboardEmbed(0));
-                await ReplyAsync(embed: CreateFullLeaderboardEmbed(1));
-                await ReplyAsync(embed: CreateFullLeaderboardEmbed(2));
-            }
-        }
-
-
-
-
-
-
-        [Command("test2")]
-        [Summary("(admin) A test command hosting different functionality - only used during development")]
-        public async Task SayTest2Async()
-        {
-            if (RootAdminManager.GetToggleState("test2", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
-            {
-                await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
-                var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
-
-                // connect the kcs per boss
-                var result = new List<KcTopList>();
-                FillListWithBosses(result);
-                UpdateListWithKc(result, clanMembers);
-                foreach (var item in result)
-                {
-                    var player1String = string.Format("     {0}**{1} ({2})**", "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc);
-                    //var player1Append = GetRemainingSpaces(player1String, charPerRow);
-
-                    var player2String = string.Format("     {0}{1} ({2})", "\U0001f948", item.KcPlayers.Skip(1).First().Player, item.KcPlayers.Skip(1).First().Kc);
-                    //var player2Append = GetRemainingSpaces(player2String, charPerRow);
-
-                    var player3String = string.Format("     {0}{1} ({2})", "\U0001f949", item.KcPlayers.Skip(2).First().Player, item.KcPlayers.Skip(2).First().Kc);
-                    //var player3Append = GetRemainingSpaces(player3String, charPerRow);
-
-                    await ReplyAsync(string.Format("{0} {1}{2}{3}{4}{5}{6}{7}{8}",
-                        EmojiHelper.GetFullEmojiString(item.Boss),
-                        item.Boss,
-                        Environment.NewLine,
-                        player1String,
-                        Environment.NewLine,
-                        player2String,
-                        Environment.NewLine,
-                        player3String,
-                        Environment.NewLine,
-                        Environment.NewLine));
-                }
-            }
-        }
-
-
-
-
-
-
-
-
-        [Command("test4")]
-        [Summary("(admin) A test command hosting different functionality - only used during development")]
-        public async Task SayTest4Async()
-        {
-            if (RootAdminManager.GetToggleState("test4", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
-            {
-                await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
-                var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
-
-                // connect the kcs per boss
-                var result = new List<KcTopList>();
-                FillListWithBosses(result);
-                UpdateListWithKc(result, clanMembers);
-                foreach (var item in result)
-                {
-                    
-                }
-            }
-        }
-
-        private Embed CreateFullLeaderboardEmbed(int skip)
-        {
-            var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
-
-            // connect the kcs per boss
             var result = new List<KcTopList>();
+
+            await WOMMemoryCache.UpdateClanMembers(refreshIfAfterThisTimeInMs);
+            var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
             FillListWithBosses(result);
             UpdateListWithKc(result, clanMembers);
 
-
-            var builder = new EmbedBuilder();
-            builder.Color = Color.DarkGreen;
-
-            BuildSet(result.Take(15), builder, skip);
-            BuildSet(result.Skip(15).Take(15), builder, skip);
-            BuildSet(result.Skip(30).Take(15), builder, skip);
-
-            if (skip == 0)
-            {
-                builder.Title = "Top boss KC | First place \U0001f947";
-            }
-            if (skip == 1)
-            {
-                builder.Title = "Top boss KC | Second place \U0001f948";
-            }
-            if (skip == 2)
-            {
-                builder.Title = "Top boss KC | Third place \U0001f949";
-            }
-
-            builder.WithFooter(string.Format("Last updated: {0}", DateTime.Now));
-
-            return builder.Build();
-        }
-
-        private string GetRemainingSpaces(string name, int totalSpaces)
-        {
-            string result = string.Empty;
-            var spacesRemaining = totalSpaces - name.Length;
-            for (int i = 0; i < spacesRemaining; i++)
-            {
-                result += "  ";
-            }
             return result;
+
         }
 
-        private void BuildSet(IEnumerable<KcTopList> result, EmbedBuilder builder, int skip)
-        {
-            // First column
-            var sb = new StringBuilder();
-            var medalString = "\U0001f947";
-            if (skip == 1)
-            {
-                medalString = "\U0001f948";
-            }
-            else if (skip == 2)
-            {
-                medalString = "\U0001f949";
-            }
-
-
-            foreach (var item in result)
-            {
-                if (item.KcPlayers.Count() > skip)
-                {
-                    sb.AppendLine(string.Format("{0} {1} {2} **({3})**", EmojiHelper.GetFullEmojiString(item.Boss), medalString, item.KcPlayers.Skip(skip).First().Player, item.KcPlayers.Skip(skip).First().Kc));
-                }
-                else
-                {
-                    sb.AppendLine(string.Format("{0} {1} {2}", EmojiHelper.GetFullEmojiString(item.Boss), medalString, "---"));
-                }
-            }
-            builder.AddField("\u200b", sb.ToString(), false);
-
-            //// Second column
-            //var sb2 = new StringBuilder();
-            //foreach (var item in result)
-            //{
-            //    if (item.KcPlayers.Count() > 1)
-            //    {
-            //        sb2.AppendLine(string.Format("{0} {1} ({2})", "\U0001f948", item.KcPlayers.Skip(1).First().Player, item.KcPlayers.Skip(1).First().Kc));
-            //    }
-            //    else
-            //    {
-            //        sb2.AppendLine(string.Format("{0} {1}", "\U0001f948", "---"));
-            //    }
-            //}
-            //builder.AddField("\u200b", sb2.ToString(), true);
-
-            //// Second column
-            //var sb3 = new StringBuilder();
-            //foreach (var item in result)
-            //{
-            //    if (item.KcPlayers.Count() > 1)
-            //    {
-            //        sb3.AppendLine(string.Format("{0} {1} ({2})", "\U0001f949", item.KcPlayers.Skip(2).First().Player, item.KcPlayers.Skip(2).First().Kc));
-            //    }
-            //    else
-            //    {
-            //        sb3.AppendLine(string.Format("{0} {1}", "\U0001f949", "---"));
-            //    }
-
-            //}
-            //builder.AddField("\u200b", sb3.ToString(), true);
-        }
-
-        private void FillListWithBosses(List<KcTopList> result)
+        private static void FillListWithBosses(List<KcTopList> result)
         {
             result.Add(new KcTopList() { Boss = EmojiEnum.sire, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.hydra, KcPlayers = new List<KcPlayer>() });
@@ -260,7 +71,7 @@ namespace CorruptOSBot.Modules
             result.Add(new KcTopList() { Boss = EmojiEnum.zulrah, KcPlayers = new List<KcPlayer>() });
         }
 
-        private void UpdateListWithKc(List<KcTopList> result, List<ClanMemberDetail> clanMembers)
+        private static void UpdateListWithKc(List<KcTopList> result, List<ClanMemberDetail> clanMembers)
         {
             result.FirstOrDefault(x => x.Boss == EmojiEnum.sire).KcPlayers.AddRange(GetTopKc(typeof(AbyssalSire), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.hydra).KcPlayers.AddRange(GetTopKc(typeof(AlchemicalHydra), clanMembers));
@@ -309,7 +120,7 @@ namespace CorruptOSBot.Modules
             result.FirstOrDefault(x => x.Boss == EmojiEnum.zulrah).KcPlayers.AddRange(GetTopKc(typeof(Zulrah), clanMembers));
         }
 
-        private List<KcPlayer> GetTopKc(Type type, List<ClanMemberDetail> clanMemberDetails)
+        private static List<KcPlayer> GetTopKc(Type type, List<ClanMemberDetail> clanMemberDetails)
         {
             var bossKills = new List<KcPlayer>();
             foreach (var clanMemberDetail in clanMemberDetails.Where(x => x.latestSnapshot != null))
@@ -323,70 +134,16 @@ namespace CorruptOSBot.Modules
                         var kills = ((IBossKc)prop.GetValue(clanMemberDetail.latestSnapshot)).kills;
                         if (kills > 0)
                         {
+                            if (true)
+                            {
+
+                            }
                             bossKills.Add(new KcPlayer() { Kc = kills, Player = clanMemberDetail.displayName });
                         }
                     }
                 }
             }
             return bossKills.OrderByDescending(x => x.Kc).ToList();
-        }
-
-
-        [Command("postid")]
-        [Summary("(admin) Gets the current post's Id")]
-        public async Task SaypostidAsync()
-        {
-            if (RootAdminManager.GetToggleState("postid", Context.User))
-            {
-
-                var messages = await Context.Channel
-                   .GetMessagesAsync(Context.Message, Direction.Before, 1)
-                   .FlattenAsync();
-
-                var message = messages.FirstOrDefault();
-                if (message != null)
-                {
-                    var messageId = ((IUserMessage)message).Id;
-
-                    await ReplyAsync(messageId.ToString());
-                }
-
-                
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
-            }
-        }
-
-        [Command("channelid")]
-        [Summary("(admin) Gets the current channel's Id")]
-        public async Task SaychannelIdAsync()
-        {
-            if (RootAdminManager.GetToggleState("channelid", Context.User))
-            {
-                var channel = Context.Channel.Id.ToString();
-
-                await ReplyAsync(channel);
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
-            }
-        }
-
-
-        [Command("guildid")]
-        [Summary("(admin) Gets the current guild Id")]
-        public async Task SayguildidAsync()
-        {
-            if (RootAdminManager.GetToggleState("guildid", Context.User))
-            {
-                var channel = Context.Guild.Id.ToString();
-
-                await ReplyAsync(channel);
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
-            }
         }
     }
 }

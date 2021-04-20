@@ -1,13 +1,10 @@
 ﻿using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
-using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CorruptOSBot.Extensions
 {
@@ -38,7 +35,6 @@ namespace CorruptOSBot.Extensions
             return product;
         }
 
-
         public CompetitionDetail GetCompetition(int compId)
         {
             CompetitionDetail product = null;
@@ -50,7 +46,6 @@ namespace CorruptOSBot.Extensions
             }
             return product;
         }
-
 
         public void AddCompParticipant(Competition competition, Participation participation)
         {
@@ -71,7 +66,6 @@ namespace CorruptOSBot.Extensions
             //    var result = response.ReasonPhrase;
             //}
         }
-
 
         public void AddTeamCompParticipant(Competition competition, TeamCompParticipation.Root participation)
         {
@@ -159,7 +153,6 @@ namespace CorruptOSBot.Extensions
             }
         }
 
-
         public Clan GetClan()
         {
             Clan product = null;
@@ -183,7 +176,6 @@ namespace CorruptOSBot.Extensions
             }
             return clanMembers;
         }
-
 
         internal ClanMemberDetail GetPlayerDetails(int id)
         {
@@ -220,67 +212,5 @@ namespace CorruptOSBot.Extensions
             }
             return achievements;
         }
-    }
-
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class RemoveMemberRoot
-    {
-        public string verificationCode { get; set; }
-        public List<string> members { get; set; }
-    }
-
-
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
-    public class Progress
-    {
-        public int start { get; set; }
-        public int end { get; set; }
-        public int gained { get; set; }
-    }
-
-    public class History
-    {
-        public DateTime? date { get; set; }
-        public int value { get; set; }
-    }
-
-    public class Participant
-    {
-        public int exp { get; set; }
-        public int id { get; set; }
-        public string username { get; set; }
-        public string displayName { get; set; }
-        public string type { get; set; }
-        public string build { get; set; }
-        public object country { get; set; }
-        public bool flagged { get; set; }
-        public double ehp { get; set; }
-        public double ehb { get; set; }
-        public double ttm { get; set; }
-        public double tt200m { get; set; }
-        public DateTime? lastImportedAt { get; set; }
-        public DateTime? lastChangedAt { get; set; }
-        public DateTime? registeredAt { get; set; }
-        public DateTime? updatedAt { get; set; }
-        public Progress progress { get; set; }
-        public List<History> history { get; set; }
-    }
-
-    public class CompetitionDetail
-    {
-        public int id { get; set; }
-        public string title { get; set; }
-        public string metric { get; set; }
-        public string type { get; set; }
-        public int score { get; set; }
-        public DateTime? startsAt { get; set; }
-        public DateTime? endsAt { get; set; }
-        public object groupId { get; set; }
-        public DateTime? createdAt { get; set; }
-        public DateTime? updatedAt { get; set; }
-        public object group { get; set; }
-        public string duration { get; set; }
-        public int totalGained { get; set; }
-        public List<Participant> participants { get; set; }
     }
 }

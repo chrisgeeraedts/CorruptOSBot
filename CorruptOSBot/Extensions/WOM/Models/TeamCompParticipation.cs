@@ -4,7 +4,6 @@ namespace CorruptOSBot.Extensions
 {
     public class TeamCompParticipation
     {
-        // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
         public class Team
         {
             public string name { get; set; }

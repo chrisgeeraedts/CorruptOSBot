@@ -1,6 +1,8 @@
 ﻿using CorruptOSBot.Extensions;
 using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Helpers.PVM;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Linq;

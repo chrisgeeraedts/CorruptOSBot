@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CorruptOSBot.Helpers
+namespace CorruptOSBot.Helpers.Discord
 {
     public static class DiscordHelper
     {
@@ -47,12 +47,12 @@ namespace CorruptOSBot.Helpers
 
         internal static async Task PostHeartbeat(IMessageChannel channel, TimeSpan timeOnline)
         {
-            await (channel).SendMessageAsync(string.Format("Bot online for **{0}** minutes | **Heartbeat** : [{1}] ", Convert.ToInt64(timeOnline.TotalMinutes), DateTime.Now));
+            await (channel).SendMessageAsync(string.Format("Bot (v{2}) online for **{0}** minutes | **Heartbeat** : [{1}] ", Convert.ToInt64(timeOnline.TotalMinutes), DateTime.Now, RootAdminManager.GetBotVersion()));
         }
 
         internal static async Task PostComeOnline(IMessageChannel channel)
         {
-            await (channel).SendMessageAsync(string.Format("Bot **Online** : [{0}] ", DateTime.Now));
+            await (channel).SendMessageAsync(string.Format("Bot (v{1}) **Online** : [{0}] ", DateTime.Now, RootAdminManager.GetBotVersion()));
         }
 
         public static bool HasRole(IGuildUser user, IGuild guild, string roleName)

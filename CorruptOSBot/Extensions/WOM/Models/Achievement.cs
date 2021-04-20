@@ -2,7 +2,6 @@
 
 namespace CorruptOSBot.Extensions
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class Achievement
     {
         public int threshold { get; set; }

@@ -1,6 +1,7 @@
 ﻿using CorruptOSBot.Extensions;
 using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -59,9 +60,6 @@ namespace CorruptOSBot.Modules
             {
                 await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!kc", "pvm-general");
             }
-
-            
-
 
             // delete the command posted
             await Context.Message.DeleteAsync();

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CorruptOSBot.Helpers
+namespace CorruptOSBot.Helpers.Bot
 {
     public static class CommandHelper
     {

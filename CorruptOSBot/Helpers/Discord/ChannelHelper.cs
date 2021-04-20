@@ -1,7 +1,8 @@
-﻿using System;
+﻿using CorruptOSBot.Helpers.Bot;
+using System;
 using System.Collections.Generic;
 
-namespace CorruptOSBot.Helpers
+namespace CorruptOSBot.Helpers.Discord
 {
     public static class ChannelHelper
     {

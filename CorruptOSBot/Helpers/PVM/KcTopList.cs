@@ -1,7 +1,6 @@
-﻿using CorruptOSBot.Helpers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace CorruptOSBot.Services
+namespace CorruptOSBot.Helpers.PVM
 {
     public class KcTopList
     {

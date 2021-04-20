@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,12 +6,13 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using CorruptOSBot.Modules;
-using System.Configuration;
 using CorruptOSBot.Events;
 using System.Collections.Generic;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Services;
 using CorruptOSBot.Extensions.WOM;
+using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Helpers.Bot;
 
 namespace CorruptOSBot
 {
@@ -145,7 +145,9 @@ namespace CorruptOSBot
             await WOMMemoryCache.UpdateClan(WOMMemoryCache.OneHourMS);
         }
 
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         private async Task StartServiceThreads(DiscordSocketClient client)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
             foreach (var _activeService in _activeServices)
             {
@@ -197,6 +199,7 @@ namespace CorruptOSBot
             // Or add Modules manually if you prefer to be a little more explicit:
             await _commands.AddModuleAsync<AdminModule>(_services);
             await _commands.AddModuleAsync<HelpModule>(_services);
+            await _commands.AddModuleAsync<BossKcModule>(_services);
             await _commands.AddModuleAsync<KcModule>(_services);
             await _commands.AddModuleAsync<RSNModule>(_services);
             await _commands.AddModuleAsync<ScoreModule>(_services);
@@ -261,7 +264,10 @@ namespace CorruptOSBot
 
             try
             {
-                await Program.Log(new LogMessage(LogSeverity.Info, "Chat", string.Format("[{2}] {0}: {1}", DiscordHelper.GetAccountNameOrNickname(arg.Author), arg.Content, arg.Channel.Name)));
+                await Program.Log(new LogMessage(LogSeverity.Info, "Chat", string.Format("[{2}] {0}: {1}", 
+                    DiscordHelper.GetAccountNameOrNickname(arg.Author), 
+                    arg.Content, 
+                    arg.Channel.Name)));
             }
             catch (Exception)
             {

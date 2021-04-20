@@ -1,11 +1,9 @@
-﻿using CorruptOSBot.Extensions.WOM;
-using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
-using CorruptOSBot.Helpers;
+﻿using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Helpers.Discord;
 using Discord;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Services
@@ -25,14 +23,17 @@ namespace CorruptOSBot.Services
 
         public async Task Trigger(IDiscordClient client)
         {
-            if (RootAdminManager.GetToggleState(nameof(HeartbeatService)) && Channel != null)
+            if (RootAdminManager.GetToggleState(nameof(HeartbeatService)))
             {
-                TimeOnline = DateTime.Now.Subtract(TimeStarted);
-                await DiscordHelper.PostHeartbeat(Channel, TimeOnline);
-            }
-            else if(Channel == null)
-            {
-                await Setup(client);
+                if (Channel != null)
+                {
+                    TimeOnline = DateTime.Now.Subtract(TimeStarted);
+                    await DiscordHelper.PostHeartbeat(Channel, TimeOnline);
+                }
+                else if (Channel == null)
+                {
+                    await Setup(client);
+                }
             }
         }
 

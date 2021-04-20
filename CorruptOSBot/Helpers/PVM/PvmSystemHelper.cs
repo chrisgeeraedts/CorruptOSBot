@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Helpers.Discord;
 using Discord;
 
-namespace CorruptOSBot.Helpers
+namespace CorruptOSBot.Helpers.PVM
 {
     public static class PvmSystemHelper
     {
@@ -113,7 +115,7 @@ namespace CorruptOSBot.Helpers
                 if (showMessage)
                 {
                     var pvmgeneralChannel = guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("pvm-general"));
-                    await ((IMessageChannel)pvmgeneralChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("PVM promotion!",
+                    await ((IMessageChannel)pvmgeneralChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("PVM promotion for {0}!", DiscordHelper.GetAccountNameOrNickname(currentUser)),
                         string.Format("<@{0}> just got promoted to <@&{1}>!", currentUser.Id, roleId),
                         imageUrl));
                 }

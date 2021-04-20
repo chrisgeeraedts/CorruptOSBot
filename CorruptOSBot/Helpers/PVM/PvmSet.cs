@@ -1,4 +1,4 @@
-﻿namespace CorruptOSBot.Helpers
+﻿namespace CorruptOSBot.Helpers.PVM
 {
     public class PvmSet
     {

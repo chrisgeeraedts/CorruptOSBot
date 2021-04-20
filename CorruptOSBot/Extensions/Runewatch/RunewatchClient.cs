@@ -1,21 +1,18 @@
-﻿using Newtonsoft.Json;
+﻿using CorruptOSBot.Helpers.Bot;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Net;
-using System.Net.Http;
 
 namespace CorruptOSBot.Extensions
 {
     public class RunewatchClient
     {
-        HttpClient client;
         List<RunewatchEntry> _runewatchEntries;
 
         DateTime lastUpdated;
         public RunewatchClient()
         {
-            client = new HttpClient();
             _runewatchEntries = GetRunewatchEntries();
         }
         public List<RunewatchEntry> GetRunewatchEntries()
@@ -23,7 +20,7 @@ namespace CorruptOSBot.Extensions
             var diffInHours = DateTime.Now.Subtract(lastUpdated).TotalHours;
             if (diffInHours > 24)
             {
-                var json = new WebClient().DownloadString(ConfigurationManager.AppSettings["runewatchUri"]);
+                var json = new WebClient().DownloadString(ConfigHelper.GetSettingProperty("runewatchUri"));
 
                 List<RunewatchEntry>  runewatchEntry = JsonConvert.DeserializeObject<List<RunewatchEntry>>(json);
                 lastUpdated = DateTime.Now;
