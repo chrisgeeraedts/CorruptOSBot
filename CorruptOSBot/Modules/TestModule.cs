@@ -1,12 +1,9 @@
-﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Extensions.WOM;
+﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.PVM;
-using CorruptOSBot.Services;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +20,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) A test command hosting different functionality - only used during development")]
         public async Task SayTest3Async()
         {
-            if (RootAdminManager.GetToggleState("test3", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
+            if (RootAdminManager.GetToggleState("test3", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Developer"))
             {
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
                 var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
@@ -43,7 +40,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) A test command hosting different functionality - only used during development")]
         public async Task SayTest2Async()
         {
-            if (RootAdminManager.GetToggleState("test2", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
+            if (RootAdminManager.GetToggleState("test2", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Developer"))
             {
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
                 var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
@@ -89,7 +86,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) A test command hosting different functionality - only used during development")]
         public async Task SayTest4Async()
         {
-            if (RootAdminManager.GetToggleState("test4", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
+            if (RootAdminManager.GetToggleState("test4", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Developer"))
             {
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
                 var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;

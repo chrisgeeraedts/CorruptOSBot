@@ -22,7 +22,6 @@ namespace CorruptOSBot.Modules
             {
                 await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultFieldsEmbed(
                 "Corrupt OS bot command list",
-                "Global Commands:",
                 GetCommandsToShowInHelp()));
 
                 // delete the command posted
@@ -38,6 +37,7 @@ namespace CorruptOSBot.Modules
             blackListedCommands.Add("!togglestates");
             blackListedCommands.Add("!channelid");
             blackListedCommands.Add("!overthrownathan");
+            blackListedCommands.Add("!postid");
 
             Dictionary<string, string> result = new Dictionary<string, string>();
 

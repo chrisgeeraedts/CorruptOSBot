@@ -14,7 +14,7 @@ namespace CorruptOSBot.Modules
     public class PromotionModule : ModuleBase<SocketCommandContext>
     {
         [Command("promotions")]
-        [Summary("Gets a list of accounts that need promotions")]
+        [Summary("(Staff) !promotions - Gets a list of accounts that need promotions")]
         public async Task SayPromotionsAsync()
         {
             if (RootAdminManager.GetToggleState("promotions", Context.User) &&

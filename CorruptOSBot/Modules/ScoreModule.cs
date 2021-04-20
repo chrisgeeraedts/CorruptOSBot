@@ -15,7 +15,7 @@ namespace CorruptOSBot.Modules
     public class ScoreModule : ModuleBase<SocketCommandContext>
     {
         [Command("score")]
-        [Summary("Generates a leaderboard for the current SOTW event. (Only allowed in **event-general**)")]
+        [Summary("!score - Generates a leaderboard for the current SOTW event. (Only allowed in **event-general**)")]
         public async Task SayScoreAsync()
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "event-general", Context.User))
@@ -93,7 +93,7 @@ namespace CorruptOSBot.Modules
 
 
         [Command("endscore")]
-        [Summary("(Staff) Generates a leaderboard for the last completed event. (Only allowed in **leaderboard**)")]
+        [Summary("(Staff) !endscore {compId}(optional) - Generates a leaderboard for the last completed event (or for the given CompId event). (Only allowed in **leaderboard**)")]
         public async Task SayEndScoreAsync()
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "leaderboard", Context.User))
@@ -139,7 +139,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Command("endscore")]
-        [Summary("(eventid) Generates a leaderboard for the last completed event. (Only allowed in **leaderboard**)")]
+        [Summary("(Staff) !endscore {compId}(optional) - Generates a leaderboard for the last completed event (or for the given CompId event). (Only allowed in **leaderboard**)")]
         public async Task SayEndScoreAsync(int compId)
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "leaderboard", Context.User))

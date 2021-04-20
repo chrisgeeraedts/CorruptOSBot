@@ -15,7 +15,7 @@ namespace CorruptOSBot.Modules
     public class AdminModule : ModuleBase<SocketCommandContext>
     {
         [Command("poll")]
-        [Summary("(your question) - Creates a yes/no poll.")]
+        [Summary("(Staff/Mod) !poll {your question} - Creates a yes/no poll.")]
         public async Task SayPollAsync([Remainder]string pollquestion)
         {
             if (RootAdminManager.GetToggleState("poll", Context.User) &&
@@ -48,7 +48,7 @@ namespace CorruptOSBot.Modules
 
 
         [Command("clear")]
-        [Summary("(number) - Clears posts above it. (max 100)")]
+        [Summary("(Dev) !clear {number} - Clears posts above it. (max 100)")]
         public async Task SayClearAsync(int number)
         { 
             if (RootAdminManager.GetToggleState("clear", Context.User) && 
@@ -65,7 +65,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Command("toggle")]
-        [Summary("(command string) - Toggles a command to be available.")]
+        [Summary("(Dev) !toggle {command string} - Toggles a command to be available.")]
         public async Task SayTogglecommandAsync(string command)
         {   
             if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer")
@@ -82,7 +82,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Command("togglestates")]
-        [Summary("Shows the current enabled and disabled commands")]
+        [Summary("(Dev) !togglestates - Shows the current enabled and disabled commands")]
         public async Task SaytogglestatescommandAsync()
         {
             if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
@@ -109,7 +109,7 @@ namespace CorruptOSBot.Modules
 
 
         [Command("getusers")]
-        [Summary("(Staff) Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
+        [Summary("(Dev) !getusers - Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
         public async Task SayGetUsersAsync()
         {
             if (RootAdminManager.GetToggleState("getusers", Context.User) &&
@@ -159,7 +159,7 @@ namespace CorruptOSBot.Modules
 
 
         [Command("getuser")]
-        [Summary("(admin) Gets a single users on discord, showing their available information.")]
+        [Summary("(Staff) !getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
         public async Task SayGetUserAsync(IGuildUser user)
         {
             if (RootAdminManager.GetToggleState("getuser", Context.User) &&
@@ -180,7 +180,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Command("getuser")]
-        [Summary("(admin) Gets a single users on discord, showing their available information.")]
+        [Summary("(Staff) !getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
         public async Task SayGetUserAsync(string username)
         {
             if (RootAdminManager.GetToggleState("getuser", Context.User) &&

@@ -13,7 +13,23 @@ namespace CorruptOSBot.Helpers.Bot
             builder.Description = description;
             builder.Title = title;
 
-            if (fields != null )
+            if (fields != null)
+            {
+                foreach (var item in fields)
+                {
+                    builder.AddField(item.Key, item.Value);
+                }
+            }
+
+            return builder.Build();
+        }
+        public static Embed CreateDefaultFieldsEmbed(string title, Dictionary<string, string> fields)
+        {
+            var builder = new EmbedBuilder();
+            builder.Color = Color.Blue;
+            builder.Title = title;
+
+            if (fields != null)
             {
                 foreach (var item in fields)
                 {

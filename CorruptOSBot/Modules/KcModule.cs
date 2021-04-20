@@ -1,10 +1,8 @@
-﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Extensions.WOM;
+﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Discord;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +13,7 @@ namespace CorruptOSBot.Modules
     public class KcModule : ModuleBase<SocketCommandContext>
     {
         [Command("kc")]
-        [Summary("{player name} (optional) - Generates KC's for the specified player or, if left empty, your own. (Only allowed in **pvm-general**)")]
+        [Summary("!kc {player name}(optional) - Generates KC's for the specified player or, if left empty, your own. (Only allowed in **pvm-general**)")]
         public async Task SayKcAsync([Remainder]string playerName)
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
@@ -35,7 +33,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Command("kc")]
-        [Summary("Generates your own KC. (Only allowed in **pvm-general**)")]
+        [Summary("kc - Generates your own KC. (Only allowed in **pvm-general**)")]
         public async Task SayKcAsync()
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
