@@ -21,7 +21,7 @@ namespace CorruptOSBot.Helpers.Bot
         private static Dictionary<string, string> LoadCommandsFromCode()
         {
             var result = new Dictionary<string, string>();
-            var blacklist = new List<string>() { "overthrownathan" };
+            var blacklist = new List<string>() { "!overthrownathan" };
 
             var commandMethods = AppDomain.CurrentDomain.GetAssemblies()
                        .SelectMany(assembly => assembly.GetTypes())
@@ -38,7 +38,7 @@ namespace CorruptOSBot.Helpers.Bot
                 string valueCommand = attrCommand.Text;
 
                 string commandLine = string.Format("!{0}", valueCommand);
-                if (!result.ContainsKey(commandLine) && !blacklist.Contains(commandLine))
+                if (!result.ContainsKey(commandLine) && !blacklist.Contains(commandLine.ToLower()))
                 {
                     result.Add(commandLine, valueSummary);
                 }
