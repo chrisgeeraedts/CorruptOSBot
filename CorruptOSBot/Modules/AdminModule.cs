@@ -157,28 +157,6 @@ namespace CorruptOSBot.Modules
             }
         }
 
-
-        [Command("getuser")]
-        [Summary("(Staff) !getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
-        public async Task SayGetUserAsync(IGuildUser user)
-        {
-            if (RootAdminManager.GetToggleState("getuser", Context.User) &&
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Staff"))
-            {
-                try
-                {
-                    await Context.Channel.SendMessageAsync(embed: BuildEmbedForUserInfo(user).Build());
-                }
-                catch (Exception e)
-                {
-                    await Program.Log(new LogMessage(LogSeverity.Info, nameof(SayGetUserAsync), string.Format("Failed: {0}", e.Message)));
-                }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
-            }
-        }
-
         [Command("getuser")]
         [Summary("(Staff) !getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
         public async Task SayGetUserAsync([Remainder]string username)
@@ -188,10 +166,16 @@ namespace CorruptOSBot.Modules
             {
                 try
                 {
-                    var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
-                    var guild = await ((IDiscordClient)Context.Client).GetGuildAsync(guildId);
-                    var allUsers = await guild.GetUsersAsync();
-                    var user = allUsers.FirstOrDefault(x => DiscordHelper.GetAccountNameOrNickname(x).ToLower() == username.ToLower());
+                    IGuildUser user;
+                    if (!username.StartsWith("<@!"))
+                    {
+                        user = await AsyncFindUserByName(username);
+                    }
+                    else
+                    {
+                        user = await AsyncFindUserByMention(username);
+                    }
+
                     if (user != null)
                     {
                         await Context.Channel.SendMessageAsync(embed: BuildEmbedForUserInfo(user).Build());
@@ -200,7 +184,6 @@ namespace CorruptOSBot.Modules
                     {
                         await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} not found", username), string.Empty));
                     }
-                   
                 }
                 catch (Exception e)
                 {
@@ -212,7 +195,21 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        private async Task<IGuildUser> AsyncFindUserByName(string username)
+        {
+            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            var guild = await ((IDiscordClient)Context.Client).GetGuildAsync(guildId);
+            var allUsers = await guild.GetUsersAsync();
+            return allUsers.FirstOrDefault(x => DiscordHelper.GetAccountNameOrNickname(x).ToLower() == username.ToLower());
+        }
 
+        private async Task<IGuildUser> AsyncFindUserByMention(string mention)
+        {
+            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            var guild = await ((IDiscordClient)Context.Client).GetGuildAsync(guildId);
+            var allUsers = await guild.GetUsersAsync();
+            return allUsers.FirstOrDefault(x => x.Mention == mention);
+        }
 
         [Command("overthrownathan")]
         [Summary("Prepare!")]
