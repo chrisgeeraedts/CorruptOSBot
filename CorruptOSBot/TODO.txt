@@ -17,10 +17,13 @@
 [X] fix the event !score so it doesnt show newer events that havent started yet :slight_smile:
 [X] Fix the events !score bug
 [X] Add name on PVM promotions in case mobile fucks up the @
-[ ] !bosskc {bossname} => shows kc top 5 for a single boss
+[/] !bosskc {bossname} => shows kc top 5 for a single boss
 [X] Fix a bug on togglestates maxing at 25 states (fieldcap)
-[ ] Do something cool with GE prices https://www.reddit.com/r/2007scape/comments/3g06rq/guide_using_the_old_school_ge_page_api/
+[X] Fix !getuser {@} so that all users can be found
+
 
 EXTERNAL / INNOVATION:
 [ ] Runelite plugin (Runelite plugin for clan. Means we will be able to pull drops, pet drops, achievements and more directly from the clan members! Also functions for pvm bingo.)
 [ ] Drops ingame, plugin transfers data to a database, Bot retrieve data from database, Show cool stuff in drops channel
+[ ] Do something cool with GE prices https://www.reddit.com/r/2007scape/comments/3g06rq/guide_using_the_old_school_ge_page_api/
+[ ] Do something cool the runelite API https://runelite.net/account/loot-tracker (https://api.runelite.net/runelite-1.7.5/loottracker?count=2000&start=0)

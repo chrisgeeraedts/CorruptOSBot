@@ -181,7 +181,7 @@ namespace CorruptOSBot.Modules
 
         [Command("getuser")]
         [Summary("(Staff) !getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
-        public async Task SayGetUserAsync(string username)
+        public async Task SayGetUserAsync([Remainder]string username)
         {
             if (RootAdminManager.GetToggleState("getuser", Context.User) &&
                 DiscordHelper.HasRole(Context.User, Context.Guild, "Staff"))
@@ -191,7 +191,7 @@ namespace CorruptOSBot.Modules
                     var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
                     var guild = await ((IDiscordClient)Context.Client).GetGuildAsync(guildId);
                     var allUsers = await guild.GetUsersAsync();
-                    var user = allUsers.FirstOrDefault(x => x.Nickname == username);
+                    var user = allUsers.FirstOrDefault(x => DiscordHelper.GetAccountNameOrNickname(x).ToLower() == username.ToLower());
                     if (user != null)
                     {
                         await Context.Channel.SendMessageAsync(embed: BuildEmbedForUserInfo(user).Build());
