@@ -15,14 +15,14 @@ namespace CorruptOSBot.Events
         {
             var recruitingChannel = arg.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("User entered Discord",
-                string.Format("<@{0}> has joined the server", arg.Id)));
+                string.Format("<@{0}> ({0}) has joined the server", arg.Id)));
         }
 
         public static async Task LeavingGuild(SocketGuildUser arg)
         {
             var recruitingChannel = arg.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member left",
-                string.Format("<@{0}> has left the server", arg.Id)));
+                string.Format("<@{0}> ({0}) has left the server", arg.Id)));
 
             var rsn = DiscordHelper.GetAccountNameOrNickname(arg);
 
@@ -36,7 +36,7 @@ namespace CorruptOSBot.Events
         {
             var recruitingChannel = arg2.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member banned",
-                string.Format("<@{0}> has been banned from the server", arg1.Id)));
+                string.Format("<@{0}>  ({0}) has been banned from the server", arg1.Id)));
         }
     }
 }

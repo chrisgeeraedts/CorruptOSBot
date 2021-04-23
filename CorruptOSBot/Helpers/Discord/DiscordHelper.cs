@@ -30,7 +30,7 @@ namespace CorruptOSBot.Helpers.Discord
         internal static bool IsInChannel(ulong channelId, string channelName, SocketUser userAdditional = null)
         {
             // override for admin
-            if (userAdditional != null && userAdditional.Id == 174621705581494272)
+            if (userAdditional != null && userAdditional.Id == 174621705581494272) //override ID
             {
                 return true;
             }
@@ -71,7 +71,7 @@ namespace CorruptOSBot.Helpers.Discord
             await ((SocketGuildUser)user).SendMessageAsync(string.Format("That command (**{0}**) is **not allowed** in this channel but only in the following channel(s): **{1}**!", command, allowedChannel));
         }
 
-        internal static async Task SendWelcomeMessageToUser(SocketUser user, SocketGuild guild)
+        internal static async Task SendWelcomeMessageToUser(SocketUser user, SocketGuild guild, bool isClanFriend)
         {
             var eb = new EmbedBuilder();
             eb.Title = "Welcome to Corrupt OS";

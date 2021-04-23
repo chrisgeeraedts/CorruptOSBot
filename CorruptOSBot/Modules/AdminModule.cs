@@ -217,13 +217,10 @@ namespace CorruptOSBot.Modules
         {
             if (RootAdminManager.GetToggleState("overthrownathan", Context.User))
             {
-                var currentUser = ((SocketGuildUser)Context.User);
-
                 var message = await Context.Channel.SendMessageAsync("**Now is not yet the time...** | this message will selfdestruct in 5 seconds... ;)");
 
                 await Context.Message.DeleteAsync();
-                await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
-                
+                await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());                
             }
         }
 

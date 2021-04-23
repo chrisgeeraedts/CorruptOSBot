@@ -81,6 +81,7 @@ namespace CorruptOSBot
             var result = new List<IService>();
 
             result.Add(new PVMRoleService(_client));
+            result.Add(new AchievementService(_client));
             result.Add(new TopKCService(_client));
             result.Add(new HeartbeatService(_client));
 
@@ -155,7 +156,7 @@ namespace CorruptOSBot
                 {
                     while(true)
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(10000);
 
                         Thread.CurrentThread.IsBackground = true;
                         /* run your code here */
@@ -290,7 +291,6 @@ namespace CorruptOSBot
                 // commands to be invoked by mentioning the bot instead.
                 if (msg.HasCharPrefix('!', ref pos) /* || msg.HasMentionPrefix(_client.CurrentUser, ref pos) */)
                 {
-
 
                     // Create a Command Context.
                     var context = new SocketCommandContext(_client, msg);

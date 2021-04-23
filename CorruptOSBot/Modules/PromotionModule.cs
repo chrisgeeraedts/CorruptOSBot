@@ -103,7 +103,8 @@ namespace CorruptOSBot.Modules
                             item.DaysInDiscord));
                     }
                 }
-                result.Add(EmbedHelper.CreateDefaultEmbed(rank.ToString(), sb.ToString()));
+                string title = string.Format("{0} at {1} (last day of the current month)", rank, GetLastDayOfMonth(DateTime.Now));
+                result.Add(EmbedHelper.CreateDefaultEmbed(title, sb.ToString()));
             }
             return result;
         }

@@ -165,6 +165,19 @@ namespace CorruptOSBot.Extensions
             return product;
         }
 
+        public List<ClanRecentAchievementsRoot> GetClanRecentAchievements()
+        {
+            List<ClanRecentAchievementsRoot> product = null;
+            HttpResponseMessage response = client.GetAsync(path + string.Format("/groups/{0}/achievements", clanId)).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                product = JsonConvert.DeserializeObject<List<ClanRecentAchievementsRoot>>(result);
+            }
+            return product;
+        }
+
+
         public List<ClanMember> GetClanMembers()
         {
             List<ClanMember> clanMembers = null;
@@ -212,5 +225,35 @@ namespace CorruptOSBot.Extensions
             }
             return achievements;
         }
+    }
+
+    public class Player
+    {
+        public int exp { get; set; }
+        public int id { get; set; }
+        public string username { get; set; }
+        public string displayName { get; set; }
+        public string type { get; set; }
+        public string build { get; set; }
+        public bool flagged { get; set; }
+        public double ehp { get; set; }
+        public double ehb { get; set; }
+        public double ttm { get; set; }
+        public double tt200m { get; set; }
+        public DateTime? lastImportedAt { get; set; }
+        public DateTime? lastChangedAt { get; set; }
+        public DateTime? registeredAt { get; set; }
+        public DateTime? updatedAt { get; set; }
+    }
+
+    public class ClanRecentAchievementsRoot
+    {
+        public int threshold { get; set; }
+        public int playerId { get; set; }
+        public string name { get; set; }
+        public string measure { get; set; }
+        public string metric { get; set; }
+        public DateTime? createdAt { get; set; }
+        public Player player { get; set; }
     }
 }

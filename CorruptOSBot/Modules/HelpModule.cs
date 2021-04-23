@@ -1,6 +1,8 @@
 ﻿using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Helpers.Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,15 +24,18 @@ namespace CorruptOSBot.Modules
             {
                 await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultFieldsEmbed(
                 "Corrupt OS bot command list",
-                GetCommandsToShowInHelp()));
+                GetCommandsToShowInHelp(Context.User, Context.Guild)));
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
             }
         }
 
-        private Dictionary<string, string> GetCommandsToShowInHelp()
+        private Dictionary<string, string> GetCommandsToShowInHelp(SocketUser user, SocketGuild guild)
         {
+            var isStaffOrDev = DiscordHelper.HasRole(user, guild, "Staff") || DiscordHelper.HasRole(user, guild, "Developer");
+
+
             List<string> blackListedCommands = new List<string>();
             blackListedCommands.Add("!clear");
             blackListedCommands.Add("!toggle");
@@ -45,7 +50,14 @@ namespace CorruptOSBot.Modules
             {
                 if (!blackListedCommands.Contains(command.Key))
                 {
-                    result.Add(command.Key, command.Value);
+                    if ((command.Value.Contains("(Staff)") || command.Value.Contains("(Dev)")) && isStaffOrDev)
+                    {
+                        result.Add(command.Key, command.Value);
+                    }
+                    else if(!command.Value.Contains("(Staff)") && !command.Value.Contains("(Dev)"))
+                    {
+                        result.Add(command.Key, command.Value);
+                    }
                 }               
             }
 

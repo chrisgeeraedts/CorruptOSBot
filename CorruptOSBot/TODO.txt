@@ -20,6 +20,14 @@
 [/] !bosskc {bossname} => shows kc top 5 for a single boss
 [X] Fix a bug on togglestates maxing at 25 states (fieldcap)
 [X] Fix !getuser {@} so that all users can be found
+[X] Daily top archivements to the channel posted
+[X] Add a !gwd command similar to !cm (without KC)
+[X] Add the !wom command (use same display as the achievement daily)
+[X] split !help command for staff and regulars
+[ ] Test the max char cap with ```Experimenting with … … Multiple lines… … For my code blocks!```
+[ ] 3 team submissions channels, once posted, move to another channel.
+[ ] Add a way to add !promotions blacklist items 
+[ ] make -{command} commands to remove PVM roles (only add for cm and gwd (due to posting of achievements behavior))
 
 
 EXTERNAL / INNOVATION:

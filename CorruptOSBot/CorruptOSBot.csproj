@@ -106,7 +106,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Services\Achievements\AchievementService.cs" />
     <Compile Include="Events\EventManager.cs" />
+    <Compile Include="Events\FilePostedHandlers\TheHuntScreenshotPosted.cs" />
     <Compile Include="Events\ReactionHandlers\PVMReactionHandler.cs" />
     <Compile Include="Events\ReactionManager.cs" />
     <Compile Include="Extensions\Runewatch\RunewatchClient.cs" />

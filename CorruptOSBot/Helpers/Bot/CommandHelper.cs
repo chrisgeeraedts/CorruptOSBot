@@ -57,6 +57,39 @@ namespace CorruptOSBot.Helpers.Bot
                     result.Add(item.Key, item.Value);
                 }
             }
+            return OrderCommandsByRoles(result);
+        }
+
+        internal static Dictionary<string, string> OrderCommandsByRoles(Dictionary<string, string> input)
+        {
+            var result = new Dictionary<string, string>();
+
+            // First add the dev roles
+            foreach (var item in input.Where(x => x.Value.Contains("(Dev)")))
+            {
+                if (!result.ContainsKey(item.Key))
+                {
+                    result.Add(item.Key, item.Value);
+                }
+            }
+
+            // Second add the staff roles
+            foreach (var item in input.Where(x => x.Value.Contains("(Staff)")))
+            {
+                if (!result.ContainsKey(item.Key))
+                {
+                    result.Add(item.Key, item.Value);
+                }
+            }
+
+            // then add everything else
+            foreach (var item in input.Where(x => !result.ContainsKey(x.Key)))
+            {
+                if (!result.ContainsKey(item.Key))
+                {
+                    result.Add(item.Key, item.Value);
+                }
+            }
             return result;
         }
     }

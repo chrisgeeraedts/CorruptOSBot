@@ -68,6 +68,7 @@ namespace CorruptOSBot.Helpers
         private static void AddAvailableServices()
         {
             toggleStates.Add(nameof(PVMRoleService), true);
+            toggleStates.Add(nameof(AchievementService), true);
             toggleStates.Add(nameof(TopKCService), true);
             toggleStates.Add(nameof(HeartbeatService), true);
         }

@@ -205,5 +205,50 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
+
+
+        [Command("gwd")]
+        [Summary("!gwd - Enables a player to earn the 'GWD' role (Only allowed in **set-pvm-roles**)")]
+        public async Task SayGWDAsync()
+        {
+            if (RootAdminManager.GetToggleState("gwd", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+            {
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
+                {
+                    // check if user has learner/intermediate/advanced
+                    var currentUser = ((SocketGuildUser)Context.User);
+                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
+
+                    if (!string.IsNullOrEmpty(rsn))
+                    {
+                        // Get KC in WOM
+                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
+                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
+
+                        if (clanMember != null)
+                        {
+                            // set the role appriate
+                            await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                            currentUser,
+                            Context.Guild,
+                            new PvmSetCM()
+                            {
+                                role = Constants.GWD,
+                                imageUrl = Constants.GWDImage
+                            },
+                            false,
+                            true);
+                        }
+                    }
+                }
+                else
+                {
+                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!cm", "set-pvm-roles");
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
     }
 }
