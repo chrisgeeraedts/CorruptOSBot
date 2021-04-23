@@ -1,6 +1,6 @@
 ﻿TODO:
 
-[ ] Add second command for welcome page so people auto assigned clan friend instead of all the randoms getting smiley rank but not joining cc 
+[X] Add second command for welcome page so people auto assigned clan friend instead of all the randoms getting smiley rank but not joining cc 
 [X] Add !cm command. Only gives role if WOM shows they ranked 
 [X] Add to the !cm command: if no kc, show message
 [X] Make the !kc command only available in the proper channel
@@ -16,8 +16,8 @@
 [X] Ranks (If possible, A command that shows who needs to be ranked up. We normally use a spreadsheet but alot of manual work has to go into it. Maybe a command like !rankups And it pulls who needs to be ranked up for that month? We do it 1st month in clan, 3rd month in clan, 6 months in clan and OG role. Might be worth waiting on this till clan system update as ranks and times will change )
 [X] fix the event !score so it doesnt show newer events that havent started yet :slight_smile:
 [X] Fix the events !score bug
-[X] Add name on PVM promotions in case mobile fucks up the @
 [/] !bosskc {bossname} => shows kc top 5 for a single boss
+[X] Add name on PVM promotions in case mobile fucks up the @
 [X] Fix a bug on togglestates maxing at 25 states (fieldcap)
 [X] Fix !getuser {@} so that all users can be found
 [X] Daily top archivements to the channel posted
