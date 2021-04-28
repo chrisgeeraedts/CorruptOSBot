@@ -1,6 +1,7 @@
 ﻿using CorruptOSBot.Extensions;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Shared;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -20,7 +21,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "event-general", Context.User))
             {
-                if (RootAdminManager.GetToggleState("score", Context.User)
+                if (ToggleStateManager.GetToggleState("score", Context.User)
                     && RootAdminManager.HasAnyRole(Context.User))
                 {
                     // load current event
@@ -98,7 +99,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "leaderboard", Context.User))
             {
-                if (RootAdminManager.GetToggleState("endscore", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
+                if (ToggleStateManager.GetToggleState("endscore", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Staff"))
                 {
                     // load current event
                     // First, get all comps
@@ -144,7 +145,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "leaderboard", Context.User))
             {
-                if (RootAdminManager.GetToggleState("endscore", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Staff"))
+                if (ToggleStateManager.GetToggleState("endscore", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Staff"))
                 {
                     // get details of this comp
                     CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(compId);

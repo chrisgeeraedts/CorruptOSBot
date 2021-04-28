@@ -1,8 +1,9 @@
 ﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
-using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
+using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.WebSocket;
 using System;
@@ -28,7 +29,7 @@ namespace CorruptOSBot.Services
 
         public async Task Trigger(IDiscordClient client)
         {
-            if (RootAdminManager.GetToggleState(nameof(TopKCService)))
+            if (ToggleStateManager.GetToggleState(nameof(TopKCService)))
             {
                 // find current channel
                 var guild = await client.GetGuildAsync(GuildId);

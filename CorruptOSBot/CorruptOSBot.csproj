@@ -106,6 +106,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Bot\EmbedHelper.cs" />
+    <Compile Include="Helpers\SettingsConstants.cs" />
+    <Compile Include="RootAdminManager.cs" />
     <Compile Include="Services\Achievements\AchievementService.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\FilePostedHandlers\TheHuntScreenshotPosted.cs" />
@@ -185,12 +188,9 @@
     <Compile Include="Extensions\WOM\WiseOldManClient.cs" />
     <Compile Include="Extensions\WOM\WOMMemoryCache.cs" />
     <Compile Include="Helpers\PVM\BossKCHelper.cs" />
-    <Compile Include="Helpers\Discord\ChannelHelper.cs" />
     <Compile Include="Helpers\Bot\CommandHelper.cs" />
-    <Compile Include="Helpers\Bot\ConfigHelper.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Discord\DiscordHelper.cs" />
-    <Compile Include="Helpers\Bot\EmbedHelper.cs" />
     <Compile Include="Helpers\Emoji\EmojiEnum.cs" />
     <Compile Include="Helpers\Emoji\EmojiHelper.cs" />
     <Compile Include="Helpers\Bot\LogHelper.cs" />
@@ -200,7 +200,6 @@
     <Compile Include="Helpers\PVM\PvmSystemHelper.cs" />
     <Compile Include="Modules\BossKcModule.cs" />
     <Compile Include="Modules\PromotionModule.cs" />
-    <Compile Include="RootAdminManager.cs" />
     <Compile Include="Interceptors\SuggestionInterceptor.cs" />
     <Compile Include="Modules\AdminModule.cs" />
     <Compile Include="Modules\HelpModule.cs" />
@@ -242,6 +241,16 @@
   <ItemGroup>
     <Content Include="Dakirby309-Windows-8-Metro-Apps-Screenshot-Metro.ico" />
     <Content Include="TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CorruptOSBot.Shared\CorruptOSBot.Shared.csproj">
+      <Project>{9afb3b35-746e-410a-9c29-2bc53b2a2011}</Project>
+      <Name>CorruptOSBot.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CorruptOSBot.TheHunt\CorruptOSBot.TheHunt.csproj">
+      <Project>{3d8f8f2f-7e66-4152-8ad4-d13f1cf3d71d}</Project>
+      <Name>CorruptOSBot.TheHunt</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Web.WebJobs.Publish.2.0.0\build\Microsoft.Web.WebJobs.Publish.targets" Condition="Exists('..\packages\Microsoft.Web.WebJobs.Publish.2.0.0\build\Microsoft.Web.WebJobs.Publish.targets')" />

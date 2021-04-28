@@ -1,7 +1,9 @@
 ﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
 using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
+using CorruptOSBot.Shared;
 using Discord;
 using Discord.Commands;
 using System;
@@ -16,11 +18,31 @@ namespace CorruptOSBot.Modules
     public class TestModule : ModuleBase<SocketCommandContext>
     {
 
+
+
+
+
+        [Command("testload")]
+        [Summary("(admin) A test command hosting different functionality - only used during development")]
+        public async Task SayTestLoadAsync()
+        {
+            if (ToggleStateManager.GetToggleState("testload", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Developer"))
+            {
+               // var loadMessage = await ReplyAsync(embed: DiscordHelper.GetLoadingEmbed());
+            }
+        }
+
+
+
+
+
+
+
         [Command("test3")]
         [Summary("(admin) A test command hosting different functionality - only used during development")]
         public async Task SayTest3Async()
         {
-            if (RootAdminManager.GetToggleState("test3", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Developer"))
+            if (ToggleStateManager.GetToggleState("test3", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Developer"))
             {
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
                 var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
@@ -40,7 +62,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) A test command hosting different functionality - only used during development")]
         public async Task SayTest2Async()
         {
-            if (RootAdminManager.GetToggleState("test2", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Developer"))
+            if (ToggleStateManager.GetToggleState("test2", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Developer"))
             {
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
                 var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
@@ -86,7 +108,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) A test command hosting different functionality - only used during development")]
         public async Task SayTest4Async()
         {
-            if (RootAdminManager.GetToggleState("test4", Context.User) && RootAdminManager.HasSpecificRole(Context.User, "Developer"))
+            if (ToggleStateManager.GetToggleState("test4", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Developer"))
             {
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
                 var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
@@ -333,7 +355,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) Gets the current post's Id")]
         public async Task SaypostidAsync()
         {
-            if (RootAdminManager.GetToggleState("postid", Context.User))
+            if (ToggleStateManager.GetToggleState("postid", Context.User))
             {
 
                 var messages = await Context.Channel
@@ -359,7 +381,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) Gets the current channel's Id")]
         public async Task SaychannelIdAsync()
         {
-            if (RootAdminManager.GetToggleState("channelid", Context.User))
+            if (ToggleStateManager.GetToggleState("channelid", Context.User))
             {
                 var channel = Context.Channel.Id.ToString();
 
@@ -375,7 +397,7 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) Gets the current guild Id")]
         public async Task SayguildidAsync()
         {
-            if (RootAdminManager.GetToggleState("guildid", Context.User))
+            if (ToggleStateManager.GetToggleState("guildid", Context.User))
             {
                 var channel = Context.Guild.Id.ToString();
 

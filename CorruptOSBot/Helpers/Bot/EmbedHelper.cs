@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Extensions;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using System;
 using System.Collections.Generic;

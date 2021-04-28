@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using CorruptOSBot.Shared;
+using Discord;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,8 @@ namespace CorruptOSBot.Helpers.Discord
 
             return ChannelHelper.GetChannelId(channelName) == channelId;
         }
+
+
 
         public static string GetAccountNameOrNickname(IGuildUser user)
         {

@@ -1,6 +1,7 @@
-﻿using CorruptOSBot.Helpers;
-using CorruptOSBot.Helpers.Bot;
+﻿using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
@@ -20,7 +21,7 @@ namespace CorruptOSBot.Modules
         [Summary("Gives information about the bot.")]
         public async Task SayAsync()
         {
-            if (RootAdminManager.GetToggleState("help", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("help", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
                 await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultFieldsEmbed(
                 "Corrupt OS bot command list",

@@ -1,4 +1,4 @@
-﻿using CorruptOSBot.Helpers.Bot;
+﻿using CorruptOSBot.Shared.Helpers.Bot;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

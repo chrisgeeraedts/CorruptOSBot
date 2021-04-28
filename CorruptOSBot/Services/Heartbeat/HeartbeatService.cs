@@ -1,6 +1,6 @@
-﻿using CorruptOSBot.Helpers;
-using CorruptOSBot.Helpers.Bot;
-using CorruptOSBot.Helpers.Discord;
+﻿using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using System;
 using System.Linq;
@@ -23,7 +23,7 @@ namespace CorruptOSBot.Services
 
         public async Task Trigger(IDiscordClient client)
         {
-            if (RootAdminManager.GetToggleState(nameof(HeartbeatService)))
+            if (ToggleStateManager.GetToggleState(nameof(HeartbeatService)))
             {
                 if (Channel != null)
                 {

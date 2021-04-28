@@ -1,8 +1,9 @@
 ﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
-using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
+using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using System;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace CorruptOSBot.Services
 
         public async Task Trigger(Discord.IDiscordClient client)
         {
-            if (RootAdminManager.GetToggleState(nameof(PVMRoleService)))
+            if (ToggleStateManager.GetToggleState(nameof(PVMRoleService)))
             {
                 await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Triggered"));
 

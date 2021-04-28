@@ -13,6 +13,9 @@ using CorruptOSBot.Services;
 using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Shared.Helpers.Bot;
+using CorruptOSBot.Shared;
+using CorruptOSBot.TheHunt;
 
 namespace CorruptOSBot
 {
@@ -31,7 +34,7 @@ namespace CorruptOSBot
         // These two types require you install the Discord.Net.Commands package.
         private readonly CommandService _commands;
         private readonly IServiceProvider _services;
-        private readonly Dictionary<ulong, Func<SocketMessage, Task>> _channelInterceptors;
+        private readonly Dictionary<ulong, Func<SocketMessage, Discord.IDiscordClient, Task>> _channelInterceptors;
         private List<IService> _activeServices;
 
 
@@ -76,6 +79,14 @@ namespace CorruptOSBot
 
         }
 
+        private void LoadAdditionalModules()
+        {
+            //TODO: Do something cool with reflection loading later
+
+            //The hunt logic
+            ModuleInjector.Inject(_channelInterceptors, _services, _commands);           
+        }
+
         private List<IService> ConfigureActiveServices()
         {
             var result = new List<IService>();
@@ -115,6 +126,8 @@ namespace CorruptOSBot
         private async Task MainAsync()
         {
             // Centralize the logic for commands into a separate method.
+            ToggleStateManager.Init();
+            
             await InitCommands();
 
             RootAdminManager.Init();
@@ -131,7 +144,9 @@ namespace CorruptOSBot
 
             await StartServiceThreads(_client);
 
-            foreach (var item in RootAdminManager.GetToggleStates())
+            LoadAdditionalModules();
+
+            foreach (var item in ToggleStateManager.GetToggleStates())
             {
                 await Log(new LogMessage(LogSeverity.Info, "Toggle states:", string.Format("{0}: {1}", item.Key, item.Value)));
             }
@@ -169,16 +184,19 @@ namespace CorruptOSBot
             }
         }
 
-        private Dictionary<ulong, Func<SocketMessage, Task>> ConfigureChannelInterceptors()
+        private Dictionary<ulong, Func<SocketMessage, Discord.IDiscordClient, Task>> ConfigureChannelInterceptors()
         {
-            var result = new Dictionary<ulong, Func<SocketMessage, Task>>();
+            var result = new Dictionary<ulong, Func<SocketMessage, Discord.IDiscordClient, Task>>();
 
-            AddToChannelInterceptorDictionary("suggestions", SuggestionInterceptor.NewSuggestionPosted, result);
+            AddToChannelInterceptorDictionary("suggestions", new SuggestionInterceptor().Trigger, result);
 
             return result;
         }
-               
-        private void AddToChannelInterceptorDictionary(string channelName, Func<SocketMessage, Task> func, Dictionary<ulong, Func<SocketMessage, Task>> dictionaryToAddTo)
+
+
+        private void AddToChannelInterceptorDictionary(string channelName, 
+            Func<SocketMessage, Discord.IDiscordClient, Task> func, 
+            Dictionary<ulong, Func<SocketMessage, Discord.IDiscordClient, Task>> dictionaryToAddTo)
         {
             var channelId = ChannelHelper.GetChannelId(channelName);
             if (channelId != 0)
@@ -222,7 +240,7 @@ namespace CorruptOSBot
 
         private async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)
         {
-            if (RootAdminManager.GetToggleState(Constants.EventUserBanned))
+            if (ToggleStateManager.GetToggleState(Constants.EventUserBanned))
             {
                 await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User banned: {0}", arg1.Username)));
                 await EventManager.BannedFromGuild(arg1, arg2);
@@ -237,7 +255,7 @@ namespace CorruptOSBot
 
         private async Task _client_UserJoined(SocketGuildUser arg)
         {
-            if (RootAdminManager.GetToggleState(Constants.EventUserJoined))
+            if (ToggleStateManager.GetToggleState(Constants.EventUserJoined))
             {
                 await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User joined: {0}", arg.Username)));
                 await EventManager.JoinedGuild(arg);
@@ -246,7 +264,7 @@ namespace CorruptOSBot
 
         private async Task _client_UserLeft(SocketGuildUser arg)
         {
-            if (RootAdminManager.GetToggleState(Constants.EventUserLeft))
+            if (ToggleStateManager.GetToggleState(Constants.EventUserLeft))
             {
                 if (arg.IsBot || arg.IsWebhook) return;
                 await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User left: {0}", arg.Username)));
@@ -279,7 +297,7 @@ namespace CorruptOSBot
             int posX = 0;
             if (_channelInterceptors.ContainsKey(arg.Channel.Id) && !msg.HasCharPrefix('!', ref posX))
             {
-                await _channelInterceptors[arg.Channel.Id](arg);
+                await _channelInterceptors[arg.Channel.Id](arg, _client);
             }
             else
             {

@@ -1,5 +1,5 @@
 ﻿using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
-using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 
 namespace CorruptOSBot.Extensions
 {
-    public class WiseOldManClient
+    public class WiseOldManClient : IDisposable
     {
         int clanId;
         HttpClient client;
@@ -224,6 +224,11 @@ namespace CorruptOSBot.Extensions
                 achievements = JsonConvert.DeserializeObject<List<Achievement>>(result);
             }
             return achievements;
+        }
+
+        public void Dispose()
+        {
+            client = null;
         }
     }
 

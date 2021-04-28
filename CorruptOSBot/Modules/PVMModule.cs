@@ -3,6 +3,7 @@ using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
+using CorruptOSBot.Shared;
 using Discord.Commands;
 using Discord.WebSocket;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace CorruptOSBot.Modules
         [Summary("!cox - Enables a player to earn the 'CoX learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayCoxAsync()
         {
-            if (RootAdminManager.GetToggleState("cox", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("cox", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
                 if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {
@@ -65,7 +66,7 @@ namespace CorruptOSBot.Modules
         [Summary("!tob - Enables a player to earn the 'ToB learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayTobAsync()
         {
-            if (RootAdminManager.GetToggleState("tob", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("tob", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
                 if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {
@@ -114,7 +115,7 @@ namespace CorruptOSBot.Modules
         [Summary("!nm - Enables a player to earn the 'nm learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayNmAsync()
         {
-            if (RootAdminManager.GetToggleState("nm", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("nm", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
                 if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {
@@ -163,7 +164,7 @@ namespace CorruptOSBot.Modules
         [Summary("!cm - Enables a player to earn the 'Challenge Mode' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayCMAsync()
         {
-            if (RootAdminManager.GetToggleState("cm", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("cm", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
                 if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {
@@ -211,7 +212,7 @@ namespace CorruptOSBot.Modules
         [Summary("!gwd - Enables a player to earn the 'GWD' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayGWDAsync()
         {
-            if (RootAdminManager.GetToggleState("gwd", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("gwd", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
                 if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {

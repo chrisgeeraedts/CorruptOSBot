@@ -2,6 +2,8 @@
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord.Commands;
 using System;
 using System.Collections.Generic;
@@ -17,8 +19,8 @@ namespace CorruptOSBot.Modules
         [Summary("(Staff) !promotions - Gets a list of accounts that need promotions")]
         public async Task SayPromotionsAsync()
         {
-            if (RootAdminManager.GetToggleState("promotions", Context.User) &&
-                (RootAdminManager.HasSpecificRole(Context.User, "Staff")))
+            if (ToggleStateManager.GetToggleState("promotions", Context.User) &&
+                (PermissionManager.HasSpecificRole(Context.User, "Staff")))
             {
                 // get players 
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);

@@ -1,19 +1,20 @@
-﻿using CorruptOSBot.Helpers;
-using CorruptOSBot.Helpers.Bot;
+﻿using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.WebSocket;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot
 {
-    public static class SuggestionInterceptor
+    public class SuggestionInterceptor : IInterceptor
     {
-        public static async Task NewSuggestionPosted(SocketMessage arg)
+        public async Task Trigger(SocketMessage arg, Discord.IDiscordClient client)
         {
             try
             {
-                if (RootAdminManager.GetToggleState(nameof(SuggestionInterceptor), arg.Author))
+                if (ToggleStateManager.GetToggleState(nameof(SuggestionInterceptor), arg.Author))
                 {
                     var currentUser = ((SocketGuildUser)arg.Author);
                     var name = DiscordHelper.GetAccountNameOrNickname(currentUser);

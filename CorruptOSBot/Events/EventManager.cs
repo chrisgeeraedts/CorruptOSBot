@@ -2,6 +2,7 @@
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.WebSocket;
 using System.Linq;

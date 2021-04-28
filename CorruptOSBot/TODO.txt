@@ -25,10 +25,15 @@
 [X] Add the !wom command (use same display as the achievement daily)
 [X] split !help command for staff and regulars
 [ ] Test the max char cap with ```Experimenting with … … Multiple lines… … For my code blocks!```
-[ ] 3 team submissions channels, once posted, move to another channel.
+[ ] 6 team submissions channels, once posted, move to another channel.
 [ ] Add a way to add !promotions blacklist items 
 [ ] make -{command} commands to remove PVM roles (only add for cm and gwd (due to posting of achievements behavior))
-
+[ ] Add 'waiting' message to commands and delete that message afterwards
+[ ] redoing the !cox command forces a refresh of the cache and checks again for promotions
+[ ] Add a force cache usage if WOM is down (and put message is heartbeat about it);
+[ ] Fix CreateWOMEmbed() so it doesnt retrieve data directly from WOM but from Cache
+[ ] Add !addbuyin {name} and !removebuyin {name} commands
+[ ] Add a system to that copies or removes posts from 1 channel into another
 
 EXTERNAL / INNOVATION:
 [ ] Runelite plugin (Runelite plugin for clan. Means we will be able to pull drops, pet drops, achievements and more directly from the clan members! Also functions for pvm bingo.)

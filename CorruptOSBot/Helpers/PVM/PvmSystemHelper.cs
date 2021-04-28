@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 
 namespace CorruptOSBot.Helpers.PVM
@@ -23,7 +24,7 @@ namespace CorruptOSBot.Helpers.PVM
 
             if (overrideTrigger || (haslearnerRole || hasIntermediate || hasAdvanced))
             {
-                if (kills > advancedRole && !hasAdvanced)
+                if (kills >= advancedRole && !hasAdvanced)
                 {
                     // upgrade role
                     await SetRole(currentUser, guild, pvmSet.advanced, AdvancedRoleId.Id, pvmSet.imageUrl, message);
@@ -31,7 +32,7 @@ namespace CorruptOSBot.Helpers.PVM
                     await RemoveRole(currentUser, guild, learnerRole);
                     await currentUser.SendMessageAsync(String.Format("You just got the {0} role!", pvmSet.advanced));
                 }
-                else if (kills > intermediateRole && !hasIntermediate && !hasAdvanced)
+                else if (kills >= intermediateRole && !hasIntermediate && !hasAdvanced)
                 {
                     // upgrade role
                     await SetRole(currentUser, guild, pvmSet.intermediate, IntermediateRoleId.Id, pvmSet.imageUrl, message);

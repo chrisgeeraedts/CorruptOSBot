@@ -1,6 +1,7 @@
-﻿using CorruptOSBot.Helpers;
-using CorruptOSBot.Helpers.Bot;
+﻿using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -18,9 +19,9 @@ namespace CorruptOSBot.Modules
         [Summary("(Staff/Mod) !poll {your question} - Creates a yes/no poll.")]
         public async Task SayPollAsync([Remainder]string pollquestion)
         {
-            if (RootAdminManager.GetToggleState("poll", Context.User) &&
-                (RootAdminManager.HasSpecificRole(Context.User, "Staff") ||
-                RootAdminManager.HasSpecificRole(Context.User, "Moderator")))
+            if (ToggleStateManager.GetToggleState("poll", Context.User) &&
+                (PermissionManager.HasSpecificRole(Context.User, "Staff") ||
+                PermissionManager.HasSpecificRole(Context.User, "Moderator")))
             {
                 var currentUser = ((SocketGuildUser)Context.User);
                 var name = DiscordHelper.GetAccountNameOrNickname(currentUser);
@@ -51,7 +52,7 @@ namespace CorruptOSBot.Modules
         [Summary("(Dev) !clear {number} - Clears posts above it. (max 100)")]
         public async Task SayClearAsync(int number)
         { 
-            if (RootAdminManager.GetToggleState("clear", Context.User) && 
+            if (ToggleStateManager.GetToggleState("clear", Context.User) && 
                 DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 // max it 
@@ -71,9 +72,9 @@ namespace CorruptOSBot.Modules
             if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer")
                 && RootAdminManager.GetCommandExist(command))
             {
-                var currentState = RootAdminManager.GetToggleState(command);
-                RootAdminManager.ToggleModuleCommand(command, !currentState);
-                var newState = RootAdminManager.GetToggleState(command);
+                var currentState = ToggleStateManager.GetToggleState(command);
+                ToggleStateManager.ToggleModuleCommand(command, !currentState);
+                var newState = ToggleStateManager.GetToggleState(command);
                 await ReplyAsync(string.Format("command {0} was toggled from {1} to {2}", command, currentState, newState));
             }
 
@@ -87,7 +88,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
-                var states = RootAdminManager.GetToggleStates();
+                var states = ToggleStateManager.GetToggleStates();
 
                 var builder = new EmbedBuilder();
                 builder.Color = Color.Blue;
@@ -112,7 +113,7 @@ namespace CorruptOSBot.Modules
         [Summary("(Dev) !getusers - Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
         public async Task SayGetUsersAsync()
         {
-            if (RootAdminManager.GetToggleState("getusers", Context.User) &&
+            if (ToggleStateManager.GetToggleState("getusers", Context.User) &&
                 DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 try
@@ -161,7 +162,7 @@ namespace CorruptOSBot.Modules
         [Summary("(Staff) !getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
         public async Task SayGetUserAsync([Remainder]string username)
         {
-            if (RootAdminManager.GetToggleState("getuser", Context.User) &&
+            if (ToggleStateManager.GetToggleState("getuser", Context.User) &&
                 DiscordHelper.HasRole(Context.User, Context.Guild, "Staff"))
             {
                 try
@@ -215,7 +216,7 @@ namespace CorruptOSBot.Modules
         [Summary("Prepare!")]
         public async Task SayOverthrowNathanAsync()
         {
-            if (RootAdminManager.GetToggleState("overthrownathan", Context.User))
+            if (ToggleStateManager.GetToggleState("overthrownathan", Context.User))
             {
                 var message = await Context.Channel.SendMessageAsync("**Now is not yet the time...** | this message will selfdestruct in 5 seconds... ;)");
 

@@ -1,7 +1,8 @@
 ﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -17,7 +18,7 @@ namespace CorruptOSBot.Modules
         [Summary("!rsn {your name} - changes your nickname in the server and Wise Old Man.")]
         public async Task SayRSNAsync([Remainder]string username)
         {
-            if (RootAdminManager.GetToggleState("rsn", Context.User))
+            if (ToggleStateManager.GetToggleState("rsn", Context.User))
             {
                 //user that actually started the command
                 var currentUser = Context.User;
@@ -44,7 +45,7 @@ namespace CorruptOSBot.Modules
         [Summary("!rsncf {your name} - changes your nickname in the server and sets you as a Clanfriend.")]
         public async Task SayRSNCFAsync([Remainder]string username)
         {
-            if (RootAdminManager.GetToggleState("rsncf", Context.User) &&
+            if (ToggleStateManager.GetToggleState("rsncf", Context.User) &&
                 DiscordHelper.IsInChannel(Context.Channel.Id, "welcome", Context.User))
             {
                 //user that actually started the command

@@ -1,4 +1,4 @@
-﻿using CorruptOSBot.Helpers.Bot;
+﻿using CorruptOSBot.Shared.Helpers.Bot;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;

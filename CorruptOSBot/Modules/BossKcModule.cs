@@ -2,6 +2,7 @@
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
+using CorruptOSBot.Shared;
 using Discord;
 using Discord.Commands;
 using System;
@@ -19,7 +20,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
             {
-                if (RootAdminManager.GetToggleState("bosskc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+                if (ToggleStateManager.GetToggleState("bosskc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
                 {
                     var embed = await CreateEmbedForMessage(bossname);
                     if (embed != null)

@@ -13,6 +13,7 @@ namespace CorruptOSBot.Extensions.WOM
         public static ClanCache Clan = new ClanCache();
         public static ClanMemberCache ClanMemberDetails = new ClanMemberCache();
 
+        public static int OneSecondMS { get => 1000; }
         public static int OneMinuteMS { get => 1000 * 60; }
         public static int OneHourMS { get => 1000 * 60 * 60; }
         public static int OneDayMS { get => 1000 * 60 * 60 * 24; }
@@ -61,11 +62,20 @@ namespace CorruptOSBot.Extensions.WOM
 
         public static async Task ForceUpdateClan()
         {
-            var WomClient = new WiseOldManClient();
-            await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clan cache")));
-            var updatedClan = WomClient.GetClan();
-            Clan.Clan = updatedClan;
-            await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clan cache")));
+            try
+            {
+                var WomClient = new WiseOldManClient();
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clan cache")));
+                var updatedClan = WomClient.GetClan();
+                Clan.Clan = updatedClan;
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clan cache")));
+            }
+            catch (Exception e)
+            {
+
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating clan: {0}", e)));
+            }
+
         }
 
         public static async Task ForceUpdateClanMembers()
@@ -73,44 +83,61 @@ namespace CorruptOSBot.Extensions.WOM
             var WomClient = new WiseOldManClient();
             await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clanmembers cache")));
 
-            var updatedClanMembers = WomClient.GetClanMembers();
-            if (updatedClanMembers != null)
+            try
             {
-                var tempList = new List<ClanMemberDetail>();
-                int index = 1;
-                int max = updatedClanMembers.Count;
-                foreach (var updatedClanMember in updatedClanMembers)
+                var updatedClanMembers = WomClient.GetClanMembers();
+                if (updatedClanMembers != null)
                 {
-                    var data = WomClient.GetPlayerDetails(updatedClanMember.id);
-                    if (data != null)
+                    var tempList = new List<ClanMemberDetail>();
+                    int index = 1;
+                    int max = updatedClanMembers.Count;
+                    foreach (var updatedClanMember in updatedClanMembers)
                     {
-                        await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Updating ({1}/{2}) {0}", data.displayName, index, max)));
-                        tempList.Add(data);
+                        var data = WomClient.GetPlayerDetails(updatedClanMember.id);
+                        if (data != null)
+                        {
+                            await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Updating ({1}/{2}) {0}", data.displayName, index, max)));
+                            tempList.Add(data);
+                        }
+                        index++;
                     }
-                    index++;
+                    ClanMemberDetails.ClanMemberDetails = tempList;
+                    ClanMemberDetails.LastUpdated = DateTime.Now;
+                    await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmembers cache")));
                 }
-                ClanMemberDetails.ClanMemberDetails = tempList;
-                ClanMemberDetails.LastUpdated = DateTime.Now;
-                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmembers cache")));
+                else
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating")));
+                }
             }
-            else
+            catch (Exception e)
             {
-                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating")));
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating: {0}", e)));
             }
+            
 
         }
 
         public static async Task ForceUpdateClanMember(int clanMemberId)
         {
-            var WomClient = new WiseOldManClient();
-            await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clanmember({0}) cache", clanMemberId)));
+            try
+            {
+                var WomClient = new WiseOldManClient();
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clanmember({0}) cache", clanMemberId)));
 
-            var playerdetails = WomClient.GetPlayerDetails(clanMemberId);
-            var detailToRemove = ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.id == clanMemberId);
-            ClanMemberDetails.ClanMemberDetails.Remove(detailToRemove);
-            ClanMemberDetails.ClanMemberDetails.Add(playerdetails);
+                var playerdetails = WomClient.GetPlayerDetails(clanMemberId);
+                var detailToRemove = ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.id == clanMemberId);
+                ClanMemberDetails.ClanMemberDetails.Remove(detailToRemove);
+                ClanMemberDetails.ClanMemberDetails.Add(playerdetails);
 
-            await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmember({0}) cache", clanMemberId)));
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmember({0}) cache", clanMemberId)));
+            }
+            catch (Exception e)
+            {
+
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating single clanmember ({1}) {0}", e, clanMemberId))) ;
+            }
+
         }
 
         public static async Task ForceUpdateClanMember(string clanMemberRsn)

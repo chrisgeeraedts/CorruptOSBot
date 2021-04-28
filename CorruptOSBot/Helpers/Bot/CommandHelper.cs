@@ -1,4 +1,5 @@
-﻿using Discord.Commands;
+﻿using CorruptOSBot.Shared;
+using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,7 +53,7 @@ namespace CorruptOSBot.Helpers.Bot
 
             foreach (var item in GetCommandsFromCode())
             {
-                if (RootAdminManager.GetToggleState(item.Key.Replace("!", string.Empty)))
+                if (ToggleStateManager.GetToggleState(item.Key.Replace("!", string.Empty)))
                 {
                     result.Add(item.Key, item.Value);
                 }
