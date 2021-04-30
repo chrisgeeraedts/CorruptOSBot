@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="corruptosModelStoreContainer" CdmEntityContainer="CorruptModel">
+    <EntitySetMapping Name="Bosses">
+      <EntityTypeMapping TypeName="corruptosModel.Boss">
+        <MappingFragment StoreEntitySet="Bosses">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Bossname" ColumnName="Bossname" />
+          <ScalarProperty Name="EmojiName" ColumnName="EmojiName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ChatLogs">
+      <EntityTypeMapping TypeName="corruptosModel.ChatLog">
+        <MappingFragment StoreEntitySet="ChatLog">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="Author" ColumnName="Author" />
+          <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+          <ScalarProperty Name="Severity" ColumnName="Severity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DiscordUsers">
+      <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
+        <MappingFragment StoreEntitySet="DiscordUsers">
+          <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="DiscordId" ColumnName="DiscordId" />
+          <ScalarProperty Name="OriginallyJoinedAt" ColumnName="OriginallyJoinedAt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ErrorLogs">
+      <EntityTypeMapping TypeName="corruptosModel.ErrorLog">
+        <MappingFragment StoreEntitySet="ErrorLog">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="Severity" ColumnName="Severity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlayerPets">
+      <EntityTypeMapping TypeName="corruptosModel.PlayerPet">
+        <MappingFragment StoreEntitySet="PlayerPets">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DropDate" ColumnName="DropDate" />
+          <ScalarProperty Name="BossId" ColumnName="BossId" />
+          <ScalarProperty Name="RunescapeAccountId" ColumnName="RunescapeAccountId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RunescapeAccounts">
+      <EntityTypeMapping TypeName="corruptosModel.RunescapeAccount">
+        <MappingFragment StoreEntitySet="RunescapeAccounts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="rsn" ColumnName="rsn" />
+          <ScalarProperty Name="wom_id" ColumnName="wom_id" />
+          <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

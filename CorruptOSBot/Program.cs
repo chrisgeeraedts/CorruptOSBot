@@ -84,7 +84,10 @@ namespace CorruptOSBot
             //TODO: Do something cool with reflection loading later
 
             //The hunt logic
-            ModuleInjector.Inject(_channelInterceptors, _services, _commands);           
+            if (ToggleStateManager.GetToggleState("thehunt"))
+            {
+                ModuleInjector.Inject(_channelInterceptors, _services, _commands);
+            }  
         }
 
         private List<IService> ConfigureActiveServices()
@@ -122,7 +125,10 @@ namespace CorruptOSBot
         {
             return LogHelper.Log(message);
         }
-
+        public static void ChatLog(LogMessage message)
+        {
+            LogHelper.ChatLog(message);
+        }
         private async Task MainAsync()
         {
             // Centralize the logic for commands into a separate method.
@@ -217,6 +223,7 @@ namespace CorruptOSBot
 
             // Or add Modules manually if you prefer to be a little more explicit:
             await _commands.AddModuleAsync<AdminModule>(_services);
+            await _commands.AddModuleAsync<AccountModule>(_services);
             await _commands.AddModuleAsync<HelpModule>(_services);
             await _commands.AddModuleAsync<BossKcModule>(_services);
             await _commands.AddModuleAsync<KcModule>(_services);
@@ -283,14 +290,17 @@ namespace CorruptOSBot
 
             try
             {
-                await Program.Log(new LogMessage(LogSeverity.Info, "Chat", string.Format("[{2}] {0}: {1}", 
-                    DiscordHelper.GetAccountNameOrNickname(arg.Author), 
-                    arg.Content, 
-                    arg.Channel.Name)));
+                Program.ChatLog(new LogMessage(LogSeverity.Info, 
+                    DiscordHelper.GetAccountNameOrNickname(arg.Author),
+                    string.Format("[{0}]{1}",
+                    arg.Channel.Name, arg.Content)));
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
+                await Program.Log(new LogMessage(LogSeverity.Error,
+                   "chatlog",
+                   e.Message,
+                   e));
             }
 
             // check for channels, if its for a targeted channel, intercept

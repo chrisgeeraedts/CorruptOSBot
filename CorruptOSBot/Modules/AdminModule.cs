@@ -1,4 +1,6 @@
-﻿using CorruptOSBot.Helpers.Bot;
+﻿using CorruptOSBot.Extensions.WOM;
+using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Bot;
@@ -15,6 +17,137 @@ namespace CorruptOSBot.Modules
 {
     public class AdminModule : ModuleBase<SocketCommandContext>
     {
+
+        [Command("initdb")]
+        [Summary("(Dev) !initdb - initializes the DB")]
+        public async Task SayInitDBAsync()
+        {
+            if (ToggleStateManager.GetToggleState("initdb", Context.User) &&
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+            {
+                await InitDB(Context);
+            }
+        }
+
+        private async Task InitDB(SocketCommandContext context)
+        {
+            CorruptOSBot.Data.CorruptModel corruptosEntities = new Data.CorruptModel();
+
+            // Clear current data
+            foreach (var item in corruptosEntities.DiscordUsers)
+            {
+                corruptosEntities.DiscordUsers.Remove(item);
+            }
+            foreach (var item in corruptosEntities.Bosses)
+            {
+                corruptosEntities.Bosses.Remove(item);
+            }
+            foreach (var item in corruptosEntities.RunescapeAccounts)
+            {
+                corruptosEntities.RunescapeAccounts.Remove(item);
+            }
+
+            // Add bosses
+            var countBosses = FillBosses(corruptosEntities);
+            await ReplyAsync(string.Format("loaded {0} bosses", countBosses));
+
+            // Add players
+            var countDiscordUsers = await AddPlayersAndDiscordUsers(corruptosEntities);
+            await ReplyAsync(string.Format("loaded {0} discord users", countDiscordUsers));
+
+            // Save
+            await corruptosEntities.SaveChangesAsync();
+            await ReplyAsync(string.Format("Saved all entities to database"));
+        }
+
+        private async Task<int> AddPlayersAndDiscordUsers(Data.CorruptModel corruptosEntities)
+        {
+            var result = 0;
+            await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
+            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
+            // iterate through all discord users
+            var allUsers = guild.GetUsersAsync().Result;
+
+            foreach (var user in allUsers)
+            {
+                if (!user.IsBot && !user.IsWebhook)
+                {
+                    var discordUser = new Data.DiscordUser()
+                    {
+                        DiscordId = Convert.ToInt64(user.Id),
+                        Username = DiscordHelper.GetAccountNameOrNickname(user),
+                        OriginallyJoinedAt = user.JoinedAt?.DateTime
+                    };
+
+                    corruptosEntities.DiscordUsers.Add(discordUser);
+
+                    var womIdentity = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.username.ToLower() == DiscordHelper.GetAccountNameOrNickname(user).ToLower());
+                    corruptosEntities.RunescapeAccounts.Add(new Data.RunescapeAccount()
+                    {
+                        DiscordUser = discordUser,
+                        rsn = DiscordHelper.GetAccountNameOrNickname(user),
+                        wom_id = womIdentity?.id
+
+                    });
+                    result++;
+                }
+            }
+            return result;
+        }
+
+        private static int FillBosses(Data.CorruptModel corruptosEntities)
+        {
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.sire.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.sire) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.sire.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.sire) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.bryophyta.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.bryophyta) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.chamber.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.chamber) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.fanatic.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.fanatic) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.prime.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.prime) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.crazyarc.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.crazyarc) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.mole.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.mole) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kq.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kq) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kree.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kree) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.nightmare.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.nightmare) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.scorpia.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.scorpia) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.gaunt.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.gaunt) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.thermy.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.thermy) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.venny.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.venny) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.todt.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.todt) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.hydra.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.hydra) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.callisto.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.callisto) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.chambercm.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.chambercm) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.sara.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.sara) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.rex.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.rex) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.derangedarc.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.derangedarc) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.gargs.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.gargs) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kbd.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kbd) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kril.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kril) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.obor.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.obor) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.skotizo.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.skotizo) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.corruptgaunt.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.corruptgaunt) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.zuk.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.zuk) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.vetion.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.vetion) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.zalcano.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.zalcano) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.barrows.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.barrows) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.cerb.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.cerb) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.chaosele.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.chaosele) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.corp.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.corp) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.supreme.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.supreme) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.bandos.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.bandos) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.hespori.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.hespori) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kraken.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kraken) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.mimic.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.mimic) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.sarachnis.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.sarachnis) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.tempor.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.tempor) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.tob.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.tob) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.jad.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.jad) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.vorkath.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.vorkath) });
+            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.zulrah.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.zulrah) });
+
+            return corruptosEntities.Bosses.Count();
+        }
+
         [Command("poll")]
         [Summary("(Staff/Mod) !poll {your question} - Creates a yes/no poll.")]
         public async Task SayPollAsync([Remainder]string pollquestion)
@@ -44,6 +177,63 @@ namespace CorruptOSBot.Modules
                     // delete the command posted
                     await Context.Message.DeleteAsync();
                 }
+            }
+        }
+
+        [Command("postid")]
+        [Summary("(admin) Gets the current post's Id")]
+        public async Task SaypostidAsync()
+        {
+            if (ToggleStateManager.GetToggleState("postid", Context.User))
+            {
+
+                var messages = await Context.Channel
+                   .GetMessagesAsync(Context.Message, Direction.Before, 1)
+                   .FlattenAsync();
+
+                var message = messages.FirstOrDefault();
+                if (message != null)
+                {
+                    var messageId = ((IUserMessage)message).Id;
+
+                    await ReplyAsync(messageId.ToString());
+                }
+
+
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
+        [Command("channelid")]
+        [Summary("(admin) Gets the current channel's Id")]
+        public async Task SaychannelIdAsync()
+        {
+            if (ToggleStateManager.GetToggleState("channelid", Context.User))
+            {
+                var channel = Context.Channel.Id.ToString();
+
+                await ReplyAsync(channel);
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
+
+        [Command("guildid")]
+        [Summary("(admin) Gets the current guild Id")]
+        public async Task SayguildidAsync()
+        {
+            if (ToggleStateManager.GetToggleState("guildid", Context.User))
+            {
+                var channel = Context.Guild.Id.ToString();
+
+                await ReplyAsync(channel);
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
             }
         }
 
@@ -170,11 +360,11 @@ namespace CorruptOSBot.Modules
                     IGuildUser user;
                     if (!username.StartsWith("<@!"))
                     {
-                        user = await AsyncFindUserByName(username);
+                        user = await DiscordHelper.AsyncFindUserByName(username, Context);
                     }
                     else
                     {
-                        user = await AsyncFindUserByMention(username);
+                        user = await DiscordHelper.AsyncFindUserByMention(username, Context);
                     }
 
                     if (user != null)
@@ -196,21 +386,7 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        private async Task<IGuildUser> AsyncFindUserByName(string username)
-        {
-            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
-            var guild = await ((IDiscordClient)Context.Client).GetGuildAsync(guildId);
-            var allUsers = await guild.GetUsersAsync();
-            return allUsers.FirstOrDefault(x => DiscordHelper.GetAccountNameOrNickname(x).ToLower() == username.ToLower());
-        }
 
-        private async Task<IGuildUser> AsyncFindUserByMention(string mention)
-        {
-            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
-            var guild = await ((IDiscordClient)Context.Client).GetGuildAsync(guildId);
-            var allUsers = await guild.GetUsersAsync();
-            return allUsers.FirstOrDefault(x => x.Mention == mention);
-        }
 
         [Command("overthrownathan")]
         [Summary("Prepare!")]

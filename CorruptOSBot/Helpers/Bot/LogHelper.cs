@@ -1,17 +1,36 @@
-﻿using Discord;
+﻿using CorruptOSBot.Data;
+using Discord;
 using System;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Helpers.Bot
 {
+
     public static class LogHelper
     {
+        public static void ChatLog(LogMessage message)
+        {
+            try
+            {
+                using (CorruptModel data = new CorruptModel())
+                {
+                    var chatLog = new ChatLog() { Message = message.Message, Author = message.Source, Severity = message.Severity.ToString(), Datetime = DateTime.Now };
+                    data.ChatLogs.Add(chatLog);
+                    data.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Log(new LogMessage(LogSeverity.Error, "ChatLog", "Failed to add chatlog - " + e.Message));
+            }
+        }
+
         public static Task Log(LogMessage message)
         {
             var messageString = string.Format($"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message} {message.Exception}");
 
             // check the settings if we should log outside
-
+           
 
             switch (message.Severity)
             {

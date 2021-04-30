@@ -1,0 +1,12 @@
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\CorruptOSBot.Data.dll.config
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\CorruptOSBot.Data.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\CorruptOSBot.Data.pdb
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\EntityFramework.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\EntityFramework.xml
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Debug\CorruptOSBot.Data.csprojAssemblyReference.cache
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Debug\CorruptOSBot.Data.csproj.CoreCompileInputs.cache
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Debug\CorruptOSBot.Data.csproj.CopyComplete
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Debug\CorruptOSBot.Data.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Debug\CorruptOSBot.Data.pdb

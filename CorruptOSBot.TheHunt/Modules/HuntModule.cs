@@ -13,8 +13,8 @@ namespace CorruptOSBot.Modules
 {
     public class HuntModule : ModuleBase<SocketCommandContext>
     {
-        [Command("huntscore")]
-        [Summary("!huntscore tional) - Retrieves your teams current score")]
+        [Command("hunt-score")]
+        [Summary("!hunt-score - Retrieves your teams current score")]
         public async Task SayHuntScoreAsync()
         {
             if (ToggleStateManager.GetToggleState("huntscore", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Staff"))
@@ -36,11 +36,12 @@ namespace CorruptOSBot.Modules
         }
 
 
-        [Command("addhuntitem")]
-        [Summary("!addhuntitem {teamname}-{bossname}-{itemname} - adds the item to the team as a drop manually")]
+        [Command("hunt-additem")]
+        [Summary("(Staff) !hunt-additem {teamname}-{bossname}-{itemname} - adds the item to the team as a drop manually")]
         public async Task SayAddHuntItemAsync([Remainder]string commandstring)
         {
-            if (ToggleStateManager.GetToggleState("addhuntitem", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Staff"))
+            if (ToggleStateManager.GetToggleState("addhuntitem", Context.User) && 
+                PermissionManager.HasSpecificRole(Context.User, "Staff"))
             {
                 var stringSplitted = commandstring.Split('/');
                 if (stringSplitted.Length == 3)

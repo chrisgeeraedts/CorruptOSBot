@@ -24,16 +24,22 @@
 [X] Add a !gwd command similar to !cm (without KC)
 [X] Add the !wom command (use same display as the achievement daily)
 [X] split !help command for staff and regulars
+
+[X] Figure out a way to save and retrieve data when the bot restarts
 [ ] Test the max char cap with ```Experimenting with … … Multiple lines… … For my code blocks!```
-[ ] 6 team submissions channels, once posted, move to another channel.
-[ ] Add a way to add !promotions blacklist items 
+[X] Add a way to add !promotions blacklist items 
 [ ] make -{command} commands to remove PVM roles (only add for cm and gwd (due to posting of achievements behavior))
 [ ] Add 'waiting' message to commands and delete that message afterwards
 [ ] redoing the !cox command forces a refresh of the cache and checks again for promotions
-[ ] Add a force cache usage if WOM is down (and put message is heartbeat about it);
+[ ] Add a force cache usage if WOM is down (and put message in heartbeat about it?);
 [ ] Fix CreateWOMEmbed() so it doesnt retrieve data directly from WOM but from Cache
-[ ] Add !addbuyin {name} and !removebuyin {name} commands
-[ ] Add a system to that copies or removes posts from 1 channel into another
+[/] Add a TheHunt Module for tracking and displaying points
+	[ ] Add !addbuyin {name} and !removebuyin {name} commands
+	[ ] Add !hunt-score command to show current teamscore
+	[ ] Add !hunt-drops command to show current teamdrops	
+	[ ] Add !hunt-team to show current team
+
+[ ] Add a command that saves the pets found to a list for future retrieval
 
 EXTERNAL / INNOVATION:
 [ ] Runelite plugin (Runelite plugin for clan. Means we will be able to pull drops, pet drops, achievements and more directly from the clan members! Also functions for pvm bingo.)

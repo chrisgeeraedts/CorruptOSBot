@@ -1,4 +1,6 @@
 ﻿using CorruptOSBot.Extensions;
+using CorruptOSBot.Extensions.WOM;
+using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
@@ -86,6 +88,28 @@ namespace CorruptOSBot.Modules
             // update WOM
             new WiseOldManClient().PostNameChange(previousName, preferedNickname);
 
+            try
+            {
+                using(var model = new Data.CorruptModel())
+                {
+                    // get the rsn account
+                    var rsaccount = model.RunescapeAccounts.FirstOrDefault(x => x.rsn.ToLower() == previousName);
+
+                    // make sure he is owner
+                    var userId = Convert.ToInt64(currentUser.Id);
+                    if (rsaccount.DiscordUser != null && rsaccount.DiscordUserId == userId)
+                    {
+                        // change name
+                        rsaccount.rsn = preferedNickname;
+                        await model.SaveChangesAsync();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to save discorduser in discord - " + e.Message));
+            }
+
             // delete the command posted
             await Context.Message.DeleteAsync();           
         }
@@ -122,10 +146,19 @@ namespace CorruptOSBot.Modules
                     string.Format("<@{0}>  ({0}) has set their RSN to **{1}**!", currentUser.Id, preferedNickname)));
 
                 // add to WOM
-                new WiseOldManClient().AddGroupMember(preferedNickname);
+                var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
 
                 // send welcome message
                 await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild, false);
+
+                try
+                {
+                    await DataHelper.AddNewDiscordUserAndRSN(Context.User, preferedNickname, groupMember);
+                }
+                catch (Exception e)
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to save discorduser in discord - " + e.Message));
+                }
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();

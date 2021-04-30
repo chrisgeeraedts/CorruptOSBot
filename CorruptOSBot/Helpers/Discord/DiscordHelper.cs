@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.WebSocket;
 using System;
@@ -39,7 +40,21 @@ namespace CorruptOSBot.Helpers.Discord
             return ChannelHelper.GetChannelId(channelName) == channelId;
         }
 
+        public static async Task<IGuildUser> AsyncFindUserByName(string username, global::Discord.Commands.SocketCommandContext context)
+        {
+            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            var guild = await ((IDiscordClient)context.Client).GetGuildAsync(guildId);
+            var allUsers = await guild.GetUsersAsync();
+            return allUsers.FirstOrDefault(x => DiscordHelper.GetAccountNameOrNickname(x).ToLower() == username.ToLower());
+        }
 
+        public static async Task<IGuildUser> AsyncFindUserByMention(string mention, global::Discord.Commands.SocketCommandContext context)
+        {
+            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            var guild = await ((IDiscordClient)context.Client).GetGuildAsync(guildId);
+            var allUsers = await guild.GetUsersAsync();
+            return allUsers.FirstOrDefault(x => x.Mention == mention);
+        }
 
         public static string GetAccountNameOrNickname(IGuildUser user)
         {

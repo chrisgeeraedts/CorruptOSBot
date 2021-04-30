@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="corruptosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bosses">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bossname" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="EmojiName" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ChatLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="varchar(max)" Nullable="false" />
+          <Property Name="Author" Type="varchar(max)" Nullable="false" />
+          <Property Name="Datetime" Type="datetime" Nullable="false" />
+          <Property Name="Severity" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DiscordUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar(max)" />
+          <Property Name="DiscordId" Type="bigint" />
+          <Property Name="OriginallyJoinedAt" Type="datetime" />
+          <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ErrorLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="Severity" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PlayerPets">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DropDate" Type="datetime" />
+          <Property Name="BossId" Type="int" />
+          <Property Name="RunescapeAccountId" Type="int" />
+        </EntityType>
+        <EntityType Name="RunescapeAccounts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rsn" Type="varchar(max)" Nullable="false" />
+          <Property Name="wom_id" Type="int" />
+          <Property Name="DiscordUserId" Type="int" />
+        </EntityType>
+        <Association Name="FK_Boss">
+          <End Role="Bosses" Type="Self.Bosses" Multiplicity="0..1" />
+          <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bosses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlayerPets">
+              <PropertyRef Name="BossId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DiscordUser">
+          <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="0..1" />
+          <End Role="RunescapeAccounts" Type="Self.RunescapeAccounts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscordUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RunescapeAccounts">
+              <PropertyRef Name="DiscordUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RunescapeAccount">
+          <End Role="RunescapeAccounts" Type="Self.RunescapeAccounts" Multiplicity="0..1" />
+          <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RunescapeAccounts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlayerPets">
+              <PropertyRef Name="RunescapeAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="corruptosModelStoreContainer">
+          <EntitySet Name="Bosses" EntityType="Self.Bosses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChatLog" EntityType="Self.ChatLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
+            <End Role="Bosses" EntitySet="Bosses" />
+            <End Role="PlayerPets" EntitySet="PlayerPets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DiscordUser" Association="Self.FK_DiscordUser">
+            <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+            <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RunescapeAccount" Association="Self.FK_RunescapeAccount">
+            <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+            <End Role="PlayerPets" EntitySet="PlayerPets" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="corruptosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Boss">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bossname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmojiName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Boss" FromRole="Bosses" ToRole="PlayerPets" />
+        </EntityType>
+        <EntityType Name="ChatLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Author" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Datetime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Severity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DiscordUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DiscordId" Type="Int64" />
+          <Property Name="OriginallyJoinedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="RunescapeAccounts" Relationship="Self.FK_DiscordUser" FromRole="DiscordUsers" ToRole="RunescapeAccounts" />
+          <Property Name="BlacklistedForPromotion" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ErrorLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Severity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PlayerPet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DropDate" Type="DateTime" Precision="3" />
+          <Property Name="BossId" Type="Int32" />
+          <Property Name="RunescapeAccountId" Type="Int32" />
+          <NavigationProperty Name="Boss" Relationship="Self.FK_Boss" FromRole="PlayerPets" ToRole="Bosses" />
+          <NavigationProperty Name="RunescapeAccount" Relationship="Self.FK_RunescapeAccount" FromRole="PlayerPets" ToRole="RunescapeAccounts" />
+        </EntityType>
+        <EntityType Name="RunescapeAccount">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rsn" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="wom_id" Type="Int32" />
+          <Property Name="DiscordUserId" Type="Int32" />
+          <NavigationProperty Name="DiscordUser" Relationship="Self.FK_DiscordUser" FromRole="RunescapeAccounts" ToRole="DiscordUsers" />
+          <NavigationProperty Name="PlayerPets" Relationship="Self.FK_RunescapeAccount" FromRole="RunescapeAccounts" ToRole="PlayerPets" />
+        </EntityType>
+        <Association Name="FK_Boss">
+          <End Role="Bosses" Type="Self.Boss" Multiplicity="0..1" />
+          <End Role="PlayerPets" Type="Self.PlayerPet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bosses">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlayerPets">
+              <PropertyRef Name="BossId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DiscordUser">
+          <End Role="DiscordUsers" Type="Self.DiscordUser" Multiplicity="0..1" />
+          <End Role="RunescapeAccounts" Type="Self.RunescapeAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscordUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RunescapeAccounts">
+              <PropertyRef Name="DiscordUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RunescapeAccount">
+          <End Role="RunescapeAccounts" Type="Self.RunescapeAccount" Multiplicity="0..1" />
+          <End Role="PlayerPets" Type="Self.PlayerPet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RunescapeAccounts">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlayerPets">
+              <PropertyRef Name="RunescapeAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CorruptModel" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bosses" EntityType="Self.Boss" />
+          <EntitySet Name="ChatLogs" EntityType="Self.ChatLog" />
+          <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUser" />
+          <EntitySet Name="ErrorLogs" EntityType="Self.ErrorLog" />
+          <EntitySet Name="PlayerPets" EntityType="Self.PlayerPet" />
+          <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccount" />
+          <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
+            <End Role="Bosses" EntitySet="Bosses" />
+            <End Role="PlayerPets" EntitySet="PlayerPets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DiscordUser" Association="Self.FK_DiscordUser">
+            <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+            <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RunescapeAccount" Association="Self.FK_RunescapeAccount">
+            <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+            <End Role="PlayerPets" EntitySet="PlayerPets" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="corruptosModelStoreContainer" CdmEntityContainer="CorruptModel">
+          <EntitySetMapping Name="Bosses">
+            <EntityTypeMapping TypeName="corruptosModel.Boss">
+              <MappingFragment StoreEntitySet="Bosses">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Bossname" ColumnName="Bossname" />
+                <ScalarProperty Name="EmojiName" ColumnName="EmojiName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChatLogs">
+            <EntityTypeMapping TypeName="corruptosModel.ChatLog">
+              <MappingFragment StoreEntitySet="ChatLog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DiscordUsers">
+            <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
+              <MappingFragment StoreEntitySet="DiscordUsers">
+                <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="DiscordId" ColumnName="DiscordId" />
+                <ScalarProperty Name="OriginallyJoinedAt" ColumnName="OriginallyJoinedAt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ErrorLogs">
+            <EntityTypeMapping TypeName="corruptosModel.ErrorLog">
+              <MappingFragment StoreEntitySet="ErrorLog">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlayerPets">
+            <EntityTypeMapping TypeName="corruptosModel.PlayerPet">
+              <MappingFragment StoreEntitySet="PlayerPets">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DropDate" ColumnName="DropDate" />
+                <ScalarProperty Name="BossId" ColumnName="BossId" />
+                <ScalarProperty Name="RunescapeAccountId" ColumnName="RunescapeAccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RunescapeAccounts">
+            <EntityTypeMapping TypeName="corruptosModel.RunescapeAccount">
+              <MappingFragment StoreEntitySet="RunescapeAccounts">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="rsn" ColumnName="rsn" />
+                <ScalarProperty Name="wom_id" ColumnName="wom_id" />
+                <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -3,6 +3,7 @@ using CorruptOSBot.Shared.Helpers.Bot;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 
@@ -108,7 +109,7 @@ namespace CorruptOSBot.Extensions
             }
         }
 
-        public void AddGroupMember(string rsn)
+        public ClanMember AddGroupMember(string rsn)
         {
             var content = JsonConvert.SerializeObject(new Root()
             {
@@ -125,11 +126,14 @@ namespace CorruptOSBot.Extensions
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
+                var clanMembers = JsonConvert.DeserializeObject<List<ClanMember>>(result);
+                return clanMembers.FirstOrDefault();
             }
             else
             {
                 var result = response.ReasonPhrase;
             }
+            return null;
         }
 
         public void PostNameChange(string oldName, string newName)
