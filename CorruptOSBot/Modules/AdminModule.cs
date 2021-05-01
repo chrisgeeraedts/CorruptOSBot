@@ -245,11 +245,12 @@ namespace CorruptOSBot.Modules
             if (ToggleStateManager.GetToggleState("serverip", Context.User))
             {
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
+                foreach (var item in ipHostInfo.AddressList)
+                {
+                    var serverIp = item.ToString();
+                    await ReplyAsync(string.Format("{0}", serverIp));
+                }
 
-                var serverIp = ipAddress.ToString();
-
-                await ReplyAsync(serverIp);
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
