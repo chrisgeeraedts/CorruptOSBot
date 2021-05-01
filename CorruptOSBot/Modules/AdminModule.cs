@@ -185,7 +185,8 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) Gets the current post's Id")]
         public async Task SaypostidAsync()
         {
-            if (ToggleStateManager.GetToggleState("postid", Context.User))
+            if (ToggleStateManager.GetToggleState("postid", Context.User) &&
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
 
                 var messages = await Context.Channel
@@ -211,7 +212,8 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) Gets the current channel's Id")]
         public async Task SaychannelIdAsync()
         {
-            if (ToggleStateManager.GetToggleState("channelid", Context.User))
+            if (ToggleStateManager.GetToggleState("channelid", Context.User) &&
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 var channel = Context.Channel.Id.ToString();
 
@@ -227,7 +229,8 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) Gets the current guild Id")]
         public async Task SayguildidAsync()
         {
-            if (ToggleStateManager.GetToggleState("guildid", Context.User))
+            if (ToggleStateManager.GetToggleState("guildid", Context.User) &&
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 var channel = Context.Guild.Id.ToString();
 
@@ -242,7 +245,8 @@ namespace CorruptOSBot.Modules
         [Summary("(admin) Gets the current server's IP")]
         public async Task SayServerIdAsync()
         {
-            if (ToggleStateManager.GetToggleState("serverip", Context.User))
+            if (ToggleStateManager.GetToggleState("serverip", Context.User) &&
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
                 foreach (var item in ipHostInfo.AddressList)
