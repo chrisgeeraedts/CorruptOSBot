@@ -44,6 +44,8 @@ namespace CorruptOSBot.Modules
             blackListedCommands.Add("!channelid");
             blackListedCommands.Add("!overthrownathan");
             blackListedCommands.Add("!postid");
+            blackListedCommands.Add("!guildid");
+            blackListedCommands.Add("!serverip");
 
             Dictionary<string, string> result = new Dictionary<string, string>();
 

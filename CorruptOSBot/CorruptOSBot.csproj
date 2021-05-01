@@ -113,6 +113,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\WOM\Models\ClanRecentAchievementsRoot.cs" />
+    <Compile Include="Extensions\WOM\Models\Player.cs" />
     <Compile Include="Helpers\Bot\EmbedHelper.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\SettingsConstants.cs" />
@@ -120,7 +122,6 @@
     <Compile Include="RootAdminManager.cs" />
     <Compile Include="Services\Achievements\AchievementService.cs" />
     <Compile Include="Events\EventManager.cs" />
-    <Compile Include="Events\FilePostedHandlers\TheHuntScreenshotPosted.cs" />
     <Compile Include="Events\ReactionHandlers\PVMReactionHandler.cs" />
     <Compile Include="Events\ReactionManager.cs" />
     <Compile Include="Extensions\Runewatch\RunewatchClient.cs" />
@@ -198,7 +199,6 @@
     <Compile Include="Extensions\WOM\WOMMemoryCache.cs" />
     <Compile Include="Helpers\PVM\BossKCHelper.cs" />
     <Compile Include="Helpers\Bot\CommandHelper.cs" />
-    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Discord\DiscordHelper.cs" />
     <Compile Include="Helpers\Emoji\EmojiEnum.cs" />
     <Compile Include="Helpers\Emoji\EmojiHelper.cs" />

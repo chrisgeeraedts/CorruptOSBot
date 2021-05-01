@@ -30,7 +30,22 @@ namespace CorruptOSBot.Helpers.Bot
             var messageString = string.Format($"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message} {message.Exception}");
 
             // check the settings if we should log outside
-           
+            try
+            {
+                if (message.Severity == LogSeverity.Error || message.Severity == LogSeverity.Critical)
+                {
+                    using (CorruptModel data = new CorruptModel())
+                    {
+                        var errorLog = new ErrorLog() { Message = message.Message, Severity = message.Severity.ToString() };
+                        data.ErrorLogs.Add(errorLog);
+                        data.SaveChanges();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // cant even log it - sad panda, but the show must go on.
+            }
 
             switch (message.Severity)
             {

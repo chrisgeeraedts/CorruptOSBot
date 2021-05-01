@@ -10,6 +10,7 @@ using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -231,6 +232,24 @@ namespace CorruptOSBot.Modules
                 var channel = Context.Guild.Id.ToString();
 
                 await ReplyAsync(channel);
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
+        [Command("serverip")]
+        [Summary("(admin) Gets the current server's IP")]
+        public async Task SayServerIdAsync()
+        {
+            if (ToggleStateManager.GetToggleState("serverip", Context.User))
+            {
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
+                IPAddress ipAddress = ipHostInfo.AddressList[0];
+
+                var serverIp = ipAddress.ToString();
+
+                await ReplyAsync(serverIp);
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();

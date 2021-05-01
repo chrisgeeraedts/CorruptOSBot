@@ -1,8 +1,6 @@
 ﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
-using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.WebSocket;
 using System.Linq;
@@ -33,7 +31,7 @@ namespace CorruptOSBot.Events
             }
         }
 
-        internal static async Task BannedFromGuild(SocketUser arg1, SocketGuild arg2)
+        public static async Task BannedFromGuild(SocketUser arg1, SocketGuild arg2)
         {
             var recruitingChannel = arg2.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member banned",

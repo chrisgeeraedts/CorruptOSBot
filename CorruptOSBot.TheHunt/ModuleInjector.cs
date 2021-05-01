@@ -10,6 +10,8 @@ namespace CorruptOSBot.TheHunt
 {
     public static class ModuleInjector
     {
+        public static string Title = "THE HUNT v0.3";
+
         public static void Inject(Dictionary<ulong, Func<SocketMessage,
             Discord.IDiscordClient,
             Task>> result,

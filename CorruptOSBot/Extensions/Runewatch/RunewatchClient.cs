@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Shared.Helpers.Bot;
+using Discord;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,18 @@ namespace CorruptOSBot.Extensions
             var diffInHours = DateTime.Now.Subtract(lastUpdated).TotalHours;
             if (diffInHours > 24)
             {
-                var json = new WebClient().DownloadString(ConfigHelper.GetSettingProperty("runewatchUri"));
+                List<RunewatchEntry> runewatchEntry = _runewatchEntries;
+                try
+                {
+                    var json = new WebClient().DownloadString(ConfigHelper.GetSettingProperty("runewatchUri"));
 
-                List<RunewatchEntry>  runewatchEntry = JsonConvert.DeserializeObject<List<RunewatchEntry>>(json);
-                lastUpdated = DateTime.Now;
-
+                    runewatchEntry = JsonConvert.DeserializeObject<List<RunewatchEntry>>(json);
+                    lastUpdated = DateTime.Now;
+                }
+                catch (Exception e)
+                {
+                    Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "Failed to remove role - " + e.Message));
+                }
                 return runewatchEntry;
             }
             return _runewatchEntries;

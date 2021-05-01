@@ -26,6 +26,7 @@
 [X] split !help command for staff and regulars
 
 [X] Figure out a way to save and retrieve data when the bot restarts
+[ ] Filter !help depending on role
 [ ] Test the max char cap with ```Experimenting with … … Multiple lines… … For my code blocks!```
 [X] Add a way to add !promotions blacklist items 
 [ ] make -{command} commands to remove PVM roles (only add for cm and gwd (due to posting of achievements behavior))

@@ -23,7 +23,6 @@ namespace CorruptOSBot.Extensions
             verificationCode = ConfigHelper.GetSettingProperty("WOMCode");
         }
 
-
         public List<Competition> GetClanCompetitions()
         {
             List<Competition> product = null;
@@ -46,43 +45,6 @@ namespace CorruptOSBot.Extensions
                 product = JsonConvert.DeserializeObject<CompetitionDetail>(result);
             }
             return product;
-        }
-
-        public void AddCompParticipant(Competition competition, Participation participation)
-        {
-            throw new NotImplementedException();
-            //Competition product = null;
-
-            //var content = JsonConvert.SerializeObject(participation);
-
-            //HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
-
-            //HttpResponseMessage response = client.PostAsync(path + string.Format("/competitions/{0}/add-participants", competition.id), c).Result;
-            //if (response.IsSuccessStatusCode)
-            //{
-            //    var result = response.Content.ReadAsStringAsync().Result;
-            //}
-            //else
-            //{
-            //    var result = response.ReasonPhrase;
-            //}
-        }
-
-        public void AddTeamCompParticipant(Competition competition, TeamCompParticipation.Root participation)
-        {
-            var content = JsonConvert.SerializeObject(participation);
-
-            HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = client.PostAsync(path + string.Format("/competitions/{0}/add-teams", competition.id), c).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-            }
-            else
-            {
-                var result = response.ReasonPhrase;
-            }
         }
 
         public void RemoveGroupMember(string rsn)
@@ -181,7 +143,6 @@ namespace CorruptOSBot.Extensions
             return product;
         }
 
-
         public List<ClanMember> GetClanMembers()
         {
             List<ClanMember> clanMembers = null;
@@ -218,51 +179,58 @@ namespace CorruptOSBot.Extensions
             return foundClanMembers;
         }
 
-        public List<Achievement> GetAchievements(int id)
-        {
-            List<Achievement> achievements = null;
-            HttpResponseMessage response = client.GetAsync(path + string.Format("/players/{0}/achievements", clanId)).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                achievements = JsonConvert.DeserializeObject<List<Achievement>>(result);
-            }
-            return achievements;
-        }
+        //public List<Achievement> GetAchievements(int id)
+        //{
+        //    List<Achievement> achievements = null;
+        //    HttpResponseMessage response = client.GetAsync(path + string.Format("/players/{0}/achievements", clanId)).Result;
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var result = response.Content.ReadAsStringAsync().Result;
+        //        achievements = JsonConvert.DeserializeObject<List<Achievement>>(result);
+        //    }
+        //    return achievements;
+        //}
+
+        //public void AddCompParticipant(Competition competition, Participation participation)
+        //{
+        //    throw new NotImplementedException();
+        //    //Competition product = null;
+
+        //    //var content = JsonConvert.SerializeObject(participation);
+
+        //    //HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+
+        //    //HttpResponseMessage response = client.PostAsync(path + string.Format("/competitions/{0}/add-participants", competition.id), c).Result;
+        //    //if (response.IsSuccessStatusCode)
+        //    //{
+        //    //    var result = response.Content.ReadAsStringAsync().Result;
+        //    //}
+        //    //else
+        //    //{
+        //    //    var result = response.ReasonPhrase;
+        //    //}
+        //}
+
+        //public void AddTeamCompParticipant(Competition competition, TeamCompParticipation.Root participation)
+        //{
+        //    var content = JsonConvert.SerializeObject(participation);
+
+        //    HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+
+        //    HttpResponseMessage response = client.PostAsync(path + string.Format("/competitions/{0}/add-teams", competition.id), c).Result;
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        var result = response.Content.ReadAsStringAsync().Result;
+        //    }
+        //    else
+        //    {
+        //        var result = response.ReasonPhrase;
+        //    }
+        //}
 
         public void Dispose()
         {
             client = null;
         }
-    }
-
-    public class Player
-    {
-        public int exp { get; set; }
-        public int id { get; set; }
-        public string username { get; set; }
-        public string displayName { get; set; }
-        public string type { get; set; }
-        public string build { get; set; }
-        public bool flagged { get; set; }
-        public double ehp { get; set; }
-        public double ehb { get; set; }
-        public double ttm { get; set; }
-        public double tt200m { get; set; }
-        public DateTime? lastImportedAt { get; set; }
-        public DateTime? lastChangedAt { get; set; }
-        public DateTime? registeredAt { get; set; }
-        public DateTime? updatedAt { get; set; }
-    }
-
-    public class ClanRecentAchievementsRoot
-    {
-        public int threshold { get; set; }
-        public int playerId { get; set; }
-        public string name { get; set; }
-        public string measure { get; set; }
-        public string metric { get; set; }
-        public DateTime? createdAt { get; set; }
-        public Player player { get; set; }
     }
 }

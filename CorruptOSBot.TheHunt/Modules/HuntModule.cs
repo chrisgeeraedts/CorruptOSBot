@@ -1,12 +1,7 @@
 ﻿using CorruptOSBot.Shared;
 using CorruptOSBot.TheHunt;
-using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Modules
@@ -17,7 +12,7 @@ namespace CorruptOSBot.Modules
         [Summary("!hunt-score - Retrieves your teams current score")]
         public async Task SayHuntScoreAsync()
         {
-            if (ToggleStateManager.GetToggleState("huntscore", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Staff"))
+            if (ToggleStateManager.GetToggleState("hunt-score", Context.User) && PermissionManager.HasSpecificRole(Context.User, "Staff"))
             {
                 var team = HuntManager.GetTeam(Context.User);
                 if (team != null)
@@ -40,7 +35,7 @@ namespace CorruptOSBot.Modules
         [Summary("(Staff) !hunt-additem {teamname}-{bossname}-{itemname} - adds the item to the team as a drop manually")]
         public async Task SayAddHuntItemAsync([Remainder]string commandstring)
         {
-            if (ToggleStateManager.GetToggleState("addhuntitem", Context.User) && 
+            if (ToggleStateManager.GetToggleState("hunt-additem", Context.User) && 
                 PermissionManager.HasSpecificRole(Context.User, "Staff"))
             {
                 var stringSplitted = commandstring.Split('/');

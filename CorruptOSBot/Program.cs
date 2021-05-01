@@ -84,9 +84,10 @@ namespace CorruptOSBot
             //TODO: Do something cool with reflection loading later
 
             //The hunt logic
-            if (ToggleStateManager.GetToggleState("thehunt"))
+            if (ToggleStateManager.GetToggleState("hunt-toggle"))
             {
                 ModuleInjector.Inject(_channelInterceptors, _services, _commands);
+                Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", ModuleInjector.Title)));
             }  
         }
 
@@ -103,10 +104,10 @@ namespace CorruptOSBot
         }
 
 
-    // If any services require the client, or the CommandService, or something else you keep on hand,
+        // If any services require the client, or the CommandService, or something else you keep on hand,
     // pass them as parameters into this method as needed.
     // If this method is getting pretty long, you can seperate it out into another file using partials.
-    private static IServiceProvider ConfigureServices()
+        private static IServiceProvider ConfigureServices()
         {
             var map = new ServiceCollection();
                 // Repeat this for all the service classes
@@ -140,11 +141,10 @@ namespace CorruptOSBot
 
             // Login and connect.
             await _client.LoginAsync(TokenType.Bot,
-                 // < DO NOT HARDCODE YOUR TOKEN >
                  ConfigHelper.GetSettingProperty("DiscordToken"));
             await _client.StartAsync();
 
-            ReactionManager.Init();
+            //ReactionManager.Init();
             
             //await LoadMemoryCache();
 
@@ -211,8 +211,6 @@ namespace CorruptOSBot
             }           
         }
 
-
-
         private async Task InitCommands()
         {
             // Either search the program and add all Module classes that can be found.
@@ -257,7 +255,7 @@ namespace CorruptOSBot
         private async Task _client_ReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
         {
             await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("Reaction: {0}: {1}", arg3.Emote.Name, arg3.Emote.ToString())));
-            await ReactionManager.ReactionPosted(_client, arg1, arg2, arg3);
+            //await ReactionManager.ReactionPosted(_client, arg1, arg2, arg3);
         }
 
         private async Task _client_UserJoined(SocketGuildUser arg)

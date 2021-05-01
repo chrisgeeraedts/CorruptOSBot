@@ -1,17 +1,9 @@
 ﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Extensions.WOM;
-using CorruptOSBot.Helpers;
-using CorruptOSBot.Helpers.Bot;
-using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
-using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Modules

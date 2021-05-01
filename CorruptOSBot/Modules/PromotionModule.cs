@@ -35,30 +35,38 @@ namespace CorruptOSBot.Modules
 
                 if (user != null)
                 {
-                    using (var database = new Data.CorruptModel())
+                    try
                     {
-                        var userid = Convert.ToInt64(user.Id);
-                        var discordUserFromDB = database.DiscordUsers.FirstOrDefault(x => x.DiscordId == userid);
-
-                        if (discordUserFromDB != null)
+                        using (var database = new Data.CorruptModel())
                         {
-                            discordUserFromDB.BlacklistedForPromotion = !discordUserFromDB.BlacklistedForPromotion;
-                            await database.SaveChangesAsync();
-                            if (discordUserFromDB.BlacklistedForPromotion)
+                            var userid = Convert.ToInt64(user.Id);
+                            var discordUserFromDB = database.DiscordUsers.FirstOrDefault(x => x.DiscordId == userid);
+
+                            if (discordUserFromDB != null)
                             {
-                                await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} added to promotion blacklist", username), string.Empty));
+                                discordUserFromDB.BlacklistedForPromotion = !discordUserFromDB.BlacklistedForPromotion;
+                                await database.SaveChangesAsync();
+                                if (discordUserFromDB.BlacklistedForPromotion)
+                                {
+                                    await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} added to promotion blacklist", username), string.Empty));
+                                }
+                                else
+                                {
+                                    await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} removed from promotion blacklist", username), string.Empty));
+                                }
+
                             }
                             else
                             {
-                                await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} removed from promotion blacklist", username), string.Empty));
+                                await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} not found in database - unable to blacklist", username), string.Empty));
                             }
-
-                        }
-                        else
-                        {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} not found in database - unable to blacklist", username), string.Empty));
                         }
                     }
+                    catch (Exception e)
+                    {
+                        await Program.Log(new LogMessage(LogSeverity.Error, "PromotionModule", "Database issue - " + e.Message));
+                    }
+                    
                 }
                 else
                 {
@@ -77,51 +85,34 @@ namespace CorruptOSBot.Modules
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
                 (PermissionManager.HasSpecificRole(Context.User, "Staff")))
             {
-                using (var database = new Data.CorruptModel())
+
+                try
                 {
-                    var blacklistedDiscordUsers = database.DiscordUsers.Where(x => x.BlacklistedForPromotion);
-                    var embeds = BuildMessageForBlacklist(blacklistedDiscordUsers);
-                    if (embeds.Any())
+                    using (var database = new Data.CorruptModel())
                     {
-                        foreach (var embed in embeds)
+                        var blacklistedDiscordUsers = database.DiscordUsers.Where(x => x.BlacklistedForPromotion);
+                        var embeds = BuildMessageForBlacklist(blacklistedDiscordUsers);
+                        if (embeds.Any())
                         {
-                            await Context.Channel.SendMessageAsync(embed: embed);
+                            foreach (var embed in embeds)
+                            {
+                                await Context.Channel.SendMessageAsync(embed: embed);
+                            }
+                        }
+                        else
+                        {
+                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Promotions Blacklist", "No discord users on the promotions blacklist"));
                         }
                     }
-                    else
-                    {
-                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Promotions Blacklist", "No discord users on the promotions blacklist"));
-                    }
                 }
+                catch (Exception e)
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Error, "PromotionModule", "Database issue - " + e.Message));
+                }
+               
                 // delete the command posted
                 await Context.Message.DeleteAsync();
             }
-        }
-
-        private List<Discord.Embed> BuildMessageForBlacklist(IEnumerable<Data.DiscordUser> blacklistedDiscordUsers)
-        {
-            var result = new List<Discord.Embed>();
-            var sb = new StringBuilder();
-
-            if (blacklistedDiscordUsers.Any())
-            {
-                foreach (var item in blacklistedDiscordUsers)
-                {
-                    // ensure that we do not go over the 2k content cap
-                    if (sb.ToString().Length > 1900)
-                    {
-                        // reset, since we can only post 2000 characters
-                        result.Add(EmbedHelper.CreateDefaultEmbed("Promotions Blacklist", sb.ToString()));
-                        sb.Clear();
-                    }
-                    else
-                    {
-                        sb.AppendLine(string.Format("- **{0}**", item.Username));
-                    }
-                }
-                result.Add(EmbedHelper.CreateDefaultEmbed("Promotions Blacklist", sb.ToString()));
-            }
-            return result;
         }
 
 
@@ -152,6 +143,34 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
+
+
+        private List<Discord.Embed> BuildMessageForBlacklist(IEnumerable<Data.DiscordUser> blacklistedDiscordUsers)
+        {
+            var result = new List<Discord.Embed>();
+            var sb = new StringBuilder();
+
+            if (blacklistedDiscordUsers.Any())
+            {
+                foreach (var item in blacklistedDiscordUsers)
+                {
+                    // ensure that we do not go over the 2k content cap
+                    if (sb.ToString().Length > 1900)
+                    {
+                        // reset, since we can only post 2000 characters
+                        result.Add(EmbedHelper.CreateDefaultEmbed("Promotions Blacklist", sb.ToString()));
+                        sb.Clear();
+                    }
+                    else
+                    {
+                        sb.AppendLine(string.Format("- **{0}**", item.Username));
+                    }
+                }
+                result.Add(EmbedHelper.CreateDefaultEmbed("Promotions Blacklist", sb.ToString()));
+            }
+            return result;
+        }
+
 
         private async Task SendEmbedMessages(List<PromotionSet> differences, Rank rank)
         {
