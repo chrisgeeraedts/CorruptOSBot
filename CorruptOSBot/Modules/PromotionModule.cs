@@ -17,8 +17,9 @@ namespace CorruptOSBot.Modules
 {
     public class PromotionModule : ModuleBase<SocketCommandContext>
     {
+        [Helpgroup(HelpGroup.Staff)]
         [Command("promotions-blacklist")]
-        [Summary("(Staff) !promotions-blacklist {username} - Adds or remove a username to/from the promotion blacklist ")]
+        [Summary("!promotions-blacklist {username} - Adds or remove a username to/from the promotion blacklist ")]
         public async Task SayPromotionblacklistAsync([Remainder]string username)
         {
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
@@ -79,8 +80,9 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        [Helpgroup(HelpGroup.Staff)]
         [Command("promotions-blacklist")]
-        [Summary("(Staff) !promotions-blacklist - shows the promotion blacklist ")]
+        [Summary("!promotions-blacklist - shows the promotion blacklist ")]
         public async Task SayPromotionblacklistAsync()
         {
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
@@ -115,10 +117,10 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
-
-
+        
+        [Helpgroup(HelpGroup.Staff)]
         [Command("promotions")]
-        [Summary("(Staff) !promotions - Gets a list of accounts that need promotions")]
+        [Summary("!promotions - Gets a list of accounts that need promotions")]
         public async Task SayPromotionsAsync()
         {
             if (ToggleStateManager.GetToggleState("promotions", Context.User) &&

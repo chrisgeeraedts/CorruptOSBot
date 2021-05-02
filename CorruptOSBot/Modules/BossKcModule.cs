@@ -14,8 +14,43 @@ namespace CorruptOSBot.Modules
 {
     public class BossKcModule : ModuleBase<SocketCommandContext>
     {
+        [Helpgroup(HelpGroup.Member)]
         [Command("bosskc")]
-        [Summary("{boss name} - Generates boss KC's for the specified player or, if left empty, your own. (Only allowed in **pvm-general**)")]
+        [Summary("!bosskc {boss name} - Generates Top Clan KC for a specific boss (Only allowed in **pvm-general**)")]
+        public async Task SayBossKcAsync()
+        {
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
+            {
+                if (ToggleStateManager.GetToggleState("bosskc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+                {
+                    var bosses = DataHelper.GetBosses();
+                    StringBuilder sb = new StringBuilder();
+                    foreach (var boss in bosses)
+                    {
+                        sb.AppendLine(string.Format("- {0}", boss.Bossname));
+                    }
+
+
+                    await ReplyAsync(embed:
+                    new EmbedBuilder()
+                        .WithTitle("Available bosses:")
+                        .WithDescription(sb.ToString())
+                        .Build());
+                }
+            }
+            else
+            {
+                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!bosskc", "pvm-general");
+            }
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("bosskc")]
+        [Summary("!bosskc {boss name} - Generates Top Clan KC for a specific boss (Only allowed in **pvm-general**)")]
         public async Task SayBossKcAsync([Remainder]string bossname)
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
@@ -43,21 +78,33 @@ namespace CorruptOSBot.Modules
         {
             var result = await BossKCHelper.GetTopBossKC(WOMMemoryCache.OneDayMS);
 
+            var bosses = DataHelper.GetBosses();
+            var selectedBoss = bosses.FirstOrDefault(x => x.Bossname.ToLower().Contains(bossname.ToLower()));
+            string bossEmoji = "";
+            string bossUri = "";
+
+            if (selectedBoss != null)
+            {
+                bossEmoji = selectedBoss.EmojiName;
+                bossUri = selectedBoss.BossImage;
+            }
+
             try
             {
-                EmojiEnum bossEnum = (EmojiEnum)Enum.Parse(typeof(EmojiEnum), bossname);
+                EmojiEnum bossEnum = (EmojiEnum)Enum.Parse(typeof(EmojiEnum), bossname.ToLower());
                 var bossResult = result.FirstOrDefault(x => x.Boss == bossEnum);
                 var emb = new EmbedBuilder();
                 var sb = new StringBuilder();
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 3; i++)
                 {
                     emb.AddField("\u200b", GetKCLine(i, i == 0, bossResult), true);
                 }
-                
+
                 return emb
-                    .WithTitle(string.Format("{0} {1}",
-                        EmojiHelper.GetFullEmojiString(bossResult.Boss),
-                        bossResult.Boss))
+                    .WithTitle(string.Format("{0} Corrupt OS Top 3 for: {1}",
+                        bossEmoji,
+                        bossResult.Boss.ToString().FirstCharToUpper()))
+                    .WithImageUrl(bossUri)
                     .Build();
             }
             catch (Exception e)

@@ -13,6 +13,7 @@ namespace CorruptOSBot.Modules
 {
     public class KcModule : ModuleBase<SocketCommandContext>
     {
+        [Helpgroup(HelpGroup.Member)]
         [Command("kc")]
         [Summary("!kc {player name}(optional) - Generates KC's for the specified player or, if left empty, your own. (Only allowed in **pvm-general**)")]
         public async Task SayKcAsync([Remainder]string playerName)
@@ -33,6 +34,7 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
+        [Helpgroup(HelpGroup.Member)]
         [Command("kc")]
         [Summary("kc - Generates your own KC. (Only allowed in **pvm-general**)")]
         public async Task SayKcAsync()

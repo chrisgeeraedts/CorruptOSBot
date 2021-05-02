@@ -20,8 +20,9 @@ namespace CorruptOSBot.Modules
     public class AdminModule : ModuleBase<SocketCommandContext>
     {
 
+        [Helpgroup(HelpGroup.Admin)]
         [Command("initdb")]
-        [Summary("(Dev) !initdb - initializes the DB")]
+        [Summary("!initdb - initializes the DB")]
         public async Task SayInitDBAsync()
         {
             if (ToggleStateManager.GetToggleState("initdb", Context.User) &&
@@ -30,9 +31,10 @@ namespace CorruptOSBot.Modules
                 await InitDB(Context);
             }
         }
-        
+
+        [Helpgroup(HelpGroup.Staff)]
         [Command("poll")]
-        [Summary("(Staff/Mod) !poll {your question} - Creates a yes/no poll.")]
+        [Summary("!poll {your question} - Creates a yes/no poll.")]
         public async Task SayPollAsync([Remainder]string pollquestion)
         {
             if (ToggleStateManager.GetToggleState("poll", Context.User) &&
@@ -63,8 +65,9 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        [Helpgroup(HelpGroup.Admin)]
         [Command("postid")]
-        [Summary("(admin) Gets the current post's Id")]
+        [Summary("!postid - Gets the current post's Id")]
         public async Task SaypostidAsync()
         {
             if (ToggleStateManager.GetToggleState("postid", Context.User) &&
@@ -90,8 +93,9 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        [Helpgroup(HelpGroup.Admin)]
         [Command("channelid")]
-        [Summary("(admin) Gets the current channel's Id")]
+        [Summary("!channelid - Gets the current channel's Id")]
         public async Task SaychannelIdAsync()
         {
             if (ToggleStateManager.GetToggleState("channelid", Context.User) &&
@@ -105,9 +109,10 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
-        
+
+        [Helpgroup(HelpGroup.Admin)]
         [Command("guildid")]
-        [Summary("(admin) Gets the current guild Id")]
+        [Summary("!guildid - Gets the current guild Id")]
         public async Task SayguildidAsync()
         {
             if (ToggleStateManager.GetToggleState("guildid", Context.User) &&
@@ -122,8 +127,9 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        [Helpgroup(HelpGroup.Admin)]
         [Command("serverip")]
-        [Summary("(admin) Gets the current server's IP")]
+        [Summary("!serverip - Gets the current server's IP")]
         public async Task SayServerIdAsync()
         {
             if (ToggleStateManager.GetToggleState("serverip", Context.User) &&
@@ -141,9 +147,10 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
-        
+
+        [Helpgroup(HelpGroup.Admin)]
         [Command("clear")]
-        [Summary("(Dev) !clear {number} - Clears posts above it. (max 100)")]
+        [Summary("!clear {number} - Clears posts above it. (max 100)")]
         public async Task SayClearAsync(int number)
         { 
             if (ToggleStateManager.GetToggleState("clear", Context.User) && 
@@ -159,8 +166,9 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        [Helpgroup(HelpGroup.Admin)]
         [Command("toggle")]
-        [Summary("(Dev) !toggle {command string} - Toggles a command to be available.")]
+        [Summary("!toggle {command string} - Toggles a command to be available.")]
         public async Task SayTogglecommandAsync(string command)
         {   
             if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer")
@@ -176,8 +184,9 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
+        [Helpgroup(HelpGroup.Admin)]
         [Command("togglestates")]
-        [Summary("(Dev) !togglestates - Shows the current enabled and disabled commands")]
+        [Summary("!togglestates - Shows the current enabled and disabled commands")]
         public async Task SaytogglestatescommandAsync()
         {
             if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
@@ -201,9 +210,10 @@ namespace CorruptOSBot.Modules
             // delete the command posted
             await Context.Message.DeleteAsync();
         }
-        
+
+        [Helpgroup(HelpGroup.Admin)]
         [Command("getusers")]
-        [Summary("(Dev) !getusers - Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
+        [Summary("!getusers - Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
         public async Task SayGetUsersAsync()
         {
             if (ToggleStateManager.GetToggleState("getusers", Context.User) &&
@@ -251,8 +261,9 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        [Helpgroup(HelpGroup.Staff)]
         [Command("getuser")]
-        [Summary("(Staff) !getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
+        [Summary("!getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
         public async Task SayGetUserAsync([Remainder]string username)
         {
             if (ToggleStateManager.GetToggleState("getuser", Context.User) &&

@@ -16,6 +16,7 @@ namespace CorruptOSBot.Modules
 {
     public class RSNModule : ModuleBase<SocketCommandContext>
     {
+        [Helpgroup(HelpGroup.Everybody)]
         [Command("rsn")]
         [Summary("!rsn {your name} - changes your nickname in the server and Wise Old Man.")]
         public async Task SayRSNAsync([Remainder]string username)
@@ -42,7 +43,7 @@ namespace CorruptOSBot.Modules
             }
         }
 
-
+        [Helpgroup(HelpGroup.Everybody)]
         [Command("rsncf")]
         [Summary("!rsncf {your name} - changes your nickname in the server and sets you as a Clanfriend.")]
         public async Task SayRSNCFAsync([Remainder]string username)

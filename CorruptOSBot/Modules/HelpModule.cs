@@ -17,15 +17,21 @@ namespace CorruptOSBot.Modules
 {
     public class HelpModule : ModuleBase<SocketCommandContext>
     {
+        [Helpgroup(HelpGroup.Member)]
         [Command("help")]
-        [Summary("Gives information about the bot.")]
+        [Summary("!help - Gives information about the bot commands for your roles.")]
         public async Task SayAsync()
         {
             if (ToggleStateManager.GetToggleState("help", Context.User) && RootAdminManager.HasAnyRole(Context.User))
             {
-                await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultFieldsEmbed(
+                var embeds = EmbedHelper.CreateDefaultFieldsEmbed(
                 "Corrupt OS bot command list",
-                GetCommandsToShowInHelp(Context.User, Context.Guild)));
+                GetCommandsToShowInHelp(Context.User, Context.Guild));
+
+                foreach (var embed in embeds)
+                {
+                    await Context.Channel.SendMessageAsync(embed: embed);
+                }
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
@@ -34,18 +40,25 @@ namespace CorruptOSBot.Modules
 
         private Dictionary<string, string> GetCommandsToShowInHelp(SocketUser user, SocketGuild guild)
         {
-            var isStaffOrDev = DiscordHelper.HasRole(user, guild, "Staff") || DiscordHelper.HasRole(user, guild, "Developer");
-
+            var isDev = DiscordHelper.HasRole(user, guild, "Developer");
+            var isStaff = DiscordHelper.HasRole(user, guild, "Staff") ||
+                DiscordHelper.HasRole(user, guild, "Clan Owner") ||
+                DiscordHelper.HasRole(user, guild, "Moderator");
+            var isMember = DiscordHelper.HasRole(user, guild, "Smiley") || 
+                DiscordHelper.HasRole(user, guild, "Recruit") || 
+                DiscordHelper.HasRole(user, guild, "Sergeant") || 
+                DiscordHelper.HasRole(user, guild, "Corporal") || 
+                DiscordHelper.HasRole(user, guild, "OG");
 
             List<string> blackListedCommands = new List<string>();
-            blackListedCommands.Add("!clear");
-            blackListedCommands.Add("!toggle");
-            blackListedCommands.Add("!togglestates");
-            blackListedCommands.Add("!channelid");
+            //blackListedCommands.Add("!clear");
+            //blackListedCommands.Add("!toggle");
+            //blackListedCommands.Add("!togglestates");
+            //blackListedCommands.Add("!channelid");
+            //blackListedCommands.Add("!postid");
+            //blackListedCommands.Add("!guildid");
+            //blackListedCommands.Add("!serverip");
             blackListedCommands.Add("!overthrownathan");
-            blackListedCommands.Add("!postid");
-            blackListedCommands.Add("!guildid");
-            blackListedCommands.Add("!serverip");
 
             Dictionary<string, string> result = new Dictionary<string, string>();
 
@@ -53,13 +66,17 @@ namespace CorruptOSBot.Modules
             {
                 if (!blackListedCommands.Contains(command.Key))
                 {
-                    if ((command.Value.Contains("(Staff)") || command.Value.Contains("(Dev)")) && isStaffOrDev)
+                    if (command.Value.HelpGroup == HelpGroup.Admin && isDev)
                     {
-                        result.Add(command.Key, command.Value);
+                        result.Add(command.Key, command.Value.Name);
                     }
-                    else if(!command.Value.Contains("(Staff)") && !command.Value.Contains("(Dev)"))
+                    if (command.Value.HelpGroup == HelpGroup.Staff && isStaff)
                     {
-                        result.Add(command.Key, command.Value);
+                        result.Add(command.Key, command.Value.Name);
+                    }
+                    if (command.Value.HelpGroup == HelpGroup.Member && isMember)
+                    {
+                        result.Add(command.Key, command.Value.Name);
                     }
                 }               
             }

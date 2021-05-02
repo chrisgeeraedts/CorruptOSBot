@@ -118,7 +118,9 @@
     <Compile Include="Helpers\Bot\EmbedHelper.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
     <Compile Include="Helpers\SettingsConstants.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Modules\AccountModule.cs" />
+    <Compile Include="Helpers\Bot\HelpgroupAttribute.cs" />
     <Compile Include="RootAdminManager.cs" />
     <Compile Include="Services\Achievements\AchievementService.cs" />
     <Compile Include="Events\EventManager.cs" />

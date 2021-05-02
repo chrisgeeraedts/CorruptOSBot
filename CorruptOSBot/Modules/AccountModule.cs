@@ -11,7 +11,7 @@ namespace CorruptOSBot.Modules
 {
     public class AccountModule : ModuleBase<SocketCommandContext>
     {
-
+        [Helpgroup(HelpGroup.Member)]
         [Command("add-alt")]
         [Summary("!add-alt {rsn} - Adds an runescape alt account to your discord account")]
         public async Task SayAddAltBAsync([Remainder] string rsn)
@@ -24,8 +24,8 @@ namespace CorruptOSBot.Modules
             // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
-
+        
+        [Helpgroup(HelpGroup.Member)]
         [Command("add-iron")]
         [Summary("!add-iron {rsn} - Adds an runescape iron account to your discord account")]
         public async Task SayAddIronAsync([Remainder] string rsn)
@@ -38,6 +38,19 @@ namespace CorruptOSBot.Modules
             // delete the command posted
             await Context.Message.DeleteAsync();
         }
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("add-iron")]
+        [Summary("!add-iron {rsn} - Adds an runescape iron account to your discord account")]
+        public async Task SayGetAccountsAsync([Remainder] string rsn)
+        {
+            
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+
 
 
         private async Task AddAlt(SocketCommandContext context, string rsn, string type)

@@ -13,6 +13,7 @@ namespace CorruptOSBot.Modules
 {
     public class PVMModule : ModuleBase<SocketCommandContext>
     {
+        [Helpgroup(HelpGroup.Member)]
         [Command("cox")]
         [Summary("!cox - Enables a player to earn the 'CoX learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayCoxAsync()
@@ -62,6 +63,7 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        [Helpgroup(HelpGroup.Member)]
         [Command("tob")]
         [Summary("!tob - Enables a player to earn the 'ToB learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayTobAsync()
@@ -111,6 +113,7 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        [Helpgroup(HelpGroup.Member)]
         [Command("nm")]
         [Summary("!nm - Enables a player to earn the 'nm learner' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayNmAsync()
@@ -160,6 +163,7 @@ namespace CorruptOSBot.Modules
             }
         }
 
+        [Helpgroup(HelpGroup.Member)]
         [Command("cm")]
         [Summary("!cm - Enables a player to earn the 'Challenge Mode' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayCMAsync()
@@ -207,7 +211,7 @@ namespace CorruptOSBot.Modules
             }
         }
 
-
+        [Helpgroup(HelpGroup.Member)]
         [Command("gwd")]
         [Summary("!gwd - Enables a player to earn the 'GWD' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayGWDAsync()

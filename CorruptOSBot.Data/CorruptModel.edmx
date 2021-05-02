@@ -12,6 +12,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Bossname" Type="nvarchar(max)" Nullable="false" />
           <Property Name="EmojiName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="BossImage" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="ChatLog">
           <Key>
@@ -158,6 +159,7 @@
           <Property Name="Bossname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="EmojiName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Boss" FromRole="Bosses" ToRole="PlayerPets" />
+          <Property Name="BossImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ChatLog">
           <Key>
@@ -308,6 +310,7 @@
           <EntitySetMapping Name="Bosses">
             <EntityTypeMapping TypeName="corruptosModel.Boss">
               <MappingFragment StoreEntitySet="Bosses">
+                <ScalarProperty Name="BossImage" ColumnName="BossImage" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Bossname" ColumnName="Bossname" />
                 <ScalarProperty Name="EmojiName" ColumnName="EmojiName" />

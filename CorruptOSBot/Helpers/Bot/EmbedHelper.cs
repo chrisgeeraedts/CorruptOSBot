@@ -27,21 +27,39 @@ namespace CorruptOSBot.Helpers.Bot
 
             return builder.Build();
         }
-        public static Embed CreateDefaultFieldsEmbed(string title, Dictionary<string, string> fields)
+        public static List<Embed> CreateDefaultFieldsEmbed(string title, Dictionary<string, string> fields)
         {
+            var result = new List<Embed>();
             var builder = new EmbedBuilder();
             builder.Color = Color.Blue;
             builder.Title = title;
 
             if (fields != null)
             {
+                int index = 0;
                 foreach (var item in fields)
                 {
-                    builder.AddField(item.Key, item.Value);
+                    if (index < 24)
+                    {
+                        builder.AddField(item.Key, item.Value);
+                        index++;
+                    }
+                    else
+                    {
+                        builder.AddField(item.Key, item.Value);
+                        result.Add(builder.Build());
+                        index = 0;
+
+                        // create new builder
+                        builder = new EmbedBuilder();
+                        builder.Color = Color.Blue;
+                    }
                 }
+                // Add the remainder
+                result.Add(builder.Build());
             }
 
-            return builder.Build();
+            return result;
         }
 
         public static Embed CreateDefaultEmbed(string title, string message, string imageUrl = null, string thumbnailUrl = null)

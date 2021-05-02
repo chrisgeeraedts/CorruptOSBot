@@ -1,4 +1,5 @@
-﻿using CorruptOSBot.Extensions;
+﻿using CorruptOSBot.Data;
+using CorruptOSBot.Extensions;
 using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers.Discord;
 using Discord.WebSocket;
@@ -35,6 +36,22 @@ namespace CorruptOSBot.Helpers
 
                 await corruptosEntities.SaveChangesAsync();
             }
+        }
+
+        public static List<Boss> GetBosses()
+        {
+            try
+            {
+                using (var corruptosEntities = new Data.CorruptModel())
+                {
+                    return corruptosEntities.Bosses.ToList();
+                }
+            }
+            catch (Exception)
+            {
+                return new List<Boss>();
+            }
+            
         }
 
         public static Data.DiscordUser GetDiscordUserFromUserId(ulong? userId)

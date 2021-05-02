@@ -8,6 +8,7 @@
     <Property Name="Bossname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="EmojiName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Boss" FromRole="Bosses" ToRole="PlayerPets" />
+    <Property Name="BossImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="ChatLog">
     <Key>

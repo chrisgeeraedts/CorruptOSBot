@@ -23,6 +23,7 @@ namespace CorruptOSBot.Data
         public int Id { get; set; }
         public string Bossname { get; set; }
         public string EmojiName { get; set; }
+        public string BossImage { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PlayerPet> PlayerPets { get; set; }

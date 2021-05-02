@@ -124,3 +124,4 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\R
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.csproj.CopyComplete
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.pdb
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.csprojAssemblyReference.cache

@@ -7,6 +7,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Bossname" Type="nvarchar(max)" Nullable="false" />
     <Property Name="EmojiName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BossImage" Type="nvarchar(max)" />
   </EntityType>
   <EntityType Name="ChatLog">
     <Key>
