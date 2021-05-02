@@ -24,6 +24,7 @@ namespace CorruptOSBot.Data
         public string rsn { get; set; }
         public Nullable<int> wom_id { get; set; }
         public Nullable<int> DiscordUserId { get; set; }
+        public string account_type { get; set; }
     
         public virtual DiscordUser DiscordUser { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -13,6 +13,7 @@
     <EntitySetMapping Name="ChatLogs">
       <EntityTypeMapping TypeName="corruptosModel.ChatLog">
         <MappingFragment StoreEntitySet="ChatLog">
+          <ScalarProperty Name="Channel" ColumnName="Channel" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Message" ColumnName="Message" />
           <ScalarProperty Name="Author" ColumnName="Author" />
@@ -24,6 +25,7 @@
     <EntitySetMapping Name="DiscordUsers">
       <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
         <MappingFragment StoreEntitySet="DiscordUsers">
+          <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
           <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Username" ColumnName="Username" />
@@ -35,6 +37,7 @@
     <EntitySetMapping Name="ErrorLogs">
       <EntityTypeMapping TypeName="corruptosModel.ErrorLog">
         <MappingFragment StoreEntitySet="ErrorLog">
+          <ScalarProperty Name="Datetime" ColumnName="Datetime" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Message" ColumnName="Message" />
           <ScalarProperty Name="Severity" ColumnName="Severity" />
@@ -44,6 +47,9 @@
     <EntitySetMapping Name="PlayerPets">
       <EntityTypeMapping TypeName="corruptosModel.PlayerPet">
         <MappingFragment StoreEntitySet="PlayerPets">
+          <ScalarProperty Name="LevelOrKcGotten" ColumnName="LevelOrKcGotten" />
+          <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+          <ScalarProperty Name="SkillId" ColumnName="SkillId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="DropDate" ColumnName="DropDate" />
           <ScalarProperty Name="BossId" ColumnName="BossId" />
@@ -54,10 +60,19 @@
     <EntitySetMapping Name="RunescapeAccounts">
       <EntityTypeMapping TypeName="corruptosModel.RunescapeAccount">
         <MappingFragment StoreEntitySet="RunescapeAccounts">
+          <ScalarProperty Name="account_type" ColumnName="account_type" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="rsn" ColumnName="rsn" />
           <ScalarProperty Name="wom_id" ColumnName="wom_id" />
           <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Skills">
+      <EntityTypeMapping TypeName="corruptosModel.Skill">
+        <MappingFragment StoreEntitySet="Skills">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

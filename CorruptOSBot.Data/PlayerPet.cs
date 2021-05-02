@@ -18,8 +18,12 @@ namespace CorruptOSBot.Data
         public Nullable<System.DateTime> DropDate { get; set; }
         public Nullable<int> BossId { get; set; }
         public Nullable<int> RunescapeAccountId { get; set; }
+        public Nullable<int> SkillId { get; set; }
+        public Nullable<int> ActivityId { get; set; }
+        public Nullable<int> LevelOrKcGotten { get; set; }
     
         public virtual Boss Boss { get; set; }
         public virtual RunescapeAccount RunescapeAccount { get; set; }
+        public virtual Skill Skill { get; set; }
     }
 }

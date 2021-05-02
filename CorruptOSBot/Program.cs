@@ -126,9 +126,9 @@ namespace CorruptOSBot
         {
             return LogHelper.Log(message);
         }
-        public static void ChatLog(LogMessage message)
+        public static void ChatLog(LogMessage message, string channel)
         {
-            LogHelper.ChatLog(message);
+            LogHelper.ChatLog(message, channel);
         }
         private async Task MainAsync()
         {
@@ -289,9 +289,7 @@ namespace CorruptOSBot
             try
             {
                 Program.ChatLog(new LogMessage(LogSeverity.Info, 
-                    DiscordHelper.GetAccountNameOrNickname(arg.Author),
-                    string.Format("[{0}]{1}",
-                    arg.Channel.Name, arg.Content)));
+                    DiscordHelper.GetAccountNameOrNickname(arg.Author), arg.Content), arg.Channel.Name);
             }
             catch (Exception e)
             {

@@ -22,6 +22,7 @@
           <Property Name="Author" Type="varchar(max)" Nullable="false" />
           <Property Name="Datetime" Type="datetime" Nullable="false" />
           <Property Name="Severity" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Channel" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="DiscordUsers">
           <Key>
@@ -32,6 +33,7 @@
           <Property Name="DiscordId" Type="bigint" />
           <Property Name="OriginallyJoinedAt" Type="datetime" />
           <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
+          <Property Name="LeavingDate" Type="datetime" />
         </EntityType>
         <EntityType Name="ErrorLog">
           <Key>
@@ -40,6 +42,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Message" Type="nvarchar(max)" />
           <Property Name="Severity" Type="nvarchar(max)" />
+          <Property Name="Datetime" Type="datetime" />
         </EntityType>
         <EntityType Name="PlayerPets">
           <Key>
@@ -48,7 +51,10 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DropDate" Type="datetime" />
           <Property Name="BossId" Type="int" />
+          <Property Name="SkillId" Type="int" />
+          <Property Name="ActivityId" Type="int" />
           <Property Name="RunescapeAccountId" Type="int" />
+          <Property Name="LevelOrKcGotten" Type="int" />
         </EntityType>
         <EntityType Name="RunescapeAccounts">
           <Key>
@@ -58,6 +64,14 @@
           <Property Name="rsn" Type="varchar(max)" Nullable="false" />
           <Property Name="wom_id" Type="int" />
           <Property Name="DiscordUserId" Type="int" />
+          <Property Name="account_type" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Skills">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <Association Name="FK_Boss">
           <End Role="Bosses" Type="Self.Bosses" Multiplicity="0..1" />
@@ -95,6 +109,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Skill">
+          <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+          <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skills">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlayerPets">
+              <PropertyRef Name="SkillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="corruptosModelStoreContainer">
           <EntitySet Name="Bosses" EntityType="Self.Bosses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChatLog" EntityType="Self.ChatLog" Schema="dbo" store:Type="Tables" />
@@ -102,6 +128,7 @@
           <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
             <End Role="Bosses" EntitySet="Bosses" />
             <End Role="PlayerPets" EntitySet="PlayerPets" />
@@ -112,6 +139,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_RunescapeAccount" Association="Self.FK_RunescapeAccount">
             <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+            <End Role="PlayerPets" EntitySet="PlayerPets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Skill" Association="Self.FK_Skill">
+            <End Role="Skills" EntitySet="Skills" />
             <End Role="PlayerPets" EntitySet="PlayerPets" />
           </AssociationSet>
         </EntityContainer>
@@ -137,6 +168,7 @@
           <Property Name="Author" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Datetime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Severity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Channel" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="DiscordUser">
           <Key>
@@ -148,6 +180,7 @@
           <Property Name="OriginallyJoinedAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="RunescapeAccounts" Relationship="Self.FK_DiscordUser" FromRole="DiscordUsers" ToRole="RunescapeAccounts" />
           <Property Name="BlacklistedForPromotion" Type="Boolean" Nullable="false" />
+          <Property Name="LeavingDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="ErrorLog">
           <Key>
@@ -156,6 +189,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Severity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Datetime" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="PlayerPet">
           <Key>
@@ -167,6 +201,10 @@
           <Property Name="RunescapeAccountId" Type="Int32" />
           <NavigationProperty Name="Boss" Relationship="Self.FK_Boss" FromRole="PlayerPets" ToRole="Bosses" />
           <NavigationProperty Name="RunescapeAccount" Relationship="Self.FK_RunescapeAccount" FromRole="PlayerPets" ToRole="RunescapeAccounts" />
+          <Property Name="SkillId" Type="Int32" />
+          <NavigationProperty Name="Skill" Relationship="corruptosModel.FK_Skill" FromRole="PlayerPet" ToRole="Skill" />
+          <Property Name="ActivityId" Type="Int32" />
+          <Property Name="LevelOrKcGotten" Type="Int32" />
         </EntityType>
         <EntityType Name="RunescapeAccount">
           <Key>
@@ -178,6 +216,7 @@
           <Property Name="DiscordUserId" Type="Int32" />
           <NavigationProperty Name="DiscordUser" Relationship="Self.FK_DiscordUser" FromRole="RunescapeAccounts" ToRole="DiscordUsers" />
           <NavigationProperty Name="PlayerPets" Relationship="Self.FK_RunescapeAccount" FromRole="RunescapeAccounts" ToRole="PlayerPets" />
+          <Property Name="account_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Boss">
           <End Role="Bosses" Type="Self.Boss" Multiplicity="0..1" />
@@ -234,7 +273,32 @@
             <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
             <End Role="PlayerPets" EntitySet="PlayerPets" />
           </AssociationSet>
+          <EntitySet Name="Skills" EntityType="corruptosModel.Skill" />
+          <AssociationSet Name="FK_Skill" Association="corruptosModel.FK_Skill">
+            <End Role="Skill" EntitySet="Skills" />
+            <End Role="PlayerPet" EntitySet="PlayerPets" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Skill">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PlayerPets" Relationship="corruptosModel.FK_Skill" FromRole="Skill" ToRole="PlayerPet" />
+        </EntityType>
+        <Association Name="FK_Skill">
+          <End Type="corruptosModel.Skill" Role="Skill" Multiplicity="0..1" />
+          <End Type="corruptosModel.PlayerPet" Role="PlayerPet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skill">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PlayerPet">
+              <PropertyRef Name="SkillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -253,6 +317,7 @@
           <EntitySetMapping Name="ChatLogs">
             <EntityTypeMapping TypeName="corruptosModel.ChatLog">
               <MappingFragment StoreEntitySet="ChatLog">
+                <ScalarProperty Name="Channel" ColumnName="Channel" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="Author" ColumnName="Author" />
@@ -264,6 +329,7 @@
           <EntitySetMapping Name="DiscordUsers">
             <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
               <MappingFragment StoreEntitySet="DiscordUsers">
+                <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
                 <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
@@ -275,6 +341,7 @@
           <EntitySetMapping Name="ErrorLogs">
             <EntityTypeMapping TypeName="corruptosModel.ErrorLog">
               <MappingFragment StoreEntitySet="ErrorLog">
+                <ScalarProperty Name="Datetime" ColumnName="Datetime" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="Severity" ColumnName="Severity" />
@@ -284,6 +351,9 @@
           <EntitySetMapping Name="PlayerPets">
             <EntityTypeMapping TypeName="corruptosModel.PlayerPet">
               <MappingFragment StoreEntitySet="PlayerPets">
+                <ScalarProperty Name="LevelOrKcGotten" ColumnName="LevelOrKcGotten" />
+                <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+                <ScalarProperty Name="SkillId" ColumnName="SkillId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="DropDate" ColumnName="DropDate" />
                 <ScalarProperty Name="BossId" ColumnName="BossId" />
@@ -294,10 +364,19 @@
           <EntitySetMapping Name="RunescapeAccounts">
             <EntityTypeMapping TypeName="corruptosModel.RunescapeAccount">
               <MappingFragment StoreEntitySet="RunescapeAccounts">
+                <ScalarProperty Name="account_type" ColumnName="account_type" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="rsn" ColumnName="rsn" />
                 <ScalarProperty Name="wom_id" ColumnName="wom_id" />
                 <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Skills">
+            <EntityTypeMapping TypeName="corruptosModel.Skill">
+              <MappingFragment StoreEntitySet="Skills">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

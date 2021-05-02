@@ -29,12 +29,25 @@ namespace CorruptOSBot.Helpers
                 {
                     DiscordUser = discordUser,
                     rsn = DiscordHelper.GetAccountNameOrNickname(currentUser),
-                    wom_id = groupMember?.id
+                    wom_id = groupMember?.id,
+                    account_type = "main"
                 });
 
                 await corruptosEntities.SaveChangesAsync();
             }
         }
 
+        public static Data.DiscordUser GetDiscordUserFromUserId(ulong? userId)
+        {
+            using (var corruptosEntities = new Data.CorruptModel())
+            {
+                long discordId = Convert.ToInt64(userId);
+
+                // Find discord dataset
+                var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
+
+                return discordUser;
+            }
+        }
     }
 }

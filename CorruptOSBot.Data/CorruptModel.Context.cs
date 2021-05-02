@@ -31,5 +31,6 @@ namespace CorruptOSBot.Data
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
         public virtual DbSet<PlayerPet> PlayerPets { get; set; }
         public virtual DbSet<RunescapeAccount> RunescapeAccounts { get; set; }
+        public virtual DbSet<Skill> Skills { get; set; }
     }
 }

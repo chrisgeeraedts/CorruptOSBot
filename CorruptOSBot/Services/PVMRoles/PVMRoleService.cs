@@ -48,7 +48,7 @@ namespace CorruptOSBot.Services
                         if (clanMemberWom != null)
                         {
                             // check if role change is needed
-                            if (discordUser != null)
+                            if (discordUser != null && clanMemberWom.latestSnapshot != null)
                             {
                                 try
                                 {

@@ -1,4 +1,5 @@
-﻿using CorruptOSBot.Extensions.WOM;
+﻿using CorruptOSBot.Data;
+using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
@@ -208,7 +209,7 @@ namespace CorruptOSBot.Modules
             var usersWithChanges = differences.Where(x =>
                 x.ShouldHaveRank == rank &&
                 x.CurrentRank != x.ShouldHaveRank 
-                //&& GetRoleRank(x.ShouldHaveRank) > GetRoleRank(x.CurrentRank)
+                //&& GetRoleRank(x.ShouldHaveRank) > GetRoleRank(x.CurrentRank) <-- use this for only upgrades
                 );
 
             if (usersWithChanges.Any())
@@ -260,75 +261,89 @@ namespace CorruptOSBot.Modules
 
         private List<PromotionSet> GetSupposedRank(IReadOnlyCollection<Discord.IGuildUser> users, Discord.IGuild guild)
         {
-            using (var database = new Data.CorruptModel())
+            var dataset = new Dictionary<long?, DiscordUser>();
+
+            try
             {
-                var dataset = database.DiscordUsers.ToDictionary(x => x.DiscordId);
-
-                var result = new List<PromotionSet>();
-
-                var daysInYear = DateTime.IsLeapYear(DateTime.Now.Year) ? 366 : 365;
-                var daysIn6Months = Convert.ToInt32(daysInYear / 2);
-                var daysIn3Months = Convert.ToInt32(daysIn6Months / 2);
-                var daysIn1Month = Convert.ToInt32(daysIn6Months / 3);
-
-                var dateTimeCurrent = GetLastDayOfMonth(DateTime.Now);
-
-                foreach (var user in users.Where(x => !x.IsBot && !x.IsWebhook))
+                using (var database = new Data.CorruptModel())
                 {
-                    var joinDate = user.JoinedAt.Value.DateTime;
-                    var blacklisted = false;
-                    var userId = Convert.ToInt64(user.Id);
-                    if (dataset.ContainsKey(userId) && dataset[userId].OriginallyJoinedAt.HasValue)
-                    {
-                        joinDate = dataset[userId].OriginallyJoinedAt.Value;
-                    }
-                    if (dataset.ContainsKey(userId))
-                    {
-                        blacklisted = dataset[userId].BlacklistedForPromotion;
-                    }
+                    dataset = database.DiscordUsers.ToDictionary(x => x.DiscordId);
+                }
+            }
+            catch (Exception e)
+            {
+                Program.Log(new LogMessage(LogSeverity.Error, "GetSupposedRank", "Failed to get joindata from database - " + e.Message));
+            }
+           
+            var result = new List<PromotionSet>();
 
-                    if (joinDate != null &&
-                        joinDate != DateTime.MinValue &&
-                        !DiscordHelper.HasRole(user, guild, "inactive") &&
-                        !DiscordHelper.HasRole(user, guild, "Clan Friend") &&
-                        !HasStaffOrModOrOwnerRole(user, guild) &&
-                        !blacklisted)
+            var daysInYear = DateTime.IsLeapYear(DateTime.Now.Year) ? 366 : 365;
+            var daysIn6Months = Convert.ToInt32(daysInYear / 2);
+            var daysIn3Months = Convert.ToInt32(daysIn6Months / 2);
+            var daysIn1Month = Convert.ToInt32(daysIn6Months / 3);
+
+            var dateTimeCurrent = GetLastDayOfMonth(DateTime.Now);
+
+            foreach (var user in users.Where(x => !x.IsBot && !x.IsWebhook))
+            {
+                var joinDate = user.JoinedAt.Value.DateTime;
+                var blacklisted = false;
+                var hasLeft = false;
+                var userId = Convert.ToInt64(user.Id);
+
+                // if we have a database entry, use that join date
+                if (dataset.ContainsKey(userId) && dataset[userId].OriginallyJoinedAt.HasValue)
+                {
+                    joinDate = dataset[userId].OriginallyJoinedAt.Value;
+                }
+                if (dataset.ContainsKey(userId))
+                {
+                    blacklisted = dataset[userId].BlacklistedForPromotion;
+                    hasLeft = dataset[userId].LeavingDate.HasValue;
+                }
+
+                if (joinDate != null &&
+                    joinDate != DateTime.MinValue &&
+                    !DiscordHelper.HasRole(user, guild, "inactive") &&
+                    !DiscordHelper.HasRole(user, guild, "Clan Friend") &&
+                    !HasStaffOrModOrOwnerRole(user, guild) &&
+                    !blacklisted &&
+                    !hasLeft)
+                {
+                    int daysInactive = -1;
+                    // check if inactive
+                    if (!IsInactive(user, out daysInactive))
                     {
-                        int daysInactive = -1;
-                        // check if inactive
-                        if (!IsInactive(user, out daysInactive))
+                        var daysFromJoining = Convert.ToInt32(dateTimeCurrent.Subtract(joinDate).TotalDays);
+
+                        if (daysFromJoining >= daysInYear)
                         {
-                            var daysFromJoining = Convert.ToInt32(dateTimeCurrent.Subtract(joinDate).TotalDays);
-
-                            if (daysFromJoining >= daysInYear)
-                            {
-                                result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.OG, DaystillRank = 9999, UserId = user.Id, DaysInDiscord = daysFromJoining });
-                            }
-                            else if (daysFromJoining >= daysIn6Months)
-                            {
-                                result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Sergeant, DaystillRank = daysInYear - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
-                            }
-                            else if (daysFromJoining >= daysIn3Months)
-                            {
-                                result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Corperal, DaystillRank = daysIn6Months - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
-                            }
-                            else if (daysFromJoining >= daysIn1Month)
-                            {
-                                result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Recruit, DaystillRank = daysIn3Months - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
-                            }
-                            else
-                            {
-                                result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Smiley, DaystillRank = daysIn1Month - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
-                            }
+                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.OG, DaystillRank = 9999, UserId = user.Id, DaysInDiscord = daysFromJoining });
+                        }
+                        else if (daysFromJoining >= daysIn6Months)
+                        {
+                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Sergeant, DaystillRank = daysInYear - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
+                        }
+                        else if (daysFromJoining >= daysIn3Months)
+                        {
+                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Corperal, DaystillRank = daysIn6Months - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
+                        }
+                        else if (daysFromJoining >= daysIn1Month)
+                        {
+                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Recruit, DaystillRank = daysIn3Months - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
                         }
                         else
                         {
-                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Inactive, DaystillRank = -1, UserId = user.Id, DaysInDiscord = daysInactive });
+                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Smiley, DaystillRank = daysIn1Month - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
                         }
                     }
+                    else
+                    {
+                        result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Inactive, DaystillRank = -1, UserId = user.Id, DaysInDiscord = daysInactive });
+                    }
                 }
-                return result;
             }
+            return result;
         }
 
         private int GetRoleRank(Rank rank)

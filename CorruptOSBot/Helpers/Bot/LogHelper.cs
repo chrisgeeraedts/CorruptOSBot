@@ -8,13 +8,13 @@ namespace CorruptOSBot.Helpers.Bot
 
     public static class LogHelper
     {
-        public static void ChatLog(LogMessage message)
+        public static void ChatLog(LogMessage message, string channel)
         {
             try
             {
                 using (CorruptModel data = new CorruptModel())
                 {
-                    var chatLog = new ChatLog() { Message = message.Message, Author = message.Source, Severity = message.Severity.ToString(), Datetime = DateTime.Now };
+                    var chatLog = new ChatLog() { Message = message.Message, Author = message.Source, Severity = message.Severity.ToString(), Datetime = DateTime.Now, Channel = channel };
                     data.ChatLogs.Add(chatLog);
                     data.SaveChanges();
                 }
@@ -36,7 +36,7 @@ namespace CorruptOSBot.Helpers.Bot
                 {
                     using (CorruptModel data = new CorruptModel())
                     {
-                        var errorLog = new ErrorLog() { Message = message.Message, Severity = message.Severity.ToString() };
+                        var errorLog = new ErrorLog() { Message = message.Message, Severity = message.Severity.ToString(), Datetime = DateTime.Now };
                         data.ErrorLogs.Add(errorLog);
                         data.SaveChanges();
                     }

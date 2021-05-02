@@ -84,6 +84,9 @@
     <Compile Include="RunescapeAccount.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Skill.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
