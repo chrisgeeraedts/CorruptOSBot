@@ -20,5 +20,8 @@ namespace CorruptOSBot.Data
         public System.DateTime Datetime { get; set; }
         public string Severity { get; set; }
         public string Channel { get; set; }
+        public Nullable<long> PostId { get; set; }
+        public Nullable<long> ChannelId { get; set; }
+        public Nullable<long> AuthorId { get; set; }
     }
 }

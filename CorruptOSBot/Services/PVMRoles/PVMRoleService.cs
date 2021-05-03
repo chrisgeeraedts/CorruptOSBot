@@ -20,7 +20,8 @@ namespace CorruptOSBot.Services
         public PVMRoleService(Discord.IDiscordClient client)
         {
             Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Created, trigering every " + TriggerTimeInMS + "MS"));
-            GuildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            var guildId = ConfigHelper.GetSettingProperty("GuildId");
+            GuildId = Convert.ToUInt64(guildId);
         }
 
         public async Task Trigger(Discord.IDiscordClient client)

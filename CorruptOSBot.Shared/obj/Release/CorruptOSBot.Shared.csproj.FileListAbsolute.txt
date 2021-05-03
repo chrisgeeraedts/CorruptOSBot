@@ -125,3 +125,11 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\R
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.pdb
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.csprojAssemblyReference.cache
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\CorruptOSBot.Shared.dll.config
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\CorruptOSBot.Data.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\EntityFramework.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\CorruptOSBot.Data.pdb
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\CorruptOSBot.Data.dll.config
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\EntityFramework.xml
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\EntityFramework.SqlServer.xml

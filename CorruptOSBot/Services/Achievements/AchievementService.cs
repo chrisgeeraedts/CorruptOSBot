@@ -35,7 +35,11 @@ namespace CorruptOSBot
                 // Add new message
                 if (channel != null)
                 {
-                    await (channel as SocketTextChannel).SendMessageAsync(embed: EmbedHelper.CreateWOMEmbed());
+                    var embed = EmbedHelper.CreateWOMEmbed();
+                    if (embed != null)
+                    {
+                        await (channel as SocketTextChannel).SendMessageAsync(embed: embed);
+                    }
                 }
             }
         }

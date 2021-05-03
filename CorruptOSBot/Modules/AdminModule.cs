@@ -171,11 +171,10 @@ namespace CorruptOSBot.Modules
         [Summary("!toggle {command string} - Toggles a command to be available.")]
         public async Task SayTogglecommandAsync(string command)
         {   
-            if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer")
-                && RootAdminManager.GetCommandExist(command))
+            if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
             {
                 var currentState = ToggleStateManager.GetToggleState(command);
-                ToggleStateManager.ToggleModuleCommand(command, !currentState);
+                await ToggleStateManager.ToggleModuleCommand(command, !currentState);
                 var newState = ToggleStateManager.GetToggleState(command);
                 await ReplyAsync(string.Format("command {0} was toggled from {1} to {2}", command, currentState, newState));
             }
@@ -201,7 +200,7 @@ namespace CorruptOSBot.Modules
 
                 foreach (var item in states.Take(25))
                 {
-                    sb.AppendLine(string.Format("**{0}**: {1}", item.Key, item.Value));
+                    sb.AppendLine(string.Format("**{0}**: {1}", item.Functionality, item.Toggled));
                 }
                 builder.Description = sb.ToString();
 
@@ -261,13 +260,14 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        [Helpgroup(HelpGroup.Staff)]
+        [Helpgroup(HelpGroup.Moderator)]
         [Command("getuser")]
         [Summary("!getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
         public async Task SayGetUserAsync([Remainder]string username)
         {
             if (ToggleStateManager.GetToggleState("getuser", Context.User) &&
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Staff"))
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Staff") ||
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Moderator"))
             {
                 try
                 {
@@ -318,10 +318,6 @@ namespace CorruptOSBot.Modules
                 corruptosEntities.RunescapeAccounts.Remove(item);
             }
 
-            // Add bosses
-            var countBosses = FillBosses(corruptosEntities);
-            await ReplyAsync(string.Format("loaded {0} bosses", countBosses));
-
             // Add players
             var countDiscordUsers = await AddPlayersAndDiscordUsers(corruptosEntities);
             await ReplyAsync(string.Format("loaded {0} discord users", countDiscordUsers));
@@ -365,58 +361,6 @@ namespace CorruptOSBot.Modules
                 }
             }
             return result;
-        }
-
-        private static int FillBosses(Data.CorruptModel corruptosEntities)
-        {
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.sire.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.sire) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.sire.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.sire) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.bryophyta.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.bryophyta) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.chamber.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.chamber) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.fanatic.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.fanatic) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.prime.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.prime) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.crazyarc.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.crazyarc) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.mole.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.mole) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kq.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kq) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kree.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kree) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.nightmare.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.nightmare) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.scorpia.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.scorpia) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.gaunt.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.gaunt) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.thermy.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.thermy) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.venny.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.venny) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.todt.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.todt) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.hydra.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.hydra) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.callisto.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.callisto) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.chambercm.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.chambercm) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.sara.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.sara) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.rex.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.rex) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.derangedarc.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.derangedarc) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.gargs.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.gargs) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kbd.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kbd) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kril.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kril) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.obor.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.obor) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.skotizo.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.skotizo) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.corruptgaunt.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.corruptgaunt) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.zuk.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.zuk) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.vetion.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.vetion) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.zalcano.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.zalcano) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.barrows.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.barrows) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.cerb.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.cerb) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.chaosele.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.chaosele) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.corp.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.corp) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.supreme.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.supreme) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.bandos.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.bandos) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.hespori.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.hespori) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.kraken.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.kraken) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.mimic.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.mimic) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.sarachnis.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.sarachnis) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.tempor.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.tempor) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.tob.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.tob) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.jad.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.jad) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.vorkath.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.vorkath) });
-            corruptosEntities.Bosses.Add(new Data.Boss() { Bossname = EmojiEnum.zulrah.ToString(), EmojiName = EmojiHelper.GetFullEmojiString(EmojiEnum.zulrah) });
-
-            return corruptosEntities.Bosses.Count();
         }
                
         private EmbedBuilder BuildEmbedForUserInfo(IGuildUser user)
@@ -493,15 +437,11 @@ namespace CorruptOSBot.Modules
                 sb.AppendLine("< no activities >");
             }
 
-
             embedBuilder.Description = sb.ToString();
             embedBuilder.ThumbnailUrl = user.GetAvatarUrl();
 
             return embedBuilder;
         }
-
-
-
 
         [Command("overthrownathan")]
         [Summary("Prepare!")]

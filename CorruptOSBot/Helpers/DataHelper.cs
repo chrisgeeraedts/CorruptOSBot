@@ -2,6 +2,7 @@
 using CorruptOSBot.Extensions;
 using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers.Discord;
+using Discord;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace CorruptOSBot.Helpers
 {
-    public static class DataHelper
+    public partial class DataHelper
     {
-        public static async Task AddNewDiscordUserAndRSN(SocketUser currentUser, string preferedNickname, ClanMember groupMember)
+        public async Task AddNewDiscordUserAndRSN(SocketUser currentUser, string preferedNickname, ClanMember groupMember)
         {
             using (var corruptosEntities = new Data.CorruptModel())
             {
@@ -38,23 +39,38 @@ namespace CorruptOSBot.Helpers
             }
         }
 
-        public static List<Boss> GetBosses()
+        public async Task SetDiscorduserLeaving(ulong userDiscordId)
         {
+
             try
             {
-                using (var corruptosEntities = new Data.CorruptModel())
+                using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
                 {
-                    return corruptosEntities.Bosses.ToList();
+                    long discordId = Convert.ToInt64(userDiscordId);
+
+                    // Find discord dataset
+                    var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
+
+                    if (discordUser != null)
+                    {
+                        discordUser.LeavingDate = DateTime.Now;
+                    }
+
+                    await corruptosEntities.SaveChangesAsync();
                 }
+
             }
-            catch (Exception)
+            catch (System.Exception e)
             {
-                return new List<Boss>();
+                await Program.Log(new LogMessage(LogSeverity.Error, "SetDiscorduserLeaving", "Failed add LeavingDate to database - " + e.Message));
             }
+
+
             
         }
 
-        public static Data.DiscordUser GetDiscordUserFromUserId(ulong? userId)
+
+        public Data.DiscordUser GetDiscordUserFromUserId(ulong? userId)
         {
             using (var corruptosEntities = new Data.CorruptModel())
             {

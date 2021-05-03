@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Extensions;
+using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using Discord;
@@ -26,44 +27,8 @@ namespace CorruptOSBot.Events
 
             var rsn = DiscordHelper.GetAccountNameOrNickname(arg);
 
-
-            try
-            {
-                using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
-                {
-                    long discordId = Convert.ToInt64(arg.Id);
-
-                    // Find discord dataset
-                    var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
-
-                    if (discordUser != null)
-                    {
-                        discordUser.LeavingDate = DateTime.Now;
-                    }
-
-                    await corruptosEntities.SaveChangesAsync();
-                }
-
-             }
-            catch (System.Exception e)
-            {
-                await Program.Log(new LogMessage(LogSeverity.Error, "LeavingGuild", "Failed add LeavingDate to database - " + e.Message));
-            }
-
-
-            try
-            {
-                if (!string.IsNullOrEmpty(rsn))
-                {
-                    new WiseOldManClient().RemoveGroupMember(rsn);
-                }
-            }
-            catch (System.Exception e)
-            {
-                await Program.Log(new LogMessage(LogSeverity.Error, "LeavingGuild", "Failed to change WOM - " + e.Message));
-            }
-
-            
+            await new DataHelper().SetDiscorduserLeaving(arg.Id);
+            new WiseOldManClient().RemoveGroupMember(rsn);
         }
 
         public static async Task BannedFromGuild(SocketUser arg1, SocketGuild arg2)
@@ -72,29 +37,10 @@ namespace CorruptOSBot.Events
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member banned",
                 string.Format("<@{0}>  ({0}) has been banned from the server", arg1.Id)));
 
+            await new DataHelper().SetDiscorduserLeaving(arg1.Id);
 
-            try
-            {
-                using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
-                {
-                    long discordId = Convert.ToInt64(arg1.Id);
-
-                    // Find discord dataset
-                    var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
-
-                    if (discordUser != null)
-                    {
-                        discordUser.LeavingDate = DateTime.Now;
-                    }
-
-                    await corruptosEntities.SaveChangesAsync();
-                }
-
-            }
-            catch (System.Exception e)
-            {
-                await Program.Log(new LogMessage(LogSeverity.Error, "BannedFromGuild", "Failed add LeavingDate to database - " + e.Message));
-            }
+            var rsn = DiscordHelper.GetAccountNameOrNickname(arg1);
+            new WiseOldManClient().RemoveGroupMember(rsn);
         }
     }
 }

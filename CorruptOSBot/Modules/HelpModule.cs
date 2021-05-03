@@ -42,8 +42,8 @@ namespace CorruptOSBot.Modules
         {
             var isDev = DiscordHelper.HasRole(user, guild, "Developer");
             var isStaff = DiscordHelper.HasRole(user, guild, "Staff") ||
-                DiscordHelper.HasRole(user, guild, "Clan Owner") ||
-                DiscordHelper.HasRole(user, guild, "Moderator");
+                DiscordHelper.HasRole(user, guild, "Clan Owner");
+            var isMod = DiscordHelper.HasRole(user, guild, "Moderator");
             var isMember = DiscordHelper.HasRole(user, guild, "Smiley") || 
                 DiscordHelper.HasRole(user, guild, "Recruit") || 
                 DiscordHelper.HasRole(user, guild, "Sergeant") || 
@@ -66,15 +66,19 @@ namespace CorruptOSBot.Modules
             {
                 if (!blackListedCommands.Contains(command.Key))
                 {
-                    if (command.Value.HelpGroup == HelpGroup.Admin && isDev)
+                    if (command.Value.HelpGroup == HelpGroup.Admin && (isDev))
                     {
                         result.Add(command.Key, command.Value.Name);
                     }
-                    if (command.Value.HelpGroup == HelpGroup.Staff && isStaff)
+                    if (command.Value.HelpGroup == HelpGroup.Staff && (isStaff || isDev))
                     {
                         result.Add(command.Key, command.Value.Name);
                     }
-                    if (command.Value.HelpGroup == HelpGroup.Member && isMember)
+                    if (command.Value.HelpGroup == HelpGroup.Moderator && (isMod || isStaff || isDev))
+                    {
+                        result.Add(command.Key, command.Value.Name);
+                    }
+                    if (command.Value.HelpGroup == HelpGroup.Member && (isMember || isMod || isStaff || isDev))
                     {
                         result.Add(command.Key, command.Value.Name);
                     }

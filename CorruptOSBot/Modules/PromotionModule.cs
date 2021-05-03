@@ -17,13 +17,14 @@ namespace CorruptOSBot.Modules
 {
     public class PromotionModule : ModuleBase<SocketCommandContext>
     {
-        [Helpgroup(HelpGroup.Staff)]
+        [Helpgroup(HelpGroup.Moderator)]
         [Command("promotions-blacklist")]
         [Summary("!promotions-blacklist {username} - Adds or remove a username to/from the promotion blacklist ")]
         public async Task SayPromotionblacklistAsync([Remainder]string username)
         {
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
-                (PermissionManager.HasSpecificRole(Context.User, "Staff")))
+                (PermissionManager.HasSpecificRole(Context.User, "Staff") ||
+                PermissionManager.HasSpecificRole(Context.User, "Moderator")))
             {
                 IGuildUser user;
                 if (!username.StartsWith("<@!"))
@@ -80,13 +81,14 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        [Helpgroup(HelpGroup.Staff)]
+        [Helpgroup(HelpGroup.Moderator)]
         [Command("promotions-blacklist")]
         [Summary("!promotions-blacklist - shows the promotion blacklist ")]
         public async Task SayPromotionblacklistAsync()
         {
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
-                (PermissionManager.HasSpecificRole(Context.User, "Staff")))
+                (PermissionManager.HasSpecificRole(Context.User, "Staff") ||
+                PermissionManager.HasSpecificRole(Context.User, "Moderator")))
             {
 
                 try
@@ -118,13 +120,15 @@ namespace CorruptOSBot.Modules
             }
         }
         
-        [Helpgroup(HelpGroup.Staff)]
+        [Helpgroup(HelpGroup.Moderator)]
         [Command("promotions")]
         [Summary("!promotions - Gets a list of accounts that need promotions")]
         public async Task SayPromotionsAsync()
         {
             if (ToggleStateManager.GetToggleState("promotions", Context.User) &&
-                (PermissionManager.HasSpecificRole(Context.User, "Staff")))
+                (
+                PermissionManager.HasSpecificRole(Context.User, "Staff") || 
+                PermissionManager.HasSpecificRole(Context.User, "Moderator")))
             {
                 // get players 
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
@@ -148,7 +152,7 @@ namespace CorruptOSBot.Modules
         }
 
 
-        private List<Discord.Embed> BuildMessageForBlacklist(IEnumerable<Data.DiscordUser> blacklistedDiscordUsers)
+        private List<Embed> BuildMessageForBlacklist(IEnumerable<Data.DiscordUser> blacklistedDiscordUsers)
         {
             var result = new List<Discord.Embed>();
             var sb = new StringBuilder();
@@ -173,7 +177,6 @@ namespace CorruptOSBot.Modules
             }
             return result;
         }
-
 
         private async Task SendEmbedMessages(List<PromotionSet> differences, Rank rank)
         {
@@ -203,7 +206,7 @@ namespace CorruptOSBot.Modules
             return new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month));
         }
 
-        private List<Discord.Embed> BuildMessageForRank(List<PromotionSet> differences, Rank rank, out bool hasUsers)
+        private List<Embed> BuildMessageForRank(List<PromotionSet> differences, Rank rank, out bool hasUsers)
         {
             var result = new List<Discord.Embed>();
             hasUsers = false;
@@ -242,7 +245,7 @@ namespace CorruptOSBot.Modules
             return result;
         }
 
-        private Discord.Embed BuildInactivityMessageForRank(List<PromotionSet> differences, out bool hasUsers)
+        private Embed BuildInactivityMessageForRank(List<PromotionSet> differences, out bool hasUsers)
         {
             var sb = new StringBuilder();
             hasUsers = differences.Any(x => x.ShouldHaveRank == Rank.Inactive && x.CurrentRank != x.ShouldHaveRank);
@@ -439,7 +442,6 @@ namespace CorruptOSBot.Modules
             }
             return result;
         }
-
 
         private bool IsInactive(Discord.IGuildUser user, out int daysInactive)
         {

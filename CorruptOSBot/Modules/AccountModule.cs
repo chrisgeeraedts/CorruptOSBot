@@ -39,19 +39,6 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
-        [Helpgroup(HelpGroup.Member)]
-        [Command("add-iron")]
-        [Summary("!add-iron {rsn} - Adds an runescape iron account to your discord account")]
-        public async Task SayGetAccountsAsync([Remainder] string rsn)
-        {
-            
-
-            // delete the command posted
-            await Context.Message.DeleteAsync();
-        }
-
-
-
 
         private async Task AddAlt(SocketCommandContext context, string rsn, string type)
         {
@@ -59,7 +46,10 @@ namespace CorruptOSBot.Modules
             {
                 using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
                 {
-                    var discordUser = DataHelper.GetDiscordUserFromUserId(context.User.Id);
+                    // Find discord dataset
+                    long discordId = Convert.ToInt64(context.User.Id);
+                    var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
+
                     var isRsnAlreadyLinked = corruptosEntities.RunescapeAccounts.Any(x => x.rsn == rsn && x.DiscordUser != null && x.DiscordUserId != discordUser.DiscordId);
                     // check if account is linked to rsn
                     if (discordUser != null)
@@ -71,7 +61,6 @@ namespace CorruptOSBot.Modules
                         else if (discordUser.RunescapeAccounts.Any(x => x.rsn == rsn))
                         {
                             // message if it does
-
                             await context.User.SendMessageAsync(String.Format("You already have linked the rsn {0} to your account!", rsn));
                         }
                         else

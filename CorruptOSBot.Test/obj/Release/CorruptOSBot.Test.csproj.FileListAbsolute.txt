@@ -36,3 +36,7 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Rel
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.csproj.CopyComplete
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.exe
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.pdb
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Data.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Shared.dll.config
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Data.pdb
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Data.dll.config

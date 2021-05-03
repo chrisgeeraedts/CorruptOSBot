@@ -73,6 +73,8 @@ namespace CorruptOSBot
             // Setup your DI container.
             _services = ConfigureServices();
 
+            ConfigHelper.Init();
+
             _channelInterceptors = ConfigureChannelInterceptors();
 
             _activeServices = ConfigureActiveServices();
@@ -126,22 +128,17 @@ namespace CorruptOSBot
         {
             return LogHelper.Log(message);
         }
-        public static void ChatLog(LogMessage message, string channel)
-        {
-            LogHelper.ChatLog(message, channel);
-        }
+
         private async Task MainAsync()
         {
             // Centralize the logic for commands into a separate method.
-            ToggleStateManager.Init();
             
             await InitCommands();
 
             RootAdminManager.Init();
 
             // Login and connect.
-            await _client.LoginAsync(TokenType.Bot,
-                 ConfigHelper.GetSettingProperty("DiscordToken"));
+            await _client.LoginAsync(TokenType.Bot, ConfigHelper.GetSettingProperty("DiscordToken"));
             await _client.StartAsync();
 
             //ReactionManager.Init();
@@ -154,7 +151,7 @@ namespace CorruptOSBot
 
             foreach (var item in ToggleStateManager.GetToggleStates())
             {
-                await Log(new LogMessage(LogSeverity.Info, "Toggle states:", string.Format("{0}: {1}", item.Key, item.Value)));
+                await Log(new LogMessage(LogSeverity.Info, "Toggle states:", string.Format("{0}: {1}", item.Functionality, item.Toggled)));
             }
 
             // Wait infinitely so your bot actually stays connected.
@@ -288,8 +285,7 @@ namespace CorruptOSBot
 
             try
             {
-                Program.ChatLog(new LogMessage(LogSeverity.Info, 
-                    DiscordHelper.GetAccountNameOrNickname(arg.Author), arg.Content), arg.Channel.Name);
+                Program.ChatLog(arg);
             }
             catch (Exception e)
             {
@@ -331,6 +327,11 @@ namespace CorruptOSBot
                     //    await msg.Channel.SendMessageAsync(result.ErrorReason);
                 }
             }
+        }
+
+        private static void ChatLog(SocketMessage arg)
+        {
+            LogHelper.ChatLog(arg);
         }
     }
 }

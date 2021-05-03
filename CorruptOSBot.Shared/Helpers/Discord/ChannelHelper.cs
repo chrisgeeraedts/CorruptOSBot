@@ -1,4 +1,5 @@
-﻿using CorruptOSBot.Shared.Helpers.Bot;
+﻿using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using System;
 using System.Collections.Generic;
 
@@ -9,22 +10,19 @@ namespace CorruptOSBot.Helpers.Discord
         private static Dictionary<string, ulong> KnownChannels = new Dictionary<string, ulong>();
         public static ulong GetChannelId(string name)
         {
-            if (!KnownChannels.ContainsKey(name.ToLower()))
+            if (KnownChannels.Count == 0)
             {
-                try
+                var channels = new DataHelper().GetChannels();
+                foreach (var channel in channels)
                 {
-                    string channelSettingProp = string.Format("channel_{0}", name.ToLower());
-
-                    var potentialResult = ConfigHelper.GetSettingProperty(channelSettingProp);
-                    var result = Convert.ToUInt64(potentialResult);
-                    KnownChannels.Add(name.ToLower(), result);
-                }
-                catch (Exception)
-                {
-                    return 0;
+                    KnownChannels.Add(channel.Name.ToLower(), Convert.ToUInt64(channel.DiscordChannelId));
                 }
             }
-            return KnownChannels[name.ToLower()];
+            if (KnownChannels.ContainsKey(name.ToLower()))
+            {
+                return KnownChannels[name.ToLower()];
+            }
+            return 0;
         }
     }
 }

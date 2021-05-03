@@ -53,6 +53,12 @@
     <Compile Include="Boss.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="BotConfiguration.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Channel.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ChatLog.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
@@ -85,6 +91,9 @@
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Skill.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Toggle.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>

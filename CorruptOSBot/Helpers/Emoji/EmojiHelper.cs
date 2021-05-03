@@ -7,10 +7,10 @@ namespace CorruptOSBot.Helpers
 {
     public static class EmojiHelper
     {
-        private static Dictionary<EmojiEnum, string> _emojiStrings;
+        private static Dictionary<string, string> _emojiStrings;
         private static Regex rxNonDigits = new Regex(@"[^\d]+");
 
-        public static string GetEmojiString(EmojiEnum emoji)
+        public static string GetEmojiString(string emoji)
         {
 
             fillEmojiIfNeeded();
@@ -22,13 +22,13 @@ namespace CorruptOSBot.Helpers
             return string.Empty;
         }
 
-        public static string GetFullEmojiString(EmojiEnum emoji)
+        public static string GetFullEmojiString(string emoji)
         {
             var baseString = GetEmojiString(emoji);
-            return string.Format("<{0}>", baseString);
+            return string.Format("{0}", baseString);
         }
 
-        public static ulong GetEmojiId(EmojiEnum emoji)
+        public static ulong GetEmojiId(string emoji)
         {
             var baseString = GetEmojiString(emoji);
             string cleaned = rxNonDigits.Replace(baseString, "");
@@ -39,16 +39,28 @@ namespace CorruptOSBot.Helpers
         {
             if (_emojiStrings == null)
             {
-                _emojiStrings = new Dictionary<EmojiEnum, string>();
-                foreach (EmojiEnum emojiItem in (EmojiEnum[])Enum.GetValues(typeof(EmojiEnum)))
+                var bosses = new Shared.DataHelper().GetBosses();
+                _emojiStrings = new Dictionary<string, string>();
+                foreach (var boss in bosses)
                 {
-                    var propertyIdentifier = string.Format("emoji_{0}", emojiItem.ToString());
-                    var emojiString = ConfigHelper.GetSettingProperty(propertyIdentifier);
-                    if (!_emojiStrings.ContainsKey(emojiItem))
+                    if (!_emojiStrings.ContainsKey(boss.Bossname))
                     {
-                        _emojiStrings.Add(emojiItem, emojiString);
+                        _emojiStrings.Add(boss.Bossname, boss.EmojiName);
                     }
                 }
+
+
+
+                //_emojiStrings = new Dictionary<string, string>();
+                //foreach (EmojiEnum emojiItem in (EmojiEnum[])Enum.GetValues(typeof(EmojiEnum)))
+                //{
+                //    var propertyIdentifier = string.Format("emoji_{0}", emojiItem.ToString());
+                //    var emojiString = ConfigHelper.GetSettingProperty(propertyIdentifier);
+                //    if (!_emojiStrings.ContainsKey(emojiItem))
+                //    {
+                //        _emojiStrings.Add(emojiItem, emojiString);
+                //    }
+                //}
             }
         }
     }

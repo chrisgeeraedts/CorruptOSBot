@@ -154,7 +154,7 @@ namespace CorruptOSBot.Modules
 
                 try
                 {
-                    await DataHelper.AddNewDiscordUserAndRSN(Context.User, preferedNickname, groupMember);
+                    await new Helpers.DataHelper().AddNewDiscordUserAndRSN(Context.User, preferedNickname, groupMember);
                 }
                 catch (Exception e)
                 {

@@ -132,3 +132,7 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.TheHunt\obj\
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.TheHunt\obj\Release\CorruptOSBot.TheHunt.csproj.CopyComplete
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.TheHunt\obj\Release\CorruptOSBot.TheHunt.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.TheHunt\obj\Release\CorruptOSBot.TheHunt.pdb
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.TheHunt\bin\Release\CorruptOSBot.Data.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.TheHunt\bin\Release\CorruptOSBot.Shared.dll.config
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.TheHunt\bin\Release\CorruptOSBot.Data.pdb
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.TheHunt\bin\Release\CorruptOSBot.Data.dll.config

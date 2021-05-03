@@ -1,5 +1,6 @@
 ﻿using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
 using CorruptOSBot.Shared.Helpers.Bot;
+using Discord;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -49,26 +50,36 @@ namespace CorruptOSBot.Extensions
 
         public void RemoveGroupMember(string rsn)
         {
-            var content = JsonConvert.SerializeObject(new RemoveMemberRoot()
+            try
             {
-                verificationCode = verificationCode,
-                members = new List<string>()
+                var content = JsonConvert.SerializeObject(new RemoveMemberRoot()
+                {
+                    verificationCode = verificationCode,
+                    members = new List<string>()
                 {
                     rsn
-                }                
-            });
+                }
+                });
 
-            HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+                HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = client.PostAsync(path + string.Format("/groups/{0}/remove-members", clanId), c).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
+                HttpResponseMessage response = client.PostAsync(path + string.Format("/groups/{0}/remove-members", clanId), c).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().Result;
+                }
+                else
+                {
+                    var result = response.ReasonPhrase;
+                }
             }
-            else
+            catch (System.Exception e)
             {
-                var result = response.ReasonPhrase;
+                Program.Log(new LogMessage(LogSeverity.Error, "RemoveGroupMember", "Failed to change WOM - " + e.Message));
             }
+
+
+            
         }
 
         public ClanMember AddGroupMember(string rsn)

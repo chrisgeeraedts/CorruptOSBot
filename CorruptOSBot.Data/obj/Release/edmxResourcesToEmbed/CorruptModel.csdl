@@ -20,6 +20,9 @@
     <Property Name="Datetime" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="Severity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Channel" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PostId" Type="Int64" />
+    <Property Name="ChannelId" Type="Int64" />
+    <Property Name="AuthorId" Type="Int64" />
   </EntityType>
   <EntityType Name="DiscordUser">
     <Key>
@@ -129,6 +132,9 @@
       <End Role="Skill" EntitySet="Skills" />
       <End Role="PlayerPet" EntitySet="PlayerPets" />
     </AssociationSet>
+    <EntitySet Name="Channels" EntityType="corruptosModel.Channel" />
+    <EntitySet Name="Toggles" EntityType="corruptosModel.Toggle" />
+    <EntitySet Name="BotConfigurations" EntityType="corruptosModel.BotConfiguration" />
   </EntityContainer>
   <EntityType Name="Skill">
     <Key>
@@ -137,6 +143,7 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="PlayerPets" Relationship="corruptosModel.FK_Skill" FromRole="Skill" ToRole="PlayerPet" />
+    <Property Name="Emoji" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK_Skill">
     <End Type="corruptosModel.Skill" Role="Skill" Multiplicity="0..1" />
@@ -150,4 +157,29 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="Channel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DiscordChannelId" Type="Int64" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Toggle">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Functionality" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Toggled" Type="Boolean" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="BotConfiguration">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PropertyValue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

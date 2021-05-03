@@ -132,21 +132,25 @@ namespace CorruptOSBot.Helpers.Bot
 
             var sb2 = new StringBuilder();
             var recentAchievements = client.GetClanRecentAchievements();
-            sb2.AppendLine("\u200b");
-            foreach (var recentAchievement in recentAchievements.Take(3))
+
+            if (recentAchievements != null)
             {
-                sb2.AppendLine(string.Format("**{0}** - {1}", recentAchievement.player.displayName, recentAchievement.name));
+                sb2.AppendLine("\u200b");
+                foreach (var recentAchievement in recentAchievements.Take(3))
+                {
+                    sb2.AppendLine(string.Format("**{0}** - {1}", recentAchievement.player.displayName, recentAchievement.name));
+                }
+                sb2.AppendLine("\u200b");
+
+                builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Recent achievements").WithValue(sb2).WithIsInline(false));
+
+                builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Homeworld").WithValue(clan.homeworld).WithIsInline(true));
+                builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Members").WithValue(clan.memberCount).WithIsInline(true));
+
+                builder.WithFooter(string.Format("Last updated: {0}", DateTime.Now.ToString("dd/MM/yyyy")));
+                return builder.Build();
             }
-            sb2.AppendLine("\u200b");
-
-            builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Recent achievements").WithValue(sb2).WithIsInline(false));
-
-            builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Homeworld").WithValue(clan.homeworld).WithIsInline(true));
-            builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Members").WithValue(clan.memberCount).WithIsInline(true));
-
-            builder.WithFooter(string.Format("Last updated: {0}", DateTime.Now.ToString("dd/MM/yyyy")));
-
-            return builder.Build();
+            return null;
         }
     }
 }

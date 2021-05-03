@@ -23,7 +23,7 @@ namespace CorruptOSBot.Modules
             {
                 if (ToggleStateManager.GetToggleState("bosskc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
                 {
-                    var bosses = DataHelper.GetBosses();
+                    var bosses = new Shared.DataHelper().GetBosses();
                     StringBuilder sb = new StringBuilder();
                     foreach (var boss in bosses)
                     {
@@ -78,7 +78,7 @@ namespace CorruptOSBot.Modules
         {
             var result = await BossKCHelper.GetTopBossKC(WOMMemoryCache.OneDayMS);
 
-            var bosses = DataHelper.GetBosses();
+            var bosses = new Shared.DataHelper().GetBosses();
             var selectedBoss = bosses.FirstOrDefault(x => x.Bossname.ToLower().Contains(bossname.ToLower()));
             string bossEmoji = "";
             string bossUri = "";

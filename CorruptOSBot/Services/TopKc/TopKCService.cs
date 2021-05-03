@@ -74,11 +74,11 @@ namespace CorruptOSBot.Services
             {
                 if (item.KcPlayers.Count() > 0)
                 {
-                    sb.AppendLine(string.Format("{0} {1} {2} **({3})**", EmojiHelper.GetFullEmojiString(item.Boss), "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc));
+                    sb.AppendLine(string.Format("{0} {1} {2} **({3})**", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc));
                 }
                 else
                 {
-                    sb.AppendLine(string.Format("{0} {1} {2}", EmojiHelper.GetFullEmojiString(item.Boss), "\U0001f947", "---"));
+                    sb.AppendLine(string.Format("{0} {1} {2}", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", "---"));
                 }
             }
             builder.AddField("\u200b", sb.ToString(), true);
@@ -102,7 +102,7 @@ namespace CorruptOSBot.Services
             var sb3 = new StringBuilder();
             foreach (var item in result)
             {
-                if (item.KcPlayers.Count() > 1)
+                if (item.KcPlayers.Count() > 2)
                 {
                     sb3.AppendLine(string.Format("{0} {1} ({2})", "\U0001f949", item.KcPlayers.Skip(2).First().Player, item.KcPlayers.Skip(2).First().Kc));
                 }

@@ -6,9 +6,9 @@
     <edmx:Diagrams>
       <Diagram DiagramId="0276e31bcc7c48b697752e84074869da" Name="Diagram1">
         <EntityTypeShape EntityType="corruptosModel.Boss" Width="1.5" PointX="3" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="corruptosModel.ChatLog" Width="1.5" PointX="10.875" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="corruptosModel.ChatLog" Width="1.5" PointX="15.75" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="corruptosModel.DiscordUser" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="corruptosModel.ErrorLog" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="corruptosModel.ErrorLog" Width="1.5" PointX="10.875" PointY="2" IsExpanded="true" />
         <EntityTypeShape EntityType="corruptosModel.PlayerPet" Width="1.5" PointX="5.25" PointY="0.875" IsExpanded="true" />
         <EntityTypeShape EntityType="corruptosModel.RunescapeAccount" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="corruptosModel.FK_Boss" ManuallyRouted="false" />
@@ -16,6 +16,9 @@
         <AssociationConnector Association="corruptosModel.FK_RunescapeAccount" ManuallyRouted="false" />
         <EntityTypeShape EntityType="corruptosModel.Skill" Width="1.5" PointX="7.25" PointY="5.125" />
         <AssociationConnector Association="corruptosModel.FK_Skill" />
+        <EntityTypeShape EntityType="corruptosModel.Channel" Width="1.5" PointX="14.125" PointY="2" />
+        <EntityTypeShape EntityType="corruptosModel.Toggle" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="corruptosModel.BotConfiguration" Width="1.5" PointX="12.5" PointY="2" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,5 +1,7 @@
 ﻿using CorruptOSBot.Data;
+using CorruptOSBot.Helpers.Discord;
 using Discord;
+using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
@@ -8,22 +10,7 @@ namespace CorruptOSBot.Helpers.Bot
 
     public static class LogHelper
     {
-        public static void ChatLog(LogMessage message, string channel)
-        {
-            try
-            {
-                using (CorruptModel data = new CorruptModel())
-                {
-                    var chatLog = new ChatLog() { Message = message.Message, Author = message.Source, Severity = message.Severity.ToString(), Datetime = DateTime.Now, Channel = channel };
-                    data.ChatLogs.Add(chatLog);
-                    data.SaveChanges();
-                }
-            }
-            catch (Exception e)
-            {
-                Log(new LogMessage(LogSeverity.Error, "ChatLog", "Failed to add chatlog - " + e.Message));
-            }
-        }
+
 
         public static Task Log(LogMessage message)
         {
@@ -36,7 +23,10 @@ namespace CorruptOSBot.Helpers.Bot
                 {
                     using (CorruptModel data = new CorruptModel())
                     {
-                        var errorLog = new ErrorLog() { Message = message.Message, Severity = message.Severity.ToString(), Datetime = DateTime.Now };
+                        var errorLog = new ErrorLog() {
+                            Message = message.Message,
+                            Severity = message.Severity.ToString(),
+                            Datetime = DateTime.Now };
                         data.ErrorLogs.Add(errorLog);
                         data.SaveChanges();
                     }
@@ -74,6 +64,33 @@ namespace CorruptOSBot.Helpers.Bot
             // If you *need* to run on .NET 4.5 for compat/other reasons,
             // the alternative is to 'return Task.Delay(0);' instead.
             return Task.CompletedTask;
+        }
+
+        public static void ChatLog(SocketMessage arg)
+        {
+            try
+            {
+                using (CorruptModel data = new CorruptModel())
+                {
+                    var chatLog = new ChatLog()
+                    {
+                        Message = arg.Content,
+                        Author = DiscordHelper.GetAccountNameOrNickname(arg.Author),
+                        Severity = "chat",
+                        Datetime = DateTime.Now,
+                        Channel = arg.Channel.Name,
+                        ChannelId = Convert.ToInt64(arg.Channel.Id),
+                        AuthorId = Convert.ToInt64(arg.Author.Id),
+                        PostId = Convert.ToInt64(arg.Id)
+                    };
+                    data.ChatLogs.Add(chatLog);
+                    data.SaveChanges();
+                }
+            }
+            catch (Exception e)
+            {
+                Log(new LogMessage(LogSeverity.Error, "ChatLog", "Failed to add chatlog - " + e.Message));
+            }
         }
     }
 }

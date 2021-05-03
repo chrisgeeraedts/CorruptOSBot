@@ -14,6 +14,22 @@
           <Property Name="EmojiName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="BossImage" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="BotConfiguration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PropertyName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PropertyValue" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Channels">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DiscordChannelId" Type="bigint" Nullable="false" />
+        </EntityType>
         <EntityType Name="ChatLog">
           <Key>
             <PropertyRef Name="Id" />
@@ -24,6 +40,9 @@
           <Property Name="Datetime" Type="datetime" Nullable="false" />
           <Property Name="Severity" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Channel" Type="varchar(max)" />
+          <Property Name="PostId" Type="bigint" />
+          <Property Name="ChannelId" Type="bigint" />
+          <Property Name="AuthorId" Type="bigint" />
         </EntityType>
         <EntityType Name="DiscordUsers">
           <Key>
@@ -73,6 +92,16 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Emoji" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Toggles">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Functionality" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Toggled" Type="bit" Nullable="false" />
+          <Property Name="Type" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Boss">
           <End Role="Bosses" Type="Self.Bosses" Multiplicity="0..1" />
@@ -124,12 +153,15 @@
         </Association>
         <EntityContainer Name="corruptosModelStoreContainer">
           <EntitySet Name="Bosses" EntityType="Self.Bosses" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BotConfiguration" EntityType="Self.BotConfiguration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Channels" EntityType="Self.Channels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChatLog" EntityType="Self.ChatLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Toggles" EntityType="Self.Toggles" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
             <End Role="Bosses" EntitySet="Bosses" />
             <End Role="PlayerPets" EntitySet="PlayerPets" />
@@ -171,6 +203,9 @@
           <Property Name="Datetime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Severity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Channel" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="PostId" Type="Int64" />
+          <Property Name="ChannelId" Type="Int64" />
+          <Property Name="AuthorId" Type="Int64" />
         </EntityType>
         <EntityType Name="DiscordUser">
           <Key>
@@ -280,6 +315,9 @@
             <End Role="Skill" EntitySet="Skills" />
             <End Role="PlayerPet" EntitySet="PlayerPets" />
           </AssociationSet>
+          <EntitySet Name="Channels" EntityType="corruptosModel.Channel" />
+          <EntitySet Name="Toggles" EntityType="corruptosModel.Toggle" />
+          <EntitySet Name="BotConfigurations" EntityType="corruptosModel.BotConfiguration" />
         </EntityContainer>
         <EntityType Name="Skill">
           <Key>
@@ -288,6 +326,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PlayerPets" Relationship="corruptosModel.FK_Skill" FromRole="Skill" ToRole="PlayerPet" />
+          <Property Name="Emoji" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Skill">
           <End Type="corruptosModel.Skill" Role="Skill" Multiplicity="0..1" />
@@ -301,6 +340,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Channel">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DiscordChannelId" Type="Int64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Toggle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Functionality" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Toggled" Type="Boolean" Nullable="false" />
+          <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BotConfiguration">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PropertyValue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -320,6 +384,9 @@
           <EntitySetMapping Name="ChatLogs">
             <EntityTypeMapping TypeName="corruptosModel.ChatLog">
               <MappingFragment StoreEntitySet="ChatLog">
+                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+                <ScalarProperty Name="ChannelId" ColumnName="ChannelId" />
+                <ScalarProperty Name="PostId" ColumnName="PostId" />
                 <ScalarProperty Name="Channel" ColumnName="Channel" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
@@ -378,7 +445,36 @@
           <EntitySetMapping Name="Skills">
             <EntityTypeMapping TypeName="corruptosModel.Skill">
               <MappingFragment StoreEntitySet="Skills">
+                <ScalarProperty Name="Emoji" ColumnName="Emoji" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Channels">
+            <EntityTypeMapping TypeName="corruptosModel.Channel">
+              <MappingFragment StoreEntitySet="Channels">
+                <ScalarProperty Name="DiscordChannelId" ColumnName="DiscordChannelId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Toggles">
+            <EntityTypeMapping TypeName="corruptosModel.Toggle">
+              <MappingFragment StoreEntitySet="Toggles">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Toggled" ColumnName="Toggled" />
+                <ScalarProperty Name="Functionality" ColumnName="Functionality" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BotConfigurations">
+            <EntityTypeMapping TypeName="corruptosModel.BotConfiguration">
+              <MappingFragment StoreEntitySet="BotConfiguration">
+                <ScalarProperty Name="PropertyValue" ColumnName="PropertyValue" />
+                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

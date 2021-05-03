@@ -1,23 +1,14 @@
-﻿using CorruptOSBot.Shared.Helpers.Bot;
+﻿using CorruptOSBot.Data;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CorruptOSBot.Shared
 {
     public static class ToggleStateManager
     {
-        private static Dictionary<string, bool> _toggleStates;
-        public static Dictionary<string, bool> ToggleStates { get { return _toggleStates; } }
-
-        public static void Init()
-        {
-            _toggleStates = new Dictionary<string, bool>();
-
-            UpdateToggleStatesFromConfig();
-        }
-
         public static bool GetToggleState(string command, SocketUser userAdditional = null)
         {
             // override for admin
@@ -27,45 +18,36 @@ namespace CorruptOSBot.Shared
             }
 
             // default togglestate check
-            if (_toggleStates.ContainsKey(command))
+            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
             {
-                return _toggleStates[command];
-            }
-            return false;
-        }
-
-        public static void UpdateToggleStatesFromConfig()
-        {
-            Dictionary<string, bool> tempToggleStates = new Dictionary<string, bool>();
-            foreach (var item in _toggleStates)
-            {
-                try
+                var toggled = false;
+                var toggleState = corruptosEntities.Toggles.FirstOrDefault(x => x.Functionality == command);
+                if (toggleState != null)
                 {
-                    var propertyname = string.Format("togglestate_{0}", item.Key.ToLower());
-                    var property = ConfigHelper.GetSettingProperty(propertyname);
-                    var propertyBool = Convert.ToBoolean(property);
-                    tempToggleStates.Add(item.Key, propertyBool);
+                    toggled = toggleState.Toggled;
                 }
-                catch (Exception)
-                {
-                    tempToggleStates.Add(item.Key, false);
-                }
+                corruptosEntities.SaveChanges();
+
+                return toggled;
             }
-            _toggleStates = tempToggleStates;
         }
 
-        public static void ToggleModuleCommand(string command, bool toggleState)
+        public static async Task ToggleModuleCommand(string command, bool toggleState)
         {
-            if (_toggleStates.ContainsKey(command))
+            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
             {
-                _toggleStates[command] = toggleState;
-                Console.WriteLine(string.Format("Toggled {0} to {1}", command, toggleState));
+                var toggleFromDb = corruptosEntities.Toggles.FirstOrDefault(x => x.Functionality == command);
+                if (toggleFromDb != null)
+                {
+                    toggleFromDb.Toggled = toggleState;
+                }
+                await corruptosEntities.SaveChangesAsync();
             }
         }
 
-        public static Dictionary<string, bool> GetToggleStates()
+        public static List<Toggle> GetToggleStates()
         {
-            return _toggleStates;
+            return new DataHelper().GetToggles();
         }
     }
 }

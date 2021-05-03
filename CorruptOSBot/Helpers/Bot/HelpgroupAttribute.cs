@@ -17,6 +17,7 @@ namespace CorruptOSBot.Modules
         Undefined,
         Everybody,
         Member,
+        Moderator,
         Staff,
         Admin
     }

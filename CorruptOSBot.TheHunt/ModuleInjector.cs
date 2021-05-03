@@ -17,18 +17,12 @@ namespace CorruptOSBot.TheHunt
             Task>> result,
             IServiceProvider _services,
             Discord.Commands.CommandService _commands)
-        {
-            SetToggles();
+        {;
             AddHuntChannelInterceptors(result);
             _commands.AddModuleAsync<HuntModule>(_services);
 
 
             HuntManager.Init();
-        }
-
-        private static void SetToggles()
-        {
-            ToggleStateManager.ToggleStates.Add(nameof(PostCopyInterceptor), true);
         }
 
         private static void AddHuntChannelInterceptors(Dictionary<ulong, Func<SocketMessage, Discord.IDiscordClient, Task>> result)

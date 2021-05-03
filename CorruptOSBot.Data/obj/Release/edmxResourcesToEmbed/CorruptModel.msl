@@ -14,6 +14,9 @@
     <EntitySetMapping Name="ChatLogs">
       <EntityTypeMapping TypeName="corruptosModel.ChatLog">
         <MappingFragment StoreEntitySet="ChatLog">
+          <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+          <ScalarProperty Name="ChannelId" ColumnName="ChannelId" />
+          <ScalarProperty Name="PostId" ColumnName="PostId" />
           <ScalarProperty Name="Channel" ColumnName="Channel" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Message" ColumnName="Message" />
@@ -72,7 +75,36 @@
     <EntitySetMapping Name="Skills">
       <EntityTypeMapping TypeName="corruptosModel.Skill">
         <MappingFragment StoreEntitySet="Skills">
+          <ScalarProperty Name="Emoji" ColumnName="Emoji" />
           <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Channels">
+      <EntityTypeMapping TypeName="corruptosModel.Channel">
+        <MappingFragment StoreEntitySet="Channels">
+          <ScalarProperty Name="DiscordChannelId" ColumnName="DiscordChannelId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Toggles">
+      <EntityTypeMapping TypeName="corruptosModel.Toggle">
+        <MappingFragment StoreEntitySet="Toggles">
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Toggled" ColumnName="Toggled" />
+          <ScalarProperty Name="Functionality" ColumnName="Functionality" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BotConfigurations">
+      <EntityTypeMapping TypeName="corruptosModel.BotConfiguration">
+        <MappingFragment StoreEntitySet="BotConfiguration">
+          <ScalarProperty Name="PropertyValue" ColumnName="PropertyValue" />
+          <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

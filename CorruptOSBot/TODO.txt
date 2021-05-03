@@ -36,16 +36,19 @@
 [X] Add Blacklist data to !getuser
 [X] Add logic so Promotions doesnt show people that have left discord (add 'left' state to discorduser table)
 [X] Test the max char cap with ```Experimenting with … … Multiple lines… … For my code blocks!``` => Not working
-
 [X] Filter !help depending on role (expand the attribute above the functions and use this to determine what to show)
 [X] Complete the bosskc and bosskc {bossname} command
+[X] Improve leaving to delete from WOM based on sql data and show message on the same data
+[X] Add alt and add iron commands should also add to WOM
+[X] check if we can add images to the chat (careful of performance / datastorage capacity) => too much storage required, not a good idea
+
 
 [ ] Change the !cox etc commands to a reply with emoji logic
 [ ] Add 'waiting' message to commands and delete that message afterwards
 [ ] redoing the !cox command forces a refresh of the cache and checks again for promotions
 [ ] Add a force cache usage if WOM is down (and put message in heartbeat about it?);
 [ ] Change the emoji helper to load data from bosses table in database
-[ ] check if we can add images to the chat (careful of performance / datastorage capacity)
+
 [ ] Add command to add list 'my runescape accounts'
 
 [ ] Add a Pet Module

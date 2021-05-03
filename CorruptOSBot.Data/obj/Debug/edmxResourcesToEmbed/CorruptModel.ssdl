@@ -9,6 +9,22 @@
     <Property Name="EmojiName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="BossImage" Type="nvarchar(max)" />
   </EntityType>
+  <EntityType Name="BotConfiguration">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PropertyName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PropertyValue" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Channels">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DiscordChannelId" Type="bigint" Nullable="false" />
+  </EntityType>
   <EntityType Name="ChatLog">
     <Key>
       <PropertyRef Name="Id" />
@@ -19,6 +35,9 @@
     <Property Name="Datetime" Type="datetime" Nullable="false" />
     <Property Name="Severity" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Channel" Type="varchar(max)" />
+    <Property Name="PostId" Type="bigint" />
+    <Property Name="ChannelId" Type="bigint" />
+    <Property Name="AuthorId" Type="bigint" />
   </EntityType>
   <EntityType Name="DiscordUsers">
     <Key>
@@ -68,6 +87,16 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Emoji" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Toggles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Functionality" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Toggled" Type="bit" Nullable="false" />
+    <Property Name="Type" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <Association Name="FK_Boss">
     <End Role="Bosses" Type="Self.Bosses" Multiplicity="0..1" />
@@ -119,12 +148,15 @@
   </Association>
   <EntityContainer Name="corruptosModelStoreContainer">
     <EntitySet Name="Bosses" EntityType="Self.Bosses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BotConfiguration" EntityType="Self.BotConfiguration" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Channels" EntityType="Self.Channels" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ChatLog" EntityType="Self.ChatLog" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Toggles" EntityType="Self.Toggles" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
       <End Role="Bosses" EntitySet="Bosses" />
       <End Role="PlayerPets" EntitySet="PlayerPets" />
