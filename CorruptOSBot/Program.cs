@@ -94,8 +94,8 @@ namespace CorruptOSBot
             //The point logic
             if (ToggleStateManager.GetToggleState("point-toggle"))
             {
-                //CorruptPoints.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
-                //Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", ModuleInjector.Title)));
+                CorruptPoints.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
+                Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", CorruptPoints.ModuleInjector.Title)));
             }
         }
 

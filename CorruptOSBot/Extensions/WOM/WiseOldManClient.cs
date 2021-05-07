@@ -71,6 +71,7 @@ namespace CorruptOSBot.Extensions
                 else
                 {
                     var result = response.ReasonPhrase;
+                    Program.Log(new LogMessage(LogSeverity.Error, "RemoveGroupMember", String.Format("{0}", result)));
                 }
             }
             catch (System.Exception e)
@@ -105,6 +106,7 @@ namespace CorruptOSBot.Extensions
             else
             {
                 var result = response.ReasonPhrase;
+                Program.Log(new LogMessage(LogSeverity.Error, "AddGroupMember", String.Format("{0}", result)));
             }
             return null;
         }

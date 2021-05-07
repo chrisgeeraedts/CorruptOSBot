@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="corruptosModelStoreContainer" CdmEntityContainer="CorruptPointsModel">
+    <EntitySetMapping Name="DiscordUsers">
+      <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
+        <MappingFragment StoreEntitySet="DiscordUsers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="DiscordId" ColumnName="DiscordId" />
+          <ScalarProperty Name="OriginallyJoinedAt" ColumnName="OriginallyJoinedAt" />
+          <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
+          <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
+          <ScalarProperty Name="CorruptPoints" ColumnName="CorruptPoints" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PointMutations">
+      <EntityTypeMapping TypeName="corruptosModel.PointMutation">
+        <MappingFragment StoreEntitySet="PointMutations">
+          <ScalarProperty Name="PointStoreItemId" ColumnName="PointStoreItemId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PointChange" ColumnName="PointChange" />
+          <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+          <ScalarProperty Name="TargetPlayerId" ColumnName="TargetPlayerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PointStores">
+      <EntityTypeMapping TypeName="corruptosModel.PointStore">
+        <MappingFragment StoreEntitySet="PointStore">
+          <ScalarProperty Name="StoreItemCommand" ColumnName="StoreItemCommand" />
+          <ScalarProperty Name="StoreItemImage" ColumnName="StoreItemImage" />
+          <ScalarProperty Name="StoreItemDescription" ColumnName="StoreItemDescription" />
+          <ScalarProperty Name="StoreItemValue" ColumnName="StoreItemValue" />
+          <ScalarProperty Name="StoreItemName" ColumnName="StoreItemName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

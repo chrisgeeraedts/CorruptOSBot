@@ -85,10 +85,10 @@ namespace CorruptOSBot.Modules
                                 account_type = type,
                             });
 
+                            // add and message if it doesnt
+                            await context.User.SendMessageAsync(String.Format("Rsn {0} was linked to your account!", rsn));
                         }
                     }
-                    // add and message if it doesnt
-                    await context.User.SendMessageAsync(String.Format("Rsn {0} was linked to your account!", rsn));
 
                     // Save
                     await corruptosEntities.SaveChangesAsync();

@@ -254,6 +254,10 @@
     <Content Include="TODO.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CorruptOSBot.CorruptPoints\CorruptOSBot.CorruptPoints.csproj">
+      <Project>{bafcad70-41d3-43d8-96fa-d930b1751b8f}</Project>
+      <Name>CorruptOSBot.CorruptPoints</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CorruptOSBot.Data\CorruptOSBot.Data.csproj">
       <Project>{E81CE2F6-084A-4F67-9947-EAF88639DC0C}</Project>
       <Name>CorruptOSBot.Data</Name>

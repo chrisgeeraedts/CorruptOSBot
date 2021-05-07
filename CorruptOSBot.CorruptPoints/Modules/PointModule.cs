@@ -40,29 +40,6 @@ namespace CorruptOSBot.CorruptPoints.Modules
             await Context.Message.DeleteAsync();
         }
 
-
-        //[Helpgroup(HelpGroup.Admin)]
-        //[Command("cp-store")]
-        //[Summary("!cp-store - Shows the available Corrupt Points items to buy")]
-        //public async Task SayCpStoreAsync()
-        //{
-        //    if (ToggleStateManager.GetToggleState("point-cp-store", Context.User) &&
-        //       PermissionManager.HasSpecificRole(Context.User, "Developer"))
-        //    {
-        //        using (CorruptPointsModel corruptosEntities = new CorruptPointsModel())
-        //        {
-        //            await ((SocketGuildUser)Context.User).SendMessageAsync(embed: CreateShopEmbed("Corrupt OS - Store"));
-        //            foreach (var item in corruptosEntities.PointStores.ToList())
-        //            {
-        //                await ((SocketGuildUser)Context.User).SendMessageAsync(embed: CreateStoreItem(item));
-        //            }
-        //        }
-        //    }
-
-        //    // delete the command posted
-        //    await Context.Message.DeleteAsync();
-        //}
-
         [Helpgroup(HelpGroup.Admin)]
         [Command("cp-buy")]
         [Summary("!cp-buy {itemid}- Buys the selected item using its item ID")]
@@ -159,35 +136,6 @@ namespace CorruptOSBot.CorruptPoints.Modules
             var currentUser = ((SocketGuildUser)user);
             var name = currentUser.Nickname ?? user.Username;
             return name;
-        }
-
-
-
-
-
-        private Embed CreateShopEmbed(string title)
-        {
-            var builder = new EmbedBuilder();
-            builder.Color = Color.Blue;
-            builder.Title = title;
-            builder.ThumbnailUrl = "https://oldschool.runescape.wiki/images/thumb/7/79/Mahogany_prize_chest_built.png/250px-Mahogany_prize_chest_built.png?15f5b";
-            return builder.Build();
-        }
-
-        private Embed CreateStoreItem(PointStore item)
-        {
-            var builder = new EmbedBuilder();
-            builder.Color = Color.Blue;
-
-            var sb = new StringBuilder();
-            sb.AppendLine(string.Format("**{0}**", item.StoreItemName));
-            sb.AppendLine(item.StoreItemDescription);
-            sb.AppendLine(string.Format("**{0}** CP", item.StoreItemValue));
-            sb.AppendLine(string.Format("*Type ' **!cp-buy {0}** ' to buy this item*", item.StoreItemCommand));
-
-            builder.Description = sb.ToString();
-            builder.ThumbnailUrl = item.StoreItemImage;
-            return builder.Build();
         }
     }
 }

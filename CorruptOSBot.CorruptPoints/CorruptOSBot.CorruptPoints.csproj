@@ -105,7 +105,6 @@
       <DependentUpon>CorruptPointsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ModuleInjector.cs" />
-    <Compile Include="Modules\List.cs" />
     <Compile Include="Modules\PointModule.cs" />
     <Compile Include="PointMutation.cs">
       <DependentUpon>CorruptPointsModel.tt</DependentUpon>
