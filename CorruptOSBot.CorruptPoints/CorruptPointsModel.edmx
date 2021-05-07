@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="corruptosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DiscordUsers">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar(max)" />
+          <Property Name="DiscordId" Type="bigint" />
+          <Property Name="OriginallyJoinedAt" Type="datetime" />
+          <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
+          <Property Name="LeavingDate" Type="datetime" />
+          <Property Name="CorruptPoints" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PointMutations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PointChange" Type="int" Nullable="false" />
+          <Property Name="DateTime" Type="datetime" Nullable="false" />
+          <Property Name="TargetPlayerId" Type="int" />
+          <Property Name="PointStoreItemId" Type="int" />
+        </EntityType>
+        <EntityType Name="PointStore">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StoreItemName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StoreItemValue" Type="int" Nullable="false" />
+          <Property Name="StoreItemDescription" Type="nvarchar(max)" />
+          <Property Name="StoreItemImage" Type="nvarchar(max)" />
+          <Property Name="StoreItemCommand" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_DiscordUserPoints">
+          <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="0..1" />
+          <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscordUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PointMutations">
+              <PropertyRef Name="TargetPlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PointStoreUserPoints">
+          <End Role="PointStore" Type="Self.PointStore" Multiplicity="0..1" />
+          <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PointStore">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PointMutations">
+              <PropertyRef Name="PointStoreItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="corruptosModelStoreContainer">
+          <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PointMutations" EntityType="Self.PointMutations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PointStore" EntityType="Self.PointStore" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DiscordUserPoints" Association="Self.FK_DiscordUserPoints">
+            <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+            <End Role="PointMutations" EntitySet="PointMutations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PointStoreUserPoints" Association="Self.FK_PointStoreUserPoints">
+            <End Role="PointStore" EntitySet="PointStore" />
+            <End Role="PointMutations" EntitySet="PointMutations" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="corruptosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="DiscordUser">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DiscordId" Type="Int64" />
+          <Property Name="OriginallyJoinedAt" Type="DateTime" Precision="3" />
+          <Property Name="BlacklistedForPromotion" Type="Boolean" Nullable="false" />
+          <Property Name="LeavingDate" Type="DateTime" Precision="3" />
+          <Property Name="CorruptPoints" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PointMutations" Relationship="Self.FK_DiscordUserPoints" FromRole="DiscordUsers" ToRole="PointMutations" />
+        </EntityType>
+        <EntityType Name="PointMutation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PointChange" Type="Int32" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TargetPlayerId" Type="Int32" />
+          <NavigationProperty Name="DiscordUser" Relationship="Self.FK_DiscordUserPoints" FromRole="PointMutations" ToRole="DiscordUsers" />
+          <Property Name="PointStoreItemId" Type="Int32" />
+          <NavigationProperty Name="PointStore" Relationship="corruptosModel.FK_PointStoreUserPoints" FromRole="PointMutation" ToRole="PointStore" />
+        </EntityType>
+        <Association Name="FK_DiscordUserPoints">
+          <End Role="DiscordUsers" Type="Self.DiscordUser" Multiplicity="0..1" />
+          <End Role="PointMutations" Type="Self.PointMutation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscordUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PointMutations">
+              <PropertyRef Name="TargetPlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CorruptPointsModel" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUser" />
+          <EntitySet Name="PointMutations" EntityType="Self.PointMutation" />
+          <AssociationSet Name="FK_DiscordUserPoints" Association="Self.FK_DiscordUserPoints">
+            <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+            <End Role="PointMutations" EntitySet="PointMutations" />
+          </AssociationSet>
+          <EntitySet Name="PointStores" EntityType="corruptosModel.PointStore" />
+          <AssociationSet Name="FK_PointStoreUserPoints" Association="corruptosModel.FK_PointStoreUserPoints">
+            <End Role="PointStore" EntitySet="PointStores" />
+            <End Role="PointMutation" EntitySet="PointMutations" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="PointStore">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StoreItemName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StoreItemValue" Type="Int32" Nullable="false" />
+          <Property Name="StoreItemDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StoreItemImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PointMutations" Relationship="corruptosModel.FK_PointStoreUserPoints" FromRole="PointStore" ToRole="PointMutation" />
+          <Property Name="StoreItemCommand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_PointStoreUserPoints">
+          <End Type="corruptosModel.PointStore" Role="PointStore" Multiplicity="0..1" />
+          <End Type="corruptosModel.PointMutation" Role="PointMutation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PointStore">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PointMutation">
+              <PropertyRef Name="PointStoreItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="corruptosModelStoreContainer" CdmEntityContainer="CorruptPointsModel">
+          <EntitySetMapping Name="DiscordUsers">
+            <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
+              <MappingFragment StoreEntitySet="DiscordUsers">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="DiscordId" ColumnName="DiscordId" />
+                <ScalarProperty Name="OriginallyJoinedAt" ColumnName="OriginallyJoinedAt" />
+                <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
+                <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
+                <ScalarProperty Name="CorruptPoints" ColumnName="CorruptPoints" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PointMutations">
+            <EntityTypeMapping TypeName="corruptosModel.PointMutation">
+              <MappingFragment StoreEntitySet="PointMutations">
+                <ScalarProperty Name="PointStoreItemId" ColumnName="PointStoreItemId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PointChange" ColumnName="PointChange" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="TargetPlayerId" ColumnName="TargetPlayerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PointStores">
+            <EntityTypeMapping TypeName="corruptosModel.PointStore">
+              <MappingFragment StoreEntitySet="PointStore">
+                <ScalarProperty Name="StoreItemCommand" ColumnName="StoreItemCommand" />
+                <ScalarProperty Name="StoreItemImage" ColumnName="StoreItemImage" />
+                <ScalarProperty Name="StoreItemDescription" ColumnName="StoreItemDescription" />
+                <ScalarProperty Name="StoreItemValue" ColumnName="StoreItemValue" />
+                <ScalarProperty Name="StoreItemName" ColumnName="StoreItemName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

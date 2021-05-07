@@ -18,19 +18,22 @@ namespace CorruptOSBot.Services
     public class TopKCService : IService
     {
         public int TriggerTimeInMS { get => 1000 * 60 * 60 * 24 * 3; } // every 3  days
+        public int BeforeTriggerTimeInMS { get => 1000 * 60 * 7; } // 7 minute
         private ulong GuildId;
 
 
         public TopKCService(Discord.IDiscordClient client)
         {
             Program.Log(new LogMessage(LogSeverity.Info, "TopKCService", "Created, triggering every " + TriggerTimeInMS + "MS"));
-            GuildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            GuildId = ConfigHelper.GetGuildId();
         }
 
         public async Task Trigger(IDiscordClient client)
         {
             if (ToggleStateManager.GetToggleState(nameof(TopKCService)))
             {
+                await Program.Log(new LogMessage(LogSeverity.Info, "TopKCService", "Triggered"));
+
                 // find current channel
                 var guild = await client.GetGuildAsync(GuildId);
                 var channel = await guild.GetChannelAsync(ChannelHelper.GetChannelId("top-boss-kc")) as SocketTextChannel;

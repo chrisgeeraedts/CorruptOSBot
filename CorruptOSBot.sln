@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.Shared", "Corr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.Data", "CorruptOSBot.Data\CorruptOSBot.Data.csproj", "{E81CE2F6-084A-4F67-9947-EAF88639DC0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.CorruptPoints", "CorruptOSBot.CorruptPoints\CorruptOSBot.CorruptPoints.csproj", "{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{E81CE2F6-084A-4F67-9947-EAF88639DC0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E81CE2F6-084A-4F67-9947-EAF88639DC0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E81CE2F6-084A-4F67-9947-EAF88639DC0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

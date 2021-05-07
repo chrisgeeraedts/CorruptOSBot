@@ -15,7 +15,6 @@ using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared;
-using CorruptOSBot.TheHunt;
 
 namespace CorruptOSBot
 {
@@ -88,9 +87,16 @@ namespace CorruptOSBot
             //The hunt logic
             if (ToggleStateManager.GetToggleState("hunt-toggle"))
             {
-                ModuleInjector.Inject(_channelInterceptors, _services, _commands);
-                Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", ModuleInjector.Title)));
-            }  
+                //TheHunt.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
+                //Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", ModuleInjector.Title)));
+            }
+
+            //The point logic
+            if (ToggleStateManager.GetToggleState("point-toggle"))
+            {
+                //CorruptPoints.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
+                //Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", ModuleInjector.Title)));
+            }
         }
 
         private List<IService> ConfigureActiveServices()
@@ -138,12 +144,20 @@ namespace CorruptOSBot
             RootAdminManager.Init();
 
             // Login and connect.
-            await _client.LoginAsync(TokenType.Bot, ConfigHelper.GetSettingProperty("DiscordToken"));
+            if (!ConfigHelper.DEBUG)
+            {
+                await _client.LoginAsync(TokenType.Bot, ConfigHelper.GetSettingProperty("DiscordToken"));
+            }
+            else
+            {
+                await _client.LoginAsync(TokenType.Bot, "ODI4ODkwMDgzNzcxODA5ODAz.YGwKDA.65Gh9phGBcbcbi7Me5r7r1GlPnI");
+            }
+
             await _client.StartAsync();
 
             //ReactionManager.Init();
             
-            //await LoadMemoryCache();
+            await LoadMemoryCache();
 
             await StartServiceThreads(_client);
 
@@ -160,24 +174,28 @@ namespace CorruptOSBot
 
         private async Task LoadMemoryCache()
         {
-            await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
-            await WOMMemoryCache.UpdateClan(WOMMemoryCache.OneHourMS);
+            if (!ConfigHelper.DEBUG)
+            {
+                await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
+                await WOMMemoryCache.UpdateClan(WOMMemoryCache.OneHourMS);
+            }
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         private async Task StartServiceThreads(DiscordSocketClient client)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
+            
             foreach (var _activeService in _activeServices)
             {
                 new Thread(() =>
                 {
                     while(true)
                     {
-                        Thread.Sleep(10000);
+                        Thread.Sleep(_activeService.BeforeTriggerTimeInMS);
 
                         Thread.CurrentThread.IsBackground = true;
-                        /* run your code here */
+
                         _activeService.Trigger(client);
 
                         Thread.Sleep(_activeService.TriggerTimeInMS);
@@ -227,6 +245,7 @@ namespace CorruptOSBot
             await _commands.AddModuleAsync<WoMModule>(_services);
             await _commands.AddModuleAsync<PVMModule>(_services);
             await _commands.AddModuleAsync<PromotionModule>(_services);
+            await _commands.AddModuleAsync<CalendarModule>(_services);
 
             await _commands.AddModuleAsync<TestModule>(_services);
 

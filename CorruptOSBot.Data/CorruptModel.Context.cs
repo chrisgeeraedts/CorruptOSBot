@@ -35,5 +35,8 @@ namespace CorruptOSBot.Data
         public virtual DbSet<Channel> Channels { get; set; }
         public virtual DbSet<Toggle> Toggles { get; set; }
         public virtual DbSet<BotConfiguration> BotConfigurations { get; set; }
+        public virtual DbSet<PointMutation> PointMutations { get; set; }
+        public virtual DbSet<PointStore> PointStores { get; set; }
+        public virtual DbSet<Calendar> Calendars { get; set; }
     }
 }

@@ -117,7 +117,16 @@ namespace CorruptOSBot.Helpers.Bot
                 }
             }
 
-            // thirdly add the member roles
+            // thirdly add the mod roles
+            foreach (var item in input.Where(x => x.Value.HelpGroup == HelpGroup.Moderator))
+            {
+                if (!result.ContainsKey(item.Key))
+                {
+                    result.Add(item.Key, item.Value);
+                }
+            }
+            
+            // Fourthly add the member roles
             foreach (var item in input.Where(x => x.Value.HelpGroup == HelpGroup.Member))
             {
                 if (!result.ContainsKey(item.Key))

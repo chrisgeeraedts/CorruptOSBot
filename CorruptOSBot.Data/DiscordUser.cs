@@ -18,6 +18,7 @@ namespace CorruptOSBot.Data
         public DiscordUser()
         {
             this.RunescapeAccounts = new HashSet<RunescapeAccount>();
+            this.PointMutations = new HashSet<PointMutation>();
         }
     
         public int Id { get; set; }
@@ -26,8 +27,11 @@ namespace CorruptOSBot.Data
         public Nullable<System.DateTime> OriginallyJoinedAt { get; set; }
         public bool BlacklistedForPromotion { get; set; }
         public Nullable<System.DateTime> LeavingDate { get; set; }
+        public int CorruptPoints { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RunescapeAccount> RunescapeAccounts { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PointMutation> PointMutations { get; set; }
     }
 }

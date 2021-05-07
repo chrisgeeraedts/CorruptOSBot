@@ -120,7 +120,7 @@
     <Compile Include="Helpers\SettingsConstants.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Modules\AccountModule.cs" />
-    <Compile Include="Helpers\Bot\HelpgroupAttribute.cs" />
+    <Compile Include="Modules\CalendarModule.cs" />
     <Compile Include="RootAdminManager.cs" />
     <Compile Include="Services\Achievements\AchievementService.cs" />
     <Compile Include="Events\EventManager.cs" />
@@ -261,10 +261,6 @@
     <ProjectReference Include="..\CorruptOSBot.Shared\CorruptOSBot.Shared.csproj">
       <Project>{9afb3b35-746e-410a-9c29-2bc53b2a2011}</Project>
       <Name>CorruptOSBot.Shared</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CorruptOSBot.TheHunt\CorruptOSBot.TheHunt.csproj">
-      <Project>{3d8f8f2f-7e66-4152-8ad4-d13f1cf3d71d}</Project>
-      <Name>CorruptOSBot.TheHunt</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -25,6 +25,7 @@ namespace CorruptOSBot.TheHunt.Data
         public Nullable<long> DiscordId { get; set; }
         public Nullable<System.DateTime> OriginallyJoinedAt { get; set; }
         public bool BlacklistedForPromotion { get; set; }
+        public Nullable<System.DateTime> LeavingDate { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<hunt_team_members> hunt_team_members { get; set; }

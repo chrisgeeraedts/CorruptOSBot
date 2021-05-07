@@ -132,7 +132,7 @@ namespace CorruptOSBot.Modules
             {
                 // get players 
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
-                var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+                var guildId = ConfigHelper.GetGuildId();
                 var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
                 // iterate through all discord users
                 var allUsers = guild.GetUsersAsync().Result;

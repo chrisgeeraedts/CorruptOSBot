@@ -223,7 +223,7 @@ namespace CorruptOSBot.Modules
                     StringBuilder builder = new StringBuilder();
 
                     DiscordHelper.DiscordUsers = new List<string>();
-                    var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+                    var guildId = ConfigHelper.GetGuildId();
                     var guild = await ((IDiscordClient)Context.Client).GetGuildAsync(guildId);
                     var allUsers = await guild.GetUsersAsync();
                     foreach (var discordUser in allUsers.Where(x => !x.IsBot && !x.IsWebhook))
@@ -331,7 +331,7 @@ namespace CorruptOSBot.Modules
         {
             var result = 0;
             await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
-            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            var guildId = ConfigHelper.GetGuildId();
             var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
             // iterate through all discord users
             var allUsers = guild.GetUsersAsync().Result;
@@ -446,6 +446,19 @@ namespace CorruptOSBot.Modules
         [Command("overthrownathan")]
         [Summary("Prepare!")]
         public async Task SayOverthrowNathanAsync()
+        {
+            if (ToggleStateManager.GetToggleState("overthrownathan", Context.User))
+            {
+                var message = await Context.Channel.SendMessageAsync("**Now is not yet the time...** | this message will selfdestruct in 5 seconds... ;)");
+
+                await Context.Message.DeleteAsync();
+                await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
+            }
+        }
+
+        [Command("overthrownath")]
+        [Summary("Prepare!")]
+        public async Task SayOverthrowNathAsync()
         {
             if (ToggleStateManager.GetToggleState("overthrownathan", Context.User))
             {

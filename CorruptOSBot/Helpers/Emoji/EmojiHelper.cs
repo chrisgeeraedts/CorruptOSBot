@@ -43,9 +43,9 @@ namespace CorruptOSBot.Helpers
                 _emojiStrings = new Dictionary<string, string>();
                 foreach (var boss in bosses)
                 {
-                    if (!_emojiStrings.ContainsKey(boss.Bossname))
+                    if (!_emojiStrings.ContainsKey(boss.BossCommand))
                     {
-                        _emojiStrings.Add(boss.Bossname, boss.EmojiName);
+                        _emojiStrings.Add(boss.BossCommand, boss.EmojiName);
                     }
                 }
 

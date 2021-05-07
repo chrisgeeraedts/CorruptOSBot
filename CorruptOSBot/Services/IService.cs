@@ -6,5 +6,6 @@ namespace CorruptOSBot.Services
     {
         Task Trigger(Discord.IDiscordClient client);
         int TriggerTimeInMS { get; }
+        int BeforeTriggerTimeInMS { get; }
     }
 }

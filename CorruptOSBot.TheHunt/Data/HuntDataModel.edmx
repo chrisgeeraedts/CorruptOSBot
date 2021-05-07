@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TheHuntModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="TheHuntModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="DiscordUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -14,12 +14,13 @@
           <Property Name="DiscordId" Type="bigint" />
           <Property Name="OriginallyJoinedAt" Type="datetime" />
           <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
+          <Property Name="LeavingDate" Type="datetime" />
         </EntityType>
         <EntityType Name="hunt_bossdrops">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ItemName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="BasePointValue" Type="int" Nullable="false" />
           <Property Name="BossId" Type="int" Nullable="false" />
@@ -146,8 +147,7 @@
             <End Role="hunt_team_members" EntitySet="hunt_team_members" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TheHuntModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -161,6 +161,7 @@
           <Property Name="OriginallyJoinedAt" Type="DateTime" Precision="3" />
           <Property Name="BlacklistedForPromotion" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="hunt_team_members" Relationship="Self.FK_DiscordUserId" FromRole="DiscordUsers" ToRole="hunt_team_members" />
+          <Property Name="LeavingDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="hunt_bossdrops">
           <Key>
@@ -311,6 +312,7 @@
           <EntitySetMapping Name="DiscordUsers">
             <EntityTypeMapping TypeName="TheHuntModel.DiscordUser">
               <MappingFragment StoreEntitySet="DiscordUsers">
+                <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="DiscordId" ColumnName="DiscordId" />

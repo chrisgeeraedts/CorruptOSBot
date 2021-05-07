@@ -27,13 +27,13 @@ namespace CorruptOSBot.Modules
                     StringBuilder sb = new StringBuilder();
                     foreach (var boss in bosses)
                     {
-                        sb.AppendLine(string.Format("- {0}", boss.Bossname));
+                        sb.AppendLine(string.Format("- {0}", boss.BossCommand));
                     }
 
 
                     await ReplyAsync(embed:
                     new EmbedBuilder()
-                        .WithTitle("Available bosses:")
+                        .WithTitle("Available bosses - use !bosskc {bossname}:")
                         .WithDescription(sb.ToString())
                         .Build());
                 }
@@ -79,7 +79,7 @@ namespace CorruptOSBot.Modules
             var result = await BossKCHelper.GetTopBossKC(WOMMemoryCache.OneDayMS);
 
             var bosses = new Shared.DataHelper().GetBosses();
-            var selectedBoss = bosses.FirstOrDefault(x => x.Bossname.ToLower().Contains(bossname.ToLower()));
+            var selectedBoss = bosses.FirstOrDefault(x => x.BossCommand.ToLower().Contains(bossname.ToLower()));
             string bossEmoji = "";
             string bossUri = "";
 

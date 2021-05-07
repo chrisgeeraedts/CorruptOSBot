@@ -51,6 +51,7 @@ namespace CorruptOSBot.Modules
                         embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
                         string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
                         embedBuilder.Description = string.Format("**Total XP: {0}**", s);
+                        embedBuilder.WithFooter(string.Format("Event runs from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
 
                         AddFields(embedBuilder, detailedComp.participants);
                         AddImage(embedBuilder, detailedComp.title);
@@ -121,6 +122,7 @@ namespace CorruptOSBot.Modules
                         embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
                         string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
                         embedBuilder.Description = string.Format("**Total XP: {0}**", s);
+                        embedBuilder.WithFooter(string.Format("Event ran from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
 
                         // get top 3 partipants
                         AddFields(embedBuilder, detailedComp.participants);

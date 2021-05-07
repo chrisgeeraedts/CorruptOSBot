@@ -42,7 +42,7 @@ namespace CorruptOSBot.Helpers.Discord
 
         public static async Task<IGuildUser> AsyncFindUserByName(string username, global::Discord.Commands.SocketCommandContext context)
         {
-            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            var guildId = ConfigHelper.GetGuildId();
             var guild = await ((IDiscordClient)context.Client).GetGuildAsync(guildId);
             var allUsers = await guild.GetUsersAsync();
             return allUsers.FirstOrDefault(x => DiscordHelper.GetAccountNameOrNickname(x).ToLower() == username.ToLower());
@@ -50,7 +50,7 @@ namespace CorruptOSBot.Helpers.Discord
 
         public static async Task<IGuildUser> AsyncFindUserByMention(string mention, global::Discord.Commands.SocketCommandContext context)
         {
-            var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            var guildId = ConfigHelper.GetGuildId();
             var guild = await ((IDiscordClient)context.Client).GetGuildAsync(guildId);
             var allUsers = await guild.GetUsersAsync();
             return allUsers.FirstOrDefault(x => x.Mention == mention);

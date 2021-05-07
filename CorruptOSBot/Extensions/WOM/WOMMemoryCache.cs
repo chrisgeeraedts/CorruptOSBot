@@ -13,6 +13,8 @@ namespace CorruptOSBot.Extensions.WOM
         public static ClanCache Clan = new ClanCache();
         public static ClanMemberCache ClanMemberDetails = new ClanMemberCache();
 
+        private static bool Reloading = false;
+
         public static int OneSecondMS { get => 1000; }
         public static int OneMinuteMS { get => 1000 * 60; }
         public static int OneHourMS { get => 1000 * 60 * 60; }
@@ -80,41 +82,51 @@ namespace CorruptOSBot.Extensions.WOM
 
         public static async Task ForceUpdateClanMembers()
         {
-            var WomClient = new WiseOldManClient();
-            await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clanmembers cache")));
+            if (!Reloading)
+            {
+                Reloading = true;
 
-            try
-            {
-                var updatedClanMembers = WomClient.GetClanMembers();
-                if (updatedClanMembers != null)
+
+
+                var WomClient = new WiseOldManClient();
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clanmembers cache")));
+
+                try
                 {
-                    var tempList = new List<ClanMemberDetail>();
-                    int index = 1;
-                    int max = updatedClanMembers.Count;
-                    foreach (var updatedClanMember in updatedClanMembers)
+                    var updatedClanMembers = WomClient.GetClanMembers();
+                    if (updatedClanMembers != null)
                     {
-                        var data = WomClient.GetPlayerDetails(updatedClanMember.id);
-                        if (data != null)
+                        var tempList = new List<ClanMemberDetail>();
+                        int index = 1;
+                        int max = updatedClanMembers.Count;
+                        foreach (var updatedClanMember in updatedClanMembers)
                         {
-                            await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Updating ({1}/{2}) {0}", data.displayName, index, max)));
-                            tempList.Add(data);
+                            var data = WomClient.GetPlayerDetails(updatedClanMember.id);
+                            if (data != null)
+                            {
+                                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Updating ({1}/{2}) {0}", data.displayName, index, max)));
+                                tempList.Add(data);
+                            }
+                            index++;
                         }
-                        index++;
+                        ClanMemberDetails.ClanMemberDetails = tempList;
+                        ClanMemberDetails.LastUpdated = DateTime.Now;
+                        await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmembers cache")));
                     }
-                    ClanMemberDetails.ClanMemberDetails = tempList;
-                    ClanMemberDetails.LastUpdated = DateTime.Now;
-                    await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmembers cache")));
+                    else
+                    {
+                        await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating")));
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating")));
+                    await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating: {0}", e)));
+                }
+                finally
+                {
+                    Reloading = false;
                 }
             }
-            catch (Exception e)
-            {
-                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating: {0}", e)));
-            }
-            
 
         }
 

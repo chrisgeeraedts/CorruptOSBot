@@ -14,14 +14,14 @@ namespace CorruptOSBot.Services
     public class PVMRoleService : IService
     {
         public int TriggerTimeInMS { get => 1000 * 60 * 5; }
+        public int BeforeTriggerTimeInMS { get => 1000 * 60 * 5; } // 5 minute
         private ulong GuildId;
 
 
         public PVMRoleService(Discord.IDiscordClient client)
         {
             Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Created, trigering every " + TriggerTimeInMS + "MS"));
-            var guildId = ConfigHelper.GetSettingProperty("GuildId");
-            GuildId = Convert.ToUInt64(guildId);
+            GuildId = ConfigHelper.GetGuildId();
         }
 
         public async Task Trigger(Discord.IDiscordClient client)

@@ -56,6 +56,9 @@
     <Compile Include="BotConfiguration.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Calendar.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Channel.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
@@ -84,6 +87,12 @@
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PlayerPet.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PointMutation.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PointStore.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

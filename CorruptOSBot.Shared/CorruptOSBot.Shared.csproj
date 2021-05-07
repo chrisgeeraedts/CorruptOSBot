@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="DataHelper.cs" />
     <Compile Include="Helpers\Bot\ConfigHelper.cs" />
+    <Compile Include="Helpers\Bot\HelpgroupAttribute.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Discord\ChannelHelper.cs" />
     <Compile Include="Helpers\SettingsConstants.cs" />

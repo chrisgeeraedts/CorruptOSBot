@@ -13,6 +13,7 @@
           <Property Name="Bossname" Type="nvarchar(max)" Nullable="false" />
           <Property Name="EmojiName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="BossImage" Type="nvarchar(max)" />
+          <Property Name="BossCommand" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="BotConfiguration">
           <Key>
@@ -21,6 +22,16 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PropertyName" Type="nvarchar(max)" Nullable="false" />
           <Property Name="PropertyValue" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Calendar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StartsAt" Type="datetime" Nullable="false" />
+          <Property Name="EndsAt" Type="datetime" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Channels">
           <Key>
@@ -54,6 +65,7 @@
           <Property Name="OriginallyJoinedAt" Type="datetime" />
           <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
           <Property Name="LeavingDate" Type="datetime" />
+          <Property Name="CorruptPoints" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ErrorLog">
           <Key>
@@ -75,6 +87,27 @@
           <Property Name="ActivityId" Type="int" />
           <Property Name="RunescapeAccountId" Type="int" />
           <Property Name="LevelOrKcGotten" Type="int" />
+        </EntityType>
+        <EntityType Name="PointMutations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PointChange" Type="int" Nullable="false" />
+          <Property Name="DateTime" Type="datetime" Nullable="false" />
+          <Property Name="TargetPlayerId" Type="int" />
+          <Property Name="PointStoreItemId" Type="int" />
+        </EntityType>
+        <EntityType Name="PointStore">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StoreItemName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="StoreItemValue" Type="int" Nullable="false" />
+          <Property Name="StoreItemDescription" Type="nvarchar(max)" />
+          <Property Name="StoreItemImage" Type="nvarchar(max)" />
+          <Property Name="StoreItemCommand" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RunescapeAccounts">
           <Key>
@@ -127,6 +160,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_DiscordUserPoints">
+          <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="0..1" />
+          <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscordUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PointMutations">
+              <PropertyRef Name="TargetPlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PointStoreUserPoints">
+          <End Role="PointStore" Type="Self.PointStore" Multiplicity="0..1" />
+          <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PointStore">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PointMutations">
+              <PropertyRef Name="PointStoreItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RunescapeAccount">
           <End Role="RunescapeAccounts" Type="Self.RunescapeAccounts" Multiplicity="0..1" />
           <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
@@ -154,11 +211,14 @@
         <EntityContainer Name="corruptosModelStoreContainer">
           <EntitySet Name="Bosses" EntityType="Self.Bosses" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BotConfiguration" EntityType="Self.BotConfiguration" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Calendar" EntityType="Self.Calendar" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Channels" EntityType="Self.Channels" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChatLog" EntityType="Self.ChatLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PointMutations" EntityType="Self.PointMutations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PointStore" EntityType="Self.PointStore" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Toggles" EntityType="Self.Toggles" Schema="dbo" store:Type="Tables" />
@@ -169,6 +229,14 @@
           <AssociationSet Name="FK_DiscordUser" Association="Self.FK_DiscordUser">
             <End Role="DiscordUsers" EntitySet="DiscordUsers" />
             <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DiscordUserPoints" Association="Self.FK_DiscordUserPoints">
+            <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+            <End Role="PointMutations" EntitySet="PointMutations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PointStoreUserPoints" Association="Self.FK_PointStoreUserPoints">
+            <End Role="PointStore" EntitySet="PointStore" />
+            <End Role="PointMutations" EntitySet="PointMutations" />
           </AssociationSet>
           <AssociationSet Name="FK_RunescapeAccount" Association="Self.FK_RunescapeAccount">
             <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
@@ -192,6 +260,7 @@
           <Property Name="EmojiName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Boss" FromRole="Bosses" ToRole="PlayerPets" />
           <Property Name="BossImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BossCommand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ChatLog">
           <Key>
@@ -218,6 +287,8 @@
           <NavigationProperty Name="RunescapeAccounts" Relationship="Self.FK_DiscordUser" FromRole="DiscordUsers" ToRole="RunescapeAccounts" />
           <Property Name="BlacklistedForPromotion" Type="Boolean" Nullable="false" />
           <Property Name="LeavingDate" Type="DateTime" Precision="3" />
+          <Property Name="CorruptPoints" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PointMutations" Relationship="corruptosModel.FK_DiscordUserPoints" FromRole="DiscordUser" ToRole="PointMutation" />
         </EntityType>
         <EntityType Name="ErrorLog">
           <Key>
@@ -318,6 +389,17 @@
           <EntitySet Name="Channels" EntityType="corruptosModel.Channel" />
           <EntitySet Name="Toggles" EntityType="corruptosModel.Toggle" />
           <EntitySet Name="BotConfigurations" EntityType="corruptosModel.BotConfiguration" />
+          <EntitySet Name="PointMutations" EntityType="corruptosModel.PointMutation" />
+          <EntitySet Name="PointStores" EntityType="corruptosModel.PointStore" />
+          <AssociationSet Name="FK_DiscordUserPoints" Association="corruptosModel.FK_DiscordUserPoints">
+            <End Role="DiscordUser" EntitySet="DiscordUsers" />
+            <End Role="PointMutation" EntitySet="PointMutations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PointStoreUserPoints" Association="corruptosModel.FK_PointStoreUserPoints">
+            <End Role="PointStore" EntitySet="PointStores" />
+            <End Role="PointMutation" EntitySet="PointMutations" />
+          </AssociationSet>
+          <EntitySet Name="Calendars" EntityType="corruptosModel.Calendar" />
         </EntityContainer>
         <EntityType Name="Skill">
           <Key>
@@ -365,6 +447,64 @@
           <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PropertyValue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="PointMutation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PointChange" Type="Int32" Nullable="false" />
+          <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TargetPlayerId" Type="Int32" />
+          <Property Name="PointStoreItemId" Type="Int32" />
+          <NavigationProperty Name="DiscordUser" Relationship="corruptosModel.FK_DiscordUserPoints" FromRole="PointMutation" ToRole="DiscordUser" />
+          <NavigationProperty Name="PointStore" Relationship="corruptosModel.FK_PointStoreUserPoints" FromRole="PointMutation" ToRole="PointStore" />
+        </EntityType>
+        <EntityType Name="PointStore">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StoreItemName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StoreItemValue" Type="Int32" Nullable="false" />
+          <Property Name="StoreItemDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StoreItemImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="PointMutations" Relationship="corruptosModel.FK_PointStoreUserPoints" FromRole="PointStore" ToRole="PointMutation" />
+          <Property Name="StoreItemCommand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_DiscordUserPoints">
+          <End Type="corruptosModel.DiscordUser" Role="DiscordUser" Multiplicity="0..1" />
+          <End Type="corruptosModel.PointMutation" Role="PointMutation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DiscordUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PointMutation">
+              <PropertyRef Name="TargetPlayerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PointStoreUserPoints">
+          <End Type="corruptosModel.PointStore" Role="PointStore" Multiplicity="0..1" />
+          <End Type="corruptosModel.PointMutation" Role="PointMutation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PointStore">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PointMutation">
+              <PropertyRef Name="PointStoreItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Calendar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StartsAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndsAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -374,6 +514,7 @@
           <EntitySetMapping Name="Bosses">
             <EntityTypeMapping TypeName="corruptosModel.Boss">
               <MappingFragment StoreEntitySet="Bosses">
+                <ScalarProperty Name="BossCommand" ColumnName="BossCommand" />
                 <ScalarProperty Name="BossImage" ColumnName="BossImage" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Bossname" ColumnName="Bossname" />
@@ -399,6 +540,7 @@
           <EntitySetMapping Name="DiscordUsers">
             <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
               <MappingFragment StoreEntitySet="DiscordUsers">
+                <ScalarProperty Name="CorruptPoints" ColumnName="CorruptPoints" />
                 <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
                 <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -475,6 +617,40 @@
               <MappingFragment StoreEntitySet="BotConfiguration">
                 <ScalarProperty Name="PropertyValue" ColumnName="PropertyValue" />
                 <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PointMutations">
+            <EntityTypeMapping TypeName="corruptosModel.PointMutation">
+              <MappingFragment StoreEntitySet="PointMutations">
+                <ScalarProperty Name="PointStoreItemId" ColumnName="PointStoreItemId" />
+                <ScalarProperty Name="TargetPlayerId" ColumnName="TargetPlayerId" />
+                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+                <ScalarProperty Name="PointChange" ColumnName="PointChange" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PointStores">
+            <EntityTypeMapping TypeName="corruptosModel.PointStore">
+              <MappingFragment StoreEntitySet="PointStore">
+                <ScalarProperty Name="StoreItemCommand" ColumnName="StoreItemCommand" />
+                <ScalarProperty Name="StoreItemImage" ColumnName="StoreItemImage" />
+                <ScalarProperty Name="StoreItemDescription" ColumnName="StoreItemDescription" />
+                <ScalarProperty Name="StoreItemValue" ColumnName="StoreItemValue" />
+                <ScalarProperty Name="StoreItemName" ColumnName="StoreItemName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Calendars">
+            <EntityTypeMapping TypeName="corruptosModel.Calendar">
+              <MappingFragment StoreEntitySet="Calendar">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="EndsAt" ColumnName="EndsAt" />
+                <ScalarProperty Name="StartsAt" ColumnName="StartsAt" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

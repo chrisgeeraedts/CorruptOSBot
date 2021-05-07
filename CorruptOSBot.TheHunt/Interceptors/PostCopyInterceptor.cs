@@ -24,7 +24,7 @@ namespace CorruptOSBot
                     deleteOriginal = Convert.ToBoolean(ConfigHelper.GetSettingProperty("thehunt-delete-original"));
 
                     // grab the target channel
-                    var guildId = Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+                    var guildId = ConfigHelper.GetGuildId();
                     var guild = client.GetGuildAsync(guildId).Result;
                     var targetChannel = (IMessageChannel)guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("thehunttargetchannel"));
                     if (targetChannel != null && arg.Attachments.Any())

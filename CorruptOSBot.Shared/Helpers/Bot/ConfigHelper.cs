@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CorruptOSBot.Shared.Helpers.Bot
@@ -39,6 +40,21 @@ namespace CorruptOSBot.Shared.Helpers.Bot
 
                 // cant find it in DB either
                 return string.Empty;
+            }
+        }
+
+
+        public static bool DEBUG = true;
+
+        public static ulong GetGuildId()
+        {
+            if (!DEBUG)
+            {
+                return Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+            }
+            else
+            {
+                return 827967957094105108;
             }
         }
     }
