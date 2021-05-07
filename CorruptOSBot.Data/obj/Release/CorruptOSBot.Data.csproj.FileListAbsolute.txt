@@ -9,4 +9,3 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Rel
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Release\CorruptOSBot.Data.csproj.CopyComplete
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Release\CorruptOSBot.Data.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Release\CorruptOSBot.Data.pdb
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Release\CorruptOSBot.Data.csprojAssemblyReference.cache

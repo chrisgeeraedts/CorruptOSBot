@@ -46,12 +46,14 @@ namespace CorruptOSBot.Modules
 
                         // create embed with data
                         var embedBuilder = new EmbedBuilder();
-                        embedBuilder.Color = Color.Gold;
+                        embedBuilder.Color = Color.Green;
                         embedBuilder.Title = f2.title;
                         embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
                         string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
                         embedBuilder.Description = string.Format("**Total XP: {0}**", s);
                         embedBuilder.WithFooter(string.Format("Event runs from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
+                        embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
+                        embedBuilder.ThumbnailUrl = "https://oldschool.runescape.wiki/images/thumb/f/f2/Old_school_bond_detail.png/120px-Old_school_bond_detail.png?15aab";
 
                         AddFields(embedBuilder, detailedComp.participants);
                         AddImage(embedBuilder, detailedComp.title);
@@ -117,12 +119,14 @@ namespace CorruptOSBot.Modules
 
                         // create embed with data
                         var embedBuilder = new EmbedBuilder();
-                        embedBuilder.Color = Color.Gold;
+                        embedBuilder.Color = Color.Green;
                         embedBuilder.Title = f2.title;
                         embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
                         string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
                         embedBuilder.Description = string.Format("**Total XP: {0}**", s);
                         embedBuilder.WithFooter(string.Format("Event ran from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
+                        embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
+                        embedBuilder.ThumbnailUrl = "https://oldschool.runescape.wiki/w/Trailblazer_dragon_trophy#/media/File:Trailblazer_dragon_trophy_detail.png";
 
                         // get top 3 partipants
                         AddFields(embedBuilder, detailedComp.participants);
@@ -160,16 +164,19 @@ namespace CorruptOSBot.Modules
                         var embedBuilder = new EmbedBuilder();
                         embedBuilder.Color = Color.Gold;
                         embedBuilder.Title = detailedComp.title;
-                        embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", compId);
+                        embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", detailedComp.id);
                         string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
                         embedBuilder.Description = string.Format("**Total XP: {0}**", s);
+                        embedBuilder.WithFooter(string.Format("Event ran from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
+                        embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
+                        embedBuilder.ThumbnailUrl = "https://oldschool.runescape.wiki/w/Trailblazer_dragon_trophy#/media/File:Trailblazer_dragon_trophy_detail.png";
 
+                        // get top 3 partipants
                         AddFields(embedBuilder, detailedComp.participants);
                         AddImage(embedBuilder, detailedComp.title);
+
                         await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
                     }
-
-
                 }
             }
             // delete the command posted

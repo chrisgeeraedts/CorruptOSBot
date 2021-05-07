@@ -1444,3 +1444,7 @@ CorruptOSBot.Data/bin/Release/CorruptOSBot.Data.dll
 *.config
 *.config
 *.config
+CorruptOSBot/App.config
+CorruptOSBot.TheHunt/bin/Release/CorruptOSBot.TheHunt.dll.config
+CorruptOSBot.TheHunt/bin/Debug/CorruptOSBot.TheHunt.dll.config
+CorruptOSBot.Test/bin/Release/CorruptOSBot.TheHunt.dll.config

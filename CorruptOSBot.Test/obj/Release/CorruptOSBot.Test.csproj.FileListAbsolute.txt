@@ -34,7 +34,6 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Rel
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Microsoft.Bcl.AsyncInterfaces.xml
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Linq.Async.xml
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Runtime.CompilerServices.Unsafe.xml
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.csprojAssemblyReference.cache
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.exe.config
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.csproj.CoreCompileInputs.cache
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.csproj.CopyComplete
