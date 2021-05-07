@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="corruptosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Bosses">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Bossname" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="EmojiName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BossImage" Type="nvarchar(max)" />
+    <Property Name="BossCommand" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="BotConfiguration">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PropertyName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PropertyValue" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Calendar">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="StartsAt" Type="datetime" Nullable="false" />
+    <Property Name="EndsAt" Type="datetime" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Channels">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DiscordChannelId" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ChatLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Message" Type="varchar(max)" Nullable="false" />
+    <Property Name="Author" Type="varchar(max)" Nullable="false" />
+    <Property Name="Datetime" Type="datetime" Nullable="false" />
+    <Property Name="Severity" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Channel" Type="varchar(max)" />
+    <Property Name="PostId" Type="bigint" />
+    <Property Name="ChannelId" Type="bigint" />
+    <Property Name="AuthorId" Type="bigint" />
+  </EntityType>
+  <EntityType Name="DiscordUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="nvarchar(max)" />
+    <Property Name="DiscordId" Type="bigint" />
+    <Property Name="OriginallyJoinedAt" Type="datetime" />
+    <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
+    <Property Name="LeavingDate" Type="datetime" />
+    <Property Name="CorruptPoints" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ErrorLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Message" Type="nvarchar(max)" />
+    <Property Name="Severity" Type="nvarchar(max)" />
+    <Property Name="Datetime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="PlayerPets">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DropDate" Type="datetime" />
+    <Property Name="BossId" Type="int" />
+    <Property Name="SkillId" Type="int" />
+    <Property Name="ActivityId" Type="int" />
+    <Property Name="RunescapeAccountId" Type="int" />
+    <Property Name="LevelOrKcGotten" Type="int" />
+  </EntityType>
+  <EntityType Name="PointMutations">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PointChange" Type="int" Nullable="false" />
+    <Property Name="DateTime" Type="datetime" Nullable="false" />
+    <Property Name="TargetPlayerId" Type="int" />
+    <Property Name="PointStoreItemId" Type="int" />
+  </EntityType>
+  <EntityType Name="PointStore">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StoreItemName" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="StoreItemValue" Type="int" Nullable="false" />
+    <Property Name="StoreItemDescription" Type="nvarchar(max)" />
+    <Property Name="StoreItemImage" Type="nvarchar(max)" />
+    <Property Name="StoreItemCommand" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="RunescapeAccounts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="rsn" Type="varchar(max)" Nullable="false" />
+    <Property Name="wom_id" Type="int" />
+    <Property Name="DiscordUserId" Type="int" />
+    <Property Name="account_type" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Skills">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Emoji" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Toggles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Functionality" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Toggled" Type="bit" Nullable="false" />
+    <Property Name="Type" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_Boss">
+    <End Role="Bosses" Type="Self.Bosses" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Bosses">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="BossId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DiscordUser">
+    <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="0..1" />
+    <End Role="RunescapeAccounts" Type="Self.RunescapeAccounts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RunescapeAccounts">
+        <PropertyRef Name="DiscordUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DiscordUserPoints">
+    <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="0..1" />
+    <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PointMutations">
+        <PropertyRef Name="TargetPlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PointStoreUserPoints">
+    <End Role="PointStore" Type="Self.PointStore" Multiplicity="0..1" />
+    <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PointStore">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PointMutations">
+        <PropertyRef Name="PointStoreItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RunescapeAccount">
+    <End Role="RunescapeAccounts" Type="Self.RunescapeAccounts" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RunescapeAccounts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="RunescapeAccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skill">
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="SkillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="corruptosModelStoreContainer">
+    <EntitySet Name="Bosses" EntityType="Self.Bosses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BotConfiguration" EntityType="Self.BotConfiguration" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Calendar" EntityType="Self.Calendar" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Channels" EntityType="Self.Channels" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ChatLog" EntityType="Self.ChatLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PointMutations" EntityType="Self.PointMutations" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PointStore" EntityType="Self.PointStore" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Toggles" EntityType="Self.Toggles" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
+      <End Role="Bosses" EntitySet="Bosses" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DiscordUser" Association="Self.FK_DiscordUser">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DiscordUserPoints" Association="Self.FK_DiscordUserPoints">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="PointMutations" EntitySet="PointMutations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PointStoreUserPoints" Association="Self.FK_PointStoreUserPoints">
+      <End Role="PointStore" EntitySet="PointStore" />
+      <End Role="PointMutations" EntitySet="PointMutations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RunescapeAccount" Association="Self.FK_RunescapeAccount">
+      <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skill" Association="Self.FK_Skill">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

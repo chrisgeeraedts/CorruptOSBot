@@ -100,8 +100,8 @@ namespace CorruptOSBot.Extensions
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                var clanMembers = JsonConvert.DeserializeObject<List<ClanMember>>(result);
-                return clanMembers.FirstOrDefault();
+                var clanMembers = JsonConvert.DeserializeObject<AddMemberRoot>(result);
+                return clanMembers.members.FirstOrDefault(x => x.username == rsn);
             }
             else
             {
@@ -244,6 +244,12 @@ namespace CorruptOSBot.Extensions
         public void Dispose()
         {
             client = null;
+        }
+
+
+        public class AddMemberRoot
+        {
+            public List<ClanMember> members { get; set; }
         }
     }
 }

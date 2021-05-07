@@ -105,6 +105,7 @@ namespace CorruptOSBot.Modules
                         bossEmoji,
                         bossResult.Boss.ToString().FirstCharToUpper()))
                     .WithImageUrl(bossUri)
+                    .WithFooter(string.Format("Data from: {0}", DateTime.Now.ToString("r")))
                     .Build();
             }
             catch (Exception e)

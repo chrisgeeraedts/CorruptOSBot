@@ -13,3 +13,7 @@
 *.png
 *.TXT
 *.p7s
+*.force
+*.cache
+*.cache
+*.txt

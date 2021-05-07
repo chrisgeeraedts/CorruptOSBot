@@ -97,7 +97,7 @@ namespace CorruptOSBot.Modules
                 EmbedBuilder builder = new EmbedBuilder();
                 builder.Title = string.Format("{0} | {1}", rsn, clanMember.id);
                 builder.Color = Color.DarkRed;
-                builder.WithFooter(string.Format("Powered by WiseOldMan API • {0}", DateTime.Now.ToString("dd/MM/yyyy")));
+                builder.WithFooter(string.Format("Data from: {0}", DateTime.Now.ToString("r")));
 
                 AddLine(builder, new Dictionary<string, int>()
                 {

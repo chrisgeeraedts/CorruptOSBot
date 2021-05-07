@@ -88,7 +88,7 @@ namespace CorruptOSBot.Helpers.Bot
             builder.Title = title;
             builder.Footer = new EmbedFooterBuilder()
             {
-                Text = string.Format("{0} Yeah | {1} Nah - {2}", "👍", "👎", DateTime.Now.ToString("dd/MM/yyyy"))
+                Text = string.Format("{0} Yeah | {1} Nah - {2}", "👍", "👎", DateTime.Now.ToString("r"))
             };
             builder.Description = message;
             return builder.Build();
@@ -102,7 +102,7 @@ namespace CorruptOSBot.Helpers.Bot
             builder.Title = title;
             builder.Footer = new EmbedFooterBuilder()
             {
-                Text = string.Format("Do not reply via text - {0}", DateTime.Now.ToString("dd/MM/yyyy"))
+                Text = string.Format("Do not reply via text - {0}", DateTime.Now.ToString("r"))
             };
             builder.Description = message;
             return builder.Build();
@@ -147,7 +147,7 @@ namespace CorruptOSBot.Helpers.Bot
                 builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Homeworld").WithValue(clan.homeworld).WithIsInline(true));
                 builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Members").WithValue(clan.memberCount).WithIsInline(true));
 
-                builder.WithFooter(string.Format("Last updated: {0}", DateTime.Now.ToString("dd/MM/yyyy")));
+                builder.WithFooter(string.Format("Last updated: {0}", DateTime.Now.ToString("r")));
                 return builder.Build();
             }
             return null;

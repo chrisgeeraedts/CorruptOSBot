@@ -56,37 +56,30 @@ namespace CorruptOSBot.Modules
                     {
                         if (isRsnAlreadyLinked)
                         {
-                            await context.User.SendMessageAsync(String.Format("This rsn {0} is already linked to an an account!", rsn));
+                            await context.User.SendMessageAsync(String.Format("The RSN **{0}** is already linked to an an Corrupt OS Discord account!", rsn));
                         }
                         else if (discordUser.RunescapeAccounts.Any(x => x.rsn == rsn))
                         {
                             // message if it does
-                            await context.User.SendMessageAsync(String.Format("You already have linked the rsn {0} to your account!", rsn));
+                            await context.User.SendMessageAsync(String.Format("You already have linked the RSN **{0}** to your Corrupt OS Discord account!", rsn));
                         }
                         else
                         {
                             // add it to WOM                
                             var client = new WiseOldManClient();
-                            client.AddGroupMember(rsn);
-
-                            var users = client.SearchUsersByName(rsn);
-                            int? womId = null;
-                            if (users.Count == 1)
-                            {
-                                womId = users.First().id;
-                            }
+                            var addedClanMember = client.AddGroupMember(rsn);
 
                             // add it to db
                             corruptosEntities.RunescapeAccounts.Add(new Data.RunescapeAccount()
                             {
                                 DiscordUser = discordUser,
                                 rsn = rsn,
-                                wom_id = womId,
+                                wom_id = addedClanMember?.id,
                                 account_type = type,
                             });
 
                             // add and message if it doesnt
-                            await context.User.SendMessageAsync(String.Format("Rsn {0} was linked to your account!", rsn));
+                            await context.User.SendMessageAsync(String.Format("**{0}** was linked to your Corrupt OS Discord account!", rsn));
                         }
                     }
 
