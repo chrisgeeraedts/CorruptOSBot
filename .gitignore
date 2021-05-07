@@ -1443,3 +1443,4 @@ CorruptOSBot.Data/bin/Debug/EntityFramework.xml
 CorruptOSBot.Data/bin/Release/CorruptOSBot.Data.dll
 *.config
 *.config
+*.config
