@@ -9,12 +9,13 @@
     <Property Name="DiscordId" Type="bigint" />
     <Property Name="OriginallyJoinedAt" Type="datetime" />
     <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
+    <Property Name="LeavingDate" Type="datetime" />
   </EntityType>
   <EntityType Name="hunt_bossdrops">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
-    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ItemName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="BasePointValue" Type="int" Nullable="false" />
     <Property Name="BossId" Type="int" Nullable="false" />

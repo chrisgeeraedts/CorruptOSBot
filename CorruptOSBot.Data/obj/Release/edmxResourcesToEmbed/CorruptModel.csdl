@@ -9,6 +9,7 @@
     <Property Name="EmojiName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Boss" FromRole="Bosses" ToRole="PlayerPets" />
     <Property Name="BossImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="BossCommand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="ChatLog">
     <Key>
@@ -35,6 +36,8 @@
     <NavigationProperty Name="RunescapeAccounts" Relationship="Self.FK_DiscordUser" FromRole="DiscordUsers" ToRole="RunescapeAccounts" />
     <Property Name="BlacklistedForPromotion" Type="Boolean" Nullable="false" />
     <Property Name="LeavingDate" Type="DateTime" Precision="3" />
+    <Property Name="CorruptPoints" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="PointMutations" Relationship="corruptosModel.FK_DiscordUserPoints" FromRole="DiscordUser" ToRole="PointMutation" />
   </EntityType>
   <EntityType Name="ErrorLog">
     <Key>
@@ -135,6 +138,17 @@
     <EntitySet Name="Channels" EntityType="corruptosModel.Channel" />
     <EntitySet Name="Toggles" EntityType="corruptosModel.Toggle" />
     <EntitySet Name="BotConfigurations" EntityType="corruptosModel.BotConfiguration" />
+    <EntitySet Name="PointMutations" EntityType="corruptosModel.PointMutation" />
+    <EntitySet Name="PointStores" EntityType="corruptosModel.PointStore" />
+    <AssociationSet Name="FK_DiscordUserPoints" Association="corruptosModel.FK_DiscordUserPoints">
+      <End Role="DiscordUser" EntitySet="DiscordUsers" />
+      <End Role="PointMutation" EntitySet="PointMutations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PointStoreUserPoints" Association="corruptosModel.FK_PointStoreUserPoints">
+      <End Role="PointStore" EntitySet="PointStores" />
+      <End Role="PointMutation" EntitySet="PointMutations" />
+    </AssociationSet>
+    <EntitySet Name="Calendars" EntityType="corruptosModel.Calendar" />
   </EntityContainer>
   <EntityType Name="Skill">
     <Key>
@@ -181,5 +195,63 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="PropertyValue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="PointMutation">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PointChange" Type="Int32" Nullable="false" />
+    <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TargetPlayerId" Type="Int32" />
+    <Property Name="PointStoreItemId" Type="Int32" />
+    <NavigationProperty Name="DiscordUser" Relationship="corruptosModel.FK_DiscordUserPoints" FromRole="PointMutation" ToRole="DiscordUser" />
+    <NavigationProperty Name="PointStore" Relationship="corruptosModel.FK_PointStoreUserPoints" FromRole="PointMutation" ToRole="PointStore" />
+  </EntityType>
+  <EntityType Name="PointStore">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StoreItemName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="StoreItemValue" Type="Int32" Nullable="false" />
+    <Property Name="StoreItemDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="StoreItemImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PointMutations" Relationship="corruptosModel.FK_PointStoreUserPoints" FromRole="PointStore" ToRole="PointMutation" />
+    <Property Name="StoreItemCommand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_DiscordUserPoints">
+    <End Type="corruptosModel.DiscordUser" Role="DiscordUser" Multiplicity="0..1" />
+    <End Type="corruptosModel.PointMutation" Role="PointMutation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PointMutation">
+        <PropertyRef Name="TargetPlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PointStoreUserPoints">
+    <End Type="corruptosModel.PointStore" Role="PointStore" Multiplicity="0..1" />
+    <End Type="corruptosModel.PointMutation" Role="PointMutation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PointStore">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PointMutation">
+        <PropertyRef Name="PointStoreItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Calendar">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="StartsAt" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="EndsAt" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
 </Schema>

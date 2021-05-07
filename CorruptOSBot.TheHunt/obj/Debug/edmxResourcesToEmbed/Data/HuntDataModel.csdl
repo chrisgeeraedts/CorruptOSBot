@@ -10,6 +10,7 @@
     <Property Name="OriginallyJoinedAt" Type="DateTime" Precision="3" />
     <Property Name="BlacklistedForPromotion" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="hunt_team_members" Relationship="Self.FK_DiscordUserId" FromRole="DiscordUsers" ToRole="hunt_team_members" />
+    <Property Name="LeavingDate" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="hunt_bossdrops">
     <Key>

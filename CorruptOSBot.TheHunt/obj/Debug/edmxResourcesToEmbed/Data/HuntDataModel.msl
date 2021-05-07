@@ -4,6 +4,7 @@
     <EntitySetMapping Name="DiscordUsers">
       <EntityTypeMapping TypeName="TheHuntModel.DiscordUser">
         <MappingFragment StoreEntitySet="DiscordUsers">
+          <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Username" ColumnName="Username" />
           <ScalarProperty Name="DiscordId" ColumnName="DiscordId" />

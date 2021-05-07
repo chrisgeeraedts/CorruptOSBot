@@ -4,6 +4,7 @@
     <EntitySetMapping Name="Bosses">
       <EntityTypeMapping TypeName="corruptosModel.Boss">
         <MappingFragment StoreEntitySet="Bosses">
+          <ScalarProperty Name="BossCommand" ColumnName="BossCommand" />
           <ScalarProperty Name="BossImage" ColumnName="BossImage" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Bossname" ColumnName="Bossname" />
@@ -29,6 +30,7 @@
     <EntitySetMapping Name="DiscordUsers">
       <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
         <MappingFragment StoreEntitySet="DiscordUsers">
+          <ScalarProperty Name="CorruptPoints" ColumnName="CorruptPoints" />
           <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
           <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
           <ScalarProperty Name="Id" ColumnName="Id" />
@@ -105,6 +107,40 @@
         <MappingFragment StoreEntitySet="BotConfiguration">
           <ScalarProperty Name="PropertyValue" ColumnName="PropertyValue" />
           <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PointMutations">
+      <EntityTypeMapping TypeName="corruptosModel.PointMutation">
+        <MappingFragment StoreEntitySet="PointMutations">
+          <ScalarProperty Name="PointStoreItemId" ColumnName="PointStoreItemId" />
+          <ScalarProperty Name="TargetPlayerId" ColumnName="TargetPlayerId" />
+          <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+          <ScalarProperty Name="PointChange" ColumnName="PointChange" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PointStores">
+      <EntityTypeMapping TypeName="corruptosModel.PointStore">
+        <MappingFragment StoreEntitySet="PointStore">
+          <ScalarProperty Name="StoreItemCommand" ColumnName="StoreItemCommand" />
+          <ScalarProperty Name="StoreItemImage" ColumnName="StoreItemImage" />
+          <ScalarProperty Name="StoreItemDescription" ColumnName="StoreItemDescription" />
+          <ScalarProperty Name="StoreItemValue" ColumnName="StoreItemValue" />
+          <ScalarProperty Name="StoreItemName" ColumnName="StoreItemName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Calendars">
+      <EntityTypeMapping TypeName="corruptosModel.Calendar">
+        <MappingFragment StoreEntitySet="Calendar">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="EndsAt" ColumnName="EndsAt" />
+          <ScalarProperty Name="StartsAt" ColumnName="StartsAt" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
