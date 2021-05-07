@@ -101,12 +101,7 @@ namespace CorruptOSBot.Extensions
             {
                 var result = response.Content.ReadAsStringAsync().Result;
                 var clanMembers = JsonConvert.DeserializeObject<AddMemberRoot>(result);
-                return clanMembers.members.FirstOrDefault(x => x.username == rsn);
-            }
-            else
-            {
-                var result = response.ReasonPhrase;
-                Program.Log(new LogMessage(LogSeverity.Error, "AddGroupMember", String.Format("{0}", result)));
+                return clanMembers.members.FirstOrDefault(x => x.username.ToLower() == rsn.ToLower());
             }
             return null;
         }

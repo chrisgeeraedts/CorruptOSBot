@@ -69,6 +69,12 @@ namespace CorruptOSBot.Modules
                             var client = new WiseOldManClient();
                             var addedClanMember = client.AddGroupMember(rsn);
 
+                            if (addedClanMember == null)
+                            {
+                                // could be null as its already a member, try to load normally
+                                addedClanMember = client.SearchUsersByName(rsn).FirstOrDefault();
+                            }
+
                             // add it to db
                             corruptosEntities.RunescapeAccounts.Add(new Data.RunescapeAccount()
                             {
