@@ -150,7 +150,7 @@ namespace CorruptOSBot
             }
             else
             {
-                await _client.LoginAsync(TokenType.Bot, "ODI4ODkwMDgzNzcxODA5ODAz.YGwKDA.65Gh9phGBcbcbi7Me5r7r1GlPnI");
+                await _client.LoginAsync(TokenType.Bot, ConfigHelper.GetSettingProperty("TestDiscordToken"));
             }
 
             await _client.StartAsync();

@@ -44,7 +44,7 @@
 [X] Move the ENTIRE configuration to the database
 [X] change the way rsn name change works so it shows the correct one in message (from DB)
 [X] Fix WOM so it removes cc member properly on leaving
-[ ] !calendar to show calender items from DB
+[X] !calendar to show calender items from DB
 
 [ ] Use the Bossname and BossCommand from the database instead of the enum's
 [ ] Change the !cox etc commands to a reply with emoji logic
