@@ -29,32 +29,30 @@ namespace CorruptOSBot.Events
             {
                 var id = Convert.ToInt64(arg.Id);
                 originalUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == id);
-            }
 
+                var recruitingChannel = arg.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
 
-
-            var recruitingChannel = arg.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
-
-            var sb = new StringBuilder();
-            sb.AppendLine(string.Format("<@{0}> ({1}) has left the server", arg.Id, originalUser?.Username));
-            sb.AppendLine(string.Format(Environment.NewLine));
-            sb.AppendLine(string.Format("**Runescape accounts linked to this discord user:**"));
-            if (originalUser != null)
-            {
-                foreach (var rsn in originalUser.RunescapeAccounts)
+                var sb = new StringBuilder();
+                sb.AppendLine(string.Format("<@{0}> ({1}) has left the server", arg.Id, originalUser?.Username));
+                sb.AppendLine(string.Format(Environment.NewLine));
+                sb.AppendLine(string.Format("**Runescape accounts linked to this discord user:**"));
+                if (originalUser != null)
                 {
-                    sb.AppendLine(string.Format("- {0}", rsn.rsn));
+                    foreach (var rsn in originalUser.RunescapeAccounts)
+                    {
+                        sb.AppendLine(string.Format("- {0}", rsn.rsn));
+                    }
                 }
-            }
 
-            await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member left",
-                sb.ToString()));
+                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member left",
+                    sb.ToString()));
 
-            if (originalUser != null)
-            {
-                foreach (var rsn in originalUser.RunescapeAccounts)
+                if (originalUser != null)
                 {
-                    new WiseOldManClient().RemoveGroupMember(rsn.rsn);
+                    foreach (var rsn in originalUser.RunescapeAccounts)
+                    {
+                        new WiseOldManClient().RemoveGroupMember(rsn.rsn);
+                    }
                 }
             }
 
@@ -88,6 +86,7 @@ namespace CorruptOSBot.Events
                 }
             }
 
+            sb.AppendLine(string.Format("(They have been removed from WOM and our database)"));
 
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member banned",
                 sb.ToString()));

@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CorruptOSBot.Modules
 {
@@ -262,7 +263,7 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Moderator)]
         [Command("getuser")]
-        [Summary("!getuser {username}(optional) - Gets a single users on discord, showing their available information.")]
+        [Summary("!getuser {username}(optional) - Gets a single user on discord, showing their available information.")]
         public async Task SayGetUserAsync([Remainder]string username)
         {
             if (ToggleStateManager.GetToggleState("getuser", Context.User) &&
@@ -283,7 +284,7 @@ namespace CorruptOSBot.Modules
 
                     if (user != null)
                     {
-                        await Context.Channel.SendMessageAsync(embed: BuildEmbedForUserInfo(user).Build());
+                        await Context.Channel.SendMessageAsync(embed: BuildEmbedForUserInfo(user, true).Build());
                     }
                     else
                     {
@@ -299,6 +300,32 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
+
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("getuser")]
+        [Summary("!getuser {username}(optional) - Gets a single user on discord, showing their available information.")]
+        public async Task SayGetUserSelfAsync()
+        {
+            if (ToggleStateManager.GetToggleState("getuser", Context.User) && 
+                RootAdminManager.HasAnyRole(Context.User) &&
+                DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
+            {
+                try
+                {
+                    IGuildUser user = (IGuildUser)Context.User;
+                    await Context.Channel.SendMessageAsync(embed: BuildEmbedForUserInfo(user).Build());
+                }
+                catch (Exception e)
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Info, nameof(SayGetUserAsync), string.Format("Failed: {0}", e.Message)));
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
 
         private async Task InitDB(SocketCommandContext context)
         {
@@ -363,13 +390,14 @@ namespace CorruptOSBot.Modules
             return result;
         }
                
-        private EmbedBuilder BuildEmbedForUserInfo(IGuildUser user)
+        private EmbedBuilder BuildEmbedForUserInfo(IGuildUser user, bool adminFormat = false)
         {
             var embedBuilder = new EmbedBuilder();
             embedBuilder.Title = DiscordHelper.GetAccountNameOrNickname(user);
-
+           
             var rsAccounts = new List<RunescapeAccount>();
             var isBlackListed = false;
+            var CP = 0;
             using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
             {
                 var userId = Convert.ToInt64(user.Id);
@@ -378,34 +406,49 @@ namespace CorruptOSBot.Modules
                 if (discorduser != null)
                 {
                     isBlackListed = discorduser.BlacklistedForPromotion;
+                    CP = discorduser.CorruptPoints;
                 }
             }
+            embedBuilder.Url = string.Format("https://wiseoldman.net/players/{0}", rsAccounts.FirstOrDefault(x => x.account_type == "main"));
 
             var sb = new StringBuilder();
             sb.AppendLine(string.Format("**ID:** {0}", user.Id));
             sb.AppendLine(string.Format("**Name:** {0}", user.Username));
             sb.AppendLine(string.Format("**Nickname:** {0}", user.Nickname));
-            sb.AppendLine(string.Format("**Status:** {0}", user.Status));
-            sb.AppendLine(string.Format("**Promotion Blacklist:** {0}", isBlackListed));
+            sb.AppendLine(string.Format("**Corrupt Points** {0}", CP));
+
+            if (adminFormat)
+            {
+                sb.AppendLine(string.Format("**Status:** {0}", user.Status));
+                sb.AppendLine(string.Format("**Promotion Blacklist:** {0}", isBlackListed));
+            }
+            
 
 
             sb.AppendLine(Environment.NewLine);
-            sb.AppendLine("**Roles:**");
 
-            foreach (var roleId in user.RoleIds)
+            if (adminFormat)
             {
-                sb.AppendLine(string.Format("- {0}", Context.Guild.GetRole(roleId).Name).Replace("@", string.Empty));
+                sb.AppendLine("**Roles:**");
+                foreach (var roleId in user.RoleIds)
+                {
+                    sb.AppendLine(string.Format("- {0}", Context.Guild.GetRole(roleId).Name).Replace("@", string.Empty));
+                }
             }
 
-
             sb.AppendLine(Environment.NewLine);
-            sb.AppendLine("**Additional:**");
-            sb.AppendLine(string.Format("**Created at:** {0}", user.CreatedAt.ToString("r")));
-            sb.AppendLine(string.Format("**Joined at:** {0}", user.JoinedAt?.ToString("r")));
-            sb.AppendLine(string.Format("**Premium since:** {0}", user.PremiumSince));
-            sb.AppendLine(string.Format("**Webhook:** {0}", user.IsWebhook));
-            sb.AppendLine(string.Format("**Bot:** {0}", user.IsBot));
 
+            if (adminFormat)
+            {
+                sb.AppendLine("**Additional:**");
+                sb.AppendLine(string.Format("**Created at:** {0}", user.CreatedAt.ToString("r")));
+                sb.AppendLine(string.Format("**Joined at:** {0}", user.JoinedAt?.ToString("r")));
+                sb.AppendLine(string.Format("**Premium since:** {0}", user.PremiumSince?.ToString("r")));
+                sb.AppendLine(string.Format("**Webhook:** {0}", user.IsWebhook));
+                sb.AppendLine(string.Format("**Bot:** {0}", user.IsBot));
+            }
+
+            
 
             sb.AppendLine(Environment.NewLine);
             sb.AppendLine("**RS Accounts:**");
@@ -414,7 +457,9 @@ namespace CorruptOSBot.Modules
             {
                 foreach (var rsAccount in rsAccounts)
                 {
-                    sb.AppendLine(string.Format("**{0}** : {1}", rsAccount.account_type, rsAccount.rsn));
+                    var urlString = string.Format("https://wiseoldman.net/players/{0}", rsAccount.rsn).Replace(" ", "%20");
+                    var uriString = string.Format("**{0}** : [{1}]({2})", rsAccount.account_type, rsAccount.rsn, urlString);
+                    sb.AppendLine(uriString);
                 }
             }
             else
@@ -423,18 +468,22 @@ namespace CorruptOSBot.Modules
             }
 
             sb.AppendLine(Environment.NewLine);
-            sb.AppendLine("**Activities:**");
 
-            if (user.Activities.Any())
+            if (adminFormat)
             {
-                foreach (var activity in user.Activities)
+                sb.AppendLine("**Activities:**");
+
+                if (user.Activities.Any())
                 {
-                    sb.AppendLine(string.Format("{0} : {1}", activity.Name, activity.Details));
+                    foreach (var activity in user.Activities)
+                    {
+                        sb.AppendLine(string.Format("{0} : {1}", activity.Name, activity.Details));
+                    }
                 }
-            }
-            else
-            {
-                sb.AppendLine("< no activities >");
+                else
+                {
+                    sb.AppendLine("< no activities >");
+                }
             }
 
             embedBuilder.Description = sb.ToString();

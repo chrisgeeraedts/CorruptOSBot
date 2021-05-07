@@ -46,6 +46,7 @@
 [X] Fix WOM so it removes cc member properly on leaving
 [X] !calendar to show calender items from DB
 
+[ ] !getuser {altname} should show the same as !getuser {main name}
 [ ] Use the Bossname and BossCommand from the database instead of the enum's
 [ ] Change the !cox etc commands to a reply with emoji logic
 [ ] Add 'waiting' message to commands and delete that message afterwards

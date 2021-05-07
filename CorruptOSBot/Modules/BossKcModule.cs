@@ -79,7 +79,7 @@ namespace CorruptOSBot.Modules
             var result = await BossKCHelper.GetTopBossKC(WOMMemoryCache.OneDayMS);
 
             var bosses = new Shared.DataHelper().GetBosses();
-            var selectedBoss = bosses.FirstOrDefault(x => x.BossCommand.ToLower().Contains(bossname.ToLower()));
+            var selectedBoss = bosses.FirstOrDefault(x => x.BossCommand == bossname.ToLower());
             string bossEmoji = "";
             string bossUri = "";
 
@@ -87,31 +87,32 @@ namespace CorruptOSBot.Modules
             {
                 bossEmoji = selectedBoss.EmojiName;
                 bossUri = selectedBoss.BossImage;
-            }
 
-            try
-            {
-                EmojiEnum bossEnum = (EmojiEnum)Enum.Parse(typeof(EmojiEnum), bossname.ToLower());
-                var bossResult = result.FirstOrDefault(x => x.Boss == bossEnum);
-                var emb = new EmbedBuilder();
-                var sb = new StringBuilder();
-                for (int i = 0; i < 3; i++)
+                try
                 {
-                    emb.AddField("\u200b", GetKCLine(i, i == 0, bossResult), true);
-                }
+                    EmojiEnum bossEnum = (EmojiEnum)Enum.Parse(typeof(EmojiEnum), bossname.ToLower());
+                    var bossResult = result.FirstOrDefault(x => x.Boss == bossEnum);
+                    var emb = new EmbedBuilder();
+                    var sb = new StringBuilder();
+                    for (int i = 0; i < 3; i++)
+                    {
+                        emb.AddField("\u200b", GetKCLine(i, i == 0, bossResult), true);
+                    }
 
-                return emb
-                    .WithTitle(string.Format("{0} Corrupt OS Top 3 for: {1}",
-                        bossEmoji,
-                        bossResult.Boss.ToString().FirstCharToUpper()))
-                    .WithImageUrl(bossUri)
-                    .WithFooter(string.Format("Data from: {0}", DateTime.Now.ToString("r")))
-                    .Build();
+                    return emb
+                        .WithTitle(string.Format("{0} Corrupt OS Top 3 for: {1}",
+                            bossEmoji,
+                            bossResult.Boss.ToString().FirstCharToUpper()))
+                        .WithImageUrl(bossUri)
+                        .WithFooter(string.Format("Corrupt OS (!bosskc) {1} - Data from: {0}", DateTime.Now.ToString("r"), bossResult.Boss.ToString()))
+                        .Build();
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
             }
-            catch (Exception e)
-            {
-                return null;
-            }
+            return null;
         }
 
 

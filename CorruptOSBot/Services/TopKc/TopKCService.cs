@@ -38,15 +38,23 @@ namespace CorruptOSBot.Services
                 var guild = await client.GetGuildAsync(GuildId);
                 var channel = await guild.GetChannelAsync(ChannelHelper.GetChannelId("top-boss-kc")) as SocketTextChannel;
 
-                // first update base data
-                await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
+                if (channel != null)
+                {
+                    // first update base data
+                    await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
 
-                // clear messages in channel
-                var messages = await channel.GetMessagesAsync(3).FlattenAsync();
-                await channel.DeleteMessagesAsync(messages);
+                    // clear messages in channel
+                    var messages = await channel.GetMessagesAsync(3).FlattenAsync();
+                    await channel.DeleteMessagesAsync(messages);
 
-                // Add new message
-                await (channel as SocketTextChannel).SendMessageAsync(embed: await CreateFullLeaderboardEmbed());
+                    // Add new message
+                    await (channel as SocketTextChannel).SendMessageAsync(embed: await CreateFullLeaderboardEmbed());
+                }
+                else
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Info, "TopKCService", "Trigger failed"));
+                }
+                
             }
         }
 

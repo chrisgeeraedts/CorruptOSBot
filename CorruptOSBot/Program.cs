@@ -195,8 +195,10 @@ namespace CorruptOSBot
                         Thread.Sleep(_activeService.BeforeTriggerTimeInMS);
 
                         Thread.CurrentThread.IsBackground = true;
-
-                        _activeService.Trigger(client);
+                        if (!ConfigHelper.DEBUG)
+                        {
+                            _activeService.Trigger(client);
+                        }
 
                         Thread.Sleep(_activeService.TriggerTimeInMS);
                     }
