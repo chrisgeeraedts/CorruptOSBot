@@ -158,6 +158,7 @@
     <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="PlayerPets" Relationship="corruptosModel.FK_Skill" FromRole="Skill" ToRole="PlayerPet" />
     <Property Name="Emoji" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK_Skill">
     <End Type="corruptosModel.Skill" Role="Skill" Multiplicity="0..1" />
