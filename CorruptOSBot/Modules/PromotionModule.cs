@@ -144,10 +144,10 @@ namespace CorruptOSBot.Modules
                 var promotionSet = GetSupposedRank(allUsersFromDB, guild);
                 var updatedPromotionSet = GetCurrentRank(promotionSet, guild);
 
-                //await SendEmbedMessages(updatedPromotionSet, Rank.OG);
-                //await SendEmbedMessages(updatedPromotionSet, Rank.Sergeant);
-                //await SendEmbedMessages(updatedPromotionSet, Rank.Corperal);
-                //await SendEmbedMessages(updatedPromotionSet, Rank.Recruit);
+                await SendEmbedMessages(updatedPromotionSet, Rank.OG);
+                await SendEmbedMessages(updatedPromotionSet, Rank.Sergeant);
+                await SendEmbedMessages(updatedPromotionSet, Rank.Corperal);
+                await SendEmbedMessages(updatedPromotionSet, Rank.Recruit);
                 await SendInactivityEmbedMessage(updatedPromotionSet);
 
                 // delete the command posted

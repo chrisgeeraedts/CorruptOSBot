@@ -30,7 +30,7 @@ namespace CorruptOSBot.Modules
             // delete the command posted
             await Context.Message.DeleteAsync();
         }
-        public int Method2(string input)
+        public async Task<int> Method2(string input)
         {
             System.Threading.Thread.Sleep(5000);
             return 1;
