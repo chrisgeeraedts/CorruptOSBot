@@ -13,13 +13,11 @@ namespace CorruptOSBot.Helpers.Discord
     public static class DiscordHelper
     {
         public static List<string> DiscordUsers { get; set; }
-        public static DateTime OnlineFrom { get; set; }
 
         public static string GetAccountNameOrNickname(SocketUser user)
         {
             var currentUser = ((SocketGuildUser)user);
             var name = currentUser.Nickname ?? user.Username;
-            OnlineFrom = DateTime.Now;
             return name;
         }
 
@@ -66,7 +64,7 @@ namespace CorruptOSBot.Helpers.Discord
 
         internal static async Task PostHeartbeat(IMessageChannel channel, TimeSpan timeOnline)
         {
-            await (channel).SendMessageAsync(string.Format("Bot (v{2}) online since {3} for **{0}** minutes | **Heartbeat** : [{1}] ", Convert.ToInt64(timeOnline.TotalMinutes), DateTime.Now, RootAdminManager.GetBotVersion(), OnlineFrom.ToString("r")));
+            await (channel).SendMessageAsync(string.Format("Bot (v{2}) online since {3} for **{0}** minutes | **Heartbeat** : [{1}] ", Convert.ToInt64(timeOnline.TotalMinutes), DateTime.Now, RootAdminManager.GetBotVersion(), Program.OnlineFrom.ToString("r")));
         }
 
         internal static async Task PostComeOnline(IMessageChannel channel)

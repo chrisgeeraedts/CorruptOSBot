@@ -1,15 +1,10 @@
 ﻿using CorruptOSBot.Extensions.WOM;
-using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
-using CorruptOSBot.Helpers.PVM;
 using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Services
@@ -48,7 +43,7 @@ namespace CorruptOSBot.Services
                     await channel.DeleteMessagesAsync(messages);
 
                     // Add new message
-                    await (channel as SocketTextChannel).SendMessageAsync(embed: await CreateFullLeaderboardEmbed());
+                    await (channel as SocketTextChannel).SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(TriggerTimeInMS));
                 }
                 else
                 {
@@ -57,75 +52,5 @@ namespace CorruptOSBot.Services
                 
             }
         }
-
-        private async Task <Embed> CreateFullLeaderboardEmbed()
-        {
-            // connect the kcs per boss
-            var result = await BossKCHelper.GetTopBossKC(WOMMemoryCache.OneDayMS);            
-
-            var builder = new EmbedBuilder();
-            builder.Color = Color.DarkGreen;
-
-            BuildSet(result.Take(15), builder);
-            BuildSet(result.Skip(15).Take(15), builder);
-            BuildSet(result.Skip(30).Take(15), builder);
-
-            builder.Title = "Top boss KC";
-            builder.WithFooter(string.Format("Last updated: {0} | next update at: {1}", DateTime.Now, DateTime.Now.Add(TimeSpan.FromMilliseconds(TriggerTimeInMS))));
-
-            return builder.Build();
-        }
-
-
-        private void BuildSet(IEnumerable<KcTopList> result, EmbedBuilder builder)
-        {
-            // First column
-            var sb = new StringBuilder();
-            foreach (var item in result)
-            {
-                if (item.KcPlayers.Count() > 0)
-                {
-                    sb.AppendLine(string.Format("{0} {1} {2} **({3})**", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc));
-                }
-                else
-                {
-                    sb.AppendLine(string.Format("{0} {1} {2}", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", "---"));
-                }
-            }
-            builder.AddField("\u200b", sb.ToString(), true);
-
-            // Second column
-            var sb2 = new StringBuilder();
-            foreach (var item in result)
-            {
-                if (item.KcPlayers.Count() > 1)
-                {
-                    sb2.AppendLine(string.Format("{0} {1} ({2})", "\U0001f948", item.KcPlayers.Skip(1).First().Player, item.KcPlayers.Skip(1).First().Kc));
-                }
-                else
-                {
-                    sb2.AppendLine(string.Format("{0} {1}", "\U0001f948", "---"));
-                }
-            }
-            builder.AddField("\u200b", sb2.ToString(), true);
-
-            // Second column
-            var sb3 = new StringBuilder();
-            foreach (var item in result)
-            {
-                if (item.KcPlayers.Count() > 2)
-                {
-                    sb3.AppendLine(string.Format("{0} {1} ({2})", "\U0001f949", item.KcPlayers.Skip(2).First().Player, item.KcPlayers.Skip(2).First().Kc));
-                }
-                else
-                {
-                    sb3.AppendLine(string.Format("{0} {1}", "\U0001f949", "---"));
-                }
-
-            }
-            builder.AddField("\u200b", sb3.ToString(), true);
-        }
-
-        
     }
 }

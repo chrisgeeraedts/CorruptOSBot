@@ -4,6 +4,7 @@ using CorruptOSBot.Shared;
 using Discord;
 using Discord.Commands;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -98,6 +99,29 @@ namespace CorruptOSBot.Modules
                 await Program.Log(new LogMessage(LogSeverity.Error, "AddAlt", "Failed adding alt to database - " + e.Message));
             }
 
+        }
+
+
+        private Dictionary<string,string> GetSplittedCommands(string input, string[] expectedCommandProperties, char splitChar)
+        {
+            var result = new Dictionary<string, string>();
+
+            //if (!string.IsNullOrEmpty(input))
+            //{
+            //    var splittedString = input.Split(splitChar);
+            //    for (int i = 0; i < splittedString.Length; i++)
+            //    {
+            //        var value = [i];
+            //        var key = string.Empty;
+            //        if (true)
+            //        {
+
+            //        }
+            //    }
+            //}
+            
+
+            return result;
         }
     }
 }

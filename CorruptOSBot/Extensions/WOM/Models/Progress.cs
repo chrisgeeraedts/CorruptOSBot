@@ -3,8 +3,8 @@
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class Progress
     {
-        public int start { get; set; }
-        public int end { get; set; }
-        public int gained { get; set; }
+        public double start { get; set; }
+        public double end { get; set; }
+        public double gained { get; set; }
     }
 }

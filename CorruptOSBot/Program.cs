@@ -29,6 +29,9 @@ namespace CorruptOSBot
 
         private readonly DiscordSocketClient _client;
 
+        public static DateTime OnlineFrom { get; set; }
+
+
         // Keep the CommandService and DI container around for use with commands.
         // These two types require you install the Discord.Net.Commands package.
         private readonly CommandService _commands;
@@ -39,6 +42,8 @@ namespace CorruptOSBot
 
         private Program()
         {
+            OnlineFrom = DateTime.Now;  
+
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
                 // How much logging do you want to see?

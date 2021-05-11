@@ -18,7 +18,7 @@ namespace CorruptOSBot.Events
         {
             var recruitingChannel = arg.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("User entered Discord",
-                string.Format("<@{0}> ({0}) has joined the server", arg.Id)));
+                string.Format("<@{0}> ({1}) has joined the server", arg.Id, arg.Username)));
         }
 
         public static async Task LeavingGuild(SocketGuildUser arg)
@@ -38,7 +38,7 @@ namespace CorruptOSBot.Events
                 sb.AppendLine(string.Format("**Runescape accounts linked to this discord user:**"));
                 if (originalUser != null)
                 {
-                    foreach (var rsn in originalUser.RunescapeAccounts)
+                    foreach (var rsn in originalUser.RunescapeAccounts.ToList())
                     {
                         sb.AppendLine(string.Format("- {0}", rsn.rsn));
                     }

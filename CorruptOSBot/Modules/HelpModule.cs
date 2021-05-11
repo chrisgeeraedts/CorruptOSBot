@@ -51,13 +51,6 @@ namespace CorruptOSBot.Modules
                 DiscordHelper.HasRole(user, guild, "OG");
 
             List<string> blackListedCommands = new List<string>();
-            //blackListedCommands.Add("!clear");
-            //blackListedCommands.Add("!toggle");
-            //blackListedCommands.Add("!togglestates");
-            //blackListedCommands.Add("!channelid");
-            //blackListedCommands.Add("!postid");
-            //blackListedCommands.Add("!guildid");
-            //blackListedCommands.Add("!serverip");
             blackListedCommands.Add("!overthrownathan");
 
             Dictionary<string, string> result = new Dictionary<string, string>();

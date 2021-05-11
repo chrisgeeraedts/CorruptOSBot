@@ -9,7 +9,7 @@ namespace CorruptOSBot.Extensions
         public string title { get; set; }
         public string metric { get; set; }
         public string type { get; set; }
-        public int score { get; set; }
+        public double score { get; set; }
         public DateTime? startsAt { get; set; }
         public DateTime? endsAt { get; set; }
         public object groupId { get; set; }

@@ -143,7 +143,7 @@ namespace CorruptOSBot.Helpers.PVM
                     var pvmgeneralChannel = guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("pvm-general"));
                     await ((IMessageChannel)pvmgeneralChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("PVM promotion for {0}!", DiscordHelper.GetAccountNameOrNickname(currentUser)),
                         string.Format("<@{0}> just got promoted to <@&{1}>!", currentUser.Id, roleId),
-                        imageUrl));
+                        imageUrl, "https://static.wikia.nocookie.net/getsetgames/images/8/82/Level_up_icon.png/revision/latest?cb=20130804113035"));
                 }
             }
             catch (Exception e)

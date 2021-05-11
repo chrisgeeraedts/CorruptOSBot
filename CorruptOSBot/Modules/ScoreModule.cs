@@ -53,7 +53,7 @@ namespace CorruptOSBot.Modules
                         embedBuilder.Description = string.Format("**Total XP: {0}**", s);
                         embedBuilder.WithFooter(string.Format("Event runs from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
                         embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
-                        embedBuilder.ThumbnailUrl = "https://oldschool.runescape.wiki/images/thumb/f/f2/Old_school_bond_detail.png/120px-Old_school_bond_detail.png?15aab";
+                        embedBuilder.ThumbnailUrl = "https://www.pngkey.com/png/full/406-4068714_free-icon-score-high-score-icon-png.png";
 
                         AddFields(embedBuilder, detailedComp.participants);
                         AddImage(embedBuilder, detailedComp.title);
@@ -110,7 +110,8 @@ namespace CorruptOSBot.Modules
                     var comps = new WiseOldManClient().GetClanCompetitions();
 
                     // get the last one in that list
-                    var f2 = comps.Where(x => x.endsAt < DateTime.Now).OrderBy(x => x.id).Last();
+                    var endedComps = comps.Where(x => x.endsAt < DateTime.Now && x.metric != "ehb");
+                    var f2 = endedComps.OrderBy(x => x.id).Last();
 
                     if (f2 != null)
                     {
@@ -126,7 +127,7 @@ namespace CorruptOSBot.Modules
                         embedBuilder.Description = string.Format("**Total XP: {0}**", s);
                         embedBuilder.WithFooter(string.Format("Event ran from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
                         embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
-                        embedBuilder.ThumbnailUrl = "https://oldschool.runescape.wiki/w/Trailblazer_dragon_trophy#/media/File:Trailblazer_dragon_trophy_detail.png";
+                        embedBuilder.ThumbnailUrl = "https://www.clipartmax.com/png/middle/261-2614621_as-personal-trainers-we-encourage-the-joyful-moments-score-icon.png";
 
                         // get top 3 partipants
                         AddFields(embedBuilder, detailedComp.participants);
@@ -214,12 +215,12 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        private void AddField(EmbedBuilder embedBuilder, string icon, string player, int score)
+        private void AddField(EmbedBuilder embedBuilder, string icon, string player, double score)
         {
             var sb = new StringBuilder();
             sb.AppendLine(icon);
             sb.AppendLine(string.Format("**{0}**", player));
-            string s = score >= 10000 ? score.ToString("n0") : score.ToString("d");
+            string s = score >= 10000 ? Convert.ToInt32(score).ToString("n0") : Convert.ToInt32(score).ToString("d");
             sb.AppendLine(s);
             embedBuilder.AddField("\u200b", sb.ToString(), true);
         }

@@ -5,7 +5,6 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Deb
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\EntityFramework.SqlServer.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\EntityFramework.xml
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\bin\Debug\EntityFramework.SqlServer.xml
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Debug\CorruptOSBot.Data.csprojAssemblyReference.cache
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Debug\CorruptOSBot.Data.csproj.CoreCompileInputs.cache
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Debug\CorruptOSBot.Data.csproj.CopyComplete
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Data\obj\Debug\CorruptOSBot.Data.dll

@@ -1,10 +1,13 @@
 ﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
+using CorruptOSBot.Services;
 using CorruptOSBot.Shared;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using System;
 using System.Linq;
 using System.Text;
@@ -74,6 +77,37 @@ namespace CorruptOSBot.Modules
         }
 
 
+        [Helpgroup(HelpGroup.Admin)]
+        [Command("refreshtopbosskc")]
+        [Summary("!refreshtopbosskc - Regenerates the Top Clan KC list")]
+        public async Task SayRefreshTopKcAsync()
+        {
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "top-boss-kc", Context.User) && 
+                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer") &&
+                ToggleStateManager.GetToggleState(nameof(TopKCService)))
+            {
+                // find current channel
+                var channel = await ((IGuild)Context.Guild).GetChannelAsync(ChannelHelper.GetChannelId("top-boss-kc")) as SocketTextChannel;
+
+                if (channel != null)
+                {
+                    // first update base data
+                    await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
+
+                    // clear messages in channel
+                    var messages = await channel.GetMessagesAsync(3).FlattenAsync();
+                    await channel.DeleteMessagesAsync(messages);
+
+                    // Add new message
+                    await (channel as SocketTextChannel).SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(1000 * 60 * 60 * 24 * 3));
+                }
+            }
+        }
+
+
+
+
+
         private async Task<Embed> CreateEmbedForMessage(string bossname)
         {
             var result = await BossKCHelper.GetTopBossKC(WOMMemoryCache.OneDayMS);
@@ -104,7 +138,7 @@ namespace CorruptOSBot.Modules
                             bossEmoji,
                             bossResult.Boss.ToString().FirstCharToUpper()))
                         .WithImageUrl(bossUri)
-                        .WithFooter(string.Format("Corrupt OS (!bosskc) {1} - Data from: {0}", DateTime.Now.ToString("r"), bossResult.Boss.ToString()))
+                        .WithFooter(string.Format("Corrupt OS '!bosskc {1}' - Data from: {0}", DateTime.Now.ToString("r"), bossResult.Boss.ToString()))
                         .Build();
                 }
                 catch (Exception e)

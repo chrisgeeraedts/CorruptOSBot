@@ -46,7 +46,6 @@ namespace CorruptOSBot.Helpers.Bot
                     }
 
 
-
                     string valueCommand = string.Empty;
                     var commandAttributes = method.GetCustomAttributes(typeof(CommandAttribute), true);
                     if (commandAttributes.Any())

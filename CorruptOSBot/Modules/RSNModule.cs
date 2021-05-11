@@ -138,13 +138,14 @@ namespace CorruptOSBot.Modules
                 // post to general channel
                 var generalChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("general"));
                 await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member joined", 
-                    string.Format("<@{0}> Welcome to Corrupt OS", currentUser.Id)));
+                    string.Format("<@{0}> Welcome to Corrupt OS", currentUser.Id),
+                    "https://blog.memberclicks.com/hubfs/Onboarding_New_Members-1.jpg"));
 
                 // post to recruitment channel
                 var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
                 await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: 
                     EmbedHelper.CreateDefaultEmbed("Member joined",
-                    string.Format("<@{0}>  ({0}) has set their RSN to **{1}**!", currentUser.Id, preferedNickname)));
+                    string.Format("<@{0}> ({1}) has set their RSN to **{1}**!", currentUser.Id, preferedNickname)));
 
                 // add to WOM
                 var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
