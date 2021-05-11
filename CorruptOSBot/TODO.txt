@@ -46,8 +46,12 @@
 [X] Fix WOM so it removes cc member properly on leaving
 [X] !calendar to show calender items from DB
 
-[ ] Add inactivity thing to !promotions - WiseOldMan, gained xp last month = inactive. Take in account ALTs / iron (determined from database)
-[ ] !getuser {altname} should show the same as !getuser {main name}
+[X] Add skill icons to !score and !endscore
+[X] Fix RSN name change command to also change the name on database
+[X] !getuser {altname} should show the same as !getuser {main name}
+
+[/] Add inactivity thing to !promotions - WiseOldMan, gained xp last month = inactive. Take in account ALTs / iron (determined from database)
+
 [ ] Use the Bossname and BossCommand from the database instead of the enum's
 [ ] Change the !cox etc commands to a reply with emoji logic
 [ ] Add 'waiting' message to commands and delete that message afterwards

@@ -138,7 +138,7 @@ namespace CorruptOSBot.Modules
                             bossEmoji,
                             bossResult.Boss.ToString().FirstCharToUpper()))
                         .WithImageUrl(bossUri)
-                        .WithFooter(string.Format("Corrupt OS '!bosskc {1}' - Data from: {0}", DateTime.Now.ToString("r"), bossResult.Boss.ToString()))
+                        .WithFooter(string.Format("Corrupt OS - type '!bosskc {1}' - Data from: {0}", DateTime.Now.ToString("r"), bossResult.Boss.ToString()))
                         .Build();
                 }
                 catch (Exception e)

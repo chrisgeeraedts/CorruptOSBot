@@ -264,6 +264,12 @@ namespace CorruptOSBot
             _client.UserLeft += _client_UserLeft;
             _client.UserBanned += _client_UserBanned;
             _client.ReactionAdded += _client_ReactionAdded;
+            _client.CurrentUserUpdated += _client_CurrentUserUpdated;
+        }
+
+        private async Task _client_CurrentUserUpdated(SocketSelfUser arg1, SocketSelfUser arg2)
+        {
+            await Program.Log(new LogMessage(LogSeverity.Info, "Users", "_client_CurrentUserUpdated"));
         }
 
         private async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)

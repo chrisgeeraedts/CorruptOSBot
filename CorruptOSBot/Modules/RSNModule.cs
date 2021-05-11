@@ -102,6 +102,7 @@ namespace CorruptOSBot.Modules
                     {
                         // change name
                         rsaccount.rsn = preferedNickname;
+                        rsaccount.DiscordUser.Username = preferedNickname;
                         await model.SaveChangesAsync();
                     }
                 }

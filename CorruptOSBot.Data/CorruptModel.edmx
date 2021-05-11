@@ -126,6 +126,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Emoji" Type="nvarchar(max)" />
+          <Property Name="Image" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Toggles">
           <Key>
@@ -409,6 +410,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="PlayerPets" Relationship="corruptosModel.FK_Skill" FromRole="Skill" ToRole="PlayerPet" />
           <Property Name="Emoji" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Skill">
           <End Type="corruptosModel.Skill" Role="Skill" Multiplicity="0..1" />
@@ -587,6 +589,7 @@
           <EntitySetMapping Name="Skills">
             <EntityTypeMapping TypeName="corruptosModel.Skill">
               <MappingFragment StoreEntitySet="Skills">
+                <ScalarProperty Name="Image" ColumnName="Image" />
                 <ScalarProperty Name="Emoji" ColumnName="Emoji" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

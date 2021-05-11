@@ -134,17 +134,21 @@ namespace CorruptOSBot.Modules
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
                 var guildId = ConfigHelper.GetGuildId();
                 var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
-                // iterate through all discord users
-                var allUsers = guild.GetUsersAsync().Result;
 
-                var promotionSet = GetSupposedRank(allUsers, guild);
+                var allUsersFromDB = new List<DiscordUser>();
+                using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+                {
+                    allUsersFromDB = corruptosEntities.DiscordUsers.ToList();
+                }
+
+                var promotionSet = GetSupposedRank(allUsersFromDB, guild);
                 var updatedPromotionSet = GetCurrentRank(promotionSet, guild);
 
-                await SendEmbedMessages(updatedPromotionSet, Rank.OG);
-                await SendEmbedMessages(updatedPromotionSet, Rank.Sergeant);
-                await SendEmbedMessages(updatedPromotionSet, Rank.Corperal);
-                await SendEmbedMessages(updatedPromotionSet, Rank.Recruit);
-                //await SendInactivityEmbedMessage(updatedPromotionSet);
+                //await SendEmbedMessages(updatedPromotionSet, Rank.OG);
+                //await SendEmbedMessages(updatedPromotionSet, Rank.Sergeant);
+                //await SendEmbedMessages(updatedPromotionSet, Rank.Corperal);
+                //await SendEmbedMessages(updatedPromotionSet, Rank.Recruit);
+                await SendInactivityEmbedMessage(updatedPromotionSet);
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
@@ -264,21 +268,9 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        private List<PromotionSet> GetSupposedRank(IReadOnlyCollection<Discord.IGuildUser> users, Discord.IGuild guild)
+        private List<PromotionSet> GetSupposedRank(List<DiscordUser> users, Discord.IGuild guild)
         {
-            var dataset = new Dictionary<long?, DiscordUser>();
-
-            try
-            {
-                using (var database = new Data.CorruptModel())
-                {
-                    dataset = database.DiscordUsers.ToDictionary(x => x.DiscordId);
-                }
-            }
-            catch (Exception e)
-            {
-                Program.Log(new LogMessage(LogSeverity.Error, "GetSupposedRank", "Failed to get joindata from database - " + e.Message));
-            }
+            
            
             var result = new List<PromotionSet>();
 
@@ -288,63 +280,58 @@ namespace CorruptOSBot.Modules
             var daysIn1Month = Convert.ToInt32(daysIn6Months / 3);
 
             var dateTimeCurrent = GetLastDayOfMonth(DateTime.Now);
+                       
+            var discordUsers = guild.GetUsersAsync().Result;
 
-            foreach (var user in users.Where(x => !x.IsBot && !x.IsWebhook))
+            foreach (var user in users)
             {
-                var joinDate = user.JoinedAt.Value.DateTime;
-                var blacklisted = false;
-                var hasLeft = false;
-                var userId = Convert.ToInt64(user.Id);
+                var joinDate = user.OriginallyJoinedAt.Value;
+                var blacklisted = user.BlacklistedForPromotion;
+                var hasLeft = user.LeavingDate.HasValue;
+                var userId = Convert.ToUInt64(user.DiscordId);
 
-                // if we have a database entry, use that join date
-                if (dataset.ContainsKey(userId) && dataset[userId].OriginallyJoinedAt.HasValue)
-                {
-                    joinDate = dataset[userId].OriginallyJoinedAt.Value;
-                }
-                if (dataset.ContainsKey(userId))
-                {
-                    blacklisted = dataset[userId].BlacklistedForPromotion;
-                    hasLeft = dataset[userId].LeavingDate.HasValue;
-                }
+                // grab the active discord account from the GUILD
+                var discordUser = discordUsers.FirstOrDefault(x => x.Id == userId);
 
-                if (joinDate != null &&
+                if (discordUser != null &&
+                    joinDate != null &&
                     joinDate != DateTime.MinValue &&
-                    !DiscordHelper.HasRole(user, guild, "inactive") &&
-                    !DiscordHelper.HasRole(user, guild, "Clan Friend") &&
-                    !HasStaffOrModOrOwnerRole(user, guild) &&
+                    !DiscordHelper.HasRole(discordUser, guild, "inactive") &&
+                    !DiscordHelper.HasRole(discordUser, guild, "Clan Friend") &&
+                    !HasStaffOrModOrOwnerRole(discordUser, guild) &&
                     !blacklisted &&
                     !hasLeft)
                 {
                     int daysInactive = -1;
                     // check if inactive
-                    if (!IsInactive(user, out daysInactive))
+                    if (!IsInactive(discordUser, out daysInactive))
                     {
                         var daysFromJoining = Convert.ToInt32(dateTimeCurrent.Subtract(joinDate).TotalDays);
 
                         if (daysFromJoining >= daysInYear)
                         {
-                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.OG, DaystillRank = 9999, UserId = user.Id, DaysInDiscord = daysFromJoining });
+                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.OG, DaystillRank = 9999, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
                         }
                         else if (daysFromJoining >= daysIn6Months)
                         {
-                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Sergeant, DaystillRank = daysInYear - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
+                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Sergeant, DaystillRank = daysInYear - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
                         }
                         else if (daysFromJoining >= daysIn3Months)
                         {
-                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Corperal, DaystillRank = daysIn6Months - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
+                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Corperal, DaystillRank = daysIn6Months - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
                         }
                         else if (daysFromJoining >= daysIn1Month)
                         {
-                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Recruit, DaystillRank = daysIn3Months - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
+                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Recruit, DaystillRank = daysIn3Months - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
                         }
                         else
                         {
-                            result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Smiley, DaystillRank = daysIn1Month - daysFromJoining, UserId = user.Id, DaysInDiscord = daysFromJoining });
+                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Smiley, DaystillRank = daysIn1Month - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
                         }
                     }
                     else
                     {
-                        result.Add(new PromotionSet() { User = user, ShouldHaveRank = Rank.Inactive, DaystillRank = -1, UserId = user.Id, DaysInDiscord = daysInactive });
+                        result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Inactive, DaystillRank = -1, UserId = discordUser.Id, DaysInDiscord = daysInactive });
                     }
                 }
             }

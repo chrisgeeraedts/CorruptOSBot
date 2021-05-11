@@ -275,7 +275,21 @@ namespace CorruptOSBot.Modules
                     IGuildUser user;
                     if (!username.StartsWith("<@!"))
                     {
+                        //first, try to find the user based on the base username
                         user = await DiscordHelper.AsyncFindUserByName(username, Context);
+
+                        // if we cant find it, then load all the alts and try with them
+                        if (user == null)
+                        {
+                            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+                            {
+                                var alt = corruptosEntities.RunescapeAccounts.FirstOrDefault(x => x.rsn.ToLower() == username.ToLower());
+                                if (alt != null && alt.DiscordUser != null)
+                                {
+                                    user = await DiscordHelper.AsyncFindUserByName(alt.DiscordUser.Username, Context);
+                                }
+                            }
+                        }
                     }
                     else
                     {

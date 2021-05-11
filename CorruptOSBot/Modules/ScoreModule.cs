@@ -53,7 +53,7 @@ namespace CorruptOSBot.Modules
                         embedBuilder.Description = string.Format("**Total XP: {0}**", s);
                         embedBuilder.WithFooter(string.Format("Event runs from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
                         embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
-                        embedBuilder.ThumbnailUrl = "https://www.pngkey.com/png/full/406-4068714_free-icon-score-high-score-icon-png.png";
+                        embedBuilder.ThumbnailUrl = GetThumbnailImage(f2.metric);
 
                         AddFields(embedBuilder, detailedComp.participants);
                         AddImage(embedBuilder, detailedComp.title);
@@ -96,6 +96,19 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
+        private string GetThumbnailImage(string metric)
+        {
+            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+            {
+                var skill = corruptosEntities.Skills.FirstOrDefault(x => x.Name.ToLower() == metric.ToLower());
+                if (skill != null && !string.IsNullOrEmpty(skill.Image))
+                {
+                    return skill.Image;
+                }
+            }
+            return "https://www.pngkey.com/png/full/406-4068714_free-icon-score-high-score-icon-png.png";
+        }
+
         [Helpgroup(HelpGroup.Staff)]
         [Command("endscore")]
         [Summary("!endscore {compId}(optional) - Generates a leaderboard for the last completed event (or for the given CompId event). (Only allowed in **leaderboard**)")]
@@ -111,31 +124,35 @@ namespace CorruptOSBot.Modules
 
                     // get the last one in that list
                     var endedComps = comps.Where(x => x.endsAt < DateTime.Now && x.metric != "ehb");
-                    var f2 = endedComps.OrderBy(x => x.id).Last();
-
-                    if (f2 != null)
+                    if (endedComps.Any())
                     {
-                        // get details of this comp
-                        CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
+                        var f2 = endedComps.OrderBy(x => x.id).Last();
 
-                        // create embed with data
-                        var embedBuilder = new EmbedBuilder();
-                        embedBuilder.Color = Color.Green;
-                        embedBuilder.Title = f2.title;
-                        embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
-                        string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
-                        embedBuilder.Description = string.Format("**Total XP: {0}**", s);
-                        embedBuilder.WithFooter(string.Format("Event ran from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
-                        embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
-                        embedBuilder.ThumbnailUrl = "https://www.clipartmax.com/png/middle/261-2614621_as-personal-trainers-we-encourage-the-joyful-moments-score-icon.png";
+                        if (f2 != null)
+                        {
+                            // get details of this comp
+                            CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
 
-                        // get top 3 partipants
-                        AddFields(embedBuilder, detailedComp.participants);
-                        AddImage(embedBuilder, detailedComp.title);
+                            // create embed with data
+                            var embedBuilder = new EmbedBuilder();
+                            embedBuilder.Color = Color.Green;
+                            embedBuilder.Title = f2.title;
+                            embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
+                            string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
+                            embedBuilder.Description = string.Format("**Total XP: {0}**", s);
+                            embedBuilder.WithFooter(string.Format("Event ran from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
+                            embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
+                            embedBuilder.ThumbnailUrl = GetThumbnailImage(detailedComp.metric);
 
-                        await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
+                            // get top 3 partipants
+                            AddFields(embedBuilder, detailedComp.participants);
+                            AddImage(embedBuilder, detailedComp.title);
 
+                            await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
+
+                        }
                     }
+                    
                 }
             }
             else

@@ -2,10 +2,13 @@
 using CorruptOSBot.Shared;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace CorruptOSBot.Helpers.Bot
 {
@@ -143,6 +146,23 @@ namespace CorruptOSBot.Helpers.Bot
                 }
             }
             return result;
+        }
+
+
+        internal static async Task<bool> ActWithLoadingIndicator<TOut, TIn>(Func<TIn, TOut> functionToCall, TIn input, ISocketMessageChannel channel)
+        {
+            var loadingPath = string.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "loading.gif");
+            if (File.Exists(loadingPath))
+            {
+                // Show message
+                var loadingMessage = await channel.SendFileAsync(loadingPath);
+
+                TOut i = functionToCall(input);
+
+                // delete loading message
+                await ((IMessage)loadingMessage).DeleteAsync();
+            }
+            return true;
         }
     }
 
