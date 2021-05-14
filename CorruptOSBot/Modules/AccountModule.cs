@@ -1,5 +1,7 @@
 ﻿using CorruptOSBot.Extensions;
 using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
 using Discord;
 using Discord.Commands;
@@ -87,6 +89,11 @@ namespace CorruptOSBot.Modules
 
                             // add and message if it doesnt
                             await context.User.SendMessageAsync(String.Format("**{0}** was linked to your Corrupt OS Discord account!", rsn));
+
+                            var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+                            await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
+                                EmbedHelper.CreateDefaultEmbed(string.Format("Member added {0}", type),
+                                string.Format("{0} added '{1}' as their {2}", discordUser.Username, rsn, type)));
                         }
                     }
 
