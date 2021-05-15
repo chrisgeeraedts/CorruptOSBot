@@ -7,20 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CorruptOSBot.CorruptPoints
+namespace CorruptOSBot.Data
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class PointMutation
+    public partial class hunt_team_members
     {
         public int Id { get; set; }
-        public int PointChange { get; set; }
-        public System.DateTime DateTime { get; set; }
-        public Nullable<int> TargetPlayerId { get; set; }
-        public Nullable<int> PointStoreItemId { get; set; }
+        public int TeamId { get; set; }
+        public int DiscordUserId { get; set; }
     
         public virtual DiscordUser DiscordUser { get; set; }
-        public virtual PointStore PointStore { get; set; }
+        public virtual hunt_teams hunt_teams { get; set; }
     }
 }

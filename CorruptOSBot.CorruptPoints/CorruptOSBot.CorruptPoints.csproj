@@ -86,32 +86,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CorruptPointsModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CorruptPointsModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CorruptPointsModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CorruptPointsModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CorruptPointsModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CorruptPointsModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="DiscordUser.cs">
-      <DependentUpon>CorruptPointsModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="ModuleInjector.cs" />
     <Compile Include="Modules\PointModule.cs" />
-    <Compile Include="PointMutation.cs">
-      <DependentUpon>CorruptPointsModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PointStore.cs">
-      <DependentUpon>CorruptPointsModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -123,13 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <EntityDeploy Include="CorruptPointsModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CorruptPointsModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="CorruptPointsModel.edmx.diagram">
-      <DependentUpon>CorruptPointsModel.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -141,18 +110,6 @@
       <Project>{9afb3b35-746e-410a-9c29-2bc53b2a2011}</Project>
       <Name>CorruptOSBot.Shared</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="CorruptPointsModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CorruptPointsModel.edmx</DependentUpon>
-      <LastGenOutput>CorruptPointsModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="CorruptPointsModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>CorruptPointsModel.edmx</DependentUpon>
-      <LastGenOutput>CorruptPointsModel.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

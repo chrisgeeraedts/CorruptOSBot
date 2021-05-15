@@ -50,7 +50,6 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
-
         [Helpgroup(HelpGroup.Member)]
         [Command("bosskc")]
         [Summary("!bosskc {boss name} - Generates Top Clan KC for a specific boss (Only allowed in **pvm-general**)")]
@@ -75,7 +74,6 @@ namespace CorruptOSBot.Modules
             // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
 
         [Helpgroup(HelpGroup.Admin)]
         [Command("refreshtopbosskc")]
@@ -103,10 +101,6 @@ namespace CorruptOSBot.Modules
                 }
             }
         }
-
-
-
-
 
         private async Task<Embed> CreateEmbedForMessage(string bossname)
         {
@@ -148,7 +142,6 @@ namespace CorruptOSBot.Modules
             }
             return null;
         }
-
 
         private string GetKCLine(int skip, bool bold, KcTopList bossResult)
         {

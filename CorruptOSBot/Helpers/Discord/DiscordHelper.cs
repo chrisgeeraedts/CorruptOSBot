@@ -10,23 +10,9 @@ using System.Threading.Tasks;
 
 namespace CorruptOSBot.Helpers.Discord
 {
-    public static class DiscordHelper
+    public static partial class DiscordHelper
     {
         public static List<string> DiscordUsers { get; set; }
-
-        public static string GetAccountNameOrNickname(SocketUser user)
-        {
-            var currentUser = ((SocketGuildUser)user);
-            var name = currentUser.Nickname ?? user.Username;
-            return name;
-        }
-
-        public static string GetAccountNameOrNickname(SocketGuildUser user)
-        {
-            var currentUser = user;
-            var name = currentUser.Nickname ?? user.Username;
-            return name;
-        }
 
         internal static bool IsInChannel(ulong channelId, string channelName, SocketUser userAdditional = null)
         {
@@ -44,7 +30,7 @@ namespace CorruptOSBot.Helpers.Discord
             var guildId = ConfigHelper.GetGuildId();
             var guild = await ((IDiscordClient)context.Client).GetGuildAsync(guildId);
             var allUsers = await guild.GetUsersAsync();
-            return allUsers.FirstOrDefault(x => DiscordHelper.GetAccountNameOrNickname(x).ToLower() == username.ToLower());
+            return allUsers.FirstOrDefault(x => DiscordNameHelper.GetAccountNameOrNickname(x).ToLower() == username.ToLower());
         }
 
         public static async Task<IGuildUser> AsyncFindUserByMention(string mention, global::Discord.Commands.SocketCommandContext context)
@@ -55,12 +41,6 @@ namespace CorruptOSBot.Helpers.Discord
             return allUsers.FirstOrDefault(x => x.Mention == mention);
         }
 
-        public static string GetAccountNameOrNickname(IGuildUser user)
-        {
-            var currentUser = user;
-            var name = currentUser.Nickname ?? user.Username;
-            return name;
-        }
 
         internal static async Task PostHeartbeat(IMessageChannel channel, TimeSpan timeOnline)
         {
@@ -94,7 +74,7 @@ namespace CorruptOSBot.Helpers.Discord
             eb.Title = "Welcome to Corrupt OS";
 
             var sb = new StringBuilder();
-            sb.AppendLine(string.Format("Hi **{0}**, and welcome to Corrupt OS!", GetAccountNameOrNickname(user)));
+            sb.AppendLine(string.Format("Hi **{0}**, and welcome to Corrupt OS!", DiscordNameHelper.GetAccountNameOrNickname(user)));
             sb.AppendLine(Environment.NewLine);
             sb.AppendLine("**Important channels:**");
             sb.AppendLine(Environment.NewLine);

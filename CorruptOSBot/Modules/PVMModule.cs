@@ -24,7 +24,7 @@ namespace CorruptOSBot.Modules
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
-                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
@@ -74,7 +74,7 @@ namespace CorruptOSBot.Modules
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
-                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
@@ -124,7 +124,7 @@ namespace CorruptOSBot.Modules
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
-                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
@@ -174,7 +174,7 @@ namespace CorruptOSBot.Modules
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
-                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
@@ -222,7 +222,7 @@ namespace CorruptOSBot.Modules
                 {
                     // check if user has learner/intermediate/advanced
                     var currentUser = ((SocketGuildUser)Context.User);
-                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
 
                     if (!string.IsNullOrEmpty(rsn))
                     {

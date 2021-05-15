@@ -33,6 +33,28 @@
     <Property Name="StoreItemImage" Type="nvarchar(max)" />
     <Property Name="StoreItemCommand" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="RunescapeAccounts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="rsn" Type="varchar(max)" Nullable="false" />
+    <Property Name="wom_id" Type="int" />
+    <Property Name="DiscordUserId" Type="int" />
+    <Property Name="account_type" Type="nvarchar(max)" />
+  </EntityType>
+  <Association Name="FK_DiscordUser">
+    <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="0..1" />
+    <End Role="RunescapeAccounts" Type="Self.RunescapeAccounts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RunescapeAccounts">
+        <PropertyRef Name="DiscordUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_DiscordUserPoints">
     <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="0..1" />
     <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
@@ -61,6 +83,11 @@
     <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PointMutations" EntityType="Self.PointMutations" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PointStore" EntityType="Self.PointStore" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_DiscordUser" Association="Self.FK_DiscordUser">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+    </AssociationSet>
     <AssociationSet Name="FK_DiscordUserPoints" Association="Self.FK_DiscordUserPoints">
       <End Role="DiscordUsers" EntitySet="DiscordUsers" />
       <End Role="PointMutations" EntitySet="PointMutations" />

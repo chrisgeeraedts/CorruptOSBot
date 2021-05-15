@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="corruptosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Activities">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Emoji" Type="nvarchar(max)" />
+  </EntityType>
   <EntityType Name="Bosses">
     <Key>
       <PropertyRef Name="Id" />
@@ -71,6 +79,49 @@
     <Property Name="Severity" Type="nvarchar(max)" />
     <Property Name="Datetime" Type="datetime" />
   </EntityType>
+  <EntityType Name="hunt_bossdrops">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BasePointValue" Type="int" Nullable="false" />
+    <Property Name="BossId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="hunt_bosses">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AllUniquesValue" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="hunt_team_drops">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TeamId" Type="int" Nullable="false" />
+    <Property Name="DropId" Type="int" Nullable="false" />
+    <Property Name="PointValue" Type="int" />
+    <Property Name="DropDate" Type="datetime" />
+    <Property Name="DropImage" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="hunt_team_members">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TeamId" Type="int" Nullable="false" />
+    <Property Name="DiscordUserId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="hunt_teams">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TeamName" Type="nvarchar(max)" />
+  </EntityType>
   <EntityType Name="PlayerPets">
     <Key>
       <PropertyRef Name="Id" />
@@ -90,7 +141,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PointChange" Type="int" Nullable="false" />
     <Property Name="DateTime" Type="datetime" Nullable="false" />
-    <Property Name="TargetPlayerId" Type="int" />
+    <Property Name="TargetPlayerId" Type="int" Nullable="false" />
     <Property Name="PointStoreItemId" Type="int" />
   </EntityType>
   <EntityType Name="PointStore">
@@ -132,6 +183,18 @@
     <Property Name="Toggled" Type="bit" Nullable="false" />
     <Property Name="Type" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <Association Name="FK_Activity">
+    <End Role="Activities" Type="Self.Activities" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="ActivityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Boss">
     <End Role="Bosses" Type="Self.Bosses" Multiplicity="0..1" />
     <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
@@ -140,6 +203,18 @@
         <PropertyRef Name="Id" />
       </Principal>
       <Dependent Role="PlayerPets">
+        <PropertyRef Name="BossId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BossId">
+    <End Role="hunt_bosses" Type="Self.hunt_bosses" Multiplicity="1" />
+    <End Role="hunt_bossdrops" Type="Self.hunt_bossdrops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_bosses">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_bossdrops">
         <PropertyRef Name="BossId" />
       </Dependent>
     </ReferentialConstraint>
@@ -156,8 +231,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_DiscordUserId">
+    <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="1" />
+    <End Role="hunt_team_members" Type="Self.hunt_team_members" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_members">
+        <PropertyRef Name="DiscordUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_DiscordUserPoints">
-    <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="0..1" />
+    <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="1" />
     <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="DiscordUsers">
@@ -165,6 +252,30 @@
       </Principal>
       <Dependent Role="PointMutations">
         <PropertyRef Name="TargetPlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DropBossDropId">
+    <End Role="hunt_bossdrops" Type="Self.hunt_bossdrops" Multiplicity="1" />
+    <End Role="hunt_team_drops" Type="Self.hunt_team_drops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_bossdrops">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_drops">
+        <PropertyRef Name="DropId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DropTeamId">
+    <End Role="hunt_teams" Type="Self.hunt_teams" Multiplicity="1" />
+    <End Role="hunt_team_drops" Type="Self.hunt_team_drops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_teams">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_drops">
+        <PropertyRef Name="TeamId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -204,7 +315,20 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_TeamId">
+    <End Role="hunt_teams" Type="Self.hunt_teams" Multiplicity="1" />
+    <End Role="hunt_team_members" Type="Self.hunt_team_members" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_teams">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_members">
+        <PropertyRef Name="TeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="corruptosModelStoreContainer">
+    <EntitySet Name="Activities" EntityType="Self.Activities" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Bosses" EntityType="Self.Bosses" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BotConfiguration" EntityType="Self.BotConfiguration" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Calendar" EntityType="Self.Calendar" Schema="dbo" store:Type="Tables" />
@@ -212,23 +336,48 @@
     <EntitySet Name="ChatLog" EntityType="Self.ChatLog" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="hunt_bossdrops" EntityType="Self.hunt_bossdrops" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="hunt_bosses" EntityType="Self.hunt_bosses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="hunt_team_drops" EntityType="Self.hunt_team_drops" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="hunt_team_members" EntityType="Self.hunt_team_members" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="hunt_teams" EntityType="Self.hunt_teams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PointMutations" EntityType="Self.PointMutations" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PointStore" EntityType="Self.PointStore" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Toggles" EntityType="Self.Toggles" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Activity" Association="Self.FK_Activity">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
     <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
       <End Role="Bosses" EntitySet="Bosses" />
       <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BossId" Association="Self.FK_BossId">
+      <End Role="hunt_bosses" EntitySet="hunt_bosses" />
+      <End Role="hunt_bossdrops" EntitySet="hunt_bossdrops" />
     </AssociationSet>
     <AssociationSet Name="FK_DiscordUser" Association="Self.FK_DiscordUser">
       <End Role="DiscordUsers" EntitySet="DiscordUsers" />
       <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
     </AssociationSet>
+    <AssociationSet Name="FK_DiscordUserId" Association="Self.FK_DiscordUserId">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="hunt_team_members" EntitySet="hunt_team_members" />
+    </AssociationSet>
     <AssociationSet Name="FK_DiscordUserPoints" Association="Self.FK_DiscordUserPoints">
       <End Role="DiscordUsers" EntitySet="DiscordUsers" />
       <End Role="PointMutations" EntitySet="PointMutations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DropBossDropId" Association="Self.FK_DropBossDropId">
+      <End Role="hunt_bossdrops" EntitySet="hunt_bossdrops" />
+      <End Role="hunt_team_drops" EntitySet="hunt_team_drops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DropTeamId" Association="Self.FK_DropTeamId">
+      <End Role="hunt_teams" EntitySet="hunt_teams" />
+      <End Role="hunt_team_drops" EntitySet="hunt_team_drops" />
     </AssociationSet>
     <AssociationSet Name="FK_PointStoreUserPoints" Association="Self.FK_PointStoreUserPoints">
       <End Role="PointStore" EntitySet="PointStore" />
@@ -241,6 +390,10 @@
     <AssociationSet Name="FK_Skill" Association="Self.FK_Skill">
       <End Role="Skills" EntitySet="Skills" />
       <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TeamId" Association="Self.FK_TeamId">
+      <End Role="hunt_teams" EntitySet="hunt_teams" />
+      <End Role="hunt_team_members" EntitySet="hunt_team_members" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

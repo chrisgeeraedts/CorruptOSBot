@@ -43,7 +43,7 @@ namespace CorruptOSBot.Services
                     var allUsers = guild.GetUsersAsync().Result;
                     foreach (var discordUser in allUsers)
                     {
-                        var name = DiscordHelper.GetAccountNameOrNickname(discordUser);
+                        var name = DiscordNameHelper.GetAccountNameOrNickname(discordUser);
                         var clanMemberWom = clanMembers.FirstOrDefault(x => x.displayName.ToLower() == name.ToLower());
 
                         if (clanMemberWom != null)

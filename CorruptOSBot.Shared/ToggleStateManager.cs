@@ -16,7 +16,7 @@ namespace CorruptOSBot.Shared
             {
                 return true;
             }
-
+            
             // default togglestate check
             using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
             {

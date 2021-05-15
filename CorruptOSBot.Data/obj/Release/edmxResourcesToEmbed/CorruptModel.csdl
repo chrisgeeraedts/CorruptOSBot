@@ -1,5 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="corruptosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Activity">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Emoji" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Activity" FromRole="Activities" ToRole="PlayerPets" />
+  </EntityType>
   <EntityType Name="Boss">
     <Key>
       <PropertyRef Name="Id" />
@@ -7,9 +16,35 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Bossname" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="EmojiName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-    <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Boss" FromRole="Bosses" ToRole="PlayerPets" />
     <Property Name="BossImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="BossCommand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Boss" FromRole="Bosses" ToRole="PlayerPets" />
+  </EntityType>
+  <EntityType Name="BotConfiguration">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PropertyName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PropertyValue" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Calendar">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="StartsAt" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="EndsAt" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Channel">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DiscordChannelId" Type="Int64" Nullable="false" />
   </EntityType>
   <EntityType Name="ChatLog">
     <Key>
@@ -33,11 +68,12 @@
     <Property Name="Username" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="DiscordId" Type="Int64" />
     <Property Name="OriginallyJoinedAt" Type="DateTime" Precision="3" />
-    <NavigationProperty Name="RunescapeAccounts" Relationship="Self.FK_DiscordUser" FromRole="DiscordUsers" ToRole="RunescapeAccounts" />
     <Property Name="BlacklistedForPromotion" Type="Boolean" Nullable="false" />
     <Property Name="LeavingDate" Type="DateTime" Precision="3" />
     <Property Name="CorruptPoints" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="PointMutations" Relationship="corruptosModel.FK_DiscordUserPoints" FromRole="DiscordUser" ToRole="PointMutation" />
+    <NavigationProperty Name="RunescapeAccounts" Relationship="Self.FK_DiscordUser" FromRole="DiscordUsers" ToRole="RunescapeAccounts" />
+    <NavigationProperty Name="hunt_team_members" Relationship="Self.FK_DiscordUserId" FromRole="DiscordUsers" ToRole="hunt_team_members" />
+    <NavigationProperty Name="PointMutations" Relationship="Self.FK_DiscordUserPoints" FromRole="DiscordUsers" ToRole="PointMutations" />
   </EntityType>
   <EntityType Name="ErrorLog">
     <Key>
@@ -48,6 +84,58 @@
     <Property Name="Severity" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Datetime" Type="DateTime" Precision="3" />
   </EntityType>
+  <EntityType Name="hunt_bossdrops">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ItemName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="BasePointValue" Type="Int32" Nullable="false" />
+    <Property Name="BossId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="hunt_bosses" Relationship="Self.FK_BossId" FromRole="hunt_bossdrops" ToRole="hunt_bosses" />
+    <NavigationProperty Name="hunt_team_drops" Relationship="Self.FK_DropBossDropId" FromRole="hunt_bossdrops" ToRole="hunt_team_drops" />
+  </EntityType>
+  <EntityType Name="hunt_bosses">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="AllUniquesValue" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="hunt_bossdrops" Relationship="Self.FK_BossId" FromRole="hunt_bosses" ToRole="hunt_bossdrops" />
+  </EntityType>
+  <EntityType Name="hunt_team_drops">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TeamId" Type="Int32" Nullable="false" />
+    <Property Name="DropId" Type="Int32" Nullable="false" />
+    <Property Name="PointValue" Type="Int32" />
+    <Property Name="DropDate" Type="DateTime" Precision="3" />
+    <Property Name="DropImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="hunt_bossdrops" Relationship="Self.FK_DropBossDropId" FromRole="hunt_team_drops" ToRole="hunt_bossdrops" />
+    <NavigationProperty Name="hunt_teams" Relationship="Self.FK_DropTeamId" FromRole="hunt_team_drops" ToRole="hunt_teams" />
+  </EntityType>
+  <EntityType Name="hunt_team_members">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TeamId" Type="Int32" Nullable="false" />
+    <Property Name="DiscordUserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="DiscordUser" Relationship="Self.FK_DiscordUserId" FromRole="hunt_team_members" ToRole="DiscordUsers" />
+    <NavigationProperty Name="hunt_teams" Relationship="Self.FK_TeamId" FromRole="hunt_team_members" ToRole="hunt_teams" />
+  </EntityType>
+  <EntityType Name="hunt_teams">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TeamName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="hunt_team_drops" Relationship="Self.FK_DropTeamId" FromRole="hunt_teams" ToRole="hunt_team_drops" />
+    <NavigationProperty Name="hunt_team_members" Relationship="Self.FK_TeamId" FromRole="hunt_teams" ToRole="hunt_team_members" />
+  </EntityType>
   <EntityType Name="PlayerPet">
     <Key>
       <PropertyRef Name="Id" />
@@ -55,13 +143,38 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="DropDate" Type="DateTime" Precision="3" />
     <Property Name="BossId" Type="Int32" />
+    <Property Name="SkillId" Type="Int32" />
+    <Property Name="ActivityId" Type="Int32" />
     <Property Name="RunescapeAccountId" Type="Int32" />
+    <Property Name="LevelOrKcGotten" Type="Int32" />
+    <NavigationProperty Name="Activity" Relationship="Self.FK_Activity" FromRole="PlayerPets" ToRole="Activities" />
     <NavigationProperty Name="Boss" Relationship="Self.FK_Boss" FromRole="PlayerPets" ToRole="Bosses" />
     <NavigationProperty Name="RunescapeAccount" Relationship="Self.FK_RunescapeAccount" FromRole="PlayerPets" ToRole="RunescapeAccounts" />
-    <Property Name="SkillId" Type="Int32" />
-    <NavigationProperty Name="Skill" Relationship="corruptosModel.FK_Skill" FromRole="PlayerPet" ToRole="Skill" />
-    <Property Name="ActivityId" Type="Int32" />
-    <Property Name="LevelOrKcGotten" Type="Int32" />
+    <NavigationProperty Name="Skill" Relationship="Self.FK_Skill" FromRole="PlayerPets" ToRole="Skills" />
+  </EntityType>
+  <EntityType Name="PointMutation">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PointChange" Type="Int32" Nullable="false" />
+    <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="TargetPlayerId" Type="Int32" Nullable="false" />
+    <Property Name="PointStoreItemId" Type="Int32" />
+    <NavigationProperty Name="DiscordUser" Relationship="Self.FK_DiscordUserPoints" FromRole="PointMutations" ToRole="DiscordUsers" />
+    <NavigationProperty Name="PointStore" Relationship="Self.FK_PointStoreUserPoints" FromRole="PointMutations" ToRole="PointStore" />
+  </EntityType>
+  <EntityType Name="PointStore">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StoreItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="StoreItemValue" Type="Int32" Nullable="false" />
+    <Property Name="StoreItemDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="StoreItemImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="StoreItemCommand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PointMutations" Relationship="Self.FK_PointStoreUserPoints" FromRole="PointStore" ToRole="PointMutations" />
   </EntityType>
   <EntityType Name="RunescapeAccount">
     <Key>
@@ -71,10 +184,41 @@
     <Property Name="rsn" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="wom_id" Type="Int32" />
     <Property Name="DiscordUserId" Type="Int32" />
+    <Property Name="account_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="DiscordUser" Relationship="Self.FK_DiscordUser" FromRole="RunescapeAccounts" ToRole="DiscordUsers" />
     <NavigationProperty Name="PlayerPets" Relationship="Self.FK_RunescapeAccount" FromRole="RunescapeAccounts" ToRole="PlayerPets" />
-    <Property Name="account_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
   </EntityType>
+  <EntityType Name="Skill">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Emoji" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Skill" FromRole="Skills" ToRole="PlayerPets" />
+  </EntityType>
+  <EntityType Name="Toggle">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Functionality" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Toggled" Type="Boolean" Nullable="false" />
+    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_Activity">
+    <End Role="Activities" Type="Self.Activity" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="Self.PlayerPet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="ActivityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Boss">
     <End Role="Bosses" Type="Self.Boss" Multiplicity="0..1" />
     <End Role="PlayerPets" Type="Self.PlayerPet" Multiplicity="*" />
@@ -99,6 +243,78 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_DiscordUserId">
+    <End Role="DiscordUsers" Type="Self.DiscordUser" Multiplicity="1" />
+    <End Role="hunt_team_members" Type="Self.hunt_team_members" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_members">
+        <PropertyRef Name="DiscordUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DiscordUserPoints">
+    <End Role="DiscordUsers" Type="Self.DiscordUser" Multiplicity="1" />
+    <End Role="PointMutations" Type="Self.PointMutation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PointMutations">
+        <PropertyRef Name="TargetPlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BossId">
+    <End Role="hunt_bosses" Type="Self.hunt_bosses" Multiplicity="1" />
+    <End Role="hunt_bossdrops" Type="Self.hunt_bossdrops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_bosses">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_bossdrops">
+        <PropertyRef Name="BossId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DropBossDropId">
+    <End Role="hunt_bossdrops" Type="Self.hunt_bossdrops" Multiplicity="1" />
+    <End Role="hunt_team_drops" Type="Self.hunt_team_drops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_bossdrops">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_drops">
+        <PropertyRef Name="DropId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DropTeamId">
+    <End Role="hunt_teams" Type="Self.hunt_teams" Multiplicity="1" />
+    <End Role="hunt_team_drops" Type="Self.hunt_team_drops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_teams">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_drops">
+        <PropertyRef Name="TeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TeamId">
+    <End Role="hunt_teams" Type="Self.hunt_teams" Multiplicity="1" />
+    <End Role="hunt_team_members" Type="Self.hunt_team_members" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_teams">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_members">
+        <PropertyRef Name="TeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_RunescapeAccount">
     <End Role="RunescapeAccounts" Type="Self.RunescapeAccount" Multiplicity="0..1" />
     <End Role="PlayerPets" Type="Self.PlayerPet" Multiplicity="*" />
@@ -111,13 +327,54 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Skill">
+    <End Role="Skills" Type="Self.Skill" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="Self.PlayerPet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="SkillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PointStoreUserPoints">
+    <End Role="PointStore" Type="Self.PointStore" Multiplicity="0..1" />
+    <End Role="PointMutations" Type="Self.PointMutation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PointStore">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PointMutations">
+        <PropertyRef Name="PointStoreItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="CorruptModel" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Activities" EntityType="Self.Activity" />
     <EntitySet Name="Bosses" EntityType="Self.Boss" />
+    <EntitySet Name="BotConfigurations" EntityType="Self.BotConfiguration" />
+    <EntitySet Name="Calendars" EntityType="Self.Calendar" />
+    <EntitySet Name="Channels" EntityType="Self.Channel" />
     <EntitySet Name="ChatLogs" EntityType="Self.ChatLog" />
     <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUser" />
     <EntitySet Name="ErrorLogs" EntityType="Self.ErrorLog" />
+    <EntitySet Name="hunt_bossdrops" EntityType="Self.hunt_bossdrops" />
+    <EntitySet Name="hunt_bosses" EntityType="Self.hunt_bosses" />
+    <EntitySet Name="hunt_team_drops" EntityType="Self.hunt_team_drops" />
+    <EntitySet Name="hunt_team_members" EntityType="Self.hunt_team_members" />
+    <EntitySet Name="hunt_teams" EntityType="Self.hunt_teams" />
     <EntitySet Name="PlayerPets" EntityType="Self.PlayerPet" />
+    <EntitySet Name="PointMutations" EntityType="Self.PointMutation" />
+    <EntitySet Name="PointStores" EntityType="Self.PointStore" />
     <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccount" />
+    <EntitySet Name="Skills" EntityType="Self.Skill" />
+    <EntitySet Name="Toggles" EntityType="Self.Toggle" />
+    <AssociationSet Name="FK_Activity" Association="Self.FK_Activity">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
     <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
       <End Role="Bosses" EntitySet="Bosses" />
       <End Role="PlayerPets" EntitySet="PlayerPets" />
@@ -126,133 +383,41 @@
       <End Role="DiscordUsers" EntitySet="DiscordUsers" />
       <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
     </AssociationSet>
+    <AssociationSet Name="FK_DiscordUserId" Association="Self.FK_DiscordUserId">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="hunt_team_members" EntitySet="hunt_team_members" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DiscordUserPoints" Association="Self.FK_DiscordUserPoints">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="PointMutations" EntitySet="PointMutations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BossId" Association="Self.FK_BossId">
+      <End Role="hunt_bosses" EntitySet="hunt_bosses" />
+      <End Role="hunt_bossdrops" EntitySet="hunt_bossdrops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DropBossDropId" Association="Self.FK_DropBossDropId">
+      <End Role="hunt_bossdrops" EntitySet="hunt_bossdrops" />
+      <End Role="hunt_team_drops" EntitySet="hunt_team_drops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DropTeamId" Association="Self.FK_DropTeamId">
+      <End Role="hunt_teams" EntitySet="hunt_teams" />
+      <End Role="hunt_team_drops" EntitySet="hunt_team_drops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TeamId" Association="Self.FK_TeamId">
+      <End Role="hunt_teams" EntitySet="hunt_teams" />
+      <End Role="hunt_team_members" EntitySet="hunt_team_members" />
+    </AssociationSet>
     <AssociationSet Name="FK_RunescapeAccount" Association="Self.FK_RunescapeAccount">
       <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
       <End Role="PlayerPets" EntitySet="PlayerPets" />
     </AssociationSet>
-    <EntitySet Name="Skills" EntityType="corruptosModel.Skill" />
-    <AssociationSet Name="FK_Skill" Association="corruptosModel.FK_Skill">
-      <End Role="Skill" EntitySet="Skills" />
-      <End Role="PlayerPet" EntitySet="PlayerPets" />
+    <AssociationSet Name="FK_Skill" Association="Self.FK_Skill">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
     </AssociationSet>
-    <EntitySet Name="Channels" EntityType="corruptosModel.Channel" />
-    <EntitySet Name="Toggles" EntityType="corruptosModel.Toggle" />
-    <EntitySet Name="BotConfigurations" EntityType="corruptosModel.BotConfiguration" />
-    <EntitySet Name="PointMutations" EntityType="corruptosModel.PointMutation" />
-    <EntitySet Name="PointStores" EntityType="corruptosModel.PointStore" />
-    <AssociationSet Name="FK_DiscordUserPoints" Association="corruptosModel.FK_DiscordUserPoints">
-      <End Role="DiscordUser" EntitySet="DiscordUsers" />
-      <End Role="PointMutation" EntitySet="PointMutations" />
-    </AssociationSet>
-    <AssociationSet Name="FK_PointStoreUserPoints" Association="corruptosModel.FK_PointStoreUserPoints">
+    <AssociationSet Name="FK_PointStoreUserPoints" Association="Self.FK_PointStoreUserPoints">
       <End Role="PointStore" EntitySet="PointStores" />
-      <End Role="PointMutation" EntitySet="PointMutations" />
+      <End Role="PointMutations" EntitySet="PointMutations" />
     </AssociationSet>
-    <EntitySet Name="Calendars" EntityType="corruptosModel.Calendar" />
   </EntityContainer>
-  <EntityType Name="Skill">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="PlayerPets" Relationship="corruptosModel.FK_Skill" FromRole="Skill" ToRole="PlayerPet" />
-    <Property Name="Emoji" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="Image" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <Association Name="FK_Skill">
-    <End Type="corruptosModel.Skill" Role="Skill" Multiplicity="0..1" />
-    <End Type="corruptosModel.PlayerPet" Role="PlayerPet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Skill">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="PlayerPet">
-        <PropertyRef Name="SkillId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Channel">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="DiscordChannelId" Type="Int64" Nullable="false" />
-  </EntityType>
-  <EntityType Name="Toggle">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Functionality" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Toggled" Type="Boolean" Nullable="false" />
-    <Property Name="Type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <EntityType Name="BotConfiguration">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="PropertyValue" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <EntityType Name="PointMutation">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="PointChange" Type="Int32" Nullable="false" />
-    <Property Name="DateTime" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="TargetPlayerId" Type="Int32" />
-    <Property Name="PointStoreItemId" Type="Int32" />
-    <NavigationProperty Name="DiscordUser" Relationship="corruptosModel.FK_DiscordUserPoints" FromRole="PointMutation" ToRole="DiscordUser" />
-    <NavigationProperty Name="PointStore" Relationship="corruptosModel.FK_PointStoreUserPoints" FromRole="PointMutation" ToRole="PointStore" />
-  </EntityType>
-  <EntityType Name="PointStore">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="StoreItemName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="StoreItemValue" Type="Int32" Nullable="false" />
-    <Property Name="StoreItemDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="StoreItemImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="PointMutations" Relationship="corruptosModel.FK_PointStoreUserPoints" FromRole="PointStore" ToRole="PointMutation" />
-    <Property Name="StoreItemCommand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-  </EntityType>
-  <Association Name="FK_DiscordUserPoints">
-    <End Type="corruptosModel.DiscordUser" Role="DiscordUser" Multiplicity="0..1" />
-    <End Type="corruptosModel.PointMutation" Role="PointMutation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="DiscordUser">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="PointMutation">
-        <PropertyRef Name="TargetPlayerId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_PointStoreUserPoints">
-    <End Type="corruptosModel.PointStore" Role="PointStore" Multiplicity="0..1" />
-    <End Type="corruptosModel.PointMutation" Role="PointMutation" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="PointStore">
-        <PropertyRef Name="Id" />
-      </Principal>
-      <Dependent Role="PointMutation">
-        <PropertyRef Name="PointStoreItemId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Calendar">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Title" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="StartsAt" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="EndsAt" Type="DateTime" Nullable="false" Precision="3" />
-    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-  </EntityType>
 </Schema>

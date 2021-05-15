@@ -17,7 +17,7 @@ namespace CorruptOSBot
                 if (ToggleStateManager.GetToggleState(nameof(SuggestionInterceptor), arg.Author))
                 {
                     var currentUser = ((SocketGuildUser)arg.Author);
-                    var name = DiscordHelper.GetAccountNameOrNickname(currentUser);
+                    var name = DiscordNameHelper.GetAccountNameOrNickname(currentUser);
                     if (!string.IsNullOrEmpty(name))
                     {
                         string title = string.Format("{0} suggested", name);

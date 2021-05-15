@@ -20,7 +20,6 @@ namespace CorruptOSBot.Modules
 {
     public class AdminModule : ModuleBase<SocketCommandContext>
     {
-
         [Helpgroup(HelpGroup.Admin)]
         [Command("initdb")]
         [Summary("!initdb - initializes the DB")]
@@ -43,7 +42,7 @@ namespace CorruptOSBot.Modules
                 PermissionManager.HasSpecificRole(Context.User, "Moderator")))
             {
                 var currentUser = ((SocketGuildUser)Context.User);
-                var name = DiscordHelper.GetAccountNameOrNickname(currentUser);
+                var name = DiscordNameHelper.GetAccountNameOrNickname(currentUser);
                 if (!string.IsNullOrEmpty(name))
                 {
                     string title = string.Format("{0} has started a poll", name);
@@ -229,7 +228,7 @@ namespace CorruptOSBot.Modules
                     var allUsers = await guild.GetUsersAsync();
                     foreach (var discordUser in allUsers.Where(x => !x.IsBot && !x.IsWebhook))
                     {
-                        DiscordHelper.DiscordUsers.Add(DiscordHelper.GetAccountNameOrNickname(discordUser));
+                        DiscordHelper.DiscordUsers.Add(DiscordNameHelper.GetAccountNameOrNickname(discordUser));
                     }
 
                     foreach (var discordUser in DiscordHelper.DiscordUsers)
@@ -315,7 +314,6 @@ namespace CorruptOSBot.Modules
             }
         }
 
-
         [Helpgroup(HelpGroup.Member)]
         [Command("getuser")]
         [Summary("!getuser {username}(optional) - Gets a single user on discord, showing their available information.")]
@@ -339,7 +337,6 @@ namespace CorruptOSBot.Modules
                 await Context.Message.DeleteAsync();
             }
         }
-
 
         private async Task InitDB(SocketCommandContext context)
         {
@@ -384,17 +381,17 @@ namespace CorruptOSBot.Modules
                     var discordUser = new Data.DiscordUser()
                     {
                         DiscordId = Convert.ToInt64(user.Id),
-                        Username = DiscordHelper.GetAccountNameOrNickname(user),
+                        Username = DiscordNameHelper.GetAccountNameOrNickname(user),
                         OriginallyJoinedAt = user.JoinedAt?.DateTime
                     };
 
                     corruptosEntities.DiscordUsers.Add(discordUser);
 
-                    var womIdentity = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.username.ToLower() == DiscordHelper.GetAccountNameOrNickname(user).ToLower());
+                    var womIdentity = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.username.ToLower() == DiscordNameHelper.GetAccountNameOrNickname(user).ToLower());
                     corruptosEntities.RunescapeAccounts.Add(new Data.RunescapeAccount()
                     {
                         DiscordUser = discordUser,
-                        rsn = DiscordHelper.GetAccountNameOrNickname(user),
+                        rsn = DiscordNameHelper.GetAccountNameOrNickname(user),
                         wom_id = womIdentity?.id
 
                     });
@@ -407,7 +404,7 @@ namespace CorruptOSBot.Modules
         private EmbedBuilder BuildEmbedForUserInfo(IGuildUser user, bool adminFormat = false)
         {
             var embedBuilder = new EmbedBuilder();
-            embedBuilder.Title = DiscordHelper.GetAccountNameOrNickname(user);
+            embedBuilder.Title = DiscordNameHelper.GetAccountNameOrNickname(user);
            
             var rsAccounts = new List<RunescapeAccount>();
             var isBlackListed = false;
@@ -506,6 +503,8 @@ namespace CorruptOSBot.Modules
             return embedBuilder;
         }
 
+        #region April first
+
         [Command("overthrownathan")]
         [Summary("Prepare!")]
         public async Task SayOverthrowNathanAsync()
@@ -531,5 +530,8 @@ namespace CorruptOSBot.Modules
                 await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
             }
         }
+
+
+        #endregion
     }
 }

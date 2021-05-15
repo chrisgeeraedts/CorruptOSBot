@@ -12,6 +12,7 @@
     <Property Name="LeavingDate" Type="DateTime" Precision="3" />
     <Property Name="CorruptPoints" Type="Int32" Nullable="false" />
     <NavigationProperty Name="PointMutations" Relationship="Self.FK_DiscordUserPoints" FromRole="DiscordUsers" ToRole="PointMutations" />
+    <NavigationProperty Name="RunescapeAccounts" Relationship="corruptosModel.FK_DiscordUser" FromRole="DiscordUser" ToRole="RunescapeAccount" />
   </EntityType>
   <EntityType Name="PointMutation">
     <Key>
@@ -49,6 +50,11 @@
       <End Role="PointStore" EntitySet="PointStores" />
       <End Role="PointMutation" EntitySet="PointMutations" />
     </AssociationSet>
+    <EntitySet Name="RunescapeAccounts" EntityType="corruptosModel.RunescapeAccount" />
+    <AssociationSet Name="FK_DiscordUser" Association="corruptosModel.FK_DiscordUser">
+      <End Role="DiscordUser" EntitySet="DiscordUsers" />
+      <End Role="RunescapeAccount" EntitySet="RunescapeAccounts" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="PointStore">
     <Key>
@@ -71,6 +77,29 @@
       </Principal>
       <Dependent Role="PointMutation">
         <PropertyRef Name="PointStoreItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="RunescapeAccount">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="rsn" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="wom_id" Type="Int32" />
+    <Property Name="DiscordUserId" Type="Int32" />
+    <Property Name="account_type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DiscordUser" Relationship="corruptosModel.FK_DiscordUser" FromRole="RunescapeAccount" ToRole="DiscordUser" />
+  </EntityType>
+  <Association Name="FK_DiscordUser">
+    <End Type="corruptosModel.DiscordUser" Role="DiscordUser" Multiplicity="0..1" />
+    <End Type="corruptosModel.RunescapeAccount" Role="RunescapeAccount" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RunescapeAccount">
+        <PropertyRef Name="DiscordUserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

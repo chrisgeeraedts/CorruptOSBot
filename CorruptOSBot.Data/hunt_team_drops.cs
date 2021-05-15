@@ -12,19 +12,16 @@ namespace CorruptOSBot.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class PlayerPet
+    public partial class hunt_team_drops
     {
         public int Id { get; set; }
+        public int TeamId { get; set; }
+        public int DropId { get; set; }
+        public Nullable<int> PointValue { get; set; }
         public Nullable<System.DateTime> DropDate { get; set; }
-        public Nullable<int> BossId { get; set; }
-        public Nullable<int> SkillId { get; set; }
-        public Nullable<int> ActivityId { get; set; }
-        public Nullable<int> RunescapeAccountId { get; set; }
-        public Nullable<int> LevelOrKcGotten { get; set; }
+        public string DropImage { get; set; }
     
-        public virtual Activity Activity { get; set; }
-        public virtual Boss Boss { get; set; }
-        public virtual RunescapeAccount RunescapeAccount { get; set; }
-        public virtual Skill Skill { get; set; }
+        public virtual hunt_bossdrops hunt_bossdrops { get; set; }
+        public virtual hunt_teams hunt_teams { get; set; }
     }
 }

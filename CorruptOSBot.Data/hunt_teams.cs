@@ -7,27 +7,26 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CorruptOSBot.CorruptPoints
+namespace CorruptOSBot.Data
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class PointStore
+    public partial class hunt_teams
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PointStore()
+        public hunt_teams()
         {
-            this.PointMutations = new HashSet<PointMutation>();
+            this.hunt_team_drops = new HashSet<hunt_team_drops>();
+            this.hunt_team_members = new HashSet<hunt_team_members>();
         }
     
         public int Id { get; set; }
-        public string StoreItemName { get; set; }
-        public int StoreItemValue { get; set; }
-        public string StoreItemDescription { get; set; }
-        public string StoreItemImage { get; set; }
-        public string StoreItemCommand { get; set; }
+        public string TeamName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PointMutation> PointMutations { get; set; }
+        public virtual ICollection<hunt_team_drops> hunt_team_drops { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<hunt_team_members> hunt_team_members { get; set; }
     }
 }

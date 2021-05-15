@@ -42,7 +42,6 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
-
         private async Task AddAlt(SocketCommandContext context, string rsn, string type)
         {
             try
@@ -106,29 +105,6 @@ namespace CorruptOSBot.Modules
                 await Program.Log(new LogMessage(LogSeverity.Error, "AddAlt", "Failed adding alt to database - " + e.Message));
             }
 
-        }
-
-
-        private Dictionary<string,string> GetSplittedCommands(string input, string[] expectedCommandProperties, char splitChar)
-        {
-            var result = new Dictionary<string, string>();
-
-            //if (!string.IsNullOrEmpty(input))
-            //{
-            //    var splittedString = input.Split(splitChar);
-            //    for (int i = 0; i < splittedString.Length; i++)
-            //    {
-            //        var value = [i];
-            //        var key = string.Empty;
-            //        if (true)
-            //        {
-
-            //        }
-            //    }
-            //}
-            
-
-            return result;
         }
     }
 }

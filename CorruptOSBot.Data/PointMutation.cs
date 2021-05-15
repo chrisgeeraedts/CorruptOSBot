@@ -17,7 +17,7 @@ namespace CorruptOSBot.Data
         public int Id { get; set; }
         public int PointChange { get; set; }
         public System.DateTime DateTime { get; set; }
-        public Nullable<int> TargetPlayerId { get; set; }
+        public int TargetPlayerId { get; set; }
         public Nullable<int> PointStoreItemId { get; set; }
     
         public virtual DiscordUser DiscordUser { get; set; }

@@ -237,7 +237,7 @@ namespace CorruptOSBot.Modules
                     else
                     {
                         sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days in Discord", 
-                            DiscordHelper.GetAccountNameOrNickname(item.User), 
+                            DiscordNameHelper.GetAccountNameOrNickname(item.User), 
                             item.CurrentRank, 
                             item.ShouldHaveRank, 
                             item.DaysInDiscord));
@@ -257,7 +257,7 @@ namespace CorruptOSBot.Modules
             {
                 foreach (var item in differences.Where(x => x.ShouldHaveRank == Rank.Inactive && x.CurrentRank != x.ShouldHaveRank))
                 {
-                    sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days inactivity on WOM", DiscordHelper.GetAccountNameOrNickname(item.User), item.CurrentRank, item.ShouldHaveRank, item.DaysInDiscord));
+                    sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days inactivity on WOM", DiscordNameHelper.GetAccountNameOrNickname(item.User), item.CurrentRank, item.ShouldHaveRank, item.DaysInDiscord));
                 }
 
                 return EmbedHelper.CreateDefaultEmbed(Rank.Inactive.ToString(), sb.ToString());
@@ -433,7 +433,7 @@ namespace CorruptOSBot.Modules
         private bool IsInactive(Discord.IGuildUser user, out int daysInactive)
         {
             daysInactive = -1;
-            var name = DiscordHelper.GetAccountNameOrNickname(user);
+            var name = DiscordNameHelper.GetAccountNameOrNickname(user);
             var womMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == name.ToLower());
 
             if (womMember != null && womMember.lastChangedAt.HasValue)

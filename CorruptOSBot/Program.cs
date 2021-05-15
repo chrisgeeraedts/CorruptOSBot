@@ -15,6 +15,7 @@ using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared;
+using System.Linq;
 
 namespace CorruptOSBot
 {
@@ -168,9 +169,9 @@ namespace CorruptOSBot
 
             LoadAdditionalModules();
 
-            foreach (var item in ToggleStateManager.GetToggleStates())
+            foreach (var item in ToggleStateManager.GetToggleStates().OrderBy(X => X.Type).ThenBy(x => x.Functionality))
             {
-                await Log(new LogMessage(LogSeverity.Info, "Toggle states:", string.Format("{0}: {1}", item.Functionality, item.Toggled)));
+                await Log(new LogMessage(LogSeverity.Info, "Toggle states:", string.Format("[{2}] {0}: {1}", item.Functionality, item.Toggled, item.Type)));
             }
 
             // Wait infinitely so your bot actually stays connected.
@@ -267,19 +268,14 @@ namespace CorruptOSBot
             _client.CurrentUserUpdated += _client_CurrentUserUpdated;
         }
 
+
+
         private async Task _client_CurrentUserUpdated(SocketSelfUser arg1, SocketSelfUser arg2)
         {
             await Program.Log(new LogMessage(LogSeverity.Info, "Users", "_client_CurrentUserUpdated"));
         }
 
-        private async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)
-        {
-            if (ToggleStateManager.GetToggleState(Constants.EventUserBanned))
-            {
-                await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User banned: {0}", arg1.Username)));
-                await EventManager.BannedFromGuild(arg1, arg2);
-            }
-        }
+
 
         private async Task _client_ReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
         {
@@ -303,6 +299,15 @@ namespace CorruptOSBot
                 if (arg.IsBot || arg.IsWebhook) return;
                 await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User left: {0}", arg.Username)));
                 await EventManager.LeavingGuild(arg);
+            }
+        }
+
+        private async Task _client_UserBanned(SocketUser arg1, SocketGuild arg2)
+        {
+            if (ToggleStateManager.GetToggleState(Constants.EventUserBanned))
+            {
+                await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User banned: {0}", arg1.Username)));
+                await EventManager.BannedFromGuild(arg1, arg2);
             }
         }
 

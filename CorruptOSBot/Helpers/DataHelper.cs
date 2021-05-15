@@ -30,7 +30,7 @@ namespace CorruptOSBot.Helpers
                 corruptosEntities.RunescapeAccounts.Add(new Data.RunescapeAccount()
                 {
                     DiscordUser = discordUser,
-                    rsn = DiscordHelper.GetAccountNameOrNickname(currentUser),
+                    rsn = preferedNickname,
                     wom_id = groupMember?.id,
                     account_type = "main"
                 });

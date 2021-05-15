@@ -90,6 +90,7 @@
     <Compile Include="Helpers\Bot\HelpgroupAttribute.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Discord\ChannelHelper.cs" />
+    <Compile Include="Helpers\Discord\DiscordNameHelper.cs" />
     <Compile Include="Helpers\SettingsConstants.cs" />
     <Compile Include="Interceptors\IInterceptor.cs" />
     <Compile Include="ToggleStateManager.cs" />

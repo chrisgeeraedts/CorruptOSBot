@@ -54,6 +54,11 @@
 [X] Added message in recruiting channel with new alt/iron command ran
 [/] Add 'waiting' message to commands and delete that message afterwards
 
+
+[ ] add command to compare discord and database
+[ ] Validate 'leaving' works fully (message and db update)
+[ ] Add column on discordusers to show clanfriend
+
 [ ] Use the Bossname and BossCommand from the database instead of the enum's
 [ ] Change the !cox etc commands to a reply with emoji logic
 [ ] redoing the !cox command forces a refresh of the cache and checks again for promotions
@@ -62,16 +67,15 @@
 [ ] Add command to add list 'my runescape accounts'
 
 [/] Add a Point Module
-	[ ] Allow players to earn points (what earns them points, chatting in discord, joining events (how to track?), joining in sotw (how to track?), paying of the abbys? (how to hide))
-	[/] Add command for players to see their points
-	[ ] Allow Admin to give points
-	[ ] Allow players to give points to eachother
-	[/] Allow players to spend points (post cool message if they do)
+	[X] Allow Admin to give points (!cp-add and !cp-set)
+	[X] Add the point total to the GetUser command
 	[X] Add command for a point shop => BAD IDEA, Make a awesome post for this instead of command
-	[ ] Add a way for players to gamble points (could be risky?)
-	[ ] Give points based on time (based on joindate? Update every hour? )
-	[ ] Add the point total to the GetUser command
-	[ ] Add a command to see previous transactions (just for admin maybe?)
+	[X] Add a command to see previous transactions (just for admin maybe?)
+	[/] Add command for players to see their points
+	[/] Allow players to spend points (post cool message if they do)
+	[ ] Allow players to earn points (what earns them points, chatting in discord, joining events (how to track?), joining in sotw (how to track?), paying of the abbys? (how to hide ;)))
+	[ ] (optional) Allow players to give points to eachother
+	[ ] (optional) Add a way for players to gamble points (could be risky?)
 	[ ] Make it all very shiny!
 
 [/] Add a TheHunt Module for tracking and displaying points

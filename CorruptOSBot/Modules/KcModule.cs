@@ -44,7 +44,7 @@ namespace CorruptOSBot.Modules
                 if (ToggleStateManager.GetToggleState("kc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
                 {
                     // get current user
-                    var rsn = DiscordHelper.GetAccountNameOrNickname(Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
                     if (!string.IsNullOrEmpty(rsn))
                     {
                         // reply with username

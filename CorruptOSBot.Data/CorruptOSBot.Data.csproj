@@ -50,6 +50,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activity.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Boss.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
@@ -84,6 +87,21 @@
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ErrorLog.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hunt_bossdrops.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hunt_bosses.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hunt_teams.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hunt_team_drops.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="hunt_team_members.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
     <Compile Include="PlayerPet.cs">

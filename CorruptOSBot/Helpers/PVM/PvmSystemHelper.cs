@@ -124,7 +124,7 @@ namespace CorruptOSBot.Helpers.PVM
             try
             {
                 await currentUser.RemoveRoleAsync(role);
-                await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Removed role for:" + DiscordHelper.GetAccountNameOrNickname(currentUser)));
+                await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Removed role for:" + DiscordNameHelper.GetAccountNameOrNickname(currentUser)));
             }
             catch (Exception e)
             {
@@ -137,11 +137,11 @@ namespace CorruptOSBot.Helpers.PVM
             {
                 var role = guild.Roles.FirstOrDefault(x => x.Name == roleName);
                 await currentUser.AddRoleAsync(role);
-                await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Updated role for:" + DiscordHelper.GetAccountNameOrNickname(currentUser)));
+                await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Updated role for:" + DiscordNameHelper.GetAccountNameOrNickname(currentUser)));
                 if (showMessage)
                 {
                     var pvmgeneralChannel = guild.GetChannelsAsync().Result.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("pvm-general"));
-                    await ((IMessageChannel)pvmgeneralChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("PVM promotion for {0}!", DiscordHelper.GetAccountNameOrNickname(currentUser)),
+                    await ((IMessageChannel)pvmgeneralChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("PVM promotion for {0}!", DiscordNameHelper.GetAccountNameOrNickname(currentUser)),
                         string.Format("<@{0}> just got promoted to <@&{1}>!", currentUser.Id, roleId),
                         imageUrl, "https://static.wikia.nocookie.net/getsetgames/images/8/82/Level_up_icon.png/revision/latest?cb=20130804113035"));
                 }

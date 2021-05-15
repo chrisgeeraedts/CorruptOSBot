@@ -7,28 +7,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CorruptOSBot.CorruptPoints
+namespace CorruptOSBot.Data
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class DiscordUser
+    public partial class Activity
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public DiscordUser()
+        public Activity()
         {
-            this.PointMutations = new HashSet<PointMutation>();
+            this.PlayerPets = new HashSet<PlayerPet>();
         }
     
         public int Id { get; set; }
-        public string Username { get; set; }
-        public Nullable<long> DiscordId { get; set; }
-        public Nullable<System.DateTime> OriginallyJoinedAt { get; set; }
-        public bool BlacklistedForPromotion { get; set; }
-        public Nullable<System.DateTime> LeavingDate { get; set; }
-        public int CorruptPoints { get; set; }
+        public string Name { get; set; }
+        public string Emoji { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PointMutation> PointMutations { get; set; }
+        public virtual ICollection<PlayerPet> PlayerPets { get; set; }
     }
 }

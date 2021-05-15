@@ -75,7 +75,7 @@ namespace CorruptOSBot.Helpers.Bot
                     var chatLog = new ChatLog()
                     {
                         Message = arg.Content,
-                        Author = DiscordHelper.GetAccountNameOrNickname(arg.Author),
+                        Author = DiscordNameHelper.GetAccountNameOrNickname(arg.Author),
                         Severity = "chat",
                         Datetime = DateTime.Now,
                         Channel = arg.Channel.Name,

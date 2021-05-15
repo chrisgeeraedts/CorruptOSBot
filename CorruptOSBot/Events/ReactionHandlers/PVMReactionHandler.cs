@@ -36,7 +36,7 @@ namespace CorruptOSBot.Events.ReactionHandlers
             var currentUser = guild.Users.FirstOrDefault(x => x.Id == arg3.UserId);
             if (currentUser != null)
             {
-                var rsn = DiscordHelper.GetAccountNameOrNickname(currentUser);
+                var rsn = DiscordNameHelper.GetAccountNameOrNickname(currentUser);
 
                 if (!string.IsNullOrEmpty(rsn))
                 {
@@ -73,7 +73,7 @@ namespace CorruptOSBot.Events.ReactionHandlers
             var currentUser = guild.Users.FirstOrDefault(x => x.Id == arg3.UserId);
             if (currentUser != null)
             {
-                var rsn = DiscordHelper.GetAccountNameOrNickname(currentUser);
+                var rsn = DiscordNameHelper.GetAccountNameOrNickname(currentUser);
 
                 if (!string.IsNullOrEmpty(rsn))
                 {
@@ -110,7 +110,7 @@ namespace CorruptOSBot.Events.ReactionHandlers
             var currentUser = guild.Users.FirstOrDefault(x => x.Id == arg3.UserId);
             if (currentUser != null)
             {
-                var rsn = DiscordHelper.GetAccountNameOrNickname(currentUser);
+                var rsn = DiscordNameHelper.GetAccountNameOrNickname(currentUser);
 
                 if (!string.IsNullOrEmpty(rsn))
                 {
