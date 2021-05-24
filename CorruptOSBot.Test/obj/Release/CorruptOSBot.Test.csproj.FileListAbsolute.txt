@@ -1,12 +1,10 @@
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Test.exe.config
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Test.exe
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Test.pdb
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.TheHunt.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Shared.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Discord.Net.WebSocket.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Discord.Net.Core.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Discord.Net.Rest.dll
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Discord.Net.Commands.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\EntityFramework.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Data.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Threading.Tasks.Extensions.dll
@@ -17,14 +15,11 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Rel
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Linq.Async.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\netstandard.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.TheHunt.pdb
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.TheHunt.dll.config
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Shared.pdb
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Shared.dll.config
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Discord.Net.WebSocket.xml
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Discord.Net.Core.xml
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Discord.Net.Rest.xml
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Discord.Net.Commands.xml
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\EntityFramework.xml
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Data.pdb
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Data.dll.config
@@ -40,3 +35,5 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Rel
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.exe
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.pdb
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.csprojAssemblyReference.cache
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\EntityFramework.SqlServer.xml

@@ -42,6 +42,62 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("change-alt")]
+        [Summary("!change-alt {old name}|{new name} - changes an existing alt name from the old to a new one")]
+        public async Task SayChangeAltBAsync([Remainder] string commandString)
+        {
+            if (ToggleStateManager.GetToggleState("change-alt", Context.User))
+            {
+                // grab actual props
+                Dictionary<string, string> commands;
+                if (TryGetEntireCommand(commandString, new string[] { "oldName", "newName" }, '|', out commands))
+                {
+                    var oldName = commands["oldName"];
+                    var newName = commands["newName"];
+
+                    // change in database
+                    using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+                    {
+                        // ensure this account is owner of the rsn
+                        var discordId = Context.User.Id;
+                        var isOwner = corruptosEntities.RunescapeAccounts.Any(x =>
+                        x.DiscordUser.DiscordId == Convert.ToInt64(discordId) &&
+                        x.rsn == oldName);
+
+                        if (isOwner)
+                        {
+                            var rsAccount = corruptosEntities.RunescapeAccounts.FirstOrDefault(x =>
+                                x.DiscordUser.DiscordId == Convert.ToInt64(discordId) &&
+                                x.rsn == oldName);
+
+                            if (rsAccount != null)
+                            {
+                                // we found the rs account, so change it
+                                rsAccount.rsn = newName;
+                            }
+                            else
+                            {
+                                // we didnt found it, add it
+                                await AddAlt(Context, newName, "alt");
+                            }
+                                                                                 
+                            // change in WOM
+                            var client = new WiseOldManClient();
+                            client.PostNameChange(oldName, newName);
+
+                            corruptosEntities.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+
         private async Task AddAlt(SocketCommandContext context, string rsn, string type)
         {
             try
@@ -105,6 +161,26 @@ namespace CorruptOSBot.Modules
                 await Program.Log(new LogMessage(LogSeverity.Error, "AddAlt", "Failed adding alt to database - " + e.Message));
             }
 
+        }
+
+
+
+        private bool TryGetEntireCommand(string commandString, string[] commandKeys, char splitter, out Dictionary<string, string> result)
+        {
+            result = new Dictionary<string, string>();
+            var splittedString = commandString.Split(splitter);
+            var index = 0;
+            foreach (var item in splittedString)
+            {
+                if (commandKeys.Length >= index)
+                {
+                    var key = commandKeys[index];
+                    var value = item;
+                    result.Add(key, value);
+                }
+                index++;
+            }
+            return true;
         }
     }
 }

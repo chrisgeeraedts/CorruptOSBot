@@ -36,6 +36,7 @@
         <AssociationConnector Association="corruptosModel.FK_RunescapeAccount" ManuallyRouted="false" />
         <AssociationConnector Association="corruptosModel.FK_Skill" ManuallyRouted="false" />
         <AssociationConnector Association="corruptosModel.FK_PointStoreUserPoints" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="corruptosModel.Role" Width="1.5" PointX="14" PointY="7" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

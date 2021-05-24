@@ -33,8 +33,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,12 +57,20 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CorruptOSBot.TheHunt\CorruptOSBot.TheHunt.csproj">
-      <Project>{3d8f8f2f-7e66-4152-8ad4-d13f1cf3d71d}</Project>
-      <Name>CorruptOSBot.TheHunt</Name>
+    <ProjectReference Include="..\CorruptOSBot.Data\CorruptOSBot.Data.csproj">
+      <Project>{e81ce2f6-084a-4f67-9947-eaf88639dc0c}</Project>
+      <Name>CorruptOSBot.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CorruptOSBot.Shared\CorruptOSBot.Shared.csproj">
+      <Project>{9afb3b35-746e-410a-9c29-2bc53b2a2011}</Project>
+      <Name>CorruptOSBot.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

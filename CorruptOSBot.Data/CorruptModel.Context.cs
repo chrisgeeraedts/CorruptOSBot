@@ -44,5 +44,6 @@ namespace CorruptOSBot.Data
         public virtual DbSet<RunescapeAccount> RunescapeAccounts { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }
         public virtual DbSet<Toggle> Toggles { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using CorruptOSBot.TheHunt;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,16 +10,16 @@ namespace CorruptOSBot.Test
     {
         static void Main(string[] args)
         {
-            HuntManager.Init();
-
-            HuntManager.AddTeam("Corrupt Heroes", "Team 1");
-            var team = HuntManager.Teams[0];
-
-            HuntManager.AddDrop(team, TheHunt.BossEnum.Armadyl, "Armadyl Chestplate", new byte[8]);
-            HuntManager.AddDrop(team, TheHunt.BossEnum.Armadyl, "Armadyl Chestplate", new byte[8]);
-            HuntManager.AddDrop(team, TheHunt.BossEnum.Armadyl, "Armadyl Chestplate", new byte[8]);
-
-            var points = team.CalculatePointsForTeam();
+            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+            {
+                var bosses = corruptosEntities.hunt_bosses.ToList();
+                var items = corruptosEntities.hunt_bossdrops.ToList();
+            }
         }
+    }
+
+    class HuntBoss
+    {
+
     }
 }

@@ -2,6 +2,7 @@
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -20,7 +21,7 @@ namespace CorruptOSBot.CorruptPoints.Modules
         public async Task SayCpAsync()
         {
             if (ToggleStateManager.GetToggleState("point-cp", Context.User) &&
-               PermissionManager.HasSpecificRole(Context.User, "Developer"))
+               RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
@@ -44,7 +45,7 @@ namespace CorruptOSBot.CorruptPoints.Modules
         public async Task SayCpBuyAsync(int itemId)
         {
             if (ToggleStateManager.GetToggleState("point-cp-buy", Context.User) &&
-               PermissionManager.HasSpecificRole(Context.User, "Developer"))
+               RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
@@ -116,7 +117,7 @@ namespace CorruptOSBot.CorruptPoints.Modules
         public async Task SayCpAddAsync(int amount)
         {
             if (ToggleStateManager.GetToggleState("point-cp-add", Context.User) &&
-               PermissionManager.HasSpecificRole(Context.User, "Developer"))
+               RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 await ReplyAsync(string.Format("Please add a name after the amount. Example: **'!cp-add 100 Of the Abbys'**"));
 
@@ -131,7 +132,7 @@ namespace CorruptOSBot.CorruptPoints.Modules
         public async Task SayCpAddAsync(int amount, [Remainder]string playername)
         {
             if (ToggleStateManager.GetToggleState("point-cp-add", Context.User) &&
-               PermissionManager.HasSpecificRole(Context.User, "Developer"))
+               RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
@@ -220,7 +221,7 @@ namespace CorruptOSBot.CorruptPoints.Modules
         public async Task SayCpSetAsync(int amount, [Remainder]string playername)
         {
             if (ToggleStateManager.GetToggleState("point-cp-set", Context.User) &&
-               PermissionManager.HasSpecificRole(Context.User, "Developer"))
+               RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
@@ -288,7 +289,7 @@ namespace CorruptOSBot.CorruptPoints.Modules
         public async Task SayCPHistoryAsync([Remainder]string playername)
         {
             if (ToggleStateManager.GetToggleState("point-cp-history", Context.User) &&
-               PermissionManager.HasSpecificRole(Context.User, "Developer"))
+               RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {

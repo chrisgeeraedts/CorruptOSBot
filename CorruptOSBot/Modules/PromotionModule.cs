@@ -5,6 +5,7 @@ using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Bot;
+using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using System;
@@ -17,14 +18,13 @@ namespace CorruptOSBot.Modules
 {
     public class PromotionModule : ModuleBase<SocketCommandContext>
     {
-        [Helpgroup(HelpGroup.Moderator)]
+        [Helpgroup(HelpGroup.Staff)]
         [Command("promotions-blacklist")]
         [Summary("!promotions-blacklist {username} - Adds or remove a username to/from the promotion blacklist ")]
         public async Task SayPromotionblacklistAsync([Remainder]string username)
         {
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
-                (PermissionManager.HasSpecificRole(Context.User, "Staff") ||
-                PermissionManager.HasSpecificRole(Context.User, "Moderator")))
+                (RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild)))
             {
                 IGuildUser user;
                 if (!username.StartsWith("<@!"))
@@ -81,14 +81,13 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        [Helpgroup(HelpGroup.Moderator)]
+        [Helpgroup(HelpGroup.Staff)]
         [Command("promotions-blacklist")]
         [Summary("!promotions-blacklist - shows the promotion blacklist ")]
         public async Task SayPromotionblacklistAsync()
         {
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
-                (PermissionManager.HasSpecificRole(Context.User, "Staff") ||
-                PermissionManager.HasSpecificRole(Context.User, "Moderator")))
+                RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
             {
 
                 try
@@ -120,16 +119,15 @@ namespace CorruptOSBot.Modules
             }
         }
         
-        [Helpgroup(HelpGroup.Moderator)]
+        [Helpgroup(HelpGroup.Staff)]
         [Command("promotions")]
         [Summary("!promotions - Gets a list of accounts that need promotions")]
         public async Task SayPromotionsAsync()
         {
             if (ToggleStateManager.GetToggleState("promotions", Context.User) &&
-                (
-                PermissionManager.HasSpecificRole(Context.User, "Staff") || 
-                PermissionManager.HasSpecificRole(Context.User, "Moderator")))
+                (RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild)))
             {
+
                 // get players 
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
                 var guildId = ConfigHelper.GetGuildId();
@@ -142,12 +140,13 @@ namespace CorruptOSBot.Modules
                 }
 
                 var promotionSet = GetSupposedRank(allUsersFromDB, guild);
-                var updatedPromotionSet = GetCurrentRank(promotionSet, guild);
+                var updatedPromotionSet = GetCurrentRank(promotionSet);
 
-                await SendEmbedMessages(updatedPromotionSet, Rank.OG);
-                await SendEmbedMessages(updatedPromotionSet, Rank.Sergeant);
-                await SendEmbedMessages(updatedPromotionSet, Rank.Corperal);
-                await SendEmbedMessages(updatedPromotionSet, Rank.Recruit);
+                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 12)); //Cadet
+                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 11)); //Sergeant
+                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 10)); //Novice 
+                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 9)); //Corporal 
+                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 8)); //Peon 
                 await SendInactivityEmbedMessage(updatedPromotionSet);
 
                 // delete the command posted
@@ -182,7 +181,7 @@ namespace CorruptOSBot.Modules
             return result;
         }
 
-        private async Task SendEmbedMessages(List<PromotionSet> differences, Rank rank)
+        private async Task SendEmbedMessages(List<PromotionSet> differences, Role rank)
         {
             var shouldPost = false;
             var result = BuildMessageForRank(differences, rank, out shouldPost);
@@ -197,7 +196,7 @@ namespace CorruptOSBot.Modules
 
         private async Task SendInactivityEmbedMessage(List<PromotionSet> differences)
         {
-            var shouldPost = false;
+            bool shouldPost;
             var result = BuildInactivityMessageForRank(differences, out shouldPost);
             if (shouldPost)
             {
@@ -205,12 +204,12 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        private DateTime GetLastDayOfMonth(DateTime dateTime)
-        {
-            return new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month));
-        }
+        //private DateTime GetLastDayOfMonth(DateTime dateTime)
+        //{
+        //    return new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month));
+        //}
 
-        private List<Embed> BuildMessageForRank(List<PromotionSet> differences, Rank rank, out bool hasUsers)
+        private List<Embed> BuildMessageForRank(List<PromotionSet> differences, Role rank, out bool hasUsers)
         {
             var result = new List<Discord.Embed>();
             hasUsers = false;
@@ -230,7 +229,7 @@ namespace CorruptOSBot.Modules
                     if (sb.ToString().Length > 1900)
                     {
                         // reset, since we can only post 2000 characters
-                        string titled = string.Format("{0} at {1} (last day of the current month)", rank, GetLastDayOfMonth(DateTime.Now));
+                        string titled = string.Format("{0} at {1}", rank.Name, DateTime.Now);
                         result.Add(EmbedHelper.CreateDefaultEmbed(titled, sb.ToString()));
                         sb.Clear();
                     }
@@ -238,13 +237,13 @@ namespace CorruptOSBot.Modules
                     {
                         sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days in Discord", 
                             DiscordNameHelper.GetAccountNameOrNickname(item.User), 
-                            item.CurrentRank, 
-                            item.ShouldHaveRank, 
+                            item.CurrentRank.Name, 
+                            item.ShouldHaveRank.Name, 
                             item.DaysInDiscord));
                     }
                 }
-                string title = string.Format("{0} at {1} (last day of the current month)", rank, GetLastDayOfMonth(DateTime.Now));
-                result.Add(EmbedHelper.CreateDefaultEmbed(title, sb.ToString()));
+                string title = string.Format("{0} at {1}", rank, DateTime.Now);
+                result.Add(EmbedHelper.CreateDefaultEmbed(title, sb.ToString(), rank.IconUrl));
             }
             return result;
         }
@@ -252,36 +251,43 @@ namespace CorruptOSBot.Modules
         private Embed BuildInactivityMessageForRank(List<PromotionSet> differences, out bool hasUsers)
         {
             var sb = new StringBuilder();
-            hasUsers = differences.Any(x => x.ShouldHaveRank == Rank.Inactive && x.CurrentRank != x.ShouldHaveRank);
+            var inactiveRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 19); // Inactive
+            hasUsers = differences.Any(x => 
+            x.ShouldHaveRank.Id == inactiveRole.Id && 
+            x.CurrentRank != x.ShouldHaveRank);
             if (hasUsers)
             {
-                foreach (var item in differences.Where(x => x.ShouldHaveRank == Rank.Inactive && x.CurrentRank != x.ShouldHaveRank))
+                foreach (var item in differences.Where(x => 
+                x.ShouldHaveRank.Id == inactiveRole.Id && 
+                x.CurrentRank.Id != x.ShouldHaveRank.Id))
                 {
-                    sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days inactivity on WOM", DiscordNameHelper.GetAccountNameOrNickname(item.User), item.CurrentRank, item.ShouldHaveRank, item.DaysInDiscord));
+                    sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days inactivity on WOM", 
+                        DiscordNameHelper.GetAccountNameOrNickname(item.User), 
+                        item.CurrentRank.Name, 
+                        item.ShouldHaveRank.Name, 
+                        item.DaysInDiscord));
                 }
 
-                return EmbedHelper.CreateDefaultEmbed(Rank.Inactive.ToString(), sb.ToString());
+                return EmbedHelper.CreateDefaultEmbed(inactiveRole.Name.ToString(), sb.ToString());
             }
             else
             {
-                return EmbedHelper.CreateDefaultEmbed(Rank.Inactive.ToString(), string.Format("All {0} users have the correct rank", Rank.Inactive));
+                return EmbedHelper.CreateDefaultEmbed(inactiveRole.Name.ToString(), string.Format("All {0} users have the correct rank", inactiveRole.Name));
             }
         }
 
-        private List<PromotionSet> GetSupposedRank(List<DiscordUser> users, Discord.IGuild guild)
-        {
-            
-           
+        private List<PromotionSet> GetSupposedRank(List<DiscordUser> users, IGuild guild)
+        {  
             var result = new List<PromotionSet>();
+            var availableRoles = RoleHelper.GetRoles().Where(x => x.CanUpgradeTo);
+            var inactiveRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 19); // Inactive
+            var clanFriendRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 20); //Clan friend
 
-            var daysInYear = DateTime.IsLeapYear(DateTime.Now.Year) ? 366 : 365;
-            var daysIn6Months = Convert.ToInt32(daysInYear / 2);
-            var daysIn3Months = Convert.ToInt32(daysIn6Months / 2);
-            var daysIn1Month = Convert.ToInt32(daysIn6Months / 3);
 
-            var dateTimeCurrent = GetLastDayOfMonth(DateTime.Now);
+            var dateTimeCurrent = DateTime.Now; //GetLastDayOfMonth(DateTime.Now);
                        
             var discordUsers = guild.GetUsersAsync().Result;
+        
 
             foreach (var user in users)
             {
@@ -296,9 +302,9 @@ namespace CorruptOSBot.Modules
                 if (discordUser != null &&
                     joinDate != null &&
                     joinDate != DateTime.MinValue &&
-                    !DiscordHelper.HasRole(discordUser, guild, "inactive") &&
-                    !DiscordHelper.HasRole(discordUser, guild, "Clan Friend") &&
-                    !HasStaffOrModOrOwnerRole(discordUser, guild) &&
+                    !RoleHelper.HasRole(discordUser, guild, inactiveRole) &&
+                    !RoleHelper.HasRole(discordUser, guild, clanFriendRole) &&
+                    !RoleHelper.HasStaffOrModOrOwnerRole(discordUser, guild) &&
                     !blacklisted &&
                     !hasLeft)
                 {
@@ -307,124 +313,47 @@ namespace CorruptOSBot.Modules
                     if (!IsInactive(discordUser, out daysInactive))
                     {
                         var daysFromJoining = Convert.ToInt32(dateTimeCurrent.Subtract(joinDate).TotalDays);
+                        var shouldHaveThisRank = availableRoles.Where(x => daysFromJoining >= x.DaysToReach).OrderByDescending(x => x.DaysToReach).FirstOrDefault();
+                        var baseRank = availableRoles.FirstOrDefault(x => x.Id == 7);
 
-                        if (daysFromJoining >= daysInYear)
+                        if (shouldHaveThisRank != null)
                         {
-                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.OG, DaystillRank = 9999, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
-                        }
-                        else if (daysFromJoining >= daysIn6Months)
-                        {
-                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Sergeant, DaystillRank = daysInYear - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
-                        }
-                        else if (daysFromJoining >= daysIn3Months)
-                        {
-                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Corperal, DaystillRank = daysIn6Months - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
-                        }
-                        else if (daysFromJoining >= daysIn1Month)
-                        {
-                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Recruit, DaystillRank = daysIn3Months - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
+                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = shouldHaveThisRank, DaystillRank = 9999, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
                         }
                         else
                         {
-                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Smiley, DaystillRank = daysIn1Month - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
+                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = baseRank, DaystillRank = baseRank.DaysToReach - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
                         }
                     }
                     else
                     {
-                        result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = Rank.Inactive, DaystillRank = -1, UserId = discordUser.Id, DaysInDiscord = daysInactive });
+                        result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = inactiveRole, DaystillRank = -1, UserId = discordUser.Id, DaysInDiscord = daysInactive });
                     }
                 }
             }
             return result;
         }
 
-        private int GetRoleRank(Rank rank)
+        private string GetRoleIcon(Role rank)
         {
-            switch (rank)
-            {
-                case Rank.OG:
-                    return 100;
-                case Rank.Sergeant:
-                    return 80;
-                case Rank.Corperal:
-                    return 50;
-                case Rank.Recruit:
-                    return 30;
-                case Rank.Smiley:
-                    return 10;
-                case Rank.Inactive:
-                    return -1;
-                default:
-                    return -100;
-            }
+            return rank.IconUrl;
         }
 
-        private string GetRoleIcon(Rank rank)
-        {
-            switch (rank)
-            {
-                case Rank.OG:
-                    return Constants.OGImage;
-                case Rank.Sergeant:
-                    return Constants.SergeantImage;
-                case Rank.Corperal:
-                    return Constants.CorporalImage;
-                case Rank.Recruit:
-                    return Constants.RecruitImage;
-                case Rank.Smiley:
-                    return Constants.SmileyImage;
-                case Rank.Inactive:
-                    return Constants.InactiveImage;
-                default:
-                    return string.Empty;
-            }
-        }
-
-        private List<PromotionSet> GetCurrentRank(List<PromotionSet> users, Discord.IGuild guild)
+        private List<PromotionSet> GetCurrentRank(List<PromotionSet> users)
         {
             var result = new List<PromotionSet>();
-            var roleId_OG = guild.Roles.FirstOrDefault(x => x.Name == "OG");
-            var roleId_Sergeant = guild.Roles.FirstOrDefault(x => x.Name == "Sergeant");
-            var roleId_Corporal = guild.Roles.FirstOrDefault(x => x.Name == "Corporal");
-            var roleId_Recruit = guild.Roles.FirstOrDefault(x => x.Name == "Recruit");
-            var roleId_Smiley = guild.Roles.FirstOrDefault(x => x.Name == "Smiley");
-            var roleId_Inactive = guild.Roles.FirstOrDefault(x => x.Name == "Inactive");
+            var availableRoles = RoleHelper.GetRoles().Where(x => x.CanUpgradeTo);
+
             foreach (var user in users)
             {
-                if (user.User.RoleIds.ToList().Contains(roleId_Inactive.Id))
+                foreach (var userRoles in user.User.RoleIds)
                 {
-                    user.CurrentRank = Rank.Inactive;
-                    result.Add(user);
-                }
-                else if (roleId_OG != null && user.User.RoleIds.ToList().Contains(roleId_OG.Id))
-                {
-                    user.CurrentRank = Rank.OG;
-                    result.Add(user);
-                }
-                else if (roleId_Sergeant != null && user.User.RoleIds.ToList().Contains(roleId_Sergeant.Id))
-                {
-                    user.CurrentRank = Rank.Sergeant;
-                    result.Add(user);
-                }
-                else if (roleId_Corporal != null && user.User.RoleIds.ToList().Contains(roleId_Corporal.Id))
-                {
-                    user.CurrentRank = Rank.Corperal;
-                    result.Add(user);
-                }
-                else if (roleId_Recruit != null && user.User.RoleIds.ToList().Contains(roleId_Recruit.Id))
-                {
-                    user.CurrentRank = Rank.Recruit;
-                    result.Add(user);
-                }
-                else if (roleId_Smiley != null && user.User.RoleIds.ToList().Contains(roleId_Smiley.Id))
-                {
-                    user.CurrentRank = Rank.Smiley;
-                    result.Add(user);
-                }
-                else if (roleId_Smiley != null && user.User.RoleIds.ToList().Contains(roleId_Smiley.Id))
-                {
-                    user.CurrentRank = Rank.Smiley;
-                    result.Add(user);
+                    var role = availableRoles.OrderByDescending(x => x.DaysToReach).FirstOrDefault(x => Convert.ToUInt64(x.DiscordRoleId) == userRoles);
+                    if (role != null)
+                    {
+                        user.CurrentRank = role;
+                        result.Add(user);
+                    }
                 }
             }
             return result;
@@ -444,33 +373,27 @@ namespace CorruptOSBot.Modules
             return false;
         }
 
-        private bool HasStaffOrModOrOwnerRole(Discord.IGuildUser user, Discord.IGuild guild)
-        {
-            return 
-                DiscordHelper.HasRole(user, guild, "Staff") || 
-                DiscordHelper.HasRole(user, guild, "Moderator") || 
-                DiscordHelper.HasRole(user, guild, "Clan Owner");
-        }
+
     }
 
     public class PromotionSet
     {
-        public Rank ShouldHaveRank { get; set; }
-        public Rank CurrentRank { get; set; }
+        public Role ShouldHaveRank { get; set; }
+        public Role CurrentRank { get; set; }
         public int DaystillRank { get; set; }
         public int DaysInDiscord { get; set; }
         public Discord.IGuildUser User { get; set; }
         public ulong UserId { get; set; }
     }
 
-    public enum Rank
-    {
-        Default,
-        OG,
-        Sergeant,
-        Corperal,
-        Recruit,
-        Smiley,
-        Inactive
-    }
+    //public enum Rank
+    //{
+    //    Default,
+    //    OG,
+    //    Sergeant,
+    //    Corperal,
+    //    Recruit,
+    //    Smiley,
+    //    Inactive
+    //}
 }

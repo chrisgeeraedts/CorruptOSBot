@@ -1,6 +1,7 @@
 ﻿using CorruptOSBot.Extensions;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using System;
@@ -17,7 +18,8 @@ namespace CorruptOSBot.Modules
         [Summary("!calendar - Shows upcoming events")]
         public async Task SayWoMAsync()
         {
-            if (ToggleStateManager.GetToggleState("calendar", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("calendar", Context.User) && 
+                RoleHelper.HasAnyRole(Context.User))
             {
                 await ReplyAsync(embed: CreateCalendarEmbed());
             }

@@ -16,12 +16,6 @@ namespace CorruptOSBot.Shared
         {            
             BotVersion = ConfigHelper.GetSettingProperty("bot-version");
         }
-
-        public static bool HasAnyRole(SocketUser user)
-        {
-            return ((SocketGuildUser)user).Roles.Any();
-        }
-
         public static string GetBotVersion()
         {
             return BotVersion;

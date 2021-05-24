@@ -5,6 +5,7 @@ using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
 using CorruptOSBot.Services;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -24,7 +25,8 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
             {
-                if (ToggleStateManager.GetToggleState("bosskc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+                if (ToggleStateManager.GetToggleState("bosskc", Context.User) && 
+                    RoleHelper.HasAnyRole(Context.User))
                 {
                     var bosses = new Shared.DataHelper().GetBosses();
                     StringBuilder sb = new StringBuilder();
@@ -57,7 +59,8 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
             {
-                if (ToggleStateManager.GetToggleState("bosskc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+                if (ToggleStateManager.GetToggleState("bosskc", Context.User) && 
+                    RoleHelper.HasAnyRole(Context.User))
                 {
                     var embed = await CreateEmbedForMessage(bossname);
                     if (embed != null)
@@ -80,8 +83,8 @@ namespace CorruptOSBot.Modules
         [Summary("!refreshtopbosskc - Regenerates the Top Clan KC list")]
         public async Task SayRefreshTopKcAsync()
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "top-boss-kc", Context.User) && 
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer") &&
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "top-boss-kc", Context.User) &&
+                RoleHelper.HasRole(Context.User, Context.Guild, 3) && //bot staff
                 ToggleStateManager.GetToggleState(nameof(TopKCService)))
             {
                 // find current channel
@@ -118,7 +121,7 @@ namespace CorruptOSBot.Modules
 
                 try
                 {
-                    EmojiEnum bossEnum = (EmojiEnum)Enum.Parse(typeof(EmojiEnum), bossname.ToLower());
+                    EmojiEnum bossEnum = (EmojiEnum)Enum.Parse(typeof(EmojiEnum), selectedBoss.Bossname.ToLower());
                     var bossResult = result.FirstOrDefault(x => x.Boss == bossEnum);
                     var emb = new EmbedBuilder();
                     var sb = new StringBuilder();

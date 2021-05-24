@@ -40,29 +40,17 @@ namespace CorruptOSBot.Helpers.Discord
             var allUsers = await guild.GetUsersAsync();
             return allUsers.FirstOrDefault(x => x.Mention == mention);
         }
-
+        internal static async Task PostComeOnline(IMessageChannel channel)
+        {
+            await (channel).SendMessageAsync(string.Format("Bot (v{1}) **Online** : [{0}] ", DateTime.Now, RootAdminManager.GetBotVersion()));
+        }
 
         internal static async Task PostHeartbeat(IMessageChannel channel, TimeSpan timeOnline)
         {
             await (channel).SendMessageAsync(string.Format("Bot (v{2}) online since {3} for **{0}** minutes | **Heartbeat** : [{1}] ", Convert.ToInt64(timeOnline.TotalMinutes), DateTime.Now, RootAdminManager.GetBotVersion(), Program.OnlineFrom.ToString("r")));
         }
 
-        internal static async Task PostComeOnline(IMessageChannel channel)
-        {
-            await (channel).SendMessageAsync(string.Format("Bot (v{1}) **Online** : [{0}] ", DateTime.Now, RootAdminManager.GetBotVersion()));
-        }
-
-        public static bool HasRole(IGuildUser user, IGuild guild, string roleName)
-        {
-            var roleId_Inactive = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
-            return user.RoleIds.ToList().Contains(roleId_Inactive.Id);
-        }
-
-        public static bool HasRole(SocketUser user, IGuild guild, string roleName)
-        {
-            return HasRole(((IGuildUser)user), guild, roleName);
-        }
-
+        
         internal static async Task NotAlloweddMessageToUser(SocketUser user, string command, string allowedChannel)
         {
             await ((SocketGuildUser)user).SendMessageAsync(string.Format("That command (**{0}**) is **not allowed** in this channel but only in the following channel(s): **{1}**!", command, allowedChannel));
@@ -84,8 +72,6 @@ namespace CorruptOSBot.Helpers.Discord
             sb.AppendLine("Help shape the clan and give us new ways we can make events more entertaining!");
             sb.AppendLine(string.Format("**<#{0}>**", ChannelHelper.GetChannelId("Support")));
             sb.AppendLine("Any issues you can open a ticket and we will be with you ASAP");
-            sb.AppendLine(string.Format("**<#{0}>**", ChannelHelper.GetChannelId("Clan-News")));
-            sb.AppendLine("Daily updates on what we are doing in the clan that some might not see");
             sb.AppendLine(string.Format("**<#{0}>**", ChannelHelper.GetChannelId("Set-Pvm-Roles")));
             sb.AppendLine("Doing the relevant command will allow you to be pinged to join a team for PvM content. ");
             sb.AppendLine(Environment.NewLine);

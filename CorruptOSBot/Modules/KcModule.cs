@@ -2,6 +2,7 @@
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using System;
@@ -20,7 +21,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
             {
-                if (ToggleStateManager.GetToggleState("kc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+                if (ToggleStateManager.GetToggleState("kc", Context.User) && RoleHelper.HasAnyRole(Context.User))
                 {
                     await ReplyAsync(embed: await CreateEmbedForMessage(playerName));
                 }
@@ -41,7 +42,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
             {
-                if (ToggleStateManager.GetToggleState("kc", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+                if (ToggleStateManager.GetToggleState("kc", Context.User) && RoleHelper.HasAnyRole(Context.User))
                 {
                     // get current user
                     var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);

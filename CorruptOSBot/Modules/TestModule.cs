@@ -1,18 +1,7 @@
-﻿using CorruptOSBot.Extensions.WOM;
-using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
-using CorruptOSBot.Helpers;
-using CorruptOSBot.Helpers.Bot;
-using CorruptOSBot.Helpers.Discord;
-using CorruptOSBot.Helpers.PVM;
+﻿using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Shared;
-using Discord;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord.Commands;
-using Discord.WebSocket;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Modules
@@ -25,7 +14,16 @@ namespace CorruptOSBot.Modules
         [Summary("!test - TEST")]
         public async Task SayTestAsync()
         {
-            await CommandHelper.ActWithLoadingIndicator(Method2, "1232", Context.Channel);
+            var guildId = ConfigHelper.GetGuildId();
+            var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
+
+            foreach (var item in guild.Roles)
+            {
+                await ReplyAsync(string.Format("{0} ({1})", item.Name, item.Id));
+            }
+
+
+            //await CommandHelper.ActWithLoadingIndicator(Method2, "1232", Context.Channel);
 
             // delete the command posted
             await Context.Message.DeleteAsync();

@@ -5,6 +5,7 @@ using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Bot;
+using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -30,9 +31,9 @@ namespace CorruptOSBot.Modules
                 var preferedNickname = username;
 
                 // check rank, if he has a smiley, its a namechange, otherwise, a new member
-                var hasSmileyRole = ((SocketGuildUser)currentUser).Roles.Any(x => x.Name == "Smiley");
+                var isMember = RoleHelper.IsMember(Context.User, Context.Guild);
 
-                if (!hasSmileyRole)
+                if (!isMember)
                 {
                     await CreateNewMember(currentUser, preferedNickname);
                 }
@@ -40,6 +41,10 @@ namespace CorruptOSBot.Modules
                 {
                     await NameChangeMember(currentUser, preferedNickname);
                 }
+
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
             }
         }
 
@@ -51,23 +56,36 @@ namespace CorruptOSBot.Modules
             if (ToggleStateManager.GetToggleState("rsncf", Context.User) &&
                 DiscordHelper.IsInChannel(Context.Channel.Id, "welcome", Context.User))
             {
-                //user that actually started the command
-                var currentUser = Context.User;
+                var dbRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 20); //Clan friend
 
-                // the prefered rsn name the user posted
-                var preferedNickname = username;
-
-                // check rank, if he has a smiley, its a namechange, otherwise, a new member
-                var hasClanFriendRole = ((SocketGuildUser)currentUser).Roles.Any(x => x.Name == "Clan Friend");
-
-                if (!hasClanFriendRole)
+                if (dbRole != null)
                 {
-                    await CreateNewClanFriendMember(currentUser, preferedNickname);
+                    //user that actually started the command
+                    var currentUser = Context.User;
+
+                    // the prefered rsn name the user posted
+                    var preferedNickname = username;
+
+                    // check rank, if he has a clanfriend, its a namechange, otherwise, a new member
+                    var hasClanFriendRole = ((SocketGuildUser)currentUser).Roles.Any(x => x.Id == Convert.ToUInt64(dbRole.DiscordRoleId));
+
+                    if (!hasClanFriendRole)
+                    {
+                        await CreateNewClanFriendMember(currentUser, preferedNickname);
+                    }
+                    else
+                    {
+                        await currentUser.SendMessageAsync(String.Format("You already have the {0} role!", dbRole.Name));
+                    }
                 }
                 else
                 {
-                    await currentUser.SendMessageAsync(String.Format("You already have the {0} role!", "Clan Friend"));
+                    await ReplyAsync("Something broke with upgrading - please contact SGNathy");
                 }
+
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
             }
         }
 
@@ -110,10 +128,7 @@ namespace CorruptOSBot.Modules
             catch (Exception e)
             {
                 await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to save discorduser in discord - " + e.Message));
-            }
-
-            // delete the command posted
-            await Context.Message.DeleteAsync();           
+            }   
         }
 
         private async Task CreateNewMember(SocketUser currentUser, string preferedNickname)
@@ -127,44 +142,46 @@ namespace CorruptOSBot.Modules
             if (isSafeAccount)
             {
                 // update the role
-                var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == "Smiley");
-                await ((SocketGuildUser)currentUser).AddRoleAsync(role);
-
-                // change nickname
-                await ((SocketGuildUser)currentUser).ModifyAsync(x =>
+                var dbRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 7); //Recruit
+                if (dbRole != null)
                 {
-                    x.Nickname = preferedNickname;
-                });
+                    // update the role
+                    var role = Context.Guild.Roles.FirstOrDefault(x => x.Id == Convert.ToUInt64(dbRole.DiscordRoleId));
+                    await ((SocketGuildUser)currentUser).AddRoleAsync(role);
 
-                // post to general channel
-                var generalChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("general"));
-                await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member joined", 
-                    string.Format("<@{0}> Welcome to Corrupt OS", currentUser.Id),
-                    "https://blog.memberclicks.com/hubfs/Onboarding_New_Members-1.jpg"));
+                    // change nickname
+                    await ((SocketGuildUser)currentUser).ModifyAsync(x =>
+                    {
+                        x.Nickname = preferedNickname;
+                    });
 
-                // post to recruitment channel
-                var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
-                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: 
-                    EmbedHelper.CreateDefaultEmbed("Member joined",
-                    string.Format("<@{0}> ({1}) has set their RSN to **{1}**!", currentUser.Id, preferedNickname)));
+                    // post to general channel
+                    var generalChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("general"));
+                    await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member joined",
+                        string.Format("<@{0}> Welcome to Corrupt OS", currentUser.Id),
+                        "https://blog.memberclicks.com/hubfs/Onboarding_New_Members-1.jpg"));
 
-                // add to WOM
-                var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
+                    // post to recruitment channel
+                    var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+                    await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
+                        EmbedHelper.CreateDefaultEmbed("Member joined",
+                        string.Format("<@{0}> ({1}) has set their RSN to **{1}**!", currentUser.Id, preferedNickname)));
 
-                // send welcome message
-                await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild, false);
+                    // add to WOM
+                    var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
 
-                try
-                {
-                    await new Helpers.DataHelper().AddNewDiscordUserAndRSN(Context.User, preferedNickname, groupMember);
+                    // send welcome message
+                    await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild, false);
+
+                    try
+                    {
+                        await new Helpers.DataHelper().AddNewDiscordUserAndRSN(Context.User, preferedNickname, groupMember);
+                    }
+                    catch (Exception e)
+                    {
+                        await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to save discorduser in discord - " + e.Message));
+                    }
                 }
-                catch (Exception e)
-                {
-                    await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to save discorduser in discord - " + e.Message));
-                }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
             else
             {
@@ -197,26 +214,34 @@ namespace CorruptOSBot.Modules
             if (isSafeAccount)
             {
                 // update the role
-                var role = Context.Guild.Roles.FirstOrDefault(x => x.Name == "Clan Friend");
-                await ((SocketGuildUser)currentUser).AddRoleAsync(role);
+                var dbRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 20); //clan friend
 
-                // change nickname
-                await ((SocketGuildUser)currentUser).ModifyAsync(x =>
+                if (dbRole != null)
                 {
-                    x.Nickname = preferedNickname;
-                });
+                    var role = Context.Guild.Roles.FirstOrDefault(x => x.Id == Convert.ToUInt64(dbRole.DiscordRoleId));
+                    await ((SocketGuildUser)currentUser).AddRoleAsync(role);
 
-                // post to recruitment channel
-                var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
-                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
-                    EmbedHelper.CreateDefaultEmbed("Clanfriend joined",
-                    string.Format("<@{0}>  ({0}) has set their RSN to **{1}**! as a Clan Friend", currentUser.Id, preferedNickname)));
+                    // change nickname
+                    await ((SocketGuildUser)currentUser).ModifyAsync(x =>
+                    {
+                        x.Nickname = preferedNickname;
+                    });
 
-                // send welcome message
-                await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild, true);
+                    // post to recruitment channel
+                    var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+                    await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
+                        EmbedHelper.CreateDefaultEmbed("Clanfriend joined",
+                        string.Format("<@{0}>  ({0}) has set their RSN to **{1}**! as a Clan Friend", currentUser.Id, preferedNickname)));
 
-                // delete the command posted
-                await Context.Message.DeleteAsync();
+                    // send welcome message
+                    await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild, true);
+
+                }
+                else
+                {
+                    await ReplyAsync("Something broke with upgrading - please contact SGNathy");
+                }
+
             }
             else
             {

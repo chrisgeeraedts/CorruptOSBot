@@ -17,7 +17,6 @@ namespace CorruptOSBot.Shared
         Undefined,
         Everybody,
         Member,
-        Moderator,
         Staff,
         Admin
     }

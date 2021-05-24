@@ -2,6 +2,7 @@
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Bot;
+using CorruptOSBot.Shared.Helpers.Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
@@ -22,7 +23,7 @@ namespace CorruptOSBot.Modules
         [Summary("!help - Gives information about the bot commands for your roles.")]
         public async Task SayAsync()
         {
-            if (ToggleStateManager.GetToggleState("help", Context.User) && RootAdminManager.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("help", Context.User) && RoleHelper.HasAnyRole(Context.User))
             {
                 var embeds = EmbedHelper.CreateDefaultFieldsEmbed(
                 "Corrupt OS bot command list",
@@ -40,15 +41,10 @@ namespace CorruptOSBot.Modules
 
         private Dictionary<string, string> GetCommandsToShowInHelp(SocketUser user, SocketGuild guild)
         {
-            var isDev = DiscordHelper.HasRole(user, guild, "Developer");
-            var isStaff = DiscordHelper.HasRole(user, guild, "Staff") ||
-                DiscordHelper.HasRole(user, guild, "Clan Owner");
-            var isMod = DiscordHelper.HasRole(user, guild, "Moderator");
-            var isMember = DiscordHelper.HasRole(user, guild, "Smiley") || 
-                DiscordHelper.HasRole(user, guild, "Recruit") || 
-                DiscordHelper.HasRole(user, guild, "Sergeant") || 
-                DiscordHelper.HasRole(user, guild, "Corporal") || 
-                DiscordHelper.HasRole(user, guild, "OG");
+            var isDev = RoleHelper.HasRole(user, guild, 3); //bot staff
+            var isStaff = RoleHelper.HasStaffOrModOrOwnerRole(user, guild);
+
+            var isMember = RoleHelper.IsMember(user, guild);
 
             List<string> blackListedCommands = new List<string>();
             blackListedCommands.Add("!overthrownathan");
@@ -67,11 +63,7 @@ namespace CorruptOSBot.Modules
                     {
                         result.Add(command.Key, command.Value.Name);
                     }
-                    if (command.Value.HelpGroup == HelpGroup.Moderator && (isMod || isStaff || isDev))
-                    {
-                        result.Add(command.Key, command.Value.Name);
-                    }
-                    if (command.Value.HelpGroup == HelpGroup.Member && (isMember || isMod || isStaff || isDev))
+                    if (command.Value.HelpGroup == HelpGroup.Member && (isMember || isStaff || isDev))
                     {
                         result.Add(command.Key, command.Value.Name);
                     }

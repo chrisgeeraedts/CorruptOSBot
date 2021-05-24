@@ -155,6 +155,18 @@
     <Property Name="StoreItemImage" Type="nvarchar(max)" />
     <Property Name="StoreItemCommand" Type="nvarchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="DiscordRoleId" Type="bigint" Nullable="false" />
+    <Property Name="DaysToReach" Type="int" Nullable="false" />
+    <Property Name="CanUpgradeTo" Type="bit" Nullable="false" />
+    <Property Name="IconUrl" Type="nvarchar(max)" />
+    <Property Name="IsStaff" Type="bit" />
+  </EntityType>
   <EntityType Name="RunescapeAccounts">
     <Key>
       <PropertyRef Name="Id" />
@@ -344,6 +356,7 @@
     <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PointMutations" EntityType="Self.PointMutations" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="PointStore" EntityType="Self.PointStore" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Toggles" EntityType="Self.Toggles" Schema="dbo" store:Type="Tables" />

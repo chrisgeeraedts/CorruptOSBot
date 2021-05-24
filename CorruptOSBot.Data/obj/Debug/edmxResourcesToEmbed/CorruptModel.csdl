@@ -419,5 +419,18 @@
       <End Role="PointStore" EntitySet="PointStores" />
       <End Role="PointMutations" EntitySet="PointMutations" />
     </AssociationSet>
+    <EntitySet Name="Roles" EntityType="corruptosModel.Role" />
   </EntityContainer>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="DiscordRoleId" Type="Int64" Nullable="false" />
+    <Property Name="DaysToReach" Type="Int32" Nullable="false" />
+    <Property Name="CanUpgradeTo" Type="Boolean" Nullable="false" />
+    <Property Name="IconUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsStaff" Type="Boolean" />
+  </EntityType>
 </Schema>

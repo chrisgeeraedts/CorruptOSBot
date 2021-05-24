@@ -24,6 +24,21 @@ namespace CorruptOSBot.Shared
 
         }
 
+        internal List<Role> GetRoles()
+        {
+            try
+            {
+                using (var corruptosEntities = new Data.CorruptModel())
+                {
+                    return corruptosEntities.Roles.ToList();
+                }
+            }
+            catch (Exception)
+            {
+                return new List<Role>();
+            }
+        }
+
         public List<Channel> GetChannels()
         {
             try

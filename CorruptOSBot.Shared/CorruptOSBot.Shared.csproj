@@ -91,11 +91,11 @@
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Discord\ChannelHelper.cs" />
     <Compile Include="Helpers\Discord\DiscordNameHelper.cs" />
+    <Compile Include="Helpers\Discord\RoleHelper.cs" />
     <Compile Include="Helpers\SettingsConstants.cs" />
     <Compile Include="Interceptors\IInterceptor.cs" />
     <Compile Include="ToggleStateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PermissionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

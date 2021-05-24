@@ -5,6 +5,7 @@ using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Bot;
+using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
@@ -26,9 +27,9 @@ namespace CorruptOSBot.Modules
         public async Task SayInitDBAsync()
         {
             if (ToggleStateManager.GetToggleState("initdb", Context.User) &&
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+                RoleHelper.HasRole(Context.User, Context.Guild, 3)) //dev role
             {
-                await InitDB(Context);
+                //await InitDB(Context);
             }
         }
 
@@ -38,8 +39,7 @@ namespace CorruptOSBot.Modules
         public async Task SayPollAsync([Remainder]string pollquestion)
         {
             if (ToggleStateManager.GetToggleState("poll", Context.User) &&
-                (PermissionManager.HasSpecificRole(Context.User, "Staff") ||
-                PermissionManager.HasSpecificRole(Context.User, "Moderator")))
+                RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
             {
                 var currentUser = ((SocketGuildUser)Context.User);
                 var name = DiscordNameHelper.GetAccountNameOrNickname(currentUser);
@@ -71,7 +71,7 @@ namespace CorruptOSBot.Modules
         public async Task SaypostidAsync()
         {
             if (ToggleStateManager.GetToggleState("postid", Context.User) &&
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+                RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
 
                 var messages = await Context.Channel
@@ -99,7 +99,7 @@ namespace CorruptOSBot.Modules
         public async Task SaychannelIdAsync()
         {
             if (ToggleStateManager.GetToggleState("channelid", Context.User) &&
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+                RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 var channel = Context.Channel.Id.ToString();
 
@@ -116,7 +116,7 @@ namespace CorruptOSBot.Modules
         public async Task SayguildidAsync()
         {
             if (ToggleStateManager.GetToggleState("guildid", Context.User) &&
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+                RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 var channel = Context.Guild.Id.ToString();
 
@@ -133,7 +133,7 @@ namespace CorruptOSBot.Modules
         public async Task SayServerIdAsync()
         {
             if (ToggleStateManager.GetToggleState("serverip", Context.User) &&
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+                RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
                 foreach (var item in ipHostInfo.AddressList)
@@ -153,8 +153,8 @@ namespace CorruptOSBot.Modules
         [Summary("!clear {number} - Clears posts above it. (max 100)")]
         public async Task SayClearAsync(int number)
         { 
-            if (ToggleStateManager.GetToggleState("clear", Context.User) && 
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+            if (ToggleStateManager.GetToggleState("clear", Context.User) &&
+                RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 // max it 
                 if (number > 100)
@@ -171,7 +171,7 @@ namespace CorruptOSBot.Modules
         [Summary("!toggle {command string} - Toggles a command to be available.")]
         public async Task SayTogglecommandAsync(string command)
         {   
-            if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+            if (RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 var currentState = ToggleStateManager.GetToggleState(command);
                 await ToggleStateManager.ToggleModuleCommand(command, !currentState);
@@ -188,7 +188,7 @@ namespace CorruptOSBot.Modules
         [Summary("!togglestates - Shows the current enabled and disabled commands")]
         public async Task SaytogglestatescommandAsync()
         {
-            if (DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+            if (RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 var states = ToggleStateManager.GetToggleStates();
 
@@ -216,7 +216,7 @@ namespace CorruptOSBot.Modules
         public async Task SayGetUsersAsync()
         {
             if (ToggleStateManager.GetToggleState("getusers", Context.User) &&
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Developer"))
+                RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
             {
                 try
                 {
@@ -260,14 +260,13 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        [Helpgroup(HelpGroup.Moderator)]
+        [Helpgroup(HelpGroup.Staff)]
         [Command("getuser")]
         [Summary("!getuser {username}(optional) - Gets a single user on discord, showing their available information.")]
         public async Task SayGetUserAsync([Remainder]string username)
         {
             if (ToggleStateManager.GetToggleState("getuser", Context.User) &&
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Staff") ||
-                DiscordHelper.HasRole(Context.User, Context.Guild, "Moderator"))
+                RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
             {
                 try
                 {
@@ -320,7 +319,7 @@ namespace CorruptOSBot.Modules
         public async Task SayGetUserSelfAsync()
         {
             if (ToggleStateManager.GetToggleState("getuser", Context.User) && 
-                RootAdminManager.HasAnyRole(Context.User) &&
+                RoleHelper.HasAnyRole(Context.User) &&
                 DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
             {
                 try
@@ -338,34 +337,187 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        private async Task InitDB(SocketCommandContext context)
+
+        [Helpgroup(HelpGroup.Admin)]
+        [Command("compare")]
+        [Summary("!compare - compares discordusers and database discord users")]
+        public async Task SayCompareAsync()
         {
-            CorruptOSBot.Data.CorruptModel corruptosEntities = new Data.CorruptModel();
-
-            // Clear current data
-            foreach (var item in corruptosEntities.DiscordUsers)
+            if (ToggleStateManager.GetToggleState("compare", Context.User) &&
+                RoleHelper.HasRole(Context.User, Context.Guild, 3)) //dev staff
             {
-                corruptosEntities.DiscordUsers.Remove(item);
-            }
-            foreach (var item in corruptosEntities.Bosses)
-            {
-                corruptosEntities.Bosses.Remove(item);
-            }
-            foreach (var item in corruptosEntities.RunescapeAccounts)
-            {
-                corruptosEntities.RunescapeAccounts.Remove(item);
-            }
+                // grab discordusers
+                var guildId = ConfigHelper.GetGuildId();
+                var guild = ((IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
+                var discordUsers = guild.GetUsersAsync().Result;
 
-            // Add players
-            var countDiscordUsers = await AddPlayersAndDiscordUsers(corruptosEntities);
-            await ReplyAsync(string.Format("loaded {0} discord users", countDiscordUsers));
+                // grab database discord suers
+                var databaseDiscordUsers = new List<DiscordUser>();
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    databaseDiscordUsers = corruptosEntities.DiscordUsers.Where(x => x.LeavingDate == null).ToList();
+                }
 
-            // Save
-            await corruptosEntities.SaveChangesAsync();
-            await ReplyAsync(string.Format("Saved all entities to database"));
+                // compare the discord users vs the database
+                var comparisonList = GetComparisonList(discordUsers, databaseDiscordUsers);
+
+                var sb = new StringBuilder();
+                var eb = new EmbedBuilder();
+
+                var embeds = new List<Embed>();
+
+                int iterator = 0;
+                foreach (var item in comparisonList.Where(x => x.ExistsInDB == false || x.ExistsInDiscord == false))
+                {
+                    if (iterator < 20)
+                    {
+                        // keep adding
+                        sb.AppendLine(string.Format("**{0}** | DB:**{1}** | DISC:**{2}** | {3}", item.DiscordId, item.ExistsInDB, item.ExistsInDiscord, item.UsernameInDiscord ?? item.UsernameInDB));
+                        iterator++;
+                    }
+                    else
+                    {
+                        // add final then build and add embed
+                        sb.AppendLine(string.Format("**{0}** | DB:**{1}** | DISC:**{2}** | {3}", item.DiscordId, item.ExistsInDB, item.ExistsInDiscord, item.UsernameInDiscord ?? item.UsernameInDB));
+                        eb.Description = sb.ToString();
+
+                        embeds.Add(eb.Build());
+
+                        sb = new StringBuilder();
+                        eb = new EmbedBuilder();
+
+                        iterator = 0;
+                    }
+                }
+
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    foreach (var item in comparisonList.Where(x => x.ExistsInDB == false || x.ExistsInDiscord == false))
+                    {
+                        var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username == item.UsernameInDB);
+                        if (discordUser != null)
+                        {
+                            discordUser.LeavingDate = new DateTime(2021,5,24,20,0,0);
+                        }
+                    }
+                    corruptosEntities.SaveChanges();
+                }
+
+                // add the final rows
+                eb.Description = sb.ToString();
+                embeds.Add(eb.Build());
+
+                foreach (var item in embeds)
+                {
+                    // reply the list
+                    await ReplyAsync(embed: item);
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
         }
 
-        private async Task<int> AddPlayersAndDiscordUsers(Data.CorruptModel corruptosEntities)
+        private List<ComparisonResult> GetComparisonList(IReadOnlyCollection<IGuildUser> discordUsers, List<DiscordUser> databaseDiscordUsers)
+        {
+            var comparisonList = new List<ComparisonResult>();
+            foreach (var item in discordUsers)
+            {
+                // check if exists in DB
+                var userId = Convert.ToInt64(item.Id);
+                var dbUser = databaseDiscordUsers.FirstOrDefault(x => x.DiscordId == userId);
+                if (dbUser != null)
+                {
+                    comparisonList.Add(new ComparisonResult()
+                    {
+                        DiscordId = item.Id,
+                        ExistsInDB = true,
+                        ExistsInDiscord = true,
+                        UsernameInDB = dbUser.Username,
+                        UsernameInDiscord = item.Username
+                    });
+                }
+                else
+                {
+                    comparisonList.Add(new ComparisonResult()
+                    {
+                        DiscordId = item.Id,
+                        ExistsInDB = false,
+                        ExistsInDiscord = true,
+                        UsernameInDB = string.Empty,
+                        UsernameInDiscord = item.Username
+                    });
+                }
+            }
+
+            // now we check the database vs the discord users
+            foreach (var item in databaseDiscordUsers)
+            {
+                // check if we already have handled this id
+                var userId = Convert.ToUInt64(item.DiscordId);
+                bool handled = comparisonList.Any(x => x.DiscordId == userId);
+
+                if (!handled)
+                {
+                    // check if exists in Discord
+
+                    var discordUser = discordUsers.FirstOrDefault(x => x.Id == userId);
+                    if (discordUser != null)
+                    {
+                        comparisonList.Add(new ComparisonResult()
+                        {
+                            DiscordId = userId,
+                            ExistsInDB = true,
+                            ExistsInDiscord = true,
+                            UsernameInDB = item.Username,
+                            UsernameInDiscord = discordUser.Username
+                        });
+                    }
+                    else
+                    {
+                        comparisonList.Add(new ComparisonResult()
+                        {
+                            DiscordId = 0,
+                            ExistsInDB = true,
+                            ExistsInDiscord = false,
+                            UsernameInDB = item.Username,
+                            UsernameInDiscord = null
+                        });
+                    }
+                }
+            }
+            return comparisonList;
+        }
+
+        private async Task InitDB(SocketCommandContext context)
+        {
+            using (CorruptModel corruptosEntities = new Data.CorruptModel())
+            {
+                // Clear current data
+                foreach (var item in corruptosEntities.DiscordUsers)
+                {
+                    corruptosEntities.DiscordUsers.Remove(item);
+                }
+                foreach (var item in corruptosEntities.Bosses)
+                {
+                    corruptosEntities.Bosses.Remove(item);
+                }
+                foreach (var item in corruptosEntities.RunescapeAccounts)
+                {
+                    corruptosEntities.RunescapeAccounts.Remove(item);
+                }
+
+                // Add players
+                var countDiscordUsers = await AddPlayersAndDiscordUsers(corruptosEntities);
+                await ReplyAsync(string.Format("loaded {0} discord users", countDiscordUsers));
+
+                // Save
+                await corruptosEntities.SaveChangesAsync();
+                await ReplyAsync(string.Format("Saved all entities to database"));
+            }
+        }
+
+        private async Task<int> AddPlayersAndDiscordUsers(CorruptModel corruptosEntities)
         {
             var result = 0;
             await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
@@ -433,8 +585,6 @@ namespace CorruptOSBot.Modules
                 sb.AppendLine(string.Format("**Status:** {0}", user.Status));
                 sb.AppendLine(string.Format("**Promotion Blacklist:** {0}", isBlackListed));
             }
-            
-
 
             sb.AppendLine(Environment.NewLine);
 
@@ -533,5 +683,15 @@ namespace CorruptOSBot.Modules
 
 
         #endregion
+    }
+
+    public class ComparisonResult
+    {
+        public string UsernameInDB { get; set; }
+        public string UsernameInDiscord { get; set; }
+        public bool ExistsInDB { get; set; }
+        public bool ExistsInDiscord { get; set; }
+        public UInt64? DiscordId { get; set; }
+        public bool IsInBoth { get { return ExistsInDB && ExistsInDiscord; } }
     }
 }
