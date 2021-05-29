@@ -53,16 +53,24 @@
 [X] Change the emoji helper to load data from bosses table in database
 [X] Added message in recruiting channel with new alt/iron command ran
 
+[X] Update role logic to support new roles
 [X] Fix bug with !rsn to change name
-[/] add command to compare discord and database
-[/] Update role logic to support new roles
+[X] add command to compare discord and database
+[X] Fix join date on getuser
+[X] Create !force-add-alt {discorduser}|{rsn}	
+[X] Create !force-add-iron {discorduser}|{rsn}
+[X] Create !change-alt {firstname}|{newname}
+[X] Create !force-change-alt {old name}|{new name}	
+[X] Create !delete-alt {rsn}
+[X] Create !force-delete-alt {rsn}
+
+
+[ ] Add command to add list 'my runescape accounts'
 
 [ ] Validate 'leaving' works fully (message and db update) => no idea how, no event is triggered or errorlog would show, works on new accounts but perhaps not if bot is not alive when user last was active. This is also weird as bot settings should allow for this.
-[ ] Add column on discordusers to show clanfriend
-
 [/] Add 'waiting' message to commands and delete that message afterwards
 
-[ ] add !change-alt {firstname-nextname}
+
 [ ] Automate the promotions process instead !promotions
 [ ] improve the !bosskc command (like !bosskc chambers should be !bosskc cox)
 [ ] Use the Bossname and BossCommand from the database instead of the enum's
@@ -70,7 +78,6 @@
 [ ] redoing the !cox command forces a refresh of the cache and checks again for promotions
 [ ] Add a force cache usage if WOM is down (and put message in heartbeat about it?);
 
-[ ] Add command to add list 'my runescape accounts'
 
 [/] Add a Point Module
 	[X] Allow Admin to give points (!cp-add and !cp-set)
@@ -100,3 +107,7 @@ EXTERNAL / INNOVATION:
 [ ] Do something cool with GE prices https://www.reddit.com/r/2007scape/comments/3g06rq/guide_using_the_old_school_ge_page_api/
 [ ] Do something cool the runelite API https://runelite.net/account/loot-tracker (https://api.runelite.net/runelite-1.7.5/loottracker?count=2000&start=0)
 [ ] Chat interaction between osrs and discord (https://www.runescape.com/companion/comapp.ws / https://github.com/aeramos/RuneScape-Discord-Chat-Sync)
+
+
+
+

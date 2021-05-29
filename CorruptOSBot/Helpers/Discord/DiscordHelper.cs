@@ -87,5 +87,23 @@ namespace CorruptOSBot.Helpers.Discord
 
             await ((SocketGuildUser)user).SendMessageAsync(embed: eb.Build());
         }
+
+        public static bool TryGetEntireCommand(string commandString, string[] commandKeys, char splitter, out Dictionary<string, string> result)
+        {
+            result = new Dictionary<string, string>();
+            var splittedString = commandString.Split(splitter);
+            var index = 0;
+            foreach (var item in splittedString)
+            {
+                if (commandKeys.Length >= index)
+                {
+                    var key = commandKeys[index];
+                    var value = item;
+                    result.Add(key, value);
+                }
+                index++;
+            }
+            return true;
+        }
     }
 }

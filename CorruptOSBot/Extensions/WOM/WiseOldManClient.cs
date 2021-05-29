@@ -66,7 +66,7 @@ namespace CorruptOSBot.Extensions
                 HttpResponseMessage response = client.PostAsync(path + string.Format("/groups/{0}/remove-members", clanId), c).Result;
                 if (response.IsSuccessStatusCode)
                 {
-                    var result = response.Content.ReadAsStringAsync().Result;
+                    response.Content.ReadAsStringAsync();
                 }
                 else
                 {
@@ -106,7 +106,7 @@ namespace CorruptOSBot.Extensions
             return null;
         }
 
-        public void PostNameChange(string oldName, string newName)
+        public string PostNameChange(string oldName, string newName)
         {
             var content = JsonConvert.SerializeObject(new NameChangeRoot()
             {
@@ -120,10 +120,11 @@ namespace CorruptOSBot.Extensions
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
+                return string.Empty;
             }
             else
             {
-                var result = response.ReasonPhrase;
+                return response.Content.ReadAsStringAsync().Result;
             }
         }
 

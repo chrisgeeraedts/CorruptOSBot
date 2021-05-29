@@ -10,6 +10,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -89,7 +90,55 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        private async Task NameChangeMember(SocketUser currentUser, string preferedNickname)
+
+        [Helpgroup(HelpGroup.Staff)]
+        [Command("force-rsn")]
+        [Summary("!force-rsn {your name} - changes your nickname in the server and Wise Old Man.")]
+        public async Task SaForceyRSNAsync([Remainder]string commandString)
+        {
+            if (ToggleStateManager.GetToggleState("rsn", Context.User))
+            {
+                // grab actual props
+                Dictionary<string, string> commands;
+                if (DiscordHelper.TryGetEntireCommand(commandString, new string[] { "oldName", "newName" }, '|', out commands))
+                {
+                    var oldName = commands["oldName"];
+                    var newName = commands["newName"];
+
+
+                    using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+                    {
+                        var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username == oldName);
+
+                        if (discordUser != null)
+                        {
+                            var discUser = Context.Guild.GetUser(Convert.ToUInt64(discordUser.DiscordId));
+                            if (discUser != null)
+                            {
+                                await NameChangeMember(discUser, newName);
+                            }
+                            else
+                            {
+                                var message = await ReplyAsync("Discord User not found!");
+                                await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
+                            }
+                        }
+                        else
+                        {
+                            var message = await ReplyAsync("Discord User not found!");
+                            await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
+                        }
+                    }   
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
+
+
+        private async Task NameChangeMember(SocketUser currentUser, string preferedNickname, bool forced = false)
         {
             string previousName = ((SocketGuildUser)currentUser).Nickname;
 
@@ -102,7 +151,7 @@ namespace CorruptOSBot.Modules
             // post to recruiting channel
             var recruitingChannel =  Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member name change",
-                string.Format("{0} has changed their name to <@{1}>", previousName, ((SocketGuildUser)currentUser).Id)));
+                string.Format("{0} has changed their name to <@{1}> {2}", previousName, ((SocketGuildUser)currentUser).Id, (forced ? "(Forced by staff)" : string.Empty))));
 
             // update WOM
             new WiseOldManClient().PostNameChange(previousName, preferedNickname);

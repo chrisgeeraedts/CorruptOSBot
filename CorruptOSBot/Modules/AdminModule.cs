@@ -561,7 +561,8 @@ namespace CorruptOSBot.Modules
             var rsAccounts = new List<RunescapeAccount>();
             var isBlackListed = false;
             var CP = 0;
-            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+            var joinDate = user.JoinedAt?.DateTime;
+            using (CorruptModel corruptosEntities = new CorruptModel())
             {
                 var userId = Convert.ToInt64(user.Id);
                 rsAccounts = corruptosEntities.RunescapeAccounts.Where(x => x.DiscordUser.DiscordId == userId).ToList();
@@ -570,6 +571,7 @@ namespace CorruptOSBot.Modules
                 {
                     isBlackListed = discorduser.BlacklistedForPromotion;
                     CP = discorduser.CorruptPoints;
+                    joinDate = discorduser.OriginallyJoinedAt;
                 }
             }
             embedBuilder.Url = string.Format("https://wiseoldman.net/players/{0}", rsAccounts.FirstOrDefault(x => x.account_type == "main"));
@@ -603,7 +605,7 @@ namespace CorruptOSBot.Modules
             {
                 sb.AppendLine("**Additional:**");
                 sb.AppendLine(string.Format("**Created at:** {0}", user.CreatedAt.ToString("r")));
-                sb.AppendLine(string.Format("**Joined at:** {0}", user.JoinedAt?.ToString("r")));
+                sb.AppendLine(string.Format("**Joined at:** {0}", joinDate?.ToString("r")));
                 sb.AppendLine(string.Format("**Premium since:** {0}", user.PremiumSince?.ToString("r")));
                 sb.AppendLine(string.Format("**Webhook:** {0}", user.IsWebhook));
                 sb.AppendLine(string.Format("**Bot:** {0}", user.IsBot));
