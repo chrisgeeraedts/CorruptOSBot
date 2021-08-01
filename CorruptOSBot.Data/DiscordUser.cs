@@ -20,6 +20,7 @@ namespace CorruptOSBot.Data
             this.RunescapeAccounts = new HashSet<RunescapeAccount>();
             this.hunt_team_members = new HashSet<hunt_team_members>();
             this.PointMutations = new HashSet<PointMutation>();
+            this.BingoTeamMembers = new HashSet<BingoTeamMember>();
         }
     
         public int Id { get; set; }
@@ -36,5 +37,7 @@ namespace CorruptOSBot.Data
         public virtual ICollection<hunt_team_members> hunt_team_members { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PointMutation> PointMutations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BingoTeamMember> BingoTeamMembers { get; set; }
     }
 }

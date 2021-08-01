@@ -24,7 +24,9 @@ namespace CorruptOSBot.Helpers
 
         public const string CM = "Challenge Mode";
         public const string GWD = "GWD";
+        public const string Corp = "Corp";
 
+        public const string CorpImage = "https://static.wikia.nocookie.net/2007scape/images/5/5c/Corporeal_Beast.png";
         public const string GWDImage = "https://www.food4rs.com/wp-content/themes/food4rs_2017_2/assets/img/temp/post-8.jpg";
         public const string CoxImage = "https://cdnb.artstation.com/p/assets/images/images/011/329/063/large/j-alexander-legend-arts-olm4k.jpg?1529007874";
         public const string TobImage = "https://cdna.artstation.com/p/assets/images/images/011/406/396/4k/henry-wong-27622531347-c5c0d6e48d-o-1.jpg?1529425776";

@@ -31,7 +31,7 @@ namespace CorruptOSBot.Modules
                 // the prefered rsn name the user posted
                 var preferedNickname = username;
 
-                // check rank, if he has a smiley, its a namechange, otherwise, a new member
+                // check rank, if he has a proper rank, its a namechange, otherwise, a new member
                 var isMember = RoleHelper.IsMember(Context.User, Context.Guild);
 
                 if (!isMember)
@@ -207,7 +207,7 @@ namespace CorruptOSBot.Modules
                     // post to general channel
                     var generalChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("general"));
                     await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member joined",
-                        string.Format("<@{0}> Welcome to Corrupt OS", currentUser.Id),
+                        string.Format("<@{0}> Welcome to Affliction", currentUser.Id),
                         "https://blog.memberclicks.com/hubfs/Onboarding_New_Members-1.jpg"));
 
                     // post to recruitment channel

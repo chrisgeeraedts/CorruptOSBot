@@ -26,20 +26,22 @@ namespace CorruptOSBot.Modules
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
                 (RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild)))
             {
-                IGuildUser user;
-                if (!username.StartsWith("<@!"))
+                try
                 {
-                    user = await DiscordHelper.AsyncFindUserByName(username, Context);
-                }
-                else
-                {
-                    user = await DiscordHelper.AsyncFindUserByMention(username, Context);
-                }
 
-                if (user != null)
-                {
-                    try
+                    IGuildUser user;
+                    if (!username.StartsWith("<@!"))
                     {
+                        user = await DiscordHelper.AsyncFindUserByName(username, Context);
+                    }
+                    else
+                    {
+                        user = await DiscordHelper.AsyncFindUserByMention(username, Context);
+                    }
+
+                    if (user != null)
+                    {
+
                         using (var database = new Data.CorruptModel())
                         {
                             var userid = Convert.ToInt64(user.Id);
@@ -49,6 +51,7 @@ namespace CorruptOSBot.Modules
                             {
                                 discordUserFromDB.BlacklistedForPromotion = !discordUserFromDB.BlacklistedForPromotion;
                                 await database.SaveChangesAsync();
+
                                 if (discordUserFromDB.BlacklistedForPromotion)
                                 {
                                     await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} added to promotion blacklist", username), string.Empty));
@@ -64,20 +67,22 @@ namespace CorruptOSBot.Modules
                                 await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} not found in database - unable to blacklist", username), string.Empty));
                             }
                         }
-                    }
-                    catch (Exception e)
-                    {
-                        await Program.Log(new LogMessage(LogSeverity.Error, "PromotionModule", "Database issue - " + e.Message));
-                    }
-                    
-                }
-                else
-                {
-                    await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} not found", username), string.Empty));
-                }
 
-                // delete the command posted
-                await Context.Message.DeleteAsync();
+
+                    }
+                    else
+                    {
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} not found", username), string.Empty));
+                    }
+
+                    // delete the command posted
+                    await Context.Message.DeleteAsync();
+
+                }
+                catch (Exception e)
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Error, "PromotionModule", "Database issue - " + e.ToString()));
+                }
             }
         }
 
@@ -385,15 +390,4 @@ namespace CorruptOSBot.Modules
         public Discord.IGuildUser User { get; set; }
         public ulong UserId { get; set; }
     }
-
-    //public enum Rank
-    //{
-    //    Default,
-    //    OG,
-    //    Sergeant,
-    //    Corperal,
-    //    Recruit,
-    //    Smiley,
-    //    Inactive
-    //}
 }

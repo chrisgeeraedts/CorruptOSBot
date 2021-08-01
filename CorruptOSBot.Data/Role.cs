@@ -20,6 +20,7 @@ namespace CorruptOSBot.Data
         public int DaysToReach { get; set; }
         public bool CanUpgradeTo { get; set; }
         public string IconUrl { get; set; }
-        public Nullable<bool> IsStaff { get; set; }
+        public bool IsStaff { get; set; }
+        public Nullable<long> EmojiId { get; set; }
     }
 }

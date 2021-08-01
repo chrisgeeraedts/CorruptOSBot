@@ -59,10 +59,10 @@ namespace CorruptOSBot.Helpers.Discord
         internal static async Task SendWelcomeMessageToUser(SocketUser user, SocketGuild guild, bool isClanFriend)
         {
             var eb = new EmbedBuilder();
-            eb.Title = "Welcome to Corrupt OS";
+            eb.Title = "Welcome to Affliction";
 
             var sb = new StringBuilder();
-            sb.AppendLine(string.Format("Hi **{0}**, and welcome to Corrupt OS!", DiscordNameHelper.GetAccountNameOrNickname(user)));
+            sb.AppendLine(string.Format("Hi **{0}**, and welcome to Affliction!", DiscordNameHelper.GetAccountNameOrNickname(user)));
             sb.AppendLine(Environment.NewLine);
             sb.AppendLine("**Important channels:**");
             sb.AppendLine(Environment.NewLine);
@@ -81,7 +81,7 @@ namespace CorruptOSBot.Helpers.Discord
             sb.AppendLine(Environment.NewLine);
             sb.AppendLine("Feel free to message **SGnathy** with any questions!");
 
-            eb.Footer = new EmbedFooterBuilder().WithText("Corrupt OS | Bot");
+            eb.Footer = new EmbedFooterBuilder().WithText("Affliction | Bot");
             eb.Description = sb.ToString();
             eb.ThumbnailUrl = guild.IconUrl;
 

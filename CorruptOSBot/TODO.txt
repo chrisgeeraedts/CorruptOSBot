@@ -52,8 +52,7 @@
 [X] !addcalendar command to have bot ask multiple questions => Bad idea, use WOM for UI instead of admin / staff commands
 [X] Change the emoji helper to load data from bosses table in database
 [X] Added message in recruiting channel with new alt/iron command ran
-
-[X] Update role logic to support new roles
+[X] Update role logic to support new roles from clanupdate
 [X] Fix bug with !rsn to change name
 [X] add command to compare discord and database
 [X] Fix join date on getuser
@@ -62,10 +61,37 @@
 [X] Create !change-alt {firstname}|{newname}
 [X] Create !force-change-alt {old name}|{new name}	
 [X] Create !delete-alt {rsn}
-[X] Create !force-delete-alt {rsn}
+[X] Create !force-delete-account {rsn}
+
+[X] Create !corp command
+[X] if someone banned they get mentioned in wall of shame, including the reason (var foo = arg2.GetBanAsync().Result.Reason)
+[X] Changed togglestates to toggles
+
+[ ] Add a Bingo Module (similar to hunt)
+	Overtime something to automate the big pvm events. Will all be done via one channel. Add post with discription of item. Move to staff channel for verification in form of thumbs up or thumbs down. 
+	Also maybe a way to get bot to read text to automated it been added to a spreadsheet or a list embed for each team. !team 1 points or something as command to see items or points. 
+	- post picture in a channel withd description
+    - moves posts to a staff channel
+	- adds thumbs up and thumbs down to verify
+	- post to team channel after verification
+	(!) player posts picture in channel A with a comment --> Bot moves picture to staff channel B (and stores item entry in db) --> Bot adds emoji's to new post (YES / NO and A,B,C,D, E,F,G,H, I,J,K,L). --> Staff can press emoji:
+		YES:  -> item entry is updated (approved), If item is linked to specific slot: Post in team channel regarding approval
+		NO:   -> item entry is updated (denied), Post in team channel regarding approval
+		A-L   -> item entry is updated (linked to a specific item slot on bingo card). If item is Approved: Post in team channel regarding approval
+	
+	BingoEvent (Id, WomID, sourceChannelId, targetChannelId, EmojiYesId, EmojiNoId)
+	BingoCard (Id, BingoEventId)
+	BingoCardSlot (Id, BingoCardId, BossId, ItemName, ItemImage, SlotLetter)
+	BingoTeam (Id, TeamName)
+	BingoTeamMember (Id, BingoTeamId, DiscordUserId)
+	BingoTeamCard (Id, BingoTeamId, BingoCardId)
+	BingoTeamCardSlot (Id, BingoTeamCardId, BingoCardSlotId, DateApproved, DateDenied)
+
+
 
 
 [ ] Add command to add list 'my runescape accounts'
+[ ] fix bug linked to WOM (5528	Bad Request	Error	2021-06-18 21:14:22)
 
 [ ] Validate 'leaving' works fully (message and db update) => no idea how, no event is triggered or errorlog would show, works on new accounts but perhaps not if bot is not alive when user last was active. This is also weird as bot settings should allow for this.
 [/] Add 'waiting' message to commands and delete that message afterwards
@@ -77,6 +103,7 @@
 [ ] Change the !cox etc commands to a reply with emoji logic
 [ ] redoing the !cox command forces a refresh of the cache and checks again for promotions
 [ ] Add a force cache usage if WOM is down (and put message in heartbeat about it?);
+
 
 
 [/] Add a Point Module

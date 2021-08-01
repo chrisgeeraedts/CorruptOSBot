@@ -45,5 +45,12 @@ namespace CorruptOSBot.Data
         public virtual DbSet<Skill> Skills { get; set; }
         public virtual DbSet<Toggle> Toggles { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<BingoCard> BingoCards { get; set; }
+        public virtual DbSet<BingoCardSlot> BingoCardSlots { get; set; }
+        public virtual DbSet<BingoEvent> BingoEvents { get; set; }
+        public virtual DbSet<BingoTeam> BingoTeams { get; set; }
+        public virtual DbSet<BingoTeamCard> BingoTeamCards { get; set; }
+        public virtual DbSet<BingoTeamCardSlot> BingoTeamCardSlots { get; set; }
+        public virtual DbSet<BingoTeamMember> BingoTeamMembers { get; set; }
     }
 }

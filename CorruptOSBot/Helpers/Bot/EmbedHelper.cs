@@ -119,39 +119,42 @@ namespace CorruptOSBot.Helpers.Bot
 
             var clan = client.GetClan();
 
-            var builder = new EmbedBuilder();
-            builder.Color = Color.Blue;
-            builder.Title = "Corrupt OS | Wise Old Man";
-            builder.Url = string.Format("https://wiseoldman.net/groups/{0}", clanId);
-            builder.ThumbnailUrl = "https://wiseoldman.net/img/logo.png";
-
-            var sb = new StringBuilder();
-            sb.AppendLine("\u200b");
-            sb.AppendLine(string.Format("- [Clan Page](https://wiseoldman.net/groups/{0})", clanId));
-            sb.AppendLine(string.Format("- [Competitions](https://wiseoldman.net/groups/{0}/competitions)", clanId));
-            sb.AppendLine(string.Format("- [Hiscores](https://wiseoldman.net/groups/{0}/hiscores)", clanId));
-            sb.AppendLine(string.Format("- [Achievements](https://wiseoldman.net/groups/{0}/achievements)", clanId));
-            builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Links").WithValue(sb.ToString()).WithIsInline(false));
-
-            var sb2 = new StringBuilder();
-            var recentAchievements = client.GetClanRecentAchievements();
-
-            if (recentAchievements != null)
+            if (clan != null)
             {
-                sb2.AppendLine("\u200b");
-                foreach (var recentAchievement in recentAchievements.Take(3))
+                var builder = new EmbedBuilder();
+                builder.Color = Color.Blue;
+                builder.Title = "Affliction | Wise Old Man";
+                builder.Url = string.Format("https://wiseoldman.net/groups/{0}", clanId);
+                builder.ThumbnailUrl = "https://wiseoldman.net/img/logo.png";
+
+                var sb = new StringBuilder();
+                sb.AppendLine("\u200b");
+                sb.AppendLine(string.Format("- [Clan Page](https://wiseoldman.net/groups/{0})", clanId));
+                sb.AppendLine(string.Format("- [Competitions](https://wiseoldman.net/groups/{0}/competitions)", clanId));
+                sb.AppendLine(string.Format("- [Hiscores](https://wiseoldman.net/groups/{0}/hiscores)", clanId));
+                sb.AppendLine(string.Format("- [Achievements](https://wiseoldman.net/groups/{0}/achievements)", clanId));
+                builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Links").WithValue(sb.ToString()).WithIsInline(false));
+
+                var sb2 = new StringBuilder();
+                var recentAchievements = client.GetClanRecentAchievements();
+
+                if (recentAchievements != null)
                 {
-                    sb2.AppendLine(string.Format("**{0}** - {1}", recentAchievement.player.displayName, recentAchievement.name));
-                }
-                sb2.AppendLine("\u200b");
+                    sb2.AppendLine("\u200b");
+                    foreach (var recentAchievement in recentAchievements.Take(3))
+                    {
+                        sb2.AppendLine(string.Format("**{0}** - {1}", recentAchievement.player.displayName, recentAchievement.name));
+                    }
+                    sb2.AppendLine("\u200b");
 
-                builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Recent achievements").WithValue(sb2).WithIsInline(false));
+                    builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Recent achievements").WithValue(sb2).WithIsInline(false));
 
-                builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Homeworld").WithValue(clan.homeworld).WithIsInline(true));
-                builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Members").WithValue(clan.memberCount).WithIsInline(true));
+                    builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Homeworld").WithValue(clan.homeworld).WithIsInline(true));
+                    builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Members").WithValue(clan.memberCount).WithIsInline(true));
 
-                builder.WithFooter(string.Format("Last updated: {0}", DateTime.Now.ToString("r")));
-                return builder.Build();
+                    builder.WithFooter(string.Format("Last updated: {0}", DateTime.Now.ToString("r")));
+                    return builder.Build();
+                }                
             }
             return null;
         }

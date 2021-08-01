@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.Data", "Corrup
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.CorruptPoints", "CorruptOSBot.CorruptPoints\CorruptOSBot.CorruptPoints.csproj", "{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.Bingo", "CorruptOSBot.Bingo\CorruptOSBot.Bingo.csproj", "{DA38D312-814E-4396-AD5A-D023825CD8B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA38D312-814E-4396-AD5A-D023825CD8B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA38D312-814E-4396-AD5A-D023825CD8B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA38D312-814E-4396-AD5A-D023825CD8B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA38D312-814E-4396-AD5A-D023825CD8B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -18,6 +18,7 @@ namespace CorruptOSBot.Data
         public Boss()
         {
             this.PlayerPets = new HashSet<PlayerPet>();
+            this.BingoCardSlots = new HashSet<BingoCardSlot>();
         }
     
         public int Id { get; set; }
@@ -28,5 +29,7 @@ namespace CorruptOSBot.Data
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PlayerPet> PlayerPets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<BingoCardSlot> BingoCardSlots { get; set; }
     }
 }

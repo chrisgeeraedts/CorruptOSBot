@@ -206,12 +206,83 @@
     <EntitySetMapping Name="Roles">
       <EntityTypeMapping TypeName="corruptosModel.Role">
         <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="EmojiId" ColumnName="EmojiId" />
           <ScalarProperty Name="IsStaff" ColumnName="IsStaff" />
           <ScalarProperty Name="IconUrl" ColumnName="IconUrl" />
           <ScalarProperty Name="CanUpgradeTo" ColumnName="CanUpgradeTo" />
           <ScalarProperty Name="DaysToReach" ColumnName="DaysToReach" />
           <ScalarProperty Name="DiscordRoleId" ColumnName="DiscordRoleId" />
           <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoCards">
+      <EntityTypeMapping TypeName="corruptosModel.BingoCard">
+        <MappingFragment StoreEntitySet="BingoCard">
+          <ScalarProperty Name="BingoEventId" ColumnName="BingoEventId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoCardSlots">
+      <EntityTypeMapping TypeName="corruptosModel.BingoCardSlot">
+        <MappingFragment StoreEntitySet="BingoCardSlot">
+          <ScalarProperty Name="SlotLetter" ColumnName="SlotLetter" />
+          <ScalarProperty Name="ItemImage" ColumnName="ItemImage" />
+          <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+          <ScalarProperty Name="BossId" ColumnName="BossId" />
+          <ScalarProperty Name="BingoCardId" ColumnName="BingoCardId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoEvents">
+      <EntityTypeMapping TypeName="corruptosModel.BingoEvent">
+        <MappingFragment StoreEntitySet="BingoEvent">
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="EmojiNoId" ColumnName="EmojiNoId" />
+          <ScalarProperty Name="EmojiYesId" ColumnName="EmojiYesId" />
+          <ScalarProperty Name="TargetChannelId" ColumnName="TargetChannelId" />
+          <ScalarProperty Name="SourceChannelId" ColumnName="SourceChannelId" />
+          <ScalarProperty Name="WomId" ColumnName="WomId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoTeams">
+      <EntityTypeMapping TypeName="corruptosModel.BingoTeam">
+        <MappingFragment StoreEntitySet="BingoTeam">
+          <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoTeamCards">
+      <EntityTypeMapping TypeName="corruptosModel.BingoTeamCard">
+        <MappingFragment StoreEntitySet="BingoTeamCard">
+          <ScalarProperty Name="BingoCardId" ColumnName="BingoCardId" />
+          <ScalarProperty Name="BingoTeamId" ColumnName="BingoTeamId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoTeamCardSlots">
+      <EntityTypeMapping TypeName="corruptosModel.BingoTeamCardSlot">
+        <MappingFragment StoreEntitySet="BingoTeamCardSlot">
+          <ScalarProperty Name="DateDenied" ColumnName="DateDenied" />
+          <ScalarProperty Name="DateApproved" ColumnName="DateApproved" />
+          <ScalarProperty Name="BingoCardSlotId" ColumnName="BingoCardSlotId" />
+          <ScalarProperty Name="BingoTeamCardId" ColumnName="BingoTeamCardId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoTeamMembers">
+      <EntityTypeMapping TypeName="corruptosModel.BingoTeamMember">
+        <MappingFragment StoreEntitySet="BingoTeamMember">
+          <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
+          <ScalarProperty Name="BingoTeamId" ColumnName="BingoTeamId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

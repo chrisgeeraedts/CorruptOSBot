@@ -184,11 +184,11 @@ namespace CorruptOSBot.Modules
 
 
         [Helpgroup(HelpGroup.Staff)]
-        [Command("force-delete-alt")]
-        [Summary("!force-delete-alt {rsn} - Removes this runescape account from the given discord account")]
+        [Command("force-delete-account")]
+        [Summary("!force-delete-account {rsn} - Removes this runescape account from the given discord account")]
         public async Task SayForceDeleteAltBAsync([Remainder] string rsn)
         {
-            if (ToggleStateManager.GetToggleState("force-delete-alt", Context.User) &&
+            if (ToggleStateManager.GetToggleState("force-delete-account", Context.User) &&
                 RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
             {
                 await DeleteAlt(Context, rsn, true);
@@ -217,14 +217,14 @@ namespace CorruptOSBot.Modules
                     {
                         if (isRsnAlreadyLinked)
                         {
-                            await context.User.SendMessageAsync(String.Format("The RSN **{0}** is already linked to an Corrupt OS Discord account!", rsn));
+                            await context.User.SendMessageAsync(String.Format("The RSN **{0}** is already linked to an Affliction Discord account!", rsn));
                         }
                         else if (discordUser.RunescapeAccounts.Any(x => x.rsn.ToLower() == rsn.ToLower()))
                         {
                             if (!overrideDiscordUserId.HasValue)
                             {
                                 // message if it does
-                                await context.User.SendMessageAsync(String.Format("You already have linked the RSN **{0}** to your Corrupt OS Discord account!", rsn));
+                                await context.User.SendMessageAsync(String.Format("You already have linked the RSN **{0}** to your Affliction Discord account!", rsn));
                             }
                         }
                         else
@@ -251,7 +251,7 @@ namespace CorruptOSBot.Modules
                             if (!overrideDiscordUserId.HasValue)
                             {
                                 // add and message if it doesnt
-                                await context.User.SendMessageAsync(String.Format("**{0}** was linked to your Corrupt OS Discord account!", rsn));
+                                await context.User.SendMessageAsync(String.Format("**{0}** was linked to your Affliction Discord account!", rsn));
                             }
 
                             var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
@@ -301,7 +301,7 @@ namespace CorruptOSBot.Modules
                     // check if account is linked to rsn
                     if (runescapeAccountDB == null)
                     {
-                        await context.User.SendMessageAsync(String.Format("The RSN **{0}** is not linked to your Corrupt OS Discord account!", rsn));
+                        await context.User.SendMessageAsync(String.Format("The RSN **{0}** is not linked to your Affliction Discord account!", rsn));
                     }
                     else
                     {
@@ -314,7 +314,7 @@ namespace CorruptOSBot.Modules
                         if (!forceOverride)
                         {
                             // add and message if it doesnt
-                            await context.User.SendMessageAsync(String.Format("**{0}** was removed from your Corrupt OS Discord account!", rsn));
+                            await context.User.SendMessageAsync(String.Format("**{0}** was removed from your Affliction Discord account!", rsn));
 
 
                             var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
@@ -385,7 +385,7 @@ namespace CorruptOSBot.Modules
                                 // add and message if it doesnt
                                 if (!forceOverride)
                                 {
-                                    await Context.User.SendMessageAsync(String.Format("Your runescape account linked to the Corrupt OS Discord account was changed from **{0}** to **{1}**", oldName, newName));
+                                    await Context.User.SendMessageAsync(String.Format("Your runescape account linked to the Affliction Discord account was changed from **{0}** to **{1}**", oldName, newName));
                                 }
 
                                 var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
@@ -409,7 +409,7 @@ namespace CorruptOSBot.Modules
                     else
                     {
                         // message if it does
-                        await Context.User.SendMessageAsync(String.Format("This RSN (**{0}**) is not linked to your Corrupt OS Discord Account!", oldName));
+                        await Context.User.SendMessageAsync(String.Format("This RSN (**{0}**) is not linked to your Affliction Discord Account!", oldName));
                     }
                 }
             }

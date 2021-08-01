@@ -91,18 +91,25 @@ namespace CorruptOSBot
             //TODO: Do something cool with reflection loading later
 
             //The hunt logic
-            if (ToggleStateManager.GetToggleState("hunt-toggle"))
-            {
-                //TheHunt.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
-                //Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", ModuleInjector.Title)));
-            }
+            //if (ToggleStateManager.GetToggleState("hunt-toggle"))
+            //{
+            //    //TheHunt.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
+            //    //Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", ModuleInjector.Title)));
+            //}
 
             //The point logic
-            if (ToggleStateManager.GetToggleState("point-toggle"))
-            {
-                CorruptPoints.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
-                Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", CorruptPoints.ModuleInjector.Title)));
-            }
+            //if (ToggleStateManager.GetToggleState("point-toggle"))
+            //{
+            //    CorruptPoints.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
+            //    Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", CorruptPoints.ModuleInjector.Title)));
+            //}
+
+            //The bingo logic
+            //if (ToggleStateManager.GetToggleState("bingo-toggle"))
+            //{
+            //    Bingo.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
+            //    Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", Bingo.ModuleInjector.Title)));
+            //}
         }
 
         private List<IService> ConfigureActiveServices()
@@ -242,6 +249,7 @@ namespace CorruptOSBot
             // so make sure that's done before you get here.
             //await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
 
+
             // Or add Modules manually if you prefer to be a little more explicit:
             await _commands.AddModuleAsync<AdminModule>(_services);
             await _commands.AddModuleAsync<AccountModule>(_services);
@@ -307,6 +315,7 @@ namespace CorruptOSBot
             if (ToggleStateManager.GetToggleState(Constants.EventUserBanned))
             {
                 await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User banned: {0}", arg1.Username)));
+                
                 await EventManager.BannedFromGuild(arg1, arg2);
             }
         }
@@ -319,6 +328,10 @@ namespace CorruptOSBot
 
             // We don't want the bot to respond to itself or other bots.
             if (msg.Author.Id == _client.CurrentUser.Id || msg.Author.IsBot) return;
+
+            // block in debug mode except admin
+
+            await BlockMessageIfDebugMode(msg);
 
             try
             {
@@ -360,9 +373,22 @@ namespace CorruptOSBot
                     // to send a message if it failed.
                     // This does not catch errors from commands with 'RunMode.Async',
                     // subscribe a handler for '_commands.CommandExecuted' to see those.
-                    //if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
-                    //    await msg.Channel.SendMessageAsync(result.ErrorReason);
+                    if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
+                        await LogHelper.Log(new LogMessage(LogSeverity.Error, msg.Content, result.ErrorReason));
                 }
+            }
+        }
+
+        private async Task BlockMessageIfDebugMode(SocketUserMessage msg)
+        {
+            if (ConfigHelper.DEBUG && msg.Author.Id != 174621705581494272) //of the abbys id
+            {
+                //block!
+                var context = new SocketCommandContext(_client, msg);
+                var message = await context.Channel.SendMessageAsync("The corrupt bot is currently in development mode - Of the Abbys is probally working on it (and breaking it). ");
+
+                await msg.DeleteAsync();
+                await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
             }
         }
 

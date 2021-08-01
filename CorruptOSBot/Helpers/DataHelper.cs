@@ -41,7 +41,6 @@ namespace CorruptOSBot.Helpers
 
         public async Task SetDiscorduserLeaving(ulong userDiscordId)
         {
-
             try
             {
                 using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
@@ -51,24 +50,19 @@ namespace CorruptOSBot.Helpers
                     // Find discord dataset
                     var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
 
-                    if (discordUser != null)
+                    if (discordUser != null && !discordUser.LeavingDate.HasValue)
                     {
                         discordUser.LeavingDate = DateTime.Now;
                     }
 
                     await corruptosEntities.SaveChangesAsync();
                 }
-
             }
             catch (System.Exception e)
             {
                 await Program.Log(new LogMessage(LogSeverity.Error, "SetDiscorduserLeaving", "Failed add LeavingDate to database - " + e.Message));
             }
-
-
-            
         }
-
 
         public Data.DiscordUser GetDiscordUserFromUserId(ulong? userId)
         {

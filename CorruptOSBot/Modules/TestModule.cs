@@ -2,6 +2,7 @@
 using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Bot;
 using Discord.Commands;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Modules
@@ -11,19 +12,22 @@ namespace CorruptOSBot.Modules
     {
         [Helpgroup(HelpGroup.Member)]
         [Command("test")]
-        [Summary("!test - TEST")]
+        [Summary("/test - TEST")]
         public async Task SayTestAsync()
         {
-            var guildId = ConfigHelper.GetGuildId();
-            var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
+            //var guildId = ConfigHelper.GetGuildId();
+            //var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
 
-            foreach (var item in guild.Roles)
-            {
-                await ReplyAsync(string.Format("{0} ({1})", item.Name, item.Id));
-            }
+            //foreach (var item in guild.Roles)
+            //{
+            //    await ReplyAsync(string.Format("{0} ({1})", item.Name, item.Id));
+            //}
 
+            //var path = string.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "loading.gif");
 
-            //await CommandHelper.ActWithLoadingIndicator(Method2, "1232", Context.Channel);
+            //await ReplyAsync(path + ": " + File.Exists(path));
+            
+            var foo = await CommandHelper.ActWithLoadingIndicator(Method2, "1232", Context.Channel);
 
             // delete the command posted
             await Context.Message.DeleteAsync();

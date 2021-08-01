@@ -249,7 +249,53 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!cm", "set-pvm-roles");
+                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!gwd", "set-pvm-roles");
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("corp")]
+        [Summary("!corp - Enables a player to earn the 'Corp' role (Only allowed in **set-pvm-roles**)")]
+        public async Task SayCorpAsync()
+        {
+            if (ToggleStateManager.GetToggleState("corp", Context.User) && RoleHelper.HasAnyRole(Context.User))
+            {
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
+                {
+                    // check if user has learner/intermediate/advanced
+                    var currentUser = ((SocketGuildUser)Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
+
+                    if (!string.IsNullOrEmpty(rsn))
+                    {
+                        // Get KC in WOM
+                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
+                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
+
+                        if (clanMember != null)
+                        {
+                            // set the role appriate
+                            await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                            currentUser,
+                            Context.Guild,
+                            new PvmSetCM()
+                            {
+                                role = Constants.Corp,
+                                imageUrl = Constants.CorpImage
+                            },
+                            false,
+                            true);
+                        }
+                    }
+                }
+                else
+                {
+                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!corp", "set-pvm-roles");
                 }
 
                 // delete the command posted

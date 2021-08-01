@@ -47,7 +47,7 @@ namespace CorruptOSBot.Shared.Helpers.Discord
         }
         public static bool HasStaffOrModOrOwnerRole(IGuildUser user, IGuild guild)
         {
-            foreach (var item in RoleHelper.GetRoles().Where(x => x.IsStaff.HasValue && x.IsStaff.Value))
+            foreach (var item in RoleHelper.GetRoles().Where(x => x.IsStaff))
             {
                 var hasStaff = HasRole(user, guild, item);
                 if (hasStaff)

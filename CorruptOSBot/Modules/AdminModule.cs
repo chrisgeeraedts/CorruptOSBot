@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Data;
+using CorruptOSBot.Extensions;
 using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
@@ -184,8 +185,8 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Admin)]
-        [Command("togglestates")]
-        [Summary("!togglestates - Shows the current enabled and disabled commands")]
+        [Command("toggles")]
+        [Summary("!toggles - Shows the current enabled and disabled commands")]
         public async Task SaytogglestatescommandAsync()
         {
             if (RoleHelper.HasRole(Context.User, Context.Guild, 3)) //bot dev
@@ -418,10 +419,76 @@ namespace CorruptOSBot.Modules
             }
         }
 
+
+
+
+        [Helpgroup(HelpGroup.Admin)]
+        [Command("fullcompare")]
+        [Summary("!fullcompare - compares discordusers and database discord users")]
+        public async Task SayCompar2eAsync()
+        {
+            if (ToggleStateManager.GetToggleState("compare", Context.User) &&
+                RoleHelper.HasRole(Context.User, Context.Guild, 3)) //dev staff
+            {
+                // compare the discord users vs the database
+                var comparisonList = GetFullComparisonList();
+
+                var sb = new StringBuilder();
+                var eb = new EmbedBuilder();
+
+                var embeds = new List<Embed>();
+
+                int iterator = 0;
+                foreach (var item in comparisonList.Values.Where(x => !x.IsInBoth))
+                {
+                    if (iterator < 20)
+                    {
+                        // keep adding
+                        sb.AppendLine(string.Format("**{0}** | DB:**{1}** | DISC:**{2}** | WOM:**{3}**", item.Username, item.ExistsInDB, item.ExistsInDiscord, item.ExistsInWOM));
+                        iterator++;
+                    }
+                    else
+                    {
+                        // add final then build and add embed
+                        sb.AppendLine(string.Format("**{0}** | DB:**{1}** | DISC:**{2}** | WOM:**{3}**", item.Username, item.ExistsInDB, item.ExistsInDiscord, item.ExistsInWOM));
+                        eb.Description = sb.ToString();
+
+                        embeds.Add(eb.Build());
+
+                        sb = new StringBuilder();
+                        eb = new EmbedBuilder();
+
+                        iterator = 0;
+                    }
+                }
+
+                // add the final rows
+                eb.Description = sb.ToString();
+                embeds.Add(eb.Build());
+
+                foreach (var item in embeds)
+                {
+                    // reply the list
+                    await ReplyAsync(embed: item);
+                }
+
+                // delete the command posted
+                await Context.Message.DeleteAsync();
+            }
+        }
+
+
+
+
+
+
+
+
+
         private List<ComparisonResult> GetComparisonList(IReadOnlyCollection<IGuildUser> discordUsers, List<DiscordUser> databaseDiscordUsers)
         {
             var comparisonList = new List<ComparisonResult>();
-            foreach (var item in discordUsers)
+            foreach (var item in discordUsers.Where(x => !x.IsBot && !x.IsWebhook))
             {
                 // check if exists in DB
                 var userId = Convert.ToInt64(item.Id);
@@ -488,6 +555,90 @@ namespace CorruptOSBot.Modules
             }
             return comparisonList;
         }
+
+        private Dictionary<string, FullComparisonResult> GetFullComparisonList()
+        {
+            var result = new Dictionary<string, FullComparisonResult>();
+
+            var guildId = ConfigHelper.GetGuildId();
+            var guild = ((IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
+            var discordUsers = guild.GetUsersAsync().Result;
+            AppendCompareListForDiscord(result, discordUsers);
+
+            // grab database discord suers
+            var databaseDiscordUsers = new List<DiscordUser>();
+            using (CorruptModel corruptosEntities = new CorruptModel())
+            {
+                databaseDiscordUsers = corruptosEntities.DiscordUsers.Where(x => x.LeavingDate == null).ToList();
+            }
+            AppendCompareListForDatabase(result, databaseDiscordUsers);
+
+            var clanMembers = new WiseOldManClient().GetClanMembers();
+            AppendCompareListForWiseOldMan(result, clanMembers);
+
+            return result;
+        }
+
+        private void AppendCompareListForDiscord(Dictionary<string, FullComparisonResult> result, IReadOnlyCollection<IGuildUser> discordUsers)
+        {
+            var filteredList = discordUsers.Where(x => !x.IsBot && !x.IsWebhook);
+
+            foreach (var item in filteredList)
+            {
+                if (!result.ContainsKey(item.Username.ToLower()))
+                {
+                    var newEntry = new FullComparisonResult();
+                    newEntry.ExistsInDiscord = true;
+                    newEntry.Username = item.Username;
+                    result.Add(item.Username.ToLower(), newEntry);
+                }
+                else
+                {
+                    result[item.Username.ToLower()].ExistsInDiscord = true;
+                }
+            }
+        }
+
+        private void AppendCompareListForDatabase(Dictionary<string, FullComparisonResult> result, List<DiscordUser> databaseDiscordUsers)
+        {
+            var filteredList = databaseDiscordUsers;
+
+            foreach (var item in filteredList)
+            {
+                if (!result.ContainsKey(item.Username.ToLower()))
+                {
+                    var newEntry = new FullComparisonResult();
+                    newEntry.ExistsInDB = true;
+                    newEntry.Username = item.Username;
+                    result.Add(item.Username.ToLower(), newEntry);
+                }
+                else
+                {
+                    result[item.Username.ToLower()].ExistsInDB = true;
+                }
+            }
+        }
+
+        private void AppendCompareListForWiseOldMan(Dictionary<string, FullComparisonResult> result, List<ClanMember> wiseOldManClanMembers)
+        {
+            var filteredList = wiseOldManClanMembers;
+
+            foreach (var item in filteredList)
+            {
+                if (!result.ContainsKey(item.username.ToLower()))
+                {
+                    var newEntry = new FullComparisonResult();
+                    newEntry.ExistsInWOM = true;
+                    newEntry.Username = item.username;
+                    result.Add(item.username.ToLower(), newEntry);
+                }
+                else
+                {
+                    result[item.username.ToLower()].ExistsInWOM = true;
+                }
+            }
+        }
+
 
         private async Task InitDB(SocketCommandContext context)
         {
@@ -695,5 +846,14 @@ namespace CorruptOSBot.Modules
         public bool ExistsInDiscord { get; set; }
         public UInt64? DiscordId { get; set; }
         public bool IsInBoth { get { return ExistsInDB && ExistsInDiscord; } }
+    }
+
+    public class FullComparisonResult
+    {
+        public string Username { get; set; }
+        public bool ExistsInDB { get; set; }
+        public bool ExistsInDiscord { get; set; }
+        public bool ExistsInWOM { get; set; }
+        public bool IsInBoth { get { return ExistsInDB && ExistsInDiscord && ExistsInWOM; } }
     }
 }

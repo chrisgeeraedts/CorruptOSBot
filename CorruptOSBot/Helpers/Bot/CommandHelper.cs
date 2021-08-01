@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -140,20 +141,29 @@ namespace CorruptOSBot.Helpers.Bot
         }
 
 
-        internal static async Task<bool> ActWithLoadingIndicator<TOut, TIn>(Func<TIn, TOut> functionToCall, TIn input, ISocketMessageChannel channel)
+        internal static async Task<TOut> ActWithLoadingIndicator<TOut, TIn>(Func<TIn, TOut> functionToCall, TIn input, ISocketMessageChannel channel)
         {
-            var loadingPath = string.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "loading.gif");
-            if (File.Exists(loadingPath))
-            {
-                // Show message
-                var loadingMessage = await channel.SendFileAsync(loadingPath);
+            //var loadingPath = string.Format(@"{0}\{1}", Directory.GetCurrentDirectory(), "loading.gif");
+            //if (File.Exists(loadingPath))
+            //{
+            // Show message
+            //var loadingMessage = await channel.SendFileAsync("https://i.ibb.co/0hk4hwY/loading.gif");
+            Stream stream = new WebClient().OpenRead("https://i.ibb.co/0hk4hwY/loading.gif");
+            var loadingMessage = await channel.SendFileAsync(stream, "Loading.gif");
 
-                TOut i = functionToCall(input);
+            //var eb = new EmbedBuilder();
+            //eb.ThumbnailUrl = "https://i.ibb.co/0hk4hwY/loading.gif";
+            //eb.Description = "Loading...";
+            //var loadingMessage = await channel.SendMessageAsync(embed: eb.Build());
 
-                // delete loading message
-                await ((IMessage)loadingMessage).DeleteAsync();
-            }
-            return true;
+            TOut i = functionToCall(input);
+
+            // delete loading message
+            await ((IMessage)loadingMessage).DeleteAsync();
+
+            return i;
+            //}
+
         }
     }
 

@@ -131,11 +131,11 @@ namespace CorruptOSBot.Modules
                     }
 
                     return emb
-                        .WithTitle(string.Format("{0} Corrupt OS Top 3 for: {1}",
+                        .WithTitle(string.Format("{0} Affliction Top 3 for: {1}",
                             bossEmoji,
                             bossResult.Boss.ToString().FirstCharToUpper()))
                         .WithImageUrl(bossUri)
-                        .WithFooter(string.Format("Corrupt OS - type '!bosskc {1}' - Data from: {0}", DateTime.Now.ToString("r"), bossResult.Boss.ToString()))
+                        .WithFooter(string.Format("Affliction - type '!bosskc {1}' - Data from: {0}", DateTime.Now.ToString("r"), bossResult.Boss.ToString()))
                         .Build();
                 }
                 catch (Exception e)

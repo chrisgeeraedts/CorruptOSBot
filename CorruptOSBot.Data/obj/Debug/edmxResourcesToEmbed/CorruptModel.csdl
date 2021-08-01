@@ -19,6 +19,7 @@
     <Property Name="BossImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="BossCommand" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="PlayerPets" Relationship="Self.FK_Boss" FromRole="Bosses" ToRole="PlayerPets" />
+    <NavigationProperty Name="BingoCardSlots" Relationship="corruptosModel.FK_BingoBossId" FromRole="Boss" ToRole="BingoCardSlot" />
   </EntityType>
   <EntityType Name="BotConfiguration">
     <Key>
@@ -74,6 +75,7 @@
     <NavigationProperty Name="RunescapeAccounts" Relationship="Self.FK_DiscordUser" FromRole="DiscordUsers" ToRole="RunescapeAccounts" />
     <NavigationProperty Name="hunt_team_members" Relationship="Self.FK_DiscordUserId" FromRole="DiscordUsers" ToRole="hunt_team_members" />
     <NavigationProperty Name="PointMutations" Relationship="Self.FK_DiscordUserPoints" FromRole="DiscordUsers" ToRole="PointMutations" />
+    <NavigationProperty Name="BingoTeamMembers" Relationship="corruptosModel.FK_BingoTeamMemberDiscordUserId" FromRole="DiscordUser" ToRole="BingoTeamMember" />
   </EntityType>
   <EntityType Name="ErrorLog">
     <Key>
@@ -420,6 +422,49 @@
       <End Role="PointMutations" EntitySet="PointMutations" />
     </AssociationSet>
     <EntitySet Name="Roles" EntityType="corruptosModel.Role" />
+    <EntitySet Name="BingoCards" EntityType="corruptosModel.BingoCard" />
+    <EntitySet Name="BingoCardSlots" EntityType="corruptosModel.BingoCardSlot" />
+    <EntitySet Name="BingoEvents" EntityType="corruptosModel.BingoEvent" />
+    <EntitySet Name="BingoTeams" EntityType="corruptosModel.BingoTeam" />
+    <EntitySet Name="BingoTeamCards" EntityType="corruptosModel.BingoTeamCard" />
+    <EntitySet Name="BingoTeamCardSlots" EntityType="corruptosModel.BingoTeamCardSlot" />
+    <EntitySet Name="BingoTeamMembers" EntityType="corruptosModel.BingoTeamMember" />
+    <AssociationSet Name="FK_BingoCardId" Association="corruptosModel.FK_BingoCardId">
+      <End Role="BingoCard" EntitySet="BingoCards" />
+      <End Role="BingoCardSlot" EntitySet="BingoCardSlots" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoEventId" Association="corruptosModel.FK_BingoEventId">
+      <End Role="BingoEvent" EntitySet="BingoEvents" />
+      <End Role="BingoCard" EntitySet="BingoCards" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardBingoCardId" Association="corruptosModel.FK_BingoTeamCardBingoCardId">
+      <End Role="BingoCard" EntitySet="BingoCards" />
+      <End Role="BingoTeamCard" EntitySet="BingoTeamCards" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoBossId" Association="corruptosModel.FK_BingoBossId">
+      <End Role="Boss" EntitySet="Bosses" />
+      <End Role="BingoCardSlot" EntitySet="BingoCardSlots" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardSlotBingoCardSlotId" Association="corruptosModel.FK_BingoTeamCardSlotBingoCardSlotId">
+      <End Role="BingoCardSlot" EntitySet="BingoCardSlots" />
+      <End Role="BingoTeamCardSlot" EntitySet="BingoTeamCardSlots" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardBingoTeamId" Association="corruptosModel.FK_BingoTeamCardBingoTeamId">
+      <End Role="BingoTeam" EntitySet="BingoTeams" />
+      <End Role="BingoTeamCard" EntitySet="BingoTeamCards" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamMemberBingoTeamId" Association="corruptosModel.FK_BingoTeamMemberBingoTeamId">
+      <End Role="BingoTeam" EntitySet="BingoTeams" />
+      <End Role="BingoTeamMember" EntitySet="BingoTeamMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardSlotBingoTeamCardId" Association="corruptosModel.FK_BingoTeamCardSlotBingoTeamCardId">
+      <End Role="BingoTeamCard" EntitySet="BingoTeamCards" />
+      <End Role="BingoTeamCardSlot" EntitySet="BingoTeamCardSlots" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamMemberDiscordUserId" Association="corruptosModel.FK_BingoTeamMemberDiscordUserId">
+      <End Role="DiscordUser" EntitySet="DiscordUsers" />
+      <End Role="BingoTeamMember" EntitySet="BingoTeamMembers" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Role">
     <Key>
@@ -431,6 +476,194 @@
     <Property Name="DaysToReach" Type="Int32" Nullable="false" />
     <Property Name="CanUpgradeTo" Type="Boolean" Nullable="false" />
     <Property Name="IconUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="IsStaff" Type="Boolean" />
+    <Property Name="IsStaff" Type="Boolean" Nullable="false" />
+    <Property Name="EmojiId" Type="Int64" />
   </EntityType>
+  <EntityType Name="BingoCard">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="BingoEventId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="BingoCardSlots" Relationship="corruptosModel.FK_BingoCardId" FromRole="BingoCard" ToRole="BingoCardSlot" />
+    <NavigationProperty Name="BingoEvent" Relationship="corruptosModel.FK_BingoEventId" FromRole="BingoCard" ToRole="BingoEvent" />
+    <NavigationProperty Name="BingoTeamCards" Relationship="corruptosModel.FK_BingoTeamCardBingoCardId" FromRole="BingoCard" ToRole="BingoTeamCard" />
+  </EntityType>
+  <EntityType Name="BingoCardSlot">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="BingoCardId" Type="Int32" Nullable="false" />
+    <Property Name="BossId" Type="Int32" Nullable="false" />
+    <Property Name="ItemName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ItemImage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="SlotLetter" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BingoCard" Relationship="corruptosModel.FK_BingoCardId" FromRole="BingoCardSlot" ToRole="BingoCard" />
+    <NavigationProperty Name="Boss" Relationship="corruptosModel.FK_BingoBossId" FromRole="BingoCardSlot" ToRole="Boss" />
+    <NavigationProperty Name="BingoTeamCardSlots" Relationship="corruptosModel.FK_BingoTeamCardSlotBingoCardSlotId" FromRole="BingoCardSlot" ToRole="BingoTeamCardSlot" />
+  </EntityType>
+  <EntityType Name="BingoEvent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="WomId" Type="Int32" />
+    <Property Name="SourceChannelId" Type="Int64" />
+    <Property Name="TargetChannelId" Type="Int64" />
+    <Property Name="EmojiYesId" Type="Int64" />
+    <Property Name="EmojiNoId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="BingoCards" Relationship="corruptosModel.FK_BingoEventId" FromRole="BingoEvent" ToRole="BingoCard" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BingoTeam">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="TeamName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="BingoTeamCards" Relationship="corruptosModel.FK_BingoTeamCardBingoTeamId" FromRole="BingoTeam" ToRole="BingoTeamCard" />
+    <NavigationProperty Name="BingoTeamMembers" Relationship="corruptosModel.FK_BingoTeamMemberBingoTeamId" FromRole="BingoTeam" ToRole="BingoTeamMember" />
+  </EntityType>
+  <EntityType Name="BingoTeamCard">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="BingoTeamId" Type="Int32" Nullable="false" />
+    <Property Name="BingoCardId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="BingoCard" Relationship="corruptosModel.FK_BingoTeamCardBingoCardId" FromRole="BingoTeamCard" ToRole="BingoCard" />
+    <NavigationProperty Name="BingoTeam" Relationship="corruptosModel.FK_BingoTeamCardBingoTeamId" FromRole="BingoTeamCard" ToRole="BingoTeam" />
+    <NavigationProperty Name="BingoTeamCardSlots" Relationship="corruptosModel.FK_BingoTeamCardSlotBingoTeamCardId" FromRole="BingoTeamCard" ToRole="BingoTeamCardSlot" />
+  </EntityType>
+  <EntityType Name="BingoTeamCardSlot">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="BingoTeamCardId" Type="Int32" Nullable="false" />
+    <Property Name="BingoCardSlotId" Type="Int32" Nullable="false" />
+    <Property Name="DateApproved" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="DateDenied" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="BingoCardSlot" Relationship="corruptosModel.FK_BingoTeamCardSlotBingoCardSlotId" FromRole="BingoTeamCardSlot" ToRole="BingoCardSlot" />
+    <NavigationProperty Name="BingoTeamCard" Relationship="corruptosModel.FK_BingoTeamCardSlotBingoTeamCardId" FromRole="BingoTeamCardSlot" ToRole="BingoTeamCard" />
+  </EntityType>
+  <EntityType Name="BingoTeamMember">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="BingoTeamId" Type="Int32" Nullable="false" />
+    <Property Name="DiscordUserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="BingoTeam" Relationship="corruptosModel.FK_BingoTeamMemberBingoTeamId" FromRole="BingoTeamMember" ToRole="BingoTeam" />
+    <NavigationProperty Name="DiscordUser" Relationship="corruptosModel.FK_BingoTeamMemberDiscordUserId" FromRole="BingoTeamMember" ToRole="DiscordUser" />
+  </EntityType>
+  <Association Name="FK_BingoCardId">
+    <End Type="corruptosModel.BingoCard" Role="BingoCard" Multiplicity="1" />
+    <End Type="corruptosModel.BingoCardSlot" Role="BingoCardSlot" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoCardSlot">
+        <PropertyRef Name="BingoCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoEventId">
+    <End Type="corruptosModel.BingoEvent" Role="BingoEvent" Multiplicity="1" />
+    <End Type="corruptosModel.BingoCard" Role="BingoCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoEvent">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoCard">
+        <PropertyRef Name="BingoEventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardBingoCardId">
+    <End Type="corruptosModel.BingoCard" Role="BingoCard" Multiplicity="1" />
+    <End Type="corruptosModel.BingoTeamCard" Role="BingoTeamCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCard">
+        <PropertyRef Name="BingoCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoBossId">
+    <End Type="corruptosModel.Boss" Role="Boss" Multiplicity="1" />
+    <End Type="corruptosModel.BingoCardSlot" Role="BingoCardSlot" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Boss">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoCardSlot">
+        <PropertyRef Name="BossId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardSlotBingoCardSlotId">
+    <End Type="corruptosModel.BingoCardSlot" Role="BingoCardSlot" Multiplicity="1" />
+    <End Type="corruptosModel.BingoTeamCardSlot" Role="BingoTeamCardSlot" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoCardSlot">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCardSlot">
+        <PropertyRef Name="BingoCardSlotId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardBingoTeamId">
+    <End Type="corruptosModel.BingoTeam" Role="BingoTeam" Multiplicity="1" />
+    <End Type="corruptosModel.BingoTeamCard" Role="BingoTeamCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoTeam">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCard">
+        <PropertyRef Name="BingoTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamMemberBingoTeamId">
+    <End Type="corruptosModel.BingoTeam" Role="BingoTeam" Multiplicity="1" />
+    <End Type="corruptosModel.BingoTeamMember" Role="BingoTeamMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoTeam">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamMember">
+        <PropertyRef Name="BingoTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardSlotBingoTeamCardId">
+    <End Type="corruptosModel.BingoTeamCard" Role="BingoTeamCard" Multiplicity="1" />
+    <End Type="corruptosModel.BingoTeamCardSlot" Role="BingoTeamCardSlot" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoTeamCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCardSlot">
+        <PropertyRef Name="BingoTeamCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamMemberDiscordUserId">
+    <End Type="corruptosModel.DiscordUser" Role="DiscordUser" Multiplicity="1" />
+    <End Type="corruptosModel.BingoTeamMember" Role="BingoTeamMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamMember">
+        <PropertyRef Name="DiscordUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

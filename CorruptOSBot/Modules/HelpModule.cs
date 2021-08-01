@@ -26,7 +26,7 @@ namespace CorruptOSBot.Modules
             if (ToggleStateManager.GetToggleState("help", Context.User) && RoleHelper.HasAnyRole(Context.User))
             {
                 var embeds = EmbedHelper.CreateDefaultFieldsEmbed(
-                "Corrupt OS bot command list",
+                "Affliction bot command list",
                 GetCommandsToShowInHelp(Context.User, Context.Guild));
 
                 foreach (var embed in embeds)
