@@ -1671,6 +1671,9 @@
         <member name="M:Discord.WebSocket.SocketDMChannel.DeleteMessageAsync(Discord.IMessage,Discord.RequestOptions)">
             <inheritdoc />
         </member>
+        <member name="M:Discord.WebSocket.SocketDMChannel.ModifyMessageAsync(System.UInt64,System.Action{Discord.MessageProperties},Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
         <member name="M:Discord.WebSocket.SocketDMChannel.TriggerTypingAsync(Discord.RequestOptions)">
             <inheritdoc />
         </member>
@@ -1846,6 +1849,9 @@
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketGroupChannel.DeleteMessageAsync(Discord.IMessage,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketGroupChannel.ModifyMessageAsync(System.UInt64,System.Action{Discord.MessageProperties},Discord.RequestOptions)">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketGroupChannel.TriggerTypingAsync(Discord.RequestOptions)">
@@ -2212,6 +2218,9 @@
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketTextChannel.DeleteMessagesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketTextChannel.ModifyMessageAsync(System.UInt64,System.Action{Discord.MessageProperties},Discord.RequestOptions)">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketTextChannel.DeleteMessageAsync(System.UInt64,Discord.RequestOptions)">
@@ -2967,6 +2976,9 @@
                 of webhooks found within the guild.
             </returns>
         </member>
+        <member name="M:Discord.WebSocket.SocketGuild.GetEmotesAsync(Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
         <member name="M:Discord.WebSocket.SocketGuild.GetEmoteAsync(System.UInt64,Discord.RequestOptions)">
             <inheritdoc />
         </member>
@@ -3354,6 +3366,9 @@
         <member name="P:Discord.WebSocket.SocketMessage.Tags">
             <inheritdoc />
         </member>
+        <member name="P:Discord.WebSocket.SocketMessage.Stickers">
+            <inheritdoc />
+        </member>
         <member name="P:Discord.WebSocket.SocketMessage.Reactions">
             <inheritdoc />
         </member>
@@ -3393,6 +3408,9 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketMessage.Discord#IMessage#MentionedUserIds">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.WebSocket.SocketMessage.Discord#IMessage#Stickers">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketMessage.AddReactionAsync(Discord.IEmote,Discord.RequestOptions)">
@@ -3530,6 +3548,9 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketUserMessage.MentionedUsers">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.WebSocket.SocketUserMessage.Stickers">
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketUserMessage.ReferencedMessage">
@@ -3778,13 +3799,25 @@
         <member name="M:Discord.WebSocket.SocketGuildUser.KickAsync(System.String,Discord.RequestOptions)">
             <inheritdoc />
         </member>
+        <member name="M:Discord.WebSocket.SocketGuildUser.AddRoleAsync(System.UInt64,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
         <member name="M:Discord.WebSocket.SocketGuildUser.AddRoleAsync(Discord.IRole,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketGuildUser.AddRolesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketGuildUser.AddRolesAsync(System.Collections.Generic.IEnumerable{Discord.IRole},Discord.RequestOptions)">
             <inheritdoc />
         </member>
+        <member name="M:Discord.WebSocket.SocketGuildUser.RemoveRoleAsync(System.UInt64,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
         <member name="M:Discord.WebSocket.SocketGuildUser.RemoveRoleAsync(Discord.IRole,Discord.RequestOptions)">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketGuildUser.RemoveRolesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketGuildUser.RemoveRolesAsync(System.Collections.Generic.IEnumerable{Discord.IRole},Discord.RequestOptions)">
@@ -4109,7 +4142,15 @@
             <inheritdoc />
             <exception cref="T:System.NotSupportedException">Webhook users cannot be modified.</exception>
         </member>
+        <member name="M:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#AddRoleAsync(System.UInt64,Discord.RequestOptions)">
+            <inheritdoc />
+            <exception cref="T:System.NotSupportedException">Roles are not supported on webhook users.</exception>
+        </member>
         <member name="M:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#AddRoleAsync(Discord.IRole,Discord.RequestOptions)">
+            <inheritdoc />
+            <exception cref="T:System.NotSupportedException">Roles are not supported on webhook users.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#AddRolesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
             <inheritdoc />
             <exception cref="T:System.NotSupportedException">Roles are not supported on webhook users.</exception>
         </member>
@@ -4117,7 +4158,15 @@
             <inheritdoc />
             <exception cref="T:System.NotSupportedException">Roles are not supported on webhook users.</exception>
         </member>
+        <member name="M:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#RemoveRoleAsync(System.UInt64,Discord.RequestOptions)">
+            <inheritdoc />
+            <exception cref="T:System.NotSupportedException">Roles are not supported on webhook users.</exception>
+        </member>
         <member name="M:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#RemoveRoleAsync(Discord.IRole,Discord.RequestOptions)">
+            <inheritdoc />
+            <exception cref="T:System.NotSupportedException">Roles are not supported on webhook users.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#RemoveRolesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
             <inheritdoc />
             <exception cref="T:System.NotSupportedException">Roles are not supported on webhook users.</exception>
         </member>

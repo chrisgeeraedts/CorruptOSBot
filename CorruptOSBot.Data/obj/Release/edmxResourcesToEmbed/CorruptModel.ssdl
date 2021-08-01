@@ -8,6 +8,69 @@
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Emoji" Type="nvarchar(max)" />
   </EntityType>
+  <EntityType Name="BingoCard">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoEventId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BingoCardSlot">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoCardId" Type="int" Nullable="false" />
+    <Property Name="BossId" Type="int" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar(max)" />
+    <Property Name="ItemImage" Type="varchar(max)" />
+    <Property Name="SlotLetter" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="BingoEvent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="WomId" Type="int" />
+    <Property Name="SourceChannelId" Type="bigint" />
+    <Property Name="TargetChannelId" Type="bigint" />
+    <Property Name="EmojiYesId" Type="bigint" />
+    <Property Name="EmojiNoId" Type="nchar" MaxLength="10" />
+    <Property Name="Active" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BingoTeam">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="TeamName" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BingoTeamCard">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoTeamId" Type="int" Nullable="false" />
+    <Property Name="BingoCardId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BingoTeamCardSlot">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoTeamCardId" Type="int" Nullable="false" />
+    <Property Name="BingoCardSlotId" Type="int" Nullable="false" />
+    <Property Name="DateApproved" Type="nchar" MaxLength="10" />
+    <Property Name="DateDenied" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="BingoTeamMember">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoTeamId" Type="int" Nullable="false" />
+    <Property Name="DiscordUserId" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="Bosses">
     <Key>
       <PropertyRef Name="Id" />
@@ -165,7 +228,8 @@
     <Property Name="DaysToReach" Type="int" Nullable="false" />
     <Property Name="CanUpgradeTo" Type="bit" Nullable="false" />
     <Property Name="IconUrl" Type="nvarchar(max)" />
-    <Property Name="IsStaff" Type="bit" />
+    <Property Name="IsStaff" Type="bit" Nullable="false" />
+    <Property Name="EmojiId" Type="bigint" />
   </EntityType>
   <EntityType Name="RunescapeAccounts">
     <Key>
@@ -204,6 +268,114 @@
       </Principal>
       <Dependent Role="PlayerPets">
         <PropertyRef Name="ActivityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoBossId">
+    <End Role="Bosses" Type="Self.Bosses" Multiplicity="1" />
+    <End Role="BingoCardSlot" Type="Self.BingoCardSlot" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Bosses">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoCardSlot">
+        <PropertyRef Name="BossId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoCardId">
+    <End Role="BingoCard" Type="Self.BingoCard" Multiplicity="1" />
+    <End Role="BingoCardSlot" Type="Self.BingoCardSlot" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoCardSlot">
+        <PropertyRef Name="BingoCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoEventId">
+    <End Role="BingoEvent" Type="Self.BingoEvent" Multiplicity="1" />
+    <End Role="BingoCard" Type="Self.BingoCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoEvent">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoCard">
+        <PropertyRef Name="BingoEventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardBingoCardId">
+    <End Role="BingoCard" Type="Self.BingoCard" Multiplicity="1" />
+    <End Role="BingoTeamCard" Type="Self.BingoTeamCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCard">
+        <PropertyRef Name="BingoCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardBingoTeamId">
+    <End Role="BingoTeam" Type="Self.BingoTeam" Multiplicity="1" />
+    <End Role="BingoTeamCard" Type="Self.BingoTeamCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoTeam">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCard">
+        <PropertyRef Name="BingoTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardSlotBingoCardSlotId">
+    <End Role="BingoCardSlot" Type="Self.BingoCardSlot" Multiplicity="1" />
+    <End Role="BingoTeamCardSlot" Type="Self.BingoTeamCardSlot" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoCardSlot">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCardSlot">
+        <PropertyRef Name="BingoCardSlotId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardSlotBingoTeamCardId">
+    <End Role="BingoTeamCard" Type="Self.BingoTeamCard" Multiplicity="1" />
+    <End Role="BingoTeamCardSlot" Type="Self.BingoTeamCardSlot" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoTeamCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCardSlot">
+        <PropertyRef Name="BingoTeamCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamMemberBingoTeamId">
+    <End Role="BingoTeam" Type="Self.BingoTeam" Multiplicity="1" />
+    <End Role="BingoTeamMember" Type="Self.BingoTeamMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoTeam">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamMember">
+        <PropertyRef Name="BingoTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamMemberDiscordUserId">
+    <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="1" />
+    <End Role="BingoTeamMember" Type="Self.BingoTeamMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamMember">
+        <PropertyRef Name="DiscordUserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -341,6 +513,13 @@
   </Association>
   <EntityContainer Name="corruptosModelStoreContainer">
     <EntitySet Name="Activities" EntityType="Self.Activities" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BingoCard" EntityType="Self.BingoCard" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BingoCardSlot" EntityType="Self.BingoCardSlot" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BingoEvent" EntityType="Self.BingoEvent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BingoTeam" EntityType="Self.BingoTeam" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BingoTeamCard" EntityType="Self.BingoTeamCard" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BingoTeamCardSlot" EntityType="Self.BingoTeamCardSlot" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BingoTeamMember" EntityType="Self.BingoTeamMember" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Bosses" EntityType="Self.Bosses" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="BotConfiguration" EntityType="Self.BotConfiguration" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Calendar" EntityType="Self.Calendar" Schema="dbo" store:Type="Tables" />
@@ -363,6 +542,42 @@
     <AssociationSet Name="FK_Activity" Association="Self.FK_Activity">
       <End Role="Activities" EntitySet="Activities" />
       <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoBossId" Association="Self.FK_BingoBossId">
+      <End Role="Bosses" EntitySet="Bosses" />
+      <End Role="BingoCardSlot" EntitySet="BingoCardSlot" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoCardId" Association="Self.FK_BingoCardId">
+      <End Role="BingoCard" EntitySet="BingoCard" />
+      <End Role="BingoCardSlot" EntitySet="BingoCardSlot" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoEventId" Association="Self.FK_BingoEventId">
+      <End Role="BingoEvent" EntitySet="BingoEvent" />
+      <End Role="BingoCard" EntitySet="BingoCard" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardBingoCardId" Association="Self.FK_BingoTeamCardBingoCardId">
+      <End Role="BingoCard" EntitySet="BingoCard" />
+      <End Role="BingoTeamCard" EntitySet="BingoTeamCard" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardBingoTeamId" Association="Self.FK_BingoTeamCardBingoTeamId">
+      <End Role="BingoTeam" EntitySet="BingoTeam" />
+      <End Role="BingoTeamCard" EntitySet="BingoTeamCard" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardSlotBingoCardSlotId" Association="Self.FK_BingoTeamCardSlotBingoCardSlotId">
+      <End Role="BingoCardSlot" EntitySet="BingoCardSlot" />
+      <End Role="BingoTeamCardSlot" EntitySet="BingoTeamCardSlot" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardSlotBingoTeamCardId" Association="Self.FK_BingoTeamCardSlotBingoTeamCardId">
+      <End Role="BingoTeamCard" EntitySet="BingoTeamCard" />
+      <End Role="BingoTeamCardSlot" EntitySet="BingoTeamCardSlot" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamMemberBingoTeamId" Association="Self.FK_BingoTeamMemberBingoTeamId">
+      <End Role="BingoTeam" EntitySet="BingoTeam" />
+      <End Role="BingoTeamMember" EntitySet="BingoTeamMember" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamMemberDiscordUserId" Association="Self.FK_BingoTeamMemberDiscordUserId">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="BingoTeamMember" EntitySet="BingoTeamMember" />
     </AssociationSet>
     <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
       <End Role="Bosses" EntitySet="Bosses" />

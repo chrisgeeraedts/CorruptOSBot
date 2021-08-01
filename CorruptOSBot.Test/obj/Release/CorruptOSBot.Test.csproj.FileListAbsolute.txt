@@ -13,7 +13,6 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Rel
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.ValueTuple.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Linq.Async.dll
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\netstandard.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Shared.pdb
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\CorruptOSBot.Shared.dll.config
@@ -29,7 +28,6 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Rel
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\Microsoft.Bcl.AsyncInterfaces.xml
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Linq.Async.xml
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Runtime.CompilerServices.Unsafe.xml
-C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.exe.config
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.csproj.CoreCompileInputs.cache
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.csproj.CopyComplete
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.exe
@@ -37,3 +35,9 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Rel
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\obj\Release\CorruptOSBot.Test.csprojAssemblyReference.cache
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\EntityFramework.SqlServer.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Memory.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Numerics.Vectors.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Buffers.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Memory.xml
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Numerics.Vectors.xml
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Test\bin\Release\System.Buffers.xml

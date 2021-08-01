@@ -133,3 +133,9 @@ C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\R
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.csproj.CopyComplete
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.dll
 C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\obj\Release\CorruptOSBot.Shared.pdb
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\System.Buffers.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\System.Memory.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\System.Numerics.Vectors.dll
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\System.Buffers.xml
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\System.Memory.xml
+C:\Users\chris\OneDrive\Documenten\GitHub\CorruptOSBot\CorruptOSBot.Shared\bin\Release\System.Numerics.Vectors.xml

@@ -1687,6 +1687,21 @@
                 A task that represents the asynchronous removal operation.
             </returns>
         </member>
+        <member name="M:Discord.IMessageChannel.ModifyMessageAsync(System.UInt64,System.Action{Discord.MessageProperties},Discord.RequestOptions)">
+            <summary>
+                Modifies a message.
+            </summary>
+            <remarks>
+                This method modifies this message with the specified properties. To see an example of this
+                method and what properties are available, please refer to <see cref="T:Discord.MessageProperties"/>.
+            </remarks>
+            <param name="messageId">The snowflake identifier of the message that would be changed.</param>
+            <param name="func">A delegate containing the properties to modify the message with.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents the asynchronous modification operation.
+            </returns>
+        </member>
         <member name="M:Discord.IMessageChannel.TriggerTypingAsync(Discord.RequestOptions)">
             <summary>
                 Broadcasts the "user is typing" message to all users in this channel, lasting 10 seconds.
@@ -3438,6 +3453,16 @@
             <returns>
                 A task that represents the asynchronous get operation. The task result contains a read-only collection
                 of webhooks found within the guild.
+            </returns>
+        </member>
+        <member name="M:Discord.IGuild.GetEmotesAsync(Discord.RequestOptions)">
+            <summary>
+                Gets a collection of emotes from this guild.
+            </summary>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents the asynchronous get operation. The task result contains a read-only collection
+                of emotes found within the guild.
             </returns>
         </member>
         <member name="M:Discord.IGuild.GetEmoteAsync(System.UInt64,Discord.RequestOptions)">
@@ -5386,6 +5411,14 @@
                 Gets all reactions included in this message.
             </summary>
         </member>
+        <member name="P:Discord.IMessage.Stickers">
+            <summary>
+                Gets all stickers included in this message.
+            </summary>
+            <returns>
+                A read-only collection of sticker objects.
+            </returns>
+        </member>
         <member name="P:Discord.IMessage.Flags">
             <summary>
                 Gets the flags related to this message.
@@ -5513,6 +5546,75 @@
             <summary>
                 The <see cref="T:Discord.IEmote" /> used in the reaction.
             </summary>
+        </member>
+        <member name="T:Discord.ISticker">
+            <summary>
+                Represents a discord sticker.
+            </summary>
+        </member>
+        <member name="P:Discord.ISticker.Id">
+            <summary>
+                Gets the ID of this sticker.
+            </summary>
+            <returns>
+                A snowflake ID associated with this sticker.
+            </returns>
+        </member>
+        <member name="P:Discord.ISticker.PackId">
+            <summary>
+                Gets the ID of the pack of this sticker.
+            </summary>
+            <returns>
+                A snowflake ID associated with the pack of this sticker.
+            </returns>
+        </member>
+        <member name="P:Discord.ISticker.Name">
+            <summary>
+                Gets the name of this sticker.
+            </summary>
+            <returns>
+                A <see langword="string"/> with the name of this sticker.
+            </returns>
+        </member>
+        <member name="P:Discord.ISticker.Description">
+            <summary>
+                Gets the description of this sticker.
+            </summary>
+            <returns>
+                A <see langword="string"/> with the description of this sticker.
+            </returns>
+        </member>
+        <member name="P:Discord.ISticker.Tags">
+            <summary>
+                Gets the list of tags of this sticker.
+            </summary>
+            <returns>
+                A read-only list with the tags of this sticker.
+            </returns>
+        </member>
+        <member name="P:Discord.ISticker.Asset">
+            <summary>
+                Gets the asset hash of this sticker.
+            </summary>
+            <returns>
+                A <see langword="string"/> with the asset hash of this sticker.
+            </returns>
+        </member>
+        <member name="P:Discord.ISticker.PreviewAsset">
+            <summary>
+                Gets the preview asset hash of this sticker.
+            </summary>
+            <returns>
+                A <see langword="string"/> with the preview asset hash of this sticker.
+            </returns>
+        </member>
+        <member name="P:Discord.ISticker.FormatType">
+            <summary>
+                Gets the format type of this sticker.
+            </summary>
+            <returns>
+                A <see cref="T:Discord.StickerFormatType"/> with the format type of this sticker.
+            </returns>
         </member>
         <member name="T:Discord.ISystemMessage">
             <summary>
@@ -5890,6 +5992,21 @@
             <returns>
                 <c>true</c> if the user has reacted to the message; otherwise <c>false</c>.
             </returns>
+        </member>
+        <member name="T:Discord.StickerFormatType">
+            <summary> Defines the types of formats for stickers. </summary>
+        </member>
+        <member name="F:Discord.StickerFormatType.None">
+            <summary> Default value for a sticker format type. </summary>
+        </member>
+        <member name="F:Discord.StickerFormatType.Png">
+            <summary> The sticker format type is png. </summary>
+        </member>
+        <member name="F:Discord.StickerFormatType.Apng">
+            <summary> The sticker format type is apng. </summary>
+        </member>
+        <member name="F:Discord.StickerFormatType.Lottie">
+            <summary> The sticker format type is lottie. </summary>
         </member>
         <member name="T:Discord.TagHandling">
             <summary>
@@ -7392,11 +7509,31 @@
                 A task that represents the asynchronous modification operation.
             </returns>
         </member>
+        <member name="M:Discord.IGuildUser.AddRoleAsync(System.UInt64,Discord.RequestOptions)">
+            <summary>
+                Adds the specified role to this user in the guild.
+            </summary>
+            <param name="roleId">The role to be added to the user.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents the asynchronous role addition operation.
+            </returns>
+        </member>
         <member name="M:Discord.IGuildUser.AddRoleAsync(Discord.IRole,Discord.RequestOptions)">
             <summary>
                 Adds the specified role to this user in the guild.
             </summary>
             <param name="role">The role to be added to the user.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents the asynchronous role addition operation.
+            </returns>
+        </member>
+        <member name="M:Discord.IGuildUser.AddRolesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
+            <summary>
+                Adds the specified <paramref name="roleIds"/> to this user in the guild.
+            </summary>
+            <param name="roleIds">The roles to be added to the user.</param>
             <param name="options">The options to be used when sending the request.</param>
             <returns>
                 A task that represents the asynchronous role addition operation.
@@ -7412,11 +7549,31 @@
                 A task that represents the asynchronous role addition operation.
             </returns>
         </member>
+        <member name="M:Discord.IGuildUser.RemoveRoleAsync(System.UInt64,Discord.RequestOptions)">
+            <summary>
+                Removes the specified <paramref name="roleId"/> from this user in the guild.
+            </summary>
+            <param name="roleId">The role to be removed from the user.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents the asynchronous role removal operation.
+            </returns>
+        </member>
         <member name="M:Discord.IGuildUser.RemoveRoleAsync(Discord.IRole,Discord.RequestOptions)">
             <summary>
                 Removes the specified <paramref name="role"/> from this user in the guild.
             </summary>
             <param name="role">The role to be removed from the user.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <returns>
+                A task that represents the asynchronous role removal operation.
+            </returns>
+        </member>
+        <member name="M:Discord.IGuildUser.RemoveRolesAsync(System.Collections.Generic.IEnumerable{System.UInt64},Discord.RequestOptions)">
+            <summary>
+                Removes the specified <paramref name="roleIds"/> from this user in the guild.
+            </summary>
+            <param name="roleIds">The roles to be removed from the user.</param>
             <param name="options">The options to be used when sending the request.</param>
             <returns>
                 A task that represents the asynchronous role removal operation.
@@ -7823,6 +7980,11 @@
         <member name="F:Discord.UserProperties.EarlyVerifiedBotDeveloper">
             <summary>
                 Flag given to users that developed bots and early verified their accounts.
+            </summary>
+        </member>
+        <member name="F:Discord.UserProperties.DiscordCertifiedModerator">
+            <summary>
+                Flag given to users that are discord certified moderators who has give discord's exam.
             </summary>
         </member>
         <member name="T:Discord.UserStatus">
@@ -9562,7 +9724,7 @@
             </summary>
             <param name="value">The snowflake identifier to resolve.</param>
             <returns>
-                A <see cref="T:System.DateTimeOffset" /> representing the time for when the object is geenrated.
+                A <see cref="T:System.DateTimeOffset" /> representing the time for when the object is generated.
             </returns>
         </member>
         <member name="M:Discord.SnowflakeUtils.ToSnowflake(System.DateTimeOffset)">
