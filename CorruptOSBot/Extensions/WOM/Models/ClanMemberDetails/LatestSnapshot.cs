@@ -4,7 +4,7 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
 {
     public class LatestSnapshot
     {
-        public DateTime? createdAt { get; set; }
+        public DateTime createdAt { get; set; }
         public object importedAt { get; set; }
         public Overall overall { get; set; }
         public Attack attack { get; set; }
@@ -70,6 +70,7 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public KrilTsutsaroth kril_tsutsaroth { get; set; }
         public Mimic mimic { get; set; }
         public Nightmare nightmare { get; set; }
+        public PhosanisNightmare phosanis_nightmare { get; set; }
         public Obor obor { get; set; }
         public Sarachnis sarachnis { get; set; }
         public Scorpia scorpia { get; set; }
@@ -78,6 +79,7 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public TheGauntlet the_gauntlet { get; set; }
         public TheCorruptedGauntlet the_corrupted_gauntlet { get; set; }
         public TheatreOfBlood theatre_of_blood { get; set; }
+        public TheatreOfBloodHardMode theatre_of_blood_hard_mode { get; set; }
         public ThermonuclearSmokeDevil thermonuclear_smoke_devil { get; set; }
         public TzkalZuk tzkal_zuk { get; set; }
         public TztokJad tztok_jad { get; set; }
@@ -90,6 +92,4 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public Ehp ehp { get; set; }
         public Ehb ehb { get; set; }
     }
-
-
 }

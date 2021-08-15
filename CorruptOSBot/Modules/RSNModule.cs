@@ -205,17 +205,32 @@ namespace CorruptOSBot.Modules
                     });
 
                     // post to general channel
-                    var generalChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("general"));
-                    await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member joined",
+                    var generalChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("General"));
+                    if (generalChannel != null)
+                    {
+                        await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member joined",
                         string.Format("<@{0}> Welcome to Affliction", currentUser.Id),
                         "https://blog.memberclicks.com/hubfs/Onboarding_New_Members-1.jpg"));
+                    }
+                    else
+                    {
+                        await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to find General Channel"));
+                    }
+
 
                     // post to recruitment channel
                     var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
-                    await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
-                        EmbedHelper.CreateDefaultEmbed("Member joined",
-                        string.Format("<@{0}> ({1}) has set their RSN to **{1}**!", currentUser.Id, preferedNickname)));
-
+                    if (recruitingChannel != null)
+                    {
+                        await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
+                            EmbedHelper.CreateDefaultEmbed("Member joined",
+                            string.Format("<@{0}> ({1}) has set their RSN to **{1}**!", currentUser.Id, preferedNickname)));
+                    }
+                    else
+                    {
+                        await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to find Changes Channel"));
+                    }
+                   
                     // add to WOM
                     var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
 
@@ -241,7 +256,9 @@ namespace CorruptOSBot.Modules
                 // post that user got kicked due to runewatch
                 // post to recruitment channel
                 var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
-                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member kicked!", 
+                if (recruitingChannel != null)
+                {
+                    await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member kicked!",
                     string.Format("{0} joined but was on RuneWatch - Therefor kicked! Reasoning: {1} | Evidence rating: {2} | Date: {3}",
                     preferedNickname,
                     runewatchEntry.reason,
@@ -249,6 +266,11 @@ namespace CorruptOSBot.Modules
                     runewatchEntry.published_date),
                     null,
                     "https://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/32/Actions-im-kick-user-icon.png"));
+                }
+                else
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to find Changes Channel"));
+                }   
             }
         }
 

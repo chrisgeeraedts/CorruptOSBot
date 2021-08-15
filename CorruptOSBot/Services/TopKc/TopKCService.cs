@@ -13,7 +13,8 @@ namespace CorruptOSBot.Services
     public class TopKCService : IService
     {
         public int TriggerTimeInMS { get => 1000 * 60 * 60 * 24 * 3; } // every 3  days
-        public int BeforeTriggerTimeInMS { get => 1000 * 60 * 5; } // 5 minute
+        public int BeforeTriggerTimeInMS { get => 1000; } // 1 second
+        //public int BeforeTriggerTimeInMS { get => 1000 * 60 * 5; } // 5 minute
         private ulong GuildId;
 
 

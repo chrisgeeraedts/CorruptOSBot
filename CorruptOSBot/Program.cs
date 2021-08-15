@@ -287,7 +287,10 @@ namespace CorruptOSBot
 
         private async Task _client_ReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
         {
+            //Console.WriteLine(string.Format("Reaction: {0}: {1} [{2}]", arg3.Emote.Name, arg3.Emote.ToString(), ((Discord.Emote)arg3.Emote).Id));
+
             await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("Reaction: {0}: {1}", arg3.Emote.Name, arg3.Emote.ToString())));
+
             //await ReactionManager.ReactionPosted(_client, arg1, arg2, arg3);
         }
 

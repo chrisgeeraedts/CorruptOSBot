@@ -237,7 +237,20 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public double ehb { get; set; }
     }
 
+    public class TheatreOfBloodHardMode : IBossKc
+    {
+        public int rank { get; set; }
+        public int kills { get; set; }
+        public double ehb { get; set; }
+    }
+
     public class ThermonuclearSmokeDevil : IBossKc
+    {
+        public int rank { get; set; }
+        public int kills { get; set; }
+        public double ehb { get; set; }
+    }
+    public class PhosanisNightmare : IBossKc
     {
         public int rank { get; set; }
         public int kills { get; set; }

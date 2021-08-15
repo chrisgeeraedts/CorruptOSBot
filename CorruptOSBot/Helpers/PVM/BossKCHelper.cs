@@ -69,6 +69,8 @@ namespace CorruptOSBot.Helpers.PVM
             result.Add(new KcTopList() { Boss = EmojiEnum.todt, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.zalcano, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.zulrah, KcPlayers = new List<KcPlayer>() });
+            result.Add(new KcTopList() { Boss = EmojiEnum.phosanis, KcPlayers = new List<KcPlayer>() });
+            result.Add(new KcTopList() { Boss = EmojiEnum.tobhardmode, KcPlayers = new List<KcPlayer>() });
         }
 
         private static void UpdateListWithKc(List<KcTopList> result, List<ClanMemberDetail> clanMembers)
@@ -118,6 +120,8 @@ namespace CorruptOSBot.Helpers.PVM
             result.FirstOrDefault(x => x.Boss == EmojiEnum.todt).KcPlayers.AddRange(GetTopKc(typeof(Wintertodt), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.zalcano).KcPlayers.AddRange(GetTopKc(typeof(Zalcano), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.zulrah).KcPlayers.AddRange(GetTopKc(typeof(Zulrah), clanMembers));
+            result.FirstOrDefault(x => x.Boss == EmojiEnum.phosanis).KcPlayers.AddRange(GetTopKc(typeof(PhosanisNightmare), clanMembers));
+            result.FirstOrDefault(x => x.Boss == EmojiEnum.tobhardmode).KcPlayers.AddRange(GetTopKc(typeof(TheatreOfBloodHardMode), clanMembers));
         }
 
         private static List<KcPlayer> GetTopKc(Type type, List<ClanMemberDetail> clanMemberDetails)
@@ -134,10 +138,6 @@ namespace CorruptOSBot.Helpers.PVM
                         var kills = ((IBossKc)prop.GetValue(clanMemberDetail.latestSnapshot)).kills;
                         if (kills > 0)
                         {
-                            if (true)
-                            {
-
-                            }
                             bossKills.Add(new KcPlayer() { Kc = kills, Player = clanMemberDetail.displayName });
                         }
                     }

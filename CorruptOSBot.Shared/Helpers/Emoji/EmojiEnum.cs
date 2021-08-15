@@ -46,6 +46,8 @@
         vorkath,
         todt,
         zalcano,
-        zulrah
+        zulrah,
+        phosanis,
+        tobhardmode
     }
 }
