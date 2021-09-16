@@ -384,11 +384,11 @@ namespace CorruptOSBot
 
         private async Task BlockMessageIfDebugMode(SocketUserMessage msg)
         {
-            if (ConfigHelper.DEBUG && msg.Author.Id != 174621705581494272) //of the abbys id
+            if (ConfigHelper.DEBUG && msg.Author.Id != 108710294049542144) //GMKirby Discord Id
             {
                 //block!
                 var context = new SocketCommandContext(_client, msg);
-                var message = await context.Channel.SendMessageAsync("The corrupt bot is currently in development mode - Of the Abbys is probally working on it (and breaking it). ");
+                var message = await context.Channel.SendMessageAsync("The corrupt bot is currently in development mode.");
 
                 await msg.DeleteAsync();
                 await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());

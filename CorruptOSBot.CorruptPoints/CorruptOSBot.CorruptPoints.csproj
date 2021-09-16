@@ -111,10 +111,6 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CorruptOSBot.Data\CorruptOSBot.Data.csproj">
       <Project>{e81ce2f6-084a-4f67-9947-eaf88639dc0c}</Project>
       <Name>CorruptOSBot.Data</Name>

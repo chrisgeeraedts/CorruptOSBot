@@ -19,7 +19,7 @@ namespace CorruptOSBot.TheHunt
             Discord.Commands.CommandService _commands)
         {;
             AddHuntChannelInterceptors(result);
-            _commands.AddModuleAsync<HuntModule>(_services);
+            //_commands.AddModuleAsync<HuntModule>(_services);
 
 
             HuntManager.Init();

@@ -11,8 +11,7 @@ namespace CorruptOSBot.Shared
     {
         public static bool GetToggleState(string command, SocketUser userAdditional = null)
         {
-            // override for admin
-            if (userAdditional != null && userAdditional.Id == 174621705581494272)
+            if (userAdditional != null && userAdditional.Id == 108710294049542144) //GMKirby Discord ID
             {
                 return true;
             }

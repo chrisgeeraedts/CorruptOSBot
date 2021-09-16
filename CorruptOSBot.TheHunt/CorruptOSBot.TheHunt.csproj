@@ -135,7 +135,6 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>HuntDataModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
     <None Include="Data\HuntDataModel.edmx.diagram">
       <DependentUpon>HuntDataModel.edmx</DependentUpon>
     </None>

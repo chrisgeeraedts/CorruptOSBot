@@ -93,10 +93,6 @@
     <Compile Include="ReactionHandlers\BingoReactionHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\CorruptOSBot.Data\CorruptOSBot.Data.csproj">
       <Project>{E81CE2F6-084A-4F67-9947-EAF88639DC0C}</Project>
       <Name>CorruptOSBot.Data</Name>

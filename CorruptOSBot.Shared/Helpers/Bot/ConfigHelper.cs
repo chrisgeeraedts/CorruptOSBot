@@ -44,7 +44,7 @@ namespace CorruptOSBot.Shared.Helpers.Bot
         }
 
 
-        public static bool DEBUG = false;
+        public static bool DEBUG = true;
 
         public static ulong GetGuildId()
         {
@@ -54,7 +54,7 @@ namespace CorruptOSBot.Shared.Helpers.Bot
             }
             else
             {
-                return 827967957094105108;
+                return 887751832426930177; //Dev Discord Id
             }
         }
     }

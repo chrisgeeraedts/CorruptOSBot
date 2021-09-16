@@ -243,9 +243,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Properties\webjob-publish-settings.json" />
-    <None Include="Settings.job">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

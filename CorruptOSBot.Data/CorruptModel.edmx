@@ -4,632 +4,632 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="corruptosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Activities">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Emoji" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="BingoCard">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="BingoEventId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="BingoCardSlot">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="BingoCardId" Type="int" Nullable="false" />
-          <Property Name="BossId" Type="int" Nullable="false" />
-          <Property Name="ItemName" Type="nvarchar(max)" />
-          <Property Name="ItemImage" Type="varchar(max)" />
-          <Property Name="SlotLetter" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="BingoEvent">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="WomId" Type="int" />
-          <Property Name="SourceChannelId" Type="bigint" />
-          <Property Name="TargetChannelId" Type="bigint" />
-          <Property Name="EmojiYesId" Type="bigint" />
-          <Property Name="EmojiNoId" Type="nchar" MaxLength="10" />
-          <Property Name="Active" Type="bit" Nullable="false" />
-        </EntityType>
-        <EntityType Name="BingoTeam">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="TeamName" Type="nvarchar" MaxLength="50" Nullable="false" />
-        </EntityType>
-        <EntityType Name="BingoTeamCard">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="BingoTeamId" Type="int" Nullable="false" />
-          <Property Name="BingoCardId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="BingoTeamCardSlot">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="BingoTeamCardId" Type="int" Nullable="false" />
-          <Property Name="BingoCardSlotId" Type="int" Nullable="false" />
-          <Property Name="DateApproved" Type="nchar" MaxLength="10" />
-          <Property Name="DateDenied" Type="nchar" MaxLength="10" />
-        </EntityType>
-        <EntityType Name="BingoTeamMember">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="BingoTeamId" Type="int" Nullable="false" />
-          <Property Name="DiscordUserId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Bosses">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Bossname" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="EmojiName" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="BossImage" Type="nvarchar(max)" />
-          <Property Name="BossCommand" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="BotConfiguration">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PropertyName" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="PropertyValue" Type="nvarchar(max)" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Calendar">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Title" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="StartsAt" Type="datetime" Nullable="false" />
-          <Property Name="EndsAt" Type="datetime" Nullable="false" />
-          <Property Name="Description" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="Channels">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="DiscordChannelId" Type="bigint" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ChatLog">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Message" Type="varchar(max)" Nullable="false" />
-          <Property Name="Author" Type="varchar(max)" Nullable="false" />
-          <Property Name="Datetime" Type="datetime" Nullable="false" />
-          <Property Name="Severity" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Channel" Type="varchar(max)" />
-          <Property Name="PostId" Type="bigint" />
-          <Property Name="ChannelId" Type="bigint" />
-          <Property Name="AuthorId" Type="bigint" />
-        </EntityType>
-        <EntityType Name="DiscordUsers">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Username" Type="nvarchar(max)" />
-          <Property Name="DiscordId" Type="bigint" />
-          <Property Name="OriginallyJoinedAt" Type="datetime" />
-          <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
-          <Property Name="LeavingDate" Type="datetime" />
-          <Property Name="CorruptPoints" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ErrorLog">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Message" Type="nvarchar(max)" />
-          <Property Name="Severity" Type="nvarchar(max)" />
-          <Property Name="Datetime" Type="datetime" />
-        </EntityType>
-        <EntityType Name="hunt_bossdrops">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ItemName" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="BasePointValue" Type="int" Nullable="false" />
-          <Property Name="BossId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="hunt_bosses">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="AllUniquesValue" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="hunt_team_drops">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TeamId" Type="int" Nullable="false" />
-          <Property Name="DropId" Type="int" Nullable="false" />
-          <Property Name="PointValue" Type="int" />
-          <Property Name="DropDate" Type="datetime" />
-          <Property Name="DropImage" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="hunt_team_members">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TeamId" Type="int" Nullable="false" />
-          <Property Name="DiscordUserId" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="hunt_teams">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TeamName" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="PlayerPets">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="DropDate" Type="datetime" />
-          <Property Name="BossId" Type="int" />
-          <Property Name="SkillId" Type="int" />
-          <Property Name="ActivityId" Type="int" />
-          <Property Name="RunescapeAccountId" Type="int" />
-          <Property Name="LevelOrKcGotten" Type="int" />
-        </EntityType>
-        <EntityType Name="PointMutations">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PointChange" Type="int" Nullable="false" />
-          <Property Name="DateTime" Type="datetime" Nullable="false" />
-          <Property Name="TargetPlayerId" Type="int" Nullable="false" />
-          <Property Name="PointStoreItemId" Type="int" />
-        </EntityType>
-        <EntityType Name="PointStore">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="StoreItemName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="StoreItemValue" Type="int" Nullable="false" />
-          <Property Name="StoreItemDescription" Type="nvarchar(max)" />
-          <Property Name="StoreItemImage" Type="nvarchar(max)" />
-          <Property Name="StoreItemCommand" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="Roles">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="DiscordRoleId" Type="bigint" Nullable="false" />
-          <Property Name="DaysToReach" Type="int" Nullable="false" />
-          <Property Name="CanUpgradeTo" Type="bit" Nullable="false" />
-          <Property Name="IconUrl" Type="nvarchar(max)" />
-          <Property Name="IsStaff" Type="bit" Nullable="false" />
-          <Property Name="EmojiId" Type="bigint" />
-        </EntityType>
-        <EntityType Name="RunescapeAccounts">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="rsn" Type="varchar(max)" Nullable="false" />
-          <Property Name="wom_id" Type="int" />
-          <Property Name="DiscordUserId" Type="int" />
-          <Property Name="account_type" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="Skills">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Emoji" Type="nvarchar(max)" />
-          <Property Name="Image" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="Toggles">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Functionality" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Toggled" Type="bit" Nullable="false" />
-          <Property Name="Type" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <Association Name="FK_Activity">
-          <End Role="Activities" Type="Self.Activities" Multiplicity="0..1" />
-          <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Activities">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PlayerPets">
-              <PropertyRef Name="ActivityId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BingoBossId">
-          <End Role="Bosses" Type="Self.Bosses" Multiplicity="1" />
-          <End Role="BingoCardSlot" Type="Self.BingoCardSlot" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bosses">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BingoCardSlot">
-              <PropertyRef Name="BossId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BingoCardId">
-          <End Role="BingoCard" Type="Self.BingoCard" Multiplicity="1" />
-          <End Role="BingoCardSlot" Type="Self.BingoCardSlot" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BingoCard">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BingoCardSlot">
-              <PropertyRef Name="BingoCardId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BingoEventId">
-          <End Role="BingoEvent" Type="Self.BingoEvent" Multiplicity="1" />
-          <End Role="BingoCard" Type="Self.BingoCard" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BingoEvent">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BingoCard">
-              <PropertyRef Name="BingoEventId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BingoTeamCardBingoCardId">
-          <End Role="BingoCard" Type="Self.BingoCard" Multiplicity="1" />
-          <End Role="BingoTeamCard" Type="Self.BingoTeamCard" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BingoCard">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BingoTeamCard">
-              <PropertyRef Name="BingoCardId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BingoTeamCardBingoTeamId">
-          <End Role="BingoTeam" Type="Self.BingoTeam" Multiplicity="1" />
-          <End Role="BingoTeamCard" Type="Self.BingoTeamCard" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BingoTeam">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BingoTeamCard">
-              <PropertyRef Name="BingoTeamId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BingoTeamCardSlotBingoCardSlotId">
-          <End Role="BingoCardSlot" Type="Self.BingoCardSlot" Multiplicity="1" />
-          <End Role="BingoTeamCardSlot" Type="Self.BingoTeamCardSlot" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BingoCardSlot">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BingoTeamCardSlot">
-              <PropertyRef Name="BingoCardSlotId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BingoTeamCardSlotBingoTeamCardId">
-          <End Role="BingoTeamCard" Type="Self.BingoTeamCard" Multiplicity="1" />
-          <End Role="BingoTeamCardSlot" Type="Self.BingoTeamCardSlot" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BingoTeamCard">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BingoTeamCardSlot">
-              <PropertyRef Name="BingoTeamCardId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BingoTeamMemberBingoTeamId">
-          <End Role="BingoTeam" Type="Self.BingoTeam" Multiplicity="1" />
-          <End Role="BingoTeamMember" Type="Self.BingoTeamMember" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="BingoTeam">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BingoTeamMember">
-              <PropertyRef Name="BingoTeamId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BingoTeamMemberDiscordUserId">
-          <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="1" />
-          <End Role="BingoTeamMember" Type="Self.BingoTeamMember" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DiscordUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="BingoTeamMember">
-              <PropertyRef Name="DiscordUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Boss">
-          <End Role="Bosses" Type="Self.Bosses" Multiplicity="0..1" />
-          <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Bosses">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PlayerPets">
-              <PropertyRef Name="BossId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_BossId">
-          <End Role="hunt_bosses" Type="Self.hunt_bosses" Multiplicity="1" />
-          <End Role="hunt_bossdrops" Type="Self.hunt_bossdrops" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="hunt_bosses">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="hunt_bossdrops">
-              <PropertyRef Name="BossId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DiscordUser">
-          <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="0..1" />
-          <End Role="RunescapeAccounts" Type="Self.RunescapeAccounts" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DiscordUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="RunescapeAccounts">
-              <PropertyRef Name="DiscordUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DiscordUserId">
-          <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="1" />
-          <End Role="hunt_team_members" Type="Self.hunt_team_members" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DiscordUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="hunt_team_members">
-              <PropertyRef Name="DiscordUserId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DiscordUserPoints">
-          <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="1" />
-          <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="DiscordUsers">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PointMutations">
-              <PropertyRef Name="TargetPlayerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DropBossDropId">
-          <End Role="hunt_bossdrops" Type="Self.hunt_bossdrops" Multiplicity="1" />
-          <End Role="hunt_team_drops" Type="Self.hunt_team_drops" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="hunt_bossdrops">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="hunt_team_drops">
-              <PropertyRef Name="DropId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_DropTeamId">
-          <End Role="hunt_teams" Type="Self.hunt_teams" Multiplicity="1" />
-          <End Role="hunt_team_drops" Type="Self.hunt_team_drops" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="hunt_teams">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="hunt_team_drops">
-              <PropertyRef Name="TeamId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_PointStoreUserPoints">
-          <End Role="PointStore" Type="Self.PointStore" Multiplicity="0..1" />
-          <End Role="PointMutations" Type="Self.PointMutations" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="PointStore">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PointMutations">
-              <PropertyRef Name="PointStoreItemId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_RunescapeAccount">
-          <End Role="RunescapeAccounts" Type="Self.RunescapeAccounts" Multiplicity="0..1" />
-          <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="RunescapeAccounts">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PlayerPets">
-              <PropertyRef Name="RunescapeAccountId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Skill">
-          <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
-          <End Role="PlayerPets" Type="Self.PlayerPets" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Skills">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="PlayerPets">
-              <PropertyRef Name="SkillId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_TeamId">
-          <End Role="hunt_teams" Type="Self.hunt_teams" Multiplicity="1" />
-          <End Role="hunt_team_members" Type="Self.hunt_team_members" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="hunt_teams">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="hunt_team_members">
-              <PropertyRef Name="TeamId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityContainer Name="corruptosModelStoreContainer">
-          <EntitySet Name="Activities" EntityType="Self.Activities" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BingoCard" EntityType="Self.BingoCard" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BingoCardSlot" EntityType="Self.BingoCardSlot" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BingoEvent" EntityType="Self.BingoEvent" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BingoTeam" EntityType="Self.BingoTeam" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BingoTeamCard" EntityType="Self.BingoTeamCard" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BingoTeamCardSlot" EntityType="Self.BingoTeamCardSlot" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BingoTeamMember" EntityType="Self.BingoTeamMember" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Bosses" EntityType="Self.Bosses" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="BotConfiguration" EntityType="Self.BotConfiguration" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Calendar" EntityType="Self.Calendar" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Channels" EntityType="Self.Channels" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ChatLog" EntityType="Self.ChatLog" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="hunt_bossdrops" EntityType="Self.hunt_bossdrops" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="hunt_bosses" EntityType="Self.hunt_bosses" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="hunt_team_drops" EntityType="Self.hunt_team_drops" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="hunt_team_members" EntityType="Self.hunt_team_members" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="hunt_teams" EntityType="Self.hunt_teams" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PointMutations" EntityType="Self.PointMutations" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="PointStore" EntityType="Self.PointStore" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Toggles" EntityType="Self.Toggles" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Activity" Association="Self.FK_Activity">
-            <End Role="Activities" EntitySet="Activities" />
-            <End Role="PlayerPets" EntitySet="PlayerPets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BingoBossId" Association="Self.FK_BingoBossId">
-            <End Role="Bosses" EntitySet="Bosses" />
-            <End Role="BingoCardSlot" EntitySet="BingoCardSlot" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BingoCardId" Association="Self.FK_BingoCardId">
-            <End Role="BingoCard" EntitySet="BingoCard" />
-            <End Role="BingoCardSlot" EntitySet="BingoCardSlot" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BingoEventId" Association="Self.FK_BingoEventId">
-            <End Role="BingoEvent" EntitySet="BingoEvent" />
-            <End Role="BingoCard" EntitySet="BingoCard" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BingoTeamCardBingoCardId" Association="Self.FK_BingoTeamCardBingoCardId">
-            <End Role="BingoCard" EntitySet="BingoCard" />
-            <End Role="BingoTeamCard" EntitySet="BingoTeamCard" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BingoTeamCardBingoTeamId" Association="Self.FK_BingoTeamCardBingoTeamId">
-            <End Role="BingoTeam" EntitySet="BingoTeam" />
-            <End Role="BingoTeamCard" EntitySet="BingoTeamCard" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BingoTeamCardSlotBingoCardSlotId" Association="Self.FK_BingoTeamCardSlotBingoCardSlotId">
-            <End Role="BingoCardSlot" EntitySet="BingoCardSlot" />
-            <End Role="BingoTeamCardSlot" EntitySet="BingoTeamCardSlot" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BingoTeamCardSlotBingoTeamCardId" Association="Self.FK_BingoTeamCardSlotBingoTeamCardId">
-            <End Role="BingoTeamCard" EntitySet="BingoTeamCard" />
-            <End Role="BingoTeamCardSlot" EntitySet="BingoTeamCardSlot" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BingoTeamMemberBingoTeamId" Association="Self.FK_BingoTeamMemberBingoTeamId">
-            <End Role="BingoTeam" EntitySet="BingoTeam" />
-            <End Role="BingoTeamMember" EntitySet="BingoTeamMember" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BingoTeamMemberDiscordUserId" Association="Self.FK_BingoTeamMemberDiscordUserId">
-            <End Role="DiscordUsers" EntitySet="DiscordUsers" />
-            <End Role="BingoTeamMember" EntitySet="BingoTeamMember" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Boss" Association="Self.FK_Boss">
-            <End Role="Bosses" EntitySet="Bosses" />
-            <End Role="PlayerPets" EntitySet="PlayerPets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_BossId" Association="Self.FK_BossId">
-            <End Role="hunt_bosses" EntitySet="hunt_bosses" />
-            <End Role="hunt_bossdrops" EntitySet="hunt_bossdrops" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DiscordUser" Association="Self.FK_DiscordUser">
-            <End Role="DiscordUsers" EntitySet="DiscordUsers" />
-            <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DiscordUserId" Association="Self.FK_DiscordUserId">
-            <End Role="DiscordUsers" EntitySet="DiscordUsers" />
-            <End Role="hunt_team_members" EntitySet="hunt_team_members" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DiscordUserPoints" Association="Self.FK_DiscordUserPoints">
-            <End Role="DiscordUsers" EntitySet="DiscordUsers" />
-            <End Role="PointMutations" EntitySet="PointMutations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DropBossDropId" Association="Self.FK_DropBossDropId">
-            <End Role="hunt_bossdrops" EntitySet="hunt_bossdrops" />
-            <End Role="hunt_team_drops" EntitySet="hunt_team_drops" />
-          </AssociationSet>
-          <AssociationSet Name="FK_DropTeamId" Association="Self.FK_DropTeamId">
-            <End Role="hunt_teams" EntitySet="hunt_teams" />
-            <End Role="hunt_team_drops" EntitySet="hunt_team_drops" />
-          </AssociationSet>
-          <AssociationSet Name="FK_PointStoreUserPoints" Association="Self.FK_PointStoreUserPoints">
-            <End Role="PointStore" EntitySet="PointStore" />
-            <End Role="PointMutations" EntitySet="PointMutations" />
-          </AssociationSet>
-          <AssociationSet Name="FK_RunescapeAccount" Association="Self.FK_RunescapeAccount">
-            <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
-            <End Role="PlayerPets" EntitySet="PlayerPets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Skill" Association="Self.FK_Skill">
-            <End Role="Skills" EntitySet="Skills" />
-            <End Role="PlayerPets" EntitySet="PlayerPets" />
-          </AssociationSet>
-          <AssociationSet Name="FK_TeamId" Association="Self.FK_TeamId">
-            <End Role="hunt_teams" EntitySet="hunt_teams" />
-            <End Role="hunt_team_members" EntitySet="hunt_team_members" />
-          </AssociationSet>
-        </EntityContainer>
-      </Schema></edmx:StorageModels>
+    <Schema Namespace="corruptosModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="corruptosModelStoreContainer">
+    <EntitySet Name="Activities" EntityType="corruptosModel.Store.Activities" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Bosses" EntityType="corruptosModel.Store.Bosses" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BotConfigurations" EntityType="corruptosModel.Store.BotConfigurations" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Calendars" EntityType="corruptosModel.Store.Calendars" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Channels" EntityType="corruptosModel.Store.Channels" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ChatLogs" EntityType="corruptosModel.Store.ChatLogs" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DiscordUsers" EntityType="corruptosModel.Store.DiscordUsers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ErrorLogs" EntityType="corruptosModel.Store.ErrorLogs" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="hunt_bossdrops" EntityType="corruptosModel.Store.hunt_bossdrops" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="hunt_bosses" EntityType="corruptosModel.Store.hunt_bosses" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="hunt_team_drops" EntityType="corruptosModel.Store.hunt_team_drops" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="hunt_team_members" EntityType="corruptosModel.Store.hunt_team_members" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="hunt_teams" EntityType="corruptosModel.Store.hunt_teams" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PlayerPets" EntityType="corruptosModel.Store.PlayerPets" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PointMutations" EntityType="corruptosModel.Store.PointMutations" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PointStores" EntityType="corruptosModel.Store.PointStores" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="RunescapeAccounts" EntityType="corruptosModel.Store.RunescapeAccounts" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Skills" EntityType="corruptosModel.Store.Skills" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Toggles" EntityType="corruptosModel.Store.Toggles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Roles" EntityType="corruptosModel.Store.Roles" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BingoCards" EntityType="corruptosModel.Store.BingoCards" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BingoCardSlots" EntityType="corruptosModel.Store.BingoCardSlots" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BingoEvents" EntityType="corruptosModel.Store.BingoEvents" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BingoTeams" EntityType="corruptosModel.Store.BingoTeams" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BingoTeamCards" EntityType="corruptosModel.Store.BingoTeamCards" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BingoTeamCardSlots" EntityType="corruptosModel.Store.BingoTeamCardSlots" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BingoTeamMembers" EntityType="corruptosModel.Store.BingoTeamMembers" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_Activity" Association="corruptosModel.Store.FK_Activity">
+      <End Role="Activities" EntitySet="Activities" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Boss" Association="corruptosModel.Store.FK_Boss">
+      <End Role="Bosses" EntitySet="Bosses" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DiscordUser" Association="corruptosModel.Store.FK_DiscordUser">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DiscordUserId" Association="corruptosModel.Store.FK_DiscordUserId">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="hunt_team_members" EntitySet="hunt_team_members" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DiscordUserPoints" Association="corruptosModel.Store.FK_DiscordUserPoints">
+      <End Role="DiscordUsers" EntitySet="DiscordUsers" />
+      <End Role="PointMutations" EntitySet="PointMutations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BossId" Association="corruptosModel.Store.FK_BossId">
+      <End Role="hunt_bosses" EntitySet="hunt_bosses" />
+      <End Role="hunt_bossdrops" EntitySet="hunt_bossdrops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DropBossDropId" Association="corruptosModel.Store.FK_DropBossDropId">
+      <End Role="hunt_bossdrops" EntitySet="hunt_bossdrops" />
+      <End Role="hunt_team_drops" EntitySet="hunt_team_drops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DropTeamId" Association="corruptosModel.Store.FK_DropTeamId">
+      <End Role="hunt_teams" EntitySet="hunt_teams" />
+      <End Role="hunt_team_drops" EntitySet="hunt_team_drops" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TeamId" Association="corruptosModel.Store.FK_TeamId">
+      <End Role="hunt_teams" EntitySet="hunt_teams" />
+      <End Role="hunt_team_members" EntitySet="hunt_team_members" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RunescapeAccount" Association="corruptosModel.Store.FK_RunescapeAccount">
+      <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skill" Association="corruptosModel.Store.FK_Skill">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="PlayerPets" EntitySet="PlayerPets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PointStoreUserPoints" Association="corruptosModel.Store.FK_PointStoreUserPoints">
+      <End Role="PointStore" EntitySet="PointStores" />
+      <End Role="PointMutations" EntitySet="PointMutations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoCardId" Association="corruptosModel.Store.FK_BingoCardId">
+      <End Role="BingoCard" EntitySet="BingoCards" />
+      <End Role="BingoCardSlot" EntitySet="BingoCardSlots" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoEventId" Association="corruptosModel.Store.FK_BingoEventId">
+      <End Role="BingoEvent" EntitySet="BingoEvents" />
+      <End Role="BingoCard" EntitySet="BingoCards" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardBingoCardId" Association="corruptosModel.Store.FK_BingoTeamCardBingoCardId">
+      <End Role="BingoCard" EntitySet="BingoCards" />
+      <End Role="BingoTeamCard" EntitySet="BingoTeamCards" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoBossId" Association="corruptosModel.Store.FK_BingoBossId">
+      <End Role="Boss" EntitySet="Bosses" />
+      <End Role="BingoCardSlot" EntitySet="BingoCardSlots" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardSlotBingoCardSlotId" Association="corruptosModel.Store.FK_BingoTeamCardSlotBingoCardSlotId">
+      <End Role="BingoCardSlot" EntitySet="BingoCardSlots" />
+      <End Role="BingoTeamCardSlot" EntitySet="BingoTeamCardSlots" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardBingoTeamId" Association="corruptosModel.Store.FK_BingoTeamCardBingoTeamId">
+      <End Role="BingoTeam" EntitySet="BingoTeams" />
+      <End Role="BingoTeamCard" EntitySet="BingoTeamCards" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamMemberBingoTeamId" Association="corruptosModel.Store.FK_BingoTeamMemberBingoTeamId">
+      <End Role="BingoTeam" EntitySet="BingoTeams" />
+      <End Role="BingoTeamMember" EntitySet="BingoTeamMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamCardSlotBingoTeamCardId" Association="corruptosModel.Store.FK_BingoTeamCardSlotBingoTeamCardId">
+      <End Role="BingoTeamCard" EntitySet="BingoTeamCards" />
+      <End Role="BingoTeamCardSlot" EntitySet="BingoTeamCardSlots" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BingoTeamMemberDiscordUserId" Association="corruptosModel.Store.FK_BingoTeamMemberDiscordUserId">
+      <End Role="DiscordUser" EntitySet="DiscordUsers" />
+      <End Role="BingoTeamMember" EntitySet="BingoTeamMembers" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Activities">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Emoji" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Bosses">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Bossname" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="EmojiName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BossImage" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="BossCommand" Type="nvarchar" Nullable="true" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="BotConfigurations">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PropertyName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PropertyValue" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Calendars">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="StartsAt" Type="datetime" Nullable="false" />
+    <Property Name="EndsAt" Type="datetime" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Channels">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="DiscordChannelId" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ChatLogs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Message" Type="varchar(max)" Nullable="false" />
+    <Property Name="Author" Type="varchar(max)" Nullable="false" />
+    <Property Name="Datetime" Type="datetime" Nullable="false" />
+    <Property Name="Severity" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Channel" Type="varchar(max)" Nullable="true" />
+    <Property Name="PostId" Type="bigint" Nullable="true" />
+    <Property Name="ChannelId" Type="bigint" Nullable="true" />
+    <Property Name="AuthorId" Type="bigint" Nullable="true" />
+  </EntityType>
+  <EntityType Name="DiscordUsers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="DiscordId" Type="bigint" Nullable="true" />
+    <Property Name="OriginallyJoinedAt" Type="datetime" Nullable="true" />
+    <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
+    <Property Name="LeavingDate" Type="datetime" Nullable="true" />
+    <Property Name="CorruptPoints" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ErrorLogs">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Message" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Severity" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Datetime" Type="datetime" Nullable="true" />
+  </EntityType>
+  <EntityType Name="hunt_bossdrops">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="BasePointValue" Type="int" Nullable="false" />
+    <Property Name="BossId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="hunt_bosses">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AllUniquesValue" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="hunt_team_drops">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TeamId" Type="int" Nullable="false" />
+    <Property Name="DropId" Type="int" Nullable="false" />
+    <Property Name="PointValue" Type="int" Nullable="true" />
+    <Property Name="DropDate" Type="datetime" Nullable="true" />
+    <Property Name="DropImage" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="hunt_team_members">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TeamId" Type="int" Nullable="false" />
+    <Property Name="DiscordUserId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="hunt_teams">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TeamName" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="PlayerPets">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DropDate" Type="datetime" Nullable="true" />
+    <Property Name="BossId" Type="int" Nullable="true" />
+    <Property Name="SkillId" Type="int" Nullable="true" />
+    <Property Name="ActivityId" Type="int" Nullable="true" />
+    <Property Name="RunescapeAccountId" Type="int" Nullable="true" />
+    <Property Name="LevelOrKcGotten" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="PointMutations">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PointChange" Type="int" Nullable="false" />
+    <Property Name="DateTime" Type="datetime" Nullable="false" />
+    <Property Name="TargetPlayerId" Type="int" Nullable="false" />
+    <Property Name="PointStoreItemId" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="PointStores">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StoreItemName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="StoreItemValue" Type="int" Nullable="false" />
+    <Property Name="StoreItemDescription" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="StoreItemImage" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="StoreItemCommand" Type="nvarchar" Nullable="true" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="RunescapeAccounts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="rsn" Type="varchar(max)" Nullable="false" />
+    <Property Name="wom_id" Type="int" Nullable="true" />
+    <Property Name="DiscordUserId" Type="int" Nullable="true" />
+    <Property Name="account_type" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Skills">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Emoji" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="Image" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Toggles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Functionality" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Toggled" Type="bit" Nullable="false" />
+    <Property Name="Type" Type="nvarchar" Nullable="true" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="DiscordRoleId" Type="bigint" Nullable="false" />
+    <Property Name="DaysToReach" Type="int" Nullable="false" />
+    <Property Name="CanUpgradeTo" Type="bit" Nullable="false" />
+    <Property Name="IconUrl" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="IsStaff" Type="bit" Nullable="false" />
+    <Property Name="EmojiId" Type="bigint" Nullable="true" />
+  </EntityType>
+  <EntityType Name="BingoCards">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoEventId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BingoCardSlots">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoCardId" Type="int" Nullable="false" />
+    <Property Name="BossId" Type="int" Nullable="false" />
+    <Property Name="ItemName" Type="nvarchar(max)" Nullable="true" />
+    <Property Name="ItemImage" Type="varchar(max)" Nullable="true" />
+    <Property Name="SlotLetter" Type="nvarchar" Nullable="true" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="BingoEvents">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="WomId" Type="int" Nullable="true" />
+    <Property Name="SourceChannelId" Type="bigint" Nullable="true" />
+    <Property Name="TargetChannelId" Type="bigint" Nullable="true" />
+    <Property Name="EmojiYesId" Type="bigint" Nullable="true" />
+    <Property Name="EmojiNoId" Type="nchar" Nullable="true" MaxLength="10" />
+    <Property Name="Active" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BingoTeams">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="TeamName" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="BingoTeamCards">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoTeamId" Type="int" Nullable="false" />
+    <Property Name="BingoCardId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BingoTeamCardSlots">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoTeamCardId" Type="int" Nullable="false" />
+    <Property Name="BingoCardSlotId" Type="int" Nullable="false" />
+    <Property Name="DateApproved" Type="nchar" Nullable="true" MaxLength="10" />
+    <Property Name="DateDenied" Type="nchar" Nullable="true" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="BingoTeamMembers">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="BingoTeamId" Type="int" Nullable="false" />
+    <Property Name="DiscordUserId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Activity">
+    <End Role="Activities" Type="corruptosModel.Store.Activities" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="corruptosModel.Store.PlayerPets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Activities">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="ActivityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Boss">
+    <End Role="Bosses" Type="corruptosModel.Store.Bosses" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="corruptosModel.Store.PlayerPets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Bosses">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="BossId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DiscordUser">
+    <End Role="DiscordUsers" Type="corruptosModel.Store.DiscordUsers" Multiplicity="0..1" />
+    <End Role="RunescapeAccounts" Type="corruptosModel.Store.RunescapeAccounts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="RunescapeAccounts">
+        <PropertyRef Name="DiscordUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DiscordUserId">
+    <End Role="DiscordUsers" Type="corruptosModel.Store.DiscordUsers" Multiplicity="1" />
+    <End Role="hunt_team_members" Type="corruptosModel.Store.hunt_team_members" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_members">
+        <PropertyRef Name="DiscordUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DiscordUserPoints">
+    <End Role="DiscordUsers" Type="corruptosModel.Store.DiscordUsers" Multiplicity="1" />
+    <End Role="PointMutations" Type="corruptosModel.Store.PointMutations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUsers">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PointMutations">
+        <PropertyRef Name="TargetPlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BossId">
+    <End Role="hunt_bosses" Type="corruptosModel.Store.hunt_bosses" Multiplicity="1" />
+    <End Role="hunt_bossdrops" Type="corruptosModel.Store.hunt_bossdrops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_bosses">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_bossdrops">
+        <PropertyRef Name="BossId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DropBossDropId">
+    <End Role="hunt_bossdrops" Type="corruptosModel.Store.hunt_bossdrops" Multiplicity="1" />
+    <End Role="hunt_team_drops" Type="corruptosModel.Store.hunt_team_drops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_bossdrops">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_drops">
+        <PropertyRef Name="DropId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DropTeamId">
+    <End Role="hunt_teams" Type="corruptosModel.Store.hunt_teams" Multiplicity="1" />
+    <End Role="hunt_team_drops" Type="corruptosModel.Store.hunt_team_drops" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_teams">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_drops">
+        <PropertyRef Name="TeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TeamId">
+    <End Role="hunt_teams" Type="corruptosModel.Store.hunt_teams" Multiplicity="1" />
+    <End Role="hunt_team_members" Type="corruptosModel.Store.hunt_team_members" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="hunt_teams">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="hunt_team_members">
+        <PropertyRef Name="TeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RunescapeAccount">
+    <End Role="RunescapeAccounts" Type="corruptosModel.Store.RunescapeAccounts" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="corruptosModel.Store.PlayerPets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RunescapeAccounts">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="RunescapeAccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skill">
+    <End Role="Skills" Type="corruptosModel.Store.Skills" Multiplicity="0..1" />
+    <End Role="PlayerPets" Type="corruptosModel.Store.PlayerPets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PlayerPets">
+        <PropertyRef Name="SkillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PointStoreUserPoints">
+    <End Role="PointStore" Type="corruptosModel.Store.PointStores" Multiplicity="0..1" />
+    <End Role="PointMutations" Type="corruptosModel.Store.PointMutations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PointStore">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="PointMutations">
+        <PropertyRef Name="PointStoreItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoCardId">
+    <End Role="BingoCard" Type="corruptosModel.Store.BingoCards" Multiplicity="1" />
+    <End Role="BingoCardSlot" Type="corruptosModel.Store.BingoCardSlots" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoCardSlot">
+        <PropertyRef Name="BingoCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoEventId">
+    <End Role="BingoEvent" Type="corruptosModel.Store.BingoEvents" Multiplicity="1" />
+    <End Role="BingoCard" Type="corruptosModel.Store.BingoCards" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoEvent">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoCard">
+        <PropertyRef Name="BingoEventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardBingoCardId">
+    <End Role="BingoCard" Type="corruptosModel.Store.BingoCards" Multiplicity="1" />
+    <End Role="BingoTeamCard" Type="corruptosModel.Store.BingoTeamCards" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCard">
+        <PropertyRef Name="BingoCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoBossId">
+    <End Role="Boss" Type="corruptosModel.Store.Bosses" Multiplicity="1" />
+    <End Role="BingoCardSlot" Type="corruptosModel.Store.BingoCardSlots" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Boss">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoCardSlot">
+        <PropertyRef Name="BossId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardSlotBingoCardSlotId">
+    <End Role="BingoCardSlot" Type="corruptosModel.Store.BingoCardSlots" Multiplicity="1" />
+    <End Role="BingoTeamCardSlot" Type="corruptosModel.Store.BingoTeamCardSlots" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoCardSlot">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCardSlot">
+        <PropertyRef Name="BingoCardSlotId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardBingoTeamId">
+    <End Role="BingoTeam" Type="corruptosModel.Store.BingoTeams" Multiplicity="1" />
+    <End Role="BingoTeamCard" Type="corruptosModel.Store.BingoTeamCards" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoTeam">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCard">
+        <PropertyRef Name="BingoTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamMemberBingoTeamId">
+    <End Role="BingoTeam" Type="corruptosModel.Store.BingoTeams" Multiplicity="1" />
+    <End Role="BingoTeamMember" Type="corruptosModel.Store.BingoTeamMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoTeam">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamMember">
+        <PropertyRef Name="BingoTeamId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamCardSlotBingoTeamCardId">
+    <End Role="BingoTeamCard" Type="corruptosModel.Store.BingoTeamCards" Multiplicity="1" />
+    <End Role="BingoTeamCardSlot" Type="corruptosModel.Store.BingoTeamCardSlots" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="BingoTeamCard">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamCardSlot">
+        <PropertyRef Name="BingoTeamCardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BingoTeamMemberDiscordUserId">
+    <End Role="DiscordUser" Type="corruptosModel.Store.DiscordUsers" Multiplicity="1" />
+    <End Role="BingoTeamMember" Type="corruptosModel.Store.BingoTeamMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DiscordUser">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BingoTeamMember">
+        <PropertyRef Name="DiscordUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="corruptosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1303,297 +1303,296 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="corruptosModelStoreContainer" CdmEntityContainer="CorruptModel">
-          <EntitySetMapping Name="Activities">
-            <EntityTypeMapping TypeName="corruptosModel.Activity">
-              <MappingFragment StoreEntitySet="Activities">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Emoji" ColumnName="Emoji" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Bosses">
-            <EntityTypeMapping TypeName="corruptosModel.Boss">
-              <MappingFragment StoreEntitySet="Bosses">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Bossname" ColumnName="Bossname" />
-                <ScalarProperty Name="EmojiName" ColumnName="EmojiName" />
-                <ScalarProperty Name="BossImage" ColumnName="BossImage" />
-                <ScalarProperty Name="BossCommand" ColumnName="BossCommand" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BotConfigurations">
-            <EntityTypeMapping TypeName="corruptosModel.BotConfiguration">
-              <MappingFragment StoreEntitySet="BotConfiguration">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
-                <ScalarProperty Name="PropertyValue" ColumnName="PropertyValue" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Calendars">
-            <EntityTypeMapping TypeName="corruptosModel.Calendar">
-              <MappingFragment StoreEntitySet="Calendar">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="StartsAt" ColumnName="StartsAt" />
-                <ScalarProperty Name="EndsAt" ColumnName="EndsAt" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Channels">
-            <EntityTypeMapping TypeName="corruptosModel.Channel">
-              <MappingFragment StoreEntitySet="Channels">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="DiscordChannelId" ColumnName="DiscordChannelId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ChatLogs">
-            <EntityTypeMapping TypeName="corruptosModel.ChatLog">
-              <MappingFragment StoreEntitySet="ChatLog">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="Author" ColumnName="Author" />
-                <ScalarProperty Name="Datetime" ColumnName="Datetime" />
-                <ScalarProperty Name="Severity" ColumnName="Severity" />
-                <ScalarProperty Name="Channel" ColumnName="Channel" />
-                <ScalarProperty Name="PostId" ColumnName="PostId" />
-                <ScalarProperty Name="ChannelId" ColumnName="ChannelId" />
-                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="DiscordUsers">
-            <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
-              <MappingFragment StoreEntitySet="DiscordUsers">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="DiscordId" ColumnName="DiscordId" />
-                <ScalarProperty Name="OriginallyJoinedAt" ColumnName="OriginallyJoinedAt" />
-                <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
-                <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
-                <ScalarProperty Name="CorruptPoints" ColumnName="CorruptPoints" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ErrorLogs">
-            <EntityTypeMapping TypeName="corruptosModel.ErrorLog">
-              <MappingFragment StoreEntitySet="ErrorLog">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Message" ColumnName="Message" />
-                <ScalarProperty Name="Severity" ColumnName="Severity" />
-                <ScalarProperty Name="Datetime" ColumnName="Datetime" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="hunt_bossdrops">
-            <EntityTypeMapping TypeName="corruptosModel.hunt_bossdrops">
-              <MappingFragment StoreEntitySet="hunt_bossdrops">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="BasePointValue" ColumnName="BasePointValue" />
-                <ScalarProperty Name="BossId" ColumnName="BossId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="hunt_bosses">
-            <EntityTypeMapping TypeName="corruptosModel.hunt_bosses">
-              <MappingFragment StoreEntitySet="hunt_bosses">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="AllUniquesValue" ColumnName="AllUniquesValue" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="hunt_team_drops">
-            <EntityTypeMapping TypeName="corruptosModel.hunt_team_drops">
-              <MappingFragment StoreEntitySet="hunt_team_drops">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
-                <ScalarProperty Name="DropId" ColumnName="DropId" />
-                <ScalarProperty Name="PointValue" ColumnName="PointValue" />
-                <ScalarProperty Name="DropDate" ColumnName="DropDate" />
-                <ScalarProperty Name="DropImage" ColumnName="DropImage" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="hunt_team_members">
-            <EntityTypeMapping TypeName="corruptosModel.hunt_team_members">
-              <MappingFragment StoreEntitySet="hunt_team_members">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="TeamId" ColumnName="TeamId" />
-                <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="hunt_teams">
-            <EntityTypeMapping TypeName="corruptosModel.hunt_teams">
-              <MappingFragment StoreEntitySet="hunt_teams">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PlayerPets">
-            <EntityTypeMapping TypeName="corruptosModel.PlayerPet">
-              <MappingFragment StoreEntitySet="PlayerPets">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="DropDate" ColumnName="DropDate" />
-                <ScalarProperty Name="BossId" ColumnName="BossId" />
-                <ScalarProperty Name="SkillId" ColumnName="SkillId" />
-                <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
-                <ScalarProperty Name="RunescapeAccountId" ColumnName="RunescapeAccountId" />
-                <ScalarProperty Name="LevelOrKcGotten" ColumnName="LevelOrKcGotten" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PointMutations">
-            <EntityTypeMapping TypeName="corruptosModel.PointMutation">
-              <MappingFragment StoreEntitySet="PointMutations">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="PointChange" ColumnName="PointChange" />
-                <ScalarProperty Name="DateTime" ColumnName="DateTime" />
-                <ScalarProperty Name="TargetPlayerId" ColumnName="TargetPlayerId" />
-                <ScalarProperty Name="PointStoreItemId" ColumnName="PointStoreItemId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PointStores">
-            <EntityTypeMapping TypeName="corruptosModel.PointStore">
-              <MappingFragment StoreEntitySet="PointStore">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="StoreItemName" ColumnName="StoreItemName" />
-                <ScalarProperty Name="StoreItemValue" ColumnName="StoreItemValue" />
-                <ScalarProperty Name="StoreItemDescription" ColumnName="StoreItemDescription" />
-                <ScalarProperty Name="StoreItemImage" ColumnName="StoreItemImage" />
-                <ScalarProperty Name="StoreItemCommand" ColumnName="StoreItemCommand" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="RunescapeAccounts">
-            <EntityTypeMapping TypeName="corruptosModel.RunescapeAccount">
-              <MappingFragment StoreEntitySet="RunescapeAccounts">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="rsn" ColumnName="rsn" />
-                <ScalarProperty Name="wom_id" ColumnName="wom_id" />
-                <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
-                <ScalarProperty Name="account_type" ColumnName="account_type" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Skills">
-            <EntityTypeMapping TypeName="corruptosModel.Skill">
-              <MappingFragment StoreEntitySet="Skills">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Emoji" ColumnName="Emoji" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Toggles">
-            <EntityTypeMapping TypeName="corruptosModel.Toggle">
-              <MappingFragment StoreEntitySet="Toggles">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Functionality" ColumnName="Functionality" />
-                <ScalarProperty Name="Toggled" ColumnName="Toggled" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Roles">
-            <EntityTypeMapping TypeName="corruptosModel.Role">
-              <MappingFragment StoreEntitySet="Roles">
-                <ScalarProperty Name="EmojiId" ColumnName="EmojiId" />
-                <ScalarProperty Name="IsStaff" ColumnName="IsStaff" />
-                <ScalarProperty Name="IconUrl" ColumnName="IconUrl" />
-                <ScalarProperty Name="CanUpgradeTo" ColumnName="CanUpgradeTo" />
-                <ScalarProperty Name="DaysToReach" ColumnName="DaysToReach" />
-                <ScalarProperty Name="DiscordRoleId" ColumnName="DiscordRoleId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BingoCards">
-            <EntityTypeMapping TypeName="corruptosModel.BingoCard">
-              <MappingFragment StoreEntitySet="BingoCard">
-                <ScalarProperty Name="BingoEventId" ColumnName="BingoEventId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BingoCardSlots">
-            <EntityTypeMapping TypeName="corruptosModel.BingoCardSlot">
-              <MappingFragment StoreEntitySet="BingoCardSlot">
-                <ScalarProperty Name="SlotLetter" ColumnName="SlotLetter" />
-                <ScalarProperty Name="ItemImage" ColumnName="ItemImage" />
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="BossId" ColumnName="BossId" />
-                <ScalarProperty Name="BingoCardId" ColumnName="BingoCardId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BingoEvents">
-            <EntityTypeMapping TypeName="corruptosModel.BingoEvent">
-              <MappingFragment StoreEntitySet="BingoEvent">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="EmojiNoId" ColumnName="EmojiNoId" />
-                <ScalarProperty Name="EmojiYesId" ColumnName="EmojiYesId" />
-                <ScalarProperty Name="TargetChannelId" ColumnName="TargetChannelId" />
-                <ScalarProperty Name="SourceChannelId" ColumnName="SourceChannelId" />
-                <ScalarProperty Name="WomId" ColumnName="WomId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BingoTeams">
-            <EntityTypeMapping TypeName="corruptosModel.BingoTeam">
-              <MappingFragment StoreEntitySet="BingoTeam">
-                <ScalarProperty Name="TeamName" ColumnName="TeamName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BingoTeamCards">
-            <EntityTypeMapping TypeName="corruptosModel.BingoTeamCard">
-              <MappingFragment StoreEntitySet="BingoTeamCard">
-                <ScalarProperty Name="BingoCardId" ColumnName="BingoCardId" />
-                <ScalarProperty Name="BingoTeamId" ColumnName="BingoTeamId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BingoTeamCardSlots">
-            <EntityTypeMapping TypeName="corruptosModel.BingoTeamCardSlot">
-              <MappingFragment StoreEntitySet="BingoTeamCardSlot">
-                <ScalarProperty Name="DateDenied" ColumnName="DateDenied" />
-                <ScalarProperty Name="DateApproved" ColumnName="DateApproved" />
-                <ScalarProperty Name="BingoCardSlotId" ColumnName="BingoCardSlotId" />
-                <ScalarProperty Name="BingoTeamCardId" ColumnName="BingoTeamCardId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BingoTeamMembers">
-            <EntityTypeMapping TypeName="corruptosModel.BingoTeamMember">
-              <MappingFragment StoreEntitySet="BingoTeamMember">
-                <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
-                <ScalarProperty Name="BingoTeamId" ColumnName="BingoTeamId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-        </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="corruptosModelStoreContainer" CdmEntityContainer="CorruptModel">
+    <EntitySetMapping Name="Activities">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.Activity)">
+        <MappingFragment StoreEntitySet="Activities">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Emoji" ColumnName="Emoji" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Bosses">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.Boss)">
+        <MappingFragment StoreEntitySet="Bosses">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Bossname" ColumnName="Bossname" />
+          <ScalarProperty Name="EmojiName" ColumnName="EmojiName" />
+          <ScalarProperty Name="BossImage" ColumnName="BossImage" />
+          <ScalarProperty Name="BossCommand" ColumnName="BossCommand" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BotConfigurations">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.BotConfiguration)">
+        <MappingFragment StoreEntitySet="BotConfigurations">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PropertyName" ColumnName="PropertyName" />
+          <ScalarProperty Name="PropertyValue" ColumnName="PropertyValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Calendars">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.Calendar)">
+        <MappingFragment StoreEntitySet="Calendars">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="StartsAt" ColumnName="StartsAt" />
+          <ScalarProperty Name="EndsAt" ColumnName="EndsAt" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Channels">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.Channel)">
+        <MappingFragment StoreEntitySet="Channels">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DiscordChannelId" ColumnName="DiscordChannelId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ChatLogs">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.ChatLog)">
+        <MappingFragment StoreEntitySet="ChatLogs">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="Author" ColumnName="Author" />
+          <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+          <ScalarProperty Name="Severity" ColumnName="Severity" />
+          <ScalarProperty Name="Channel" ColumnName="Channel" />
+          <ScalarProperty Name="PostId" ColumnName="PostId" />
+          <ScalarProperty Name="ChannelId" ColumnName="ChannelId" />
+          <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DiscordUsers">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.DiscordUser)">
+        <MappingFragment StoreEntitySet="DiscordUsers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="DiscordId" ColumnName="DiscordId" />
+          <ScalarProperty Name="OriginallyJoinedAt" ColumnName="OriginallyJoinedAt" />
+          <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
+          <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
+          <ScalarProperty Name="CorruptPoints" ColumnName="CorruptPoints" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ErrorLogs">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.ErrorLog)">
+        <MappingFragment StoreEntitySet="ErrorLogs">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="Severity" ColumnName="Severity" />
+          <ScalarProperty Name="Datetime" ColumnName="Datetime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hunt_bossdrops">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.hunt_bossdrops)">
+        <MappingFragment StoreEntitySet="hunt_bossdrops">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+          <ScalarProperty Name="BasePointValue" ColumnName="BasePointValue" />
+          <ScalarProperty Name="BossId" ColumnName="BossId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hunt_bosses">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.hunt_bosses)">
+        <MappingFragment StoreEntitySet="hunt_bosses">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="AllUniquesValue" ColumnName="AllUniquesValue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hunt_team_drops">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.hunt_team_drops)">
+        <MappingFragment StoreEntitySet="hunt_team_drops">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+          <ScalarProperty Name="DropId" ColumnName="DropId" />
+          <ScalarProperty Name="PointValue" ColumnName="PointValue" />
+          <ScalarProperty Name="DropDate" ColumnName="DropDate" />
+          <ScalarProperty Name="DropImage" ColumnName="DropImage" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hunt_team_members">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.hunt_team_members)">
+        <MappingFragment StoreEntitySet="hunt_team_members">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TeamId" ColumnName="TeamId" />
+          <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hunt_teams">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.hunt_teams)">
+        <MappingFragment StoreEntitySet="hunt_teams">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlayerPets">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.PlayerPet)">
+        <MappingFragment StoreEntitySet="PlayerPets">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DropDate" ColumnName="DropDate" />
+          <ScalarProperty Name="BossId" ColumnName="BossId" />
+          <ScalarProperty Name="SkillId" ColumnName="SkillId" />
+          <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+          <ScalarProperty Name="RunescapeAccountId" ColumnName="RunescapeAccountId" />
+          <ScalarProperty Name="LevelOrKcGotten" ColumnName="LevelOrKcGotten" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PointMutations">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.PointMutation)">
+        <MappingFragment StoreEntitySet="PointMutations">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="PointChange" ColumnName="PointChange" />
+          <ScalarProperty Name="DateTime" ColumnName="DateTime" />
+          <ScalarProperty Name="TargetPlayerId" ColumnName="TargetPlayerId" />
+          <ScalarProperty Name="PointStoreItemId" ColumnName="PointStoreItemId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PointStores">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.PointStore)">
+        <MappingFragment StoreEntitySet="PointStores">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="StoreItemName" ColumnName="StoreItemName" />
+          <ScalarProperty Name="StoreItemValue" ColumnName="StoreItemValue" />
+          <ScalarProperty Name="StoreItemDescription" ColumnName="StoreItemDescription" />
+          <ScalarProperty Name="StoreItemImage" ColumnName="StoreItemImage" />
+          <ScalarProperty Name="StoreItemCommand" ColumnName="StoreItemCommand" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RunescapeAccounts">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.RunescapeAccount)">
+        <MappingFragment StoreEntitySet="RunescapeAccounts">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="rsn" ColumnName="rsn" />
+          <ScalarProperty Name="wom_id" ColumnName="wom_id" />
+          <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
+          <ScalarProperty Name="account_type" ColumnName="account_type" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Skills">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.Skill)">
+        <MappingFragment StoreEntitySet="Skills">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Emoji" ColumnName="Emoji" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Toggles">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.Toggle)">
+        <MappingFragment StoreEntitySet="Toggles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Functionality" ColumnName="Functionality" />
+          <ScalarProperty Name="Toggled" ColumnName="Toggled" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.Role)">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="DiscordRoleId" ColumnName="DiscordRoleId" />
+          <ScalarProperty Name="DaysToReach" ColumnName="DaysToReach" />
+          <ScalarProperty Name="CanUpgradeTo" ColumnName="CanUpgradeTo" />
+          <ScalarProperty Name="IconUrl" ColumnName="IconUrl" />
+          <ScalarProperty Name="IsStaff" ColumnName="IsStaff" />
+          <ScalarProperty Name="EmojiId" ColumnName="EmojiId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoCards">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.BingoCard)">
+        <MappingFragment StoreEntitySet="BingoCards">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="BingoEventId" ColumnName="BingoEventId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoCardSlots">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.BingoCardSlot)">
+        <MappingFragment StoreEntitySet="BingoCardSlots">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="BingoCardId" ColumnName="BingoCardId" />
+          <ScalarProperty Name="BossId" ColumnName="BossId" />
+          <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+          <ScalarProperty Name="ItemImage" ColumnName="ItemImage" />
+          <ScalarProperty Name="SlotLetter" ColumnName="SlotLetter" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoEvents">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.BingoEvent)">
+        <MappingFragment StoreEntitySet="BingoEvents">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="WomId" ColumnName="WomId" />
+          <ScalarProperty Name="SourceChannelId" ColumnName="SourceChannelId" />
+          <ScalarProperty Name="TargetChannelId" ColumnName="TargetChannelId" />
+          <ScalarProperty Name="EmojiYesId" ColumnName="EmojiYesId" />
+          <ScalarProperty Name="EmojiNoId" ColumnName="EmojiNoId" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoTeams">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.BingoTeam)">
+        <MappingFragment StoreEntitySet="BingoTeams">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TeamName" ColumnName="TeamName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoTeamCards">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.BingoTeamCard)">
+        <MappingFragment StoreEntitySet="BingoTeamCards">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="BingoTeamId" ColumnName="BingoTeamId" />
+          <ScalarProperty Name="BingoCardId" ColumnName="BingoCardId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoTeamCardSlots">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.BingoTeamCardSlot)">
+        <MappingFragment StoreEntitySet="BingoTeamCardSlots">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="BingoTeamCardId" ColumnName="BingoTeamCardId" />
+          <ScalarProperty Name="BingoCardSlotId" ColumnName="BingoCardSlotId" />
+          <ScalarProperty Name="DateApproved" ColumnName="DateApproved" />
+          <ScalarProperty Name="DateDenied" ColumnName="DateDenied" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BingoTeamMembers">
+      <EntityTypeMapping TypeName="IsTypeOf(corruptosModel.BingoTeamMember)">
+        <MappingFragment StoreEntitySet="BingoTeamMembers">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="BingoTeamId" ColumnName="BingoTeamId" />
+          <ScalarProperty Name="DiscordUserId" ColumnName="DiscordUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -1607,7 +1606,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

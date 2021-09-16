@@ -171,6 +171,7 @@
       <DependentUpon>CorruptModel.edmx</DependentUpon>
       <LastGenOutput>CorruptModel.Context.cs</LastGenOutput>
     </Content>
+    <Content Include="CorruptModel.edmx.sql" />
     <Content Include="CorruptModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>CorruptModel.edmx</DependentUpon>
