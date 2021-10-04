@@ -44,7 +44,7 @@ namespace CorruptOSBot.Shared.Helpers.Bot
         }
 
 
-        public static bool DEBUG = true;
+        public static bool DEBUG = false;
 
         public static ulong GetGuildId()
         {

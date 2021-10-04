@@ -19,7 +19,7 @@ namespace CorruptOSBot.Services
 
         public HeartbeatService(IDiscordClient client)
         {
-            //Task.Delay(10000).ContinueWith(t => Setup(client));            
+            Task.Delay(10000).ContinueWith(t => Setup(client));
         }
 
         public async Task Trigger(IDiscordClient client)
