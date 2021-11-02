@@ -7,9 +7,14 @@ namespace CorruptOSBot.Shared.Helpers.Bot
     public static class ConfigHelper
     {
         private static Dictionary<string, string> _configuration { get; set; }
+        public static bool DEBUG { get; set; }
 
         public static void Init()
         {
+
+            DEBUG = false;
+
+
             var config = new DataHelper().GetConfiguration();
             _configuration = new Dictionary<string, string>();
             foreach (var item in config)
@@ -44,7 +49,6 @@ namespace CorruptOSBot.Shared.Helpers.Bot
         }
 
 
-        public static bool DEBUG = false;
 
         public static ulong GetGuildId()
         {

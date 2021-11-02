@@ -33,17 +33,16 @@ namespace CorruptOSBot.Shared.Helpers.Discord
         {
             var roles = RoleHelper.GetRoles();
 
-            return
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 7)) ||  //Rank 1
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 8)) ||  //Rank 2
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 9)) ||  //Rank 3
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 10)) || //Rank 4
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 11)) || //Rank 5
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 12)) || //Rank 6
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 14)) || //SOTW
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 15)) || //BOTW
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 17)) || //Rank 10
-                HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 18));   //Rank 7
+            return HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 7)) ||  //Rank 1
+            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 8)) ||  //Rank 2
+            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 9)) ||  //Rank 3
+            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 10)) || //Rank 4
+            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 11)) || //Rank 5
+            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 12)) || //Rank 6
+            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 14)) || //SOTW
+            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 15)) || //BOTW
+            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 17)) || //Rank 10
+            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 18));   //Rank 7
         }
         public static bool HasStaffOrModOrOwnerRole(IGuildUser user, IGuild guild)
         {
