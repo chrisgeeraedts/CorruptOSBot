@@ -12,23 +12,20 @@ namespace CorruptOSBot.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class BingoEvent
+    public partial class Rank
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public BingoEvent()
+        public Rank()
         {
-            this.BingoCards = new HashSet<BingoCard>();
+            this.DiscordUsers = new HashSet<DiscordUser>();
         }
     
         public int Id { get; set; }
-        public Nullable<int> WomId { get; set; }
-        public Nullable<long> SourceChannelId { get; set; }
-        public Nullable<long> TargetChannelId { get; set; }
-        public Nullable<long> EmojiYesId { get; set; }
-        public string EmojiNoId { get; set; }
-        public bool Active { get; set; }
+        public string Name { get; set; }
+        public string Icon { get; set; }
+        public int PointsNeeded { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BingoCard> BingoCards { get; set; }
+        public virtual ICollection<DiscordUser> DiscordUsers { get; set; }
     }
 }

@@ -56,27 +56,6 @@
     <Compile Include="Activity.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="BingoCard.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BingoCardSlot.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BingoEvent.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BingoTeam.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BingoTeamCard.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BingoTeamCardSlot.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="BingoTeamMember.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Boss.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
@@ -113,31 +92,13 @@
     <Compile Include="ErrorLog.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="hunt_bossdrops.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="hunt_bosses.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="hunt_teams.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="hunt_team_drops.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="hunt_team_members.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="PlayerPet.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="PointMutation.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="PointStore.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rank.cs">
+      <DependentUpon>CorruptModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Role.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>

@@ -7,13 +7,11 @@ namespace CorruptOSBot.Shared.Helpers.Bot
     public static class ConfigHelper
     {
         private static Dictionary<string, string> _configuration { get; set; }
-        public static bool DEBUG { get; set; }
+        public static bool IsDebugMode { get; set; }
 
         public static void Init()
         {
-
-            DEBUG = false;
-
+            IsDebugMode = true;
 
             var config = new DataHelper().GetConfiguration();
             _configuration = new Dictionary<string, string>();
@@ -25,7 +23,6 @@ namespace CorruptOSBot.Shared.Helpers.Bot
                 }
             }
         }
-
 
         public static string GetSettingProperty(string key)
         {
@@ -48,11 +45,9 @@ namespace CorruptOSBot.Shared.Helpers.Bot
             }
         }
 
-
-
         public static ulong GetGuildId()
         {
-            if (!DEBUG)
+            if (!IsDebugMode)
             {
                 return Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
             }

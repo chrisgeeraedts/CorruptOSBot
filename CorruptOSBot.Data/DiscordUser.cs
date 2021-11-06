@@ -18,9 +18,6 @@ namespace CorruptOSBot.Data
         public DiscordUser()
         {
             this.RunescapeAccounts = new HashSet<RunescapeAccount>();
-            this.hunt_team_members = new HashSet<hunt_team_members>();
-            this.PointMutations = new HashSet<PointMutation>();
-            this.BingoTeamMembers = new HashSet<BingoTeamMember>();
         }
     
         public int Id { get; set; }
@@ -29,15 +26,11 @@ namespace CorruptOSBot.Data
         public Nullable<System.DateTime> OriginallyJoinedAt { get; set; }
         public bool BlacklistedForPromotion { get; set; }
         public Nullable<System.DateTime> LeavingDate { get; set; }
-        public int CorruptPoints { get; set; }
+        public int Points { get; set; }
+        public int RankId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RunescapeAccount> RunescapeAccounts { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<hunt_team_members> hunt_team_members { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PointMutation> PointMutations { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<BingoTeamMember> BingoTeamMembers { get; set; }
+        public virtual Rank Rank { get; set; }
     }
 }

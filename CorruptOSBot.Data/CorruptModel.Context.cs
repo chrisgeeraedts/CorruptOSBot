@@ -33,24 +33,11 @@ namespace CorruptOSBot.Data
         public virtual DbSet<ChatLog> ChatLogs { get; set; }
         public virtual DbSet<DiscordUser> DiscordUsers { get; set; }
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
-        public virtual DbSet<hunt_bossdrops> hunt_bossdrops { get; set; }
-        public virtual DbSet<hunt_bosses> hunt_bosses { get; set; }
-        public virtual DbSet<hunt_team_drops> hunt_team_drops { get; set; }
-        public virtual DbSet<hunt_team_members> hunt_team_members { get; set; }
-        public virtual DbSet<hunt_teams> hunt_teams { get; set; }
         public virtual DbSet<PlayerPet> PlayerPets { get; set; }
-        public virtual DbSet<PointMutation> PointMutations { get; set; }
-        public virtual DbSet<PointStore> PointStores { get; set; }
+        public virtual DbSet<Rank> Ranks { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RunescapeAccount> RunescapeAccounts { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }
         public virtual DbSet<Toggle> Toggles { get; set; }
-        public virtual DbSet<Role> Roles { get; set; }
-        public virtual DbSet<BingoCard> BingoCards { get; set; }
-        public virtual DbSet<BingoCardSlot> BingoCardSlots { get; set; }
-        public virtual DbSet<BingoEvent> BingoEvents { get; set; }
-        public virtual DbSet<BingoTeam> BingoTeams { get; set; }
-        public virtual DbSet<BingoTeamCard> BingoTeamCards { get; set; }
-        public virtual DbSet<BingoTeamCardSlot> BingoTeamCardSlots { get; set; }
-        public virtual DbSet<BingoTeamMember> BingoTeamMembers { get; set; }
     }
 }

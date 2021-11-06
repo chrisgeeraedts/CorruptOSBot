@@ -249,7 +249,6 @@
     <Compile Include="Modules\PVMModule.cs" />
     <Compile Include="Modules\RSNModule.cs" />
     <Compile Include="Modules\ScoreModule.cs" />
-    <Compile Include="Modules\TestModule.cs" />
     <Compile Include="Modules\WoMModule.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

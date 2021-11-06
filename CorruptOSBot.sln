@@ -5,17 +5,9 @@ VisualStudioVersion = 16.0.29123.88
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot", "CorruptOSBot\CorruptOSBot.csproj", "{B8029EA2-E30C-45AD-BB9F-87FE190B79CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.TheHunt", "CorruptOSBot.TheHunt\CorruptOSBot.TheHunt.csproj", "{3D8F8F2F-7E66-4152-8AD4-D13F1CF3D71D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.Test", "CorruptOSBot.Test\CorruptOSBot.Test.csproj", "{84E71D36-A0AB-4501-8BE1-34ADD9563306}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.Shared", "CorruptOSBot.Shared\CorruptOSBot.Shared.csproj", "{9AFB3B35-746E-410A-9C29-2BC53B2A2011}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.Data", "CorruptOSBot.Data\CorruptOSBot.Data.csproj", "{E81CE2F6-084A-4F67-9947-EAF88639DC0C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.CorruptPoints", "CorruptOSBot.CorruptPoints\CorruptOSBot.CorruptPoints.csproj", "{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CorruptOSBot.Bingo", "CorruptOSBot.Bingo\CorruptOSBot.Bingo.csproj", "{DA38D312-814E-4396-AD5A-D023825CD8B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,14 +19,6 @@ Global
 		{B8029EA2-E30C-45AD-BB9F-87FE190B79CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8029EA2-E30C-45AD-BB9F-87FE190B79CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8029EA2-E30C-45AD-BB9F-87FE190B79CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3D8F8F2F-7E66-4152-8AD4-D13F1CF3D71D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3D8F8F2F-7E66-4152-8AD4-D13F1CF3D71D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3D8F8F2F-7E66-4152-8AD4-D13F1CF3D71D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3D8F8F2F-7E66-4152-8AD4-D13F1CF3D71D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{84E71D36-A0AB-4501-8BE1-34ADD9563306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84E71D36-A0AB-4501-8BE1-34ADD9563306}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84E71D36-A0AB-4501-8BE1-34ADD9563306}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84E71D36-A0AB-4501-8BE1-34ADD9563306}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9AFB3B35-746E-410A-9C29-2BC53B2A2011}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9AFB3B35-746E-410A-9C29-2BC53B2A2011}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AFB3B35-746E-410A-9C29-2BC53B2A2011}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -43,14 +27,6 @@ Global
 		{E81CE2F6-084A-4F67-9947-EAF88639DC0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E81CE2F6-084A-4F67-9947-EAF88639DC0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E81CE2F6-084A-4F67-9947-EAF88639DC0C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BAFCAD70-41D3-43D8-96FA-D930B1751B8F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA38D312-814E-4396-AD5A-D023825CD8B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA38D312-814E-4396-AD5A-D023825CD8B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA38D312-814E-4396-AD5A-D023825CD8B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA38D312-814E-4396-AD5A-D023825CD8B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

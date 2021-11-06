@@ -83,9 +83,7 @@ namespace CorruptOSBot.Modules
         [Summary("!refreshtopbosskc - Regenerates the Top Clan KC list")]
         public async Task SayRefreshTopKcAsync()
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "top-boss-kc", Context.User) &&
-                RoleHelper.HasRole(Context.User, Context.Guild, 3) && //bot staff
-                ToggleStateManager.GetToggleState(nameof(TopKCService)))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "top-boss-kc", Context.User) && ToggleStateManager.GetToggleState(nameof(TopKCService)))
             {
                 // find current channel
                 var channel = await ((IGuild)Context.Guild).GetChannelAsync(ChannelHelper.GetChannelId("top-boss-kc")) as SocketTextChannel;

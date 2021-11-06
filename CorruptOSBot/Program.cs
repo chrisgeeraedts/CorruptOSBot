@@ -1,29 +1,29 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using CorruptOSBot.Events;
+using CorruptOSBot.Extensions.WOM;
+using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
+using CorruptOSBot.Helpers.Discord;
+using CorruptOSBot.Modules;
+using CorruptOSBot.Services;
+using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using CorruptOSBot.Modules;
-using CorruptOSBot.Events;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
-using CorruptOSBot.Helpers;
-using CorruptOSBot.Services;
-using CorruptOSBot.Extensions.WOM;
-using CorruptOSBot.Helpers.Discord;
-using CorruptOSBot.Helpers.Bot;
-using CorruptOSBot.Shared.Helpers.Bot;
-using CorruptOSBot.Shared;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace CorruptOSBot
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            // Call the Program constructor, followed by the 
+            // Call the Program constructor, followed by the
             // MainAsync method and wait until it finishes (which should be never).
             new Program().MainAsync().GetAwaiter().GetResult();
         }
@@ -32,18 +32,17 @@ namespace CorruptOSBot
 
         public static DateTime OnlineFrom { get; set; }
 
-
         // Keep the CommandService and DI container around for use with commands.
         // These two types require you install the Discord.Net.Commands package.
         private readonly CommandService _commands;
+
         private readonly IServiceProvider _services;
         private readonly Dictionary<ulong, Func<SocketMessage, Discord.IDiscordClient, Task>> _channelInterceptors;
         private List<IService> _activeServices;
 
-
         private Program()
         {
-            OnlineFrom = DateTime.Now;  
+            OnlineFrom = DateTime.Now;
 
             _client = new DiscordSocketClient(new DiscordSocketConfig
             {
@@ -83,57 +82,30 @@ namespace CorruptOSBot
             _channelInterceptors = ConfigureChannelInterceptors();
 
             _activeServices = ConfigureActiveServices();
-
-        }
-
-        private void LoadAdditionalModules()
-        {
-            //TODO: Do something cool with reflection loading later
-
-            //The hunt logic
-            //if (ToggleStateManager.GetToggleState("hunt-toggle"))
-            //{
-            //    //TheHunt.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
-            //    //Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", ModuleInjector.Title)));
-            //}
-
-            //The point logic
-            //if (ToggleStateManager.GetToggleState("point-toggle"))
-            //{
-            //    CorruptPoints.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
-            //    Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", CorruptPoints.ModuleInjector.Title)));
-            //}
-
-            //The bingo logic
-            //if (ToggleStateManager.GetToggleState("bingo-toggle"))
-            //{
-            //    Bingo.ModuleInjector.Inject(_channelInterceptors, _services, _commands);
-            //    Log(new LogMessage(LogSeverity.Info, "Modules", string.Format("Loaded Module: {0}", Bingo.ModuleInjector.Title)));
-            //}
         }
 
         private List<IService> ConfigureActiveServices()
         {
-            var result = new List<IService>();
-
-            result.Add(new PVMRoleService(_client));
-            result.Add(new AchievementService(_client));
-            result.Add(new TopKCService(_client));
-            result.Add(new HeartbeatService(_client));
+            var result = new List<IService>
+            {
+                new PVMRoleService(_client),
+                new AchievementService(_client),
+                new TopKCService(_client),
+                new HeartbeatService(_client)
+            };
 
             return result;
         }
 
-
         // If any services require the client, or the CommandService, or something else you keep on hand,
-    // pass them as parameters into this method as needed.
-    // If this method is getting pretty long, you can seperate it out into another file using partials.
+        // pass them as parameters into this method as needed.
+        // If this method is getting pretty long, you can seperate it out into another file using partials.
         private static IServiceProvider ConfigureServices()
         {
             var map = new ServiceCollection();
-                // Repeat this for all the service classes
-                // and other dependencies that your commands might need.
-                //.AddSingleton(new SomeServiceClass());
+            // Repeat this for all the service classes
+            // and other dependencies that your commands might need.
+            //.AddSingleton(new SomeServiceClass());
 
             // When all your required services are in the collection, build the container.
             // Tip: There's an overload taking in a 'validateScopes' bool to make sure
@@ -151,13 +123,13 @@ namespace CorruptOSBot
         private async Task MainAsync()
         {
             // Centralize the logic for commands into a separate method.
-            
+
             await InitCommands();
 
             RootAdminManager.Init();
 
             // Login and connect.
-            if (!ConfigHelper.DEBUG)
+            if (!ConfigHelper.IsDebugMode)
             {
                 await _client.LoginAsync(TokenType.Bot, ConfigHelper.GetSettingProperty("DiscordToken"));
             }
@@ -169,12 +141,10 @@ namespace CorruptOSBot
             await _client.StartAsync();
 
             //ReactionManager.Init();
-            
+
             await LoadMemoryCache();
 
             await StartServiceThreads(_client);
-
-            LoadAdditionalModules();
 
             foreach (var item in ToggleStateManager.GetToggleStates().OrderBy(X => X.Type).ThenBy(x => x.Functionality))
             {
@@ -187,7 +157,7 @@ namespace CorruptOSBot
 
         private async Task LoadMemoryCache()
         {
-            if (!ConfigHelper.DEBUG)
+            if (!ConfigHelper.IsDebugMode)
             {
                 await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
                 await WOMMemoryCache.UpdateClan(WOMMemoryCache.OneHourMS);
@@ -195,27 +165,26 @@ namespace CorruptOSBot
         }
 
 #pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+
         private async Task StartServiceThreads(DiscordSocketClient client)
 #pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            
             foreach (var _activeService in _activeServices)
             {
                 new Thread(() =>
                 {
-                    while(true)
+                    while (true)
                     {
                         Thread.Sleep(_activeService.BeforeTriggerTimeInMS);
 
                         Thread.CurrentThread.IsBackground = true;
-                        if (!ConfigHelper.DEBUG)
+                        if (!ConfigHelper.IsDebugMode)
                         {
                             _activeService.Trigger(client);
                         }
 
                         Thread.Sleep(_activeService.TriggerTimeInMS);
                     }
-                    
                 }).Start();
             }
         }
@@ -229,16 +198,15 @@ namespace CorruptOSBot
             return result;
         }
 
-
-        private void AddToChannelInterceptorDictionary(string channelName, 
-            Func<SocketMessage, Discord.IDiscordClient, Task> func, 
+        private void AddToChannelInterceptorDictionary(string channelName,
+            Func<SocketMessage, Discord.IDiscordClient, Task> func,
             Dictionary<ulong, Func<SocketMessage, Discord.IDiscordClient, Task>> dictionaryToAddTo)
         {
             var channelId = ChannelHelper.GetChannelId(channelName);
             if (channelId != 0)
             {
                 dictionaryToAddTo.Add(channelId, func);
-            }           
+            }
         }
 
         private async Task InitCommands()
@@ -248,7 +216,6 @@ namespace CorruptOSBot
             // You also need to pass your 'IServiceProvider' instance now,
             // so make sure that's done before you get here.
             //await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-
 
             // Or add Modules manually if you prefer to be a little more explicit:
             await _commands.AddModuleAsync<AdminModule>(_services);
@@ -263,12 +230,10 @@ namespace CorruptOSBot
             await _commands.AddModuleAsync<PromotionModule>(_services);
             await _commands.AddModuleAsync<CalendarModule>(_services);
 
-            await _commands.AddModuleAsync<TestModule>(_services);
-
             // Note that the first one is 'Modules' (plural) and the second is 'Module' (singular).
 
             // Subscribe a handler to see if a message invokes a command.
-            _client.MessageReceived += HandleCommandAsync;            
+            _client.MessageReceived += HandleCommandAsync;
             _client.UserJoined += _client_UserJoined;
             _client.UserLeft += _client_UserLeft;
             _client.UserBanned += _client_UserBanned;
@@ -276,20 +241,16 @@ namespace CorruptOSBot
             _client.CurrentUserUpdated += _client_CurrentUserUpdated;
         }
 
-
-
         private async Task _client_CurrentUserUpdated(SocketSelfUser arg1, SocketSelfUser arg2)
         {
-            await Program.Log(new LogMessage(LogSeverity.Info, "Users", "_client_CurrentUserUpdated"));
+            await Log(new LogMessage(LogSeverity.Info, "Users", "_client_CurrentUserUpdated"));
         }
-
-
 
         private async Task _client_ReactionAdded(Cacheable<IUserMessage, ulong> arg1, ISocketMessageChannel arg2, SocketReaction arg3)
         {
             //Console.WriteLine(string.Format("Reaction: {0}: {1} [{2}]", arg3.Emote.Name, arg3.Emote.ToString(), ((Discord.Emote)arg3.Emote).Id));
 
-            await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("Reaction: {0}: {1}", arg3.Emote.Name, arg3.Emote.ToString())));
+            await Log(new LogMessage(LogSeverity.Info, "Users", string.Format("Reaction: {0}: {1}", arg3.Emote.Name, arg3.Emote.ToString())));
 
             //await ReactionManager.ReactionPosted(_client, arg1, arg2, arg3);
         }
@@ -298,7 +259,7 @@ namespace CorruptOSBot
         {
             if (ToggleStateManager.GetToggleState(Constants.EventUserJoined))
             {
-                await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User joined: {0}", arg.Username)));
+                await Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User joined: {0}", arg.Username)));
                 await EventManager.JoinedGuild(arg);
             }
         }
@@ -308,7 +269,7 @@ namespace CorruptOSBot
             if (ToggleStateManager.GetToggleState(Constants.EventUserLeft))
             {
                 if (arg.IsBot || arg.IsWebhook) return;
-                await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User left: {0}", arg.Username)));
+                await Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User left: {0}", arg.Username)));
                 await EventManager.LeavingGuild(arg);
             }
         }
@@ -317,8 +278,7 @@ namespace CorruptOSBot
         {
             if (ToggleStateManager.GetToggleState(Constants.EventUserBanned))
             {
-                await Program.Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User banned: {0}", arg1.Username)));
-                
+                await Log(new LogMessage(LogSeverity.Info, "Users", string.Format("User banned: {0}", arg1.Username)));
                 await EventManager.BannedFromGuild(arg1, arg2);
             }
         }
@@ -338,14 +298,11 @@ namespace CorruptOSBot
 
             try
             {
-                Program.ChatLog(arg);
+                ChatLog(arg);
             }
             catch (Exception e)
             {
-                await Program.Log(new LogMessage(LogSeverity.Error,
-                   "chatlog",
-                   e.Message,
-                   e));
+                await Log(new LogMessage(LogSeverity.Error, "chatlog", e.Message, e));
             }
 
             // check for channels, if its for a targeted channel, intercept
@@ -364,11 +321,10 @@ namespace CorruptOSBot
                 // commands to be invoked by mentioning the bot instead.
                 if (msg.HasCharPrefix('!', ref pos) /* || msg.HasMentionPrefix(_client.CurrentUser, ref pos) */)
                 {
-
                     // Create a Command Context.
                     var context = new SocketCommandContext(_client, msg);
 
-                    // Execute the command. (result does not indicate a return value, 
+                    // Execute the command. (result does not indicate a return value,
                     // rather an object stating if the command executed successfully).
                     var result = await _commands.ExecuteAsync(context, pos, _services);
 
@@ -377,14 +333,16 @@ namespace CorruptOSBot
                     // This does not catch errors from commands with 'RunMode.Async',
                     // subscribe a handler for '_commands.CommandExecuted' to see those.
                     if (!result.IsSuccess && result.Error != CommandError.UnknownCommand)
+                    {
                         await LogHelper.Log(new LogMessage(LogSeverity.Error, msg.Content, result.ErrorReason));
+                    }
                 }
             }
         }
 
         private async Task BlockMessageIfDebugMode(SocketUserMessage msg)
         {
-            if (ConfigHelper.DEBUG && msg.Author.Id != 108710294049542144) //GMKirby Discord Id
+            if (ConfigHelper.IsDebugMode && msg.Author.Id != 108710294049542144) //GMKirby Discord Id
             {
                 //block!
                 var context = new SocketCommandContext(_client, msg);

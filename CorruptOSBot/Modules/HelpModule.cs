@@ -41,9 +41,7 @@ namespace CorruptOSBot.Modules
 
         private Dictionary<string, string> GetCommandsToShowInHelp(SocketUser user, SocketGuild guild)
         {
-            var isDev = RoleHelper.HasRole(user, guild, 3); //bot staff
             var isStaff = RoleHelper.HasStaffOrModOrOwnerRole(user, guild);
-
             var isMember = RoleHelper.IsMember(user, guild);
 
             List<string> blackListedCommands = new List<string>();
@@ -55,15 +53,15 @@ namespace CorruptOSBot.Modules
             {
                 if (!blackListedCommands.Contains(command.Key))
                 {
-                    if (command.Value.HelpGroup == HelpGroup.Admin && (isDev))
+                    if (command.Value.HelpGroup == HelpGroup.Admin)
                     {
                         result.Add(command.Key, command.Value.Name);
                     }
-                    if (command.Value.HelpGroup == HelpGroup.Staff && (isStaff || isDev))
+                    if (command.Value.HelpGroup == HelpGroup.Staff && isStaff)
                     {
                         result.Add(command.Key, command.Value.Name);
                     }
-                    if (command.Value.HelpGroup == HelpGroup.Member && (isMember || isStaff || isDev))
+                    if (command.Value.HelpGroup == HelpGroup.Member && (isMember || isStaff))
                     {
                         result.Add(command.Key, command.Value.Name);
                     }
