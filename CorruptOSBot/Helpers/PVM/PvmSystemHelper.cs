@@ -14,9 +14,9 @@ namespace CorruptOSBot.Helpers.PVM
         private static int advancedRole = 250;
         internal static async Task CheckAndUpdateAccountAsync(IGuildUser currentUser, IGuild guild, int kills, PvmSet pvmSet, bool message, bool overrideTrigger)
         {
-            var learnerRole = guild.Roles.FirstOrDefault(x => x.Name == pvmSet.learner);
-            var IntermediateRoleId = guild.Roles.FirstOrDefault(x => x.Name == pvmSet.intermediate);
-            var AdvancedRoleId = guild.Roles.FirstOrDefault(x => x.Name == pvmSet.advanced);
+            var learnerRole = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == pvmSet.learner.ToLower());
+            var IntermediateRoleId = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == pvmSet.intermediate.ToLower());
+            var AdvancedRoleId = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == pvmSet.advanced.ToLower());
 
             var haslearnerRole = currentUser.RoleIds.Any(x => x == learnerRole.Id);
             var hasIntermediate = currentUser.RoleIds.Any(x => x == IntermediateRoleId.Id);
@@ -65,7 +65,7 @@ namespace CorruptOSBot.Helpers.PVM
 
         internal static async Task CheckAndUpdateAccountCMAsync(IGuildUser currentUser, IGuild guild, int kills, PvmSetCM pvmSet, bool message, bool overrideTrigger)
         {
-            var roleId = guild.Roles.FirstOrDefault(x => x.Name == pvmSet.role);
+            var roleId = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == pvmSet.role.ToLower());
 
             var hasRole = currentUser.RoleIds.Any(x => x == roleId.Id);
 
@@ -96,7 +96,7 @@ namespace CorruptOSBot.Helpers.PVM
 
         internal static async Task CheckAndUpdateAccountNoKCAsync(IGuildUser currentUser, IGuild guild, PvmSetCM pvmSet, bool message, bool overrideTrigger)
         {
-            var roleId = guild.Roles.FirstOrDefault(x => x.Name == pvmSet.role);
+            var roleId = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == pvmSet.role.ToLower());
 
             var hasRole = currentUser.RoleIds.Any(x => x == roleId.Id);
 
@@ -135,7 +135,7 @@ namespace CorruptOSBot.Helpers.PVM
         {
             try
             {
-                var role = guild.Roles.FirstOrDefault(x => x.Name == roleName);
+                var role = guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
                 await currentUser.AddRoleAsync(role);
                 await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Updated role for:" + DiscordNameHelper.GetAccountNameOrNickname(currentUser)));
                 if (showMessage)
