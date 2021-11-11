@@ -140,15 +140,15 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Admin)]
         [Command("clear")]
-        [Summary("!clear {number} - Clears posts above it. (max 100)")]
+        [Summary("!clear {number} - Clears posts above it. (max 10)")]
         public async Task SayClearAsync(int number)
         {
             if (ToggleStateManager.GetToggleState("clear", Context.User))
             {
                 // max it
-                if (number > 100)
+                if (number > 10)
                 {
-                    number = 100;
+                    number = 10;
                 }
 
                 var messages = await Context.Channel.GetMessagesAsync(number + 1).FlattenAsync();
