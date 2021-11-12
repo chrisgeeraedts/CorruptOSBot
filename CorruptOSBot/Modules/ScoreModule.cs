@@ -115,7 +115,7 @@ namespace CorruptOSBot.Modules
         [Summary("!endscore {compId}(optional) - Generates a leaderboard for the last completed event (or for the given CompId event). (Only allowed in **leaderboard**)")]
         public async Task SayEndScoreAsync()
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "leaderboard", Context.User))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "event-leaderboard", Context.User))
             {
                 if (ToggleStateManager.GetToggleState("endscore", Context.User) && RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
                 {
@@ -158,7 +158,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!endscore", "leaderboard");
+                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!endscore", "event-leaderboard");
             }
 
             // delete the command posted

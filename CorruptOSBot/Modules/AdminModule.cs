@@ -453,6 +453,17 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Admin)]
+        [Command("post", false)]
+        [Summary("!post {message} - posts message contents from the bot")]
+        public async Task PostMessage([Remainder]string message)
+        {
+            await Context.Channel.SendMessageAsync(message);
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Admin)]
         [Command("add-points", false)]
         [Summary("!add-points {username} - gives specified member the specified points")]
         public async Task AddPoints(string username, int points)
