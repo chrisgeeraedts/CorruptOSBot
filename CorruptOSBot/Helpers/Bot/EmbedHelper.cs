@@ -159,6 +159,7 @@ namespace CorruptOSBot.Helpers.Bot
             return null;
         }
 
+
         public static async Task<Embed> CreateFullLeaderboardEmbed(int triggerTimeInMS)
         {
             // connect the kcs per boss
@@ -226,6 +227,92 @@ namespace CorruptOSBot.Helpers.Bot
 
             }
             builder.AddField("\u200b", sb3.ToString(), true);
+        }
+
+        public static Embed CreateWOMEmbedSotw()
+        {
+            var client = new WiseOldManClient();
+            var clanId = ConfigHelper.GetSettingProperty("WOMClanId");
+
+            var clan = client.GetClan();
+
+            if (clan != null)
+            {
+                var comps = new WiseOldManClient().GetClanCompetitions();
+
+                // Filter on comps that have started and arent finished yet
+                var f1 = comps.Where(x =>
+                x.startsAt < DateTime.Now &&
+                x.endsAt > DateTime.Now);
+                // 12-04-2021 < 13-04-2021   ==> TRUE
+                // 17-04-2021 > 13-04-2021   ==> TRUE
+
+                if (f1.Any())
+                {
+                    // get the last one in that list
+                    var f2 = f1.OrderBy(x => x.id).First();
+
+                    // get details of this comp
+                    CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
+
+                    // create embed with data
+                    var embedBuilder = new EmbedBuilder();
+                    embedBuilder.Color = Color.Green;
+                    embedBuilder.Title = f2.title;
+                    embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
+                    string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
+                    embedBuilder.Description = string.Format("**Total XP: {0}**", s);
+                    embedBuilder.WithFooter(string.Format("Event runs from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
+                    embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
+                    embedBuilder.ThumbnailUrl = GetImage(f2.metric);
+
+                    AddFields(embedBuilder, detailedComp.participants);
+
+                    return embedBuilder.Build();
+                }
+                return null;
+            }
+            return null;
+        }
+        private static string GetImage(string metric)
+        {
+            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+            {
+                var skill = corruptosEntities.Skills.FirstOrDefault(x => x.Name.ToLower() == metric.ToLower());
+                if (skill != null && !string.IsNullOrEmpty(skill.Image))
+                {
+                    return skill.Image;
+                }
+            }
+            return "https://www.pngkey.com/png/full/406-4068714_free-icon-score-high-score-icon-png.png";
+        }
+
+        private static void AddFields(EmbedBuilder embedBuilder, List<Participant> participants)
+        {
+            var orderedParticipants = participants.OrderByDescending(x => x.progress.gained).ToList();
+
+            if (orderedParticipants.Count > 0)
+            {
+                AddField(embedBuilder, "\U0001f947", participants[0].displayName, participants[0].progress.gained);
+            }
+            if (orderedParticipants.Count > 1)
+            {
+                AddField(embedBuilder, "\U0001f948", participants[1].displayName, participants[1].progress.gained);
+            }
+            if (orderedParticipants.Count > 2)
+            {
+                AddField(embedBuilder, "\U0001f949", participants[2].displayName, participants[2].progress.gained);
+            }
+        }
+
+        private static void AddField(EmbedBuilder embedBuilder, string icon, string player, double score)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine(icon);
+            sb.AppendLine(string.Format("**{0}**", player));
+            string s = score >= 10000 ? Convert.ToInt32(score).ToString("n0") : Convert.ToInt32(score).ToString("d");
+            sb.AppendLine(s);
+            embedBuilder.AddField("\u200b", sb.ToString(), true);
         }
     }
 }

@@ -91,7 +91,8 @@ namespace CorruptOSBot
                 new PVMRoleService(_client),
                 new AchievementService(_client),
                 new TopKCService(_client),
-                new HeartbeatService(_client)
+                new HeartbeatService(_client),
+                new SotWService(_client)
             };
 
             return result;
@@ -342,7 +343,7 @@ namespace CorruptOSBot
 
         private async Task BlockMessageIfDebugMode(SocketUserMessage msg)
         {
-            if (ConfigHelper.IsDebugMode && msg.Author.Id != 108710294049542144) //GMKirby Discord Id
+            if (ConfigHelper.IsDebugMode)
             {
                 //block!
                 var context = new SocketCommandContext(_client, msg);
