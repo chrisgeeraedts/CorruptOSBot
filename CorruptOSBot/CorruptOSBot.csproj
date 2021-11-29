@@ -258,6 +258,7 @@
     <Compile Include="Services\PVMRoles\PVMRoleService.cs" />
     <Compile Include="Helpers\PVM\KcPlayer.cs" />
     <Compile Include="Helpers\PVM\KcTopList.cs" />
+    <Compile Include="Services\SotW\SotWService.cs" />
     <Compile Include="Services\TopKc\TopKCService.cs" />
   </ItemGroup>
   <ItemGroup>
