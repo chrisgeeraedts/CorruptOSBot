@@ -188,6 +188,46 @@ namespace CorruptOSBot.Extensions
             return foundClanMembers;
         }
 
+        public Boolean UpdateAllParticipants()
+        {
+            List<Competition> Competetions = GetClanCompetitions();
+
+            var CompList = Competetions.Where(x =>
+            x.startsAt < DateTime.Now &&
+            x.endsAt > DateTime.Now);
+
+            if (CompList.Any())
+            {
+                var CurrentComp = CompList.OrderBy(x => x.id).First();
+
+                var content = JsonConvert.SerializeObject(new Root()
+                {
+                    verificationCode = verificationCode
+                });
+
+                HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+
+                Program.Log(new LogMessage(LogSeverity.Info, "CompId", CurrentComp.id.ToString()));
+
+                HttpResponseMessage response = client.PostAsync(path + string.Format("/competitions/{0}/update-all", CurrentComp.id), c).Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Program.Log(new LogMessage(LogSeverity.Info, "UpdateAllParticipants", "Update Call Success"));
+                    return true;
+                }
+                else 
+                {
+                    Program.Log(new LogMessage(LogSeverity.Info, "UpdateAllParticipants", "Update Call Failed."));
+                }
+            } 
+            else
+            {
+                Program.Log(new LogMessage(LogSeverity.Info, "UpdateAllParticipants", "No active event is running at this moment."));
+            }
+            return false;
+        }
+
         //public List<Achievement> GetAchievements(int id)
         //{
         //    List<Achievement> achievements = null;
