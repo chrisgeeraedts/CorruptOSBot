@@ -241,30 +241,30 @@ namespace CorruptOSBot.Helpers.Bot
                 var comps = new WiseOldManClient().GetClanCompetitions();
 
                 // Filter on comps that have started and arent finished yet
-                var f1 = comps.Where(x =>
+                var CompList = comps.Where(x =>
                 x.startsAt < DateTime.Now &&
                 x.endsAt > DateTime.Now);
                 // 12-04-2021 < 13-04-2021   ==> TRUE
                 // 17-04-2021 > 13-04-2021   ==> TRUE
 
-                if (f1.Any())
+                if (CompList.Any())
                 {
                     // get the last one in that list
-                    var f2 = f1.OrderBy(x => x.id).First();
+                    var CurrentComp = CompList.OrderBy(x => x.id).First();
 
                     // get details of this comp
-                    CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
+                    CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(CurrentComp.id);
 
                     // create embed with data
                     var embedBuilder = new EmbedBuilder();
                     embedBuilder.Color = Color.Green;
-                    embedBuilder.Title = f2.title;
-                    embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id);
+                    embedBuilder.Title = CurrentComp.title;
+                    embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", CurrentComp.id);
                     string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
                     embedBuilder.Description = string.Format("**Total XP: {0}**", s);
                     embedBuilder.WithFooter(string.Format("Event runs from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
                     embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
-                    embedBuilder.ThumbnailUrl = GetImage(f2.metric);
+                    embedBuilder.ThumbnailUrl = GetImage(CurrentComp.metric);
 
                     AddFields(embedBuilder, detailedComp.participants);
 
