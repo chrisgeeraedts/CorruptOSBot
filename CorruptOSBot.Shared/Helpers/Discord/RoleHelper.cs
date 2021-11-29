@@ -32,17 +32,14 @@ namespace CorruptOSBot.Shared.Helpers.Discord
         public static bool IsMember(SocketUser user, SocketGuild guild)
         {
             var roles = GetRoles();
+            var result = false;
 
-            return HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 7)) ||  //Rank 1
-            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 8)) ||  //Rank 2
-            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 9)) ||  //Rank 3
-            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 10)) || //Rank 4
-            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 11)) || //Rank 5
-            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 12)) || //Rank 6
-            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 14)) || //SOTW
-            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 15)) || //BOTW
-            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 17)) || //Rank 10
-            HasRole(user, guild, roles.FirstOrDefault(x => x.Id == 18));   //Rank 7
+            for (var i = 1; i < 16; i++)
+            {
+                result = HasRole(user, guild, roles.FirstOrDefault(x => x.Id == i));
+            }
+
+            return result;
         }
 
         public static bool HasStaffOrModOrOwnerRole(IGuildUser user, IGuild guild)

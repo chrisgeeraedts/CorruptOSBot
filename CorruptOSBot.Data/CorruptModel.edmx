@@ -74,7 +74,7 @@
           <Property Name="BlacklistedForPromotion" Type="bit" Nullable="false" />
           <Property Name="LeavingDate" Type="datetime" />
           <Property Name="Points" Type="int" Nullable="false" />
-          <Property Name="RankId" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ErrorLogs">
           <Key>
@@ -97,15 +97,6 @@
           <Property Name="RunescapeAccountId" Type="int" />
           <Property Name="LevelOrKcGotten" Type="int" />
         </EntityType>
-        <EntityType Name="Ranks">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Icon" Type="nvarchar(max)" />
-          <Property Name="PointsNeeded" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Roles">
           <Key>
             <PropertyRef Name="Id" />
@@ -113,10 +104,11 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="DiscordRoleId" Type="bigint" Nullable="false" />
-          <Property Name="DaysToReach" Type="int" Nullable="false" />
           <Property Name="CanUpgradeTo" Type="bit" Nullable="false" />
-          <Property Name="IconUrl" Type="nvarchar(max)" />
           <Property Name="IsStaff" Type="bit" Nullable="false" />
+          <Property Name="PointsToReach" Type="int" Nullable="false" />
+          <Property Name="MaximumPoints" Type="int" Nullable="false" />
+          <Property Name="IconUrl" Type="nvarchar(max)" />
           <Property Name="EmojiId" Type="bigint" />
         </EntityType>
         <EntityType Name="RunescapeAccounts">
@@ -183,15 +175,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DiscordUsers_Ranks">
-          <End Role="Ranks" Type="Self.Ranks" Multiplicity="1" />
+        <Association Name="FK_DiscordUsers_Roles">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="DiscordUsers" Type="Self.DiscordUsers" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Ranks">
+            <Principal Role="Roles">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="DiscordUsers">
-              <PropertyRef Name="RankId" />
+              <PropertyRef Name="RoleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -229,7 +221,6 @@
           <EntitySet Name="DiscordUsers" EntityType="Self.DiscordUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ErrorLogs" EntityType="Self.ErrorLogs" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PlayerPets" EntityType="Self.PlayerPets" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Ranks" EntityType="Self.Ranks" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RunescapeAccounts" EntityType="Self.RunescapeAccounts" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
@@ -246,8 +237,8 @@
             <End Role="DiscordUsers" EntitySet="DiscordUsers" />
             <End Role="RunescapeAccounts" EntitySet="RunescapeAccounts" />
           </AssociationSet>
-          <AssociationSet Name="FK_DiscordUsers_Ranks" Association="Self.FK_DiscordUsers_Ranks">
-            <End Role="Ranks" EntitySet="Ranks" />
+          <AssociationSet Name="FK_DiscordUsers_Roles" Association="Self.FK_DiscordUsers_Roles">
+            <End Role="Roles" EntitySet="Roles" />
             <End Role="DiscordUsers" EntitySet="DiscordUsers" />
           </AssociationSet>
           <AssociationSet Name="FK_RunescapeAccount" Association="Self.FK_RunescapeAccount">
@@ -273,7 +264,6 @@
           <EntitySet Name="DiscordUsers" EntityType="corruptosModel.DiscordUser" />
           <EntitySet Name="ErrorLogs" EntityType="corruptosModel.ErrorLog" />
           <EntitySet Name="PlayerPets" EntityType="corruptosModel.PlayerPet" />
-          <EntitySet Name="Ranks" EntityType="corruptosModel.Rank" />
           <EntitySet Name="Roles" EntityType="corruptosModel.Role" />
           <EntitySet Name="RunescapeAccounts" EntityType="corruptosModel.RunescapeAccount" />
           <EntitySet Name="Skills" EntityType="corruptosModel.Skill" />
@@ -290,8 +280,8 @@
             <End Role="DiscordUser" EntitySet="DiscordUsers" />
             <End Role="RunescapeAccount" EntitySet="RunescapeAccounts" />
           </AssociationSet>
-          <AssociationSet Name="FK_DiscordUsers_Ranks" Association="corruptosModel.FK_DiscordUsers_Ranks">
-            <End Role="Rank" EntitySet="Ranks" />
+          <AssociationSet Name="FK_DiscordUsers_Roles" Association="corruptosModel.FK_DiscordUsers_Roles">
+            <End Role="Role" EntitySet="Roles" />
             <End Role="DiscordUser" EntitySet="DiscordUsers" />
           </AssociationSet>
           <AssociationSet Name="FK_RunescapeAccount" Association="corruptosModel.FK_RunescapeAccount">
@@ -374,9 +364,9 @@
           <Property Name="BlacklistedForPromotion" Type="Boolean" Nullable="false" />
           <Property Name="LeavingDate" Type="DateTime" Precision="3" />
           <Property Name="Points" Type="Int32" Nullable="false" />
-          <Property Name="RankId" Type="Int32" Nullable="false" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="RunescapeAccounts" Relationship="corruptosModel.FK_DiscordUser" FromRole="DiscordUser" ToRole="RunescapeAccount" />
-          <NavigationProperty Name="Rank" Relationship="corruptosModel.FK_DiscordUsers_Ranks" FromRole="DiscordUser" ToRole="Rank" />
+          <NavigationProperty Name="Role" Relationship="corruptosModel.FK_DiscordUsers_Roles" FromRole="DiscordUser" ToRole="Role" />
         </EntityType>
         <EntityType Name="ErrorLog">
           <Key>
@@ -403,16 +393,6 @@
           <NavigationProperty Name="RunescapeAccount" Relationship="corruptosModel.FK_RunescapeAccount" FromRole="PlayerPet" ToRole="RunescapeAccount" />
           <NavigationProperty Name="Skill" Relationship="corruptosModel.FK_Skill" FromRole="PlayerPet" ToRole="Skill" />
         </EntityType>
-        <EntityType Name="Rank">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Icon" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PointsNeeded" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="DiscordUsers" Relationship="corruptosModel.FK_DiscordUsers_Ranks" FromRole="Rank" ToRole="DiscordUser" />
-        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="Id" />
@@ -420,11 +400,13 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DiscordRoleId" Type="Int64" Nullable="false" />
-          <Property Name="DaysToReach" Type="Int32" Nullable="false" />
           <Property Name="CanUpgradeTo" Type="Boolean" Nullable="false" />
-          <Property Name="IconUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsStaff" Type="Boolean" Nullable="false" />
+          <Property Name="PointsToReach" Type="Int32" Nullable="false" />
+          <Property Name="MaximumPoints" Type="Int32" Nullable="false" />
+          <Property Name="IconUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="EmojiId" Type="Int64" />
+          <NavigationProperty Name="DiscordUsers" Relationship="corruptosModel.FK_DiscordUsers_Roles" FromRole="Role" ToRole="DiscordUser" />
         </EntityType>
         <EntityType Name="RunescapeAccount">
           <Key>
@@ -493,15 +475,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_DiscordUsers_Ranks">
-          <End Type="corruptosModel.Rank" Role="Rank" Multiplicity="1" />
+        <Association Name="FK_DiscordUsers_Roles">
+          <End Type="corruptosModel.Role" Role="Role" Multiplicity="1" />
           <End Type="corruptosModel.DiscordUser" Role="DiscordUser" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Rank">
+            <Principal Role="Role">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="DiscordUser">
-              <PropertyRef Name="RankId" />
+              <PropertyRef Name="RoleId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -602,7 +584,7 @@
           <EntitySetMapping Name="DiscordUsers">
             <EntityTypeMapping TypeName="corruptosModel.DiscordUser">
               <MappingFragment StoreEntitySet="DiscordUsers">
-                <ScalarProperty Name="RankId" ColumnName="RankId" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="Points" ColumnName="Points" />
                 <ScalarProperty Name="LeavingDate" ColumnName="LeavingDate" />
                 <ScalarProperty Name="BlacklistedForPromotion" ColumnName="BlacklistedForPromotion" />
@@ -636,24 +618,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Ranks">
-            <EntityTypeMapping TypeName="corruptosModel.Rank">
-              <MappingFragment StoreEntitySet="Ranks">
-                <ScalarProperty Name="PointsNeeded" ColumnName="PointsNeeded" />
-                <ScalarProperty Name="Icon" ColumnName="Icon" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="corruptosModel.Role">
               <MappingFragment StoreEntitySet="Roles">
                 <ScalarProperty Name="EmojiId" ColumnName="EmojiId" />
-                <ScalarProperty Name="IsStaff" ColumnName="IsStaff" />
                 <ScalarProperty Name="IconUrl" ColumnName="IconUrl" />
+                <ScalarProperty Name="MaximumPoints" ColumnName="MaximumPoints" />
+                <ScalarProperty Name="PointsToReach" ColumnName="PointsToReach" />
+                <ScalarProperty Name="IsStaff" ColumnName="IsStaff" />
                 <ScalarProperty Name="CanUpgradeTo" ColumnName="CanUpgradeTo" />
-                <ScalarProperty Name="DaysToReach" ColumnName="DaysToReach" />
                 <ScalarProperty Name="DiscordRoleId" ColumnName="DiscordRoleId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

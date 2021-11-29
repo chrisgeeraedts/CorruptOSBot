@@ -9,7 +9,6 @@ namespace CorruptOSBot.Extensions.WOM
 {
     public static partial class WOMMemoryCache
     {
-
         public static ClanCache Clan = new ClanCache();
         public static ClanMemberCache ClanMemberDetails = new ClanMemberCache();
 
@@ -25,8 +24,6 @@ namespace CorruptOSBot.Extensions.WOM
             var diffInMS = DateTime.Now.Subtract(datetime).TotalMilliseconds;
             return diffInMS > refreshIfAfterThisTimeInMs;
         }
-
-
 
         public static async Task UpdateClan(int refreshIfAfterThisTimeInMs)
         {
@@ -74,10 +71,8 @@ namespace CorruptOSBot.Extensions.WOM
             }
             catch (Exception e)
             {
-
                 await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating clan: {0}", e)));
             }
-
         }
 
         public static async Task ForceUpdateClanMembers()
@@ -85,8 +80,6 @@ namespace CorruptOSBot.Extensions.WOM
             if (!Reloading)
             {
                 Reloading = true;
-
-
 
                 var WomClient = new WiseOldManClient();
                 await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Reloading memory Clanmembers cache")));
@@ -127,7 +120,6 @@ namespace CorruptOSBot.Extensions.WOM
                     Reloading = false;
                 }
             }
-
         }
 
         public static async Task ForceUpdateClanMember(int clanMemberId)
@@ -146,10 +138,8 @@ namespace CorruptOSBot.Extensions.WOM
             }
             catch (Exception e)
             {
-
-                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating single clanmember ({1}) {0}", e, clanMemberId))) ;
+                await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Failure updating single clanmember ({1}) {0}", e, clanMemberId)));
             }
-
         }
 
         public static async Task ForceUpdateClanMember(string clanMemberRsn)

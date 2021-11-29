@@ -5,7 +5,6 @@ using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,7 +73,6 @@ namespace CorruptOSBot.Modules
                                 nextComp.title, nextComp.startsAt, Convert.ToInt32(nextComp.startsAt.Subtract(DateTime.Now).TotalHours));
                             embedBuilder.ImageUrl = Constants.EventImage;
 
-
                             await ReplyAsync(embed: embedBuilder.Build());
                         }
                         else
@@ -90,24 +88,11 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!score", "event-general");               
+                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!score", "event-general");
             }
 
             // delete the command posted
             await Context.Message.DeleteAsync();
-        }
-
-        private string GetThumbnailImage(string metric)
-        {
-            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
-            {
-                var skill = corruptosEntities.Skills.FirstOrDefault(x => x.Name.ToLower() == metric.ToLower());
-                if (skill != null && !string.IsNullOrEmpty(skill.Image))
-                {
-                    return skill.Image;
-                }
-            }
-            return "https://www.pngkey.com/png/full/406-4068714_free-icon-score-high-score-icon-png.png";
         }
 
         [Helpgroup(HelpGroup.Staff)]
@@ -150,10 +135,8 @@ namespace CorruptOSBot.Modules
                             AddImage(embedBuilder, detailedComp.title);
 
                             await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
-
                         }
                     }
-                    
                 }
             }
             else
@@ -202,6 +185,19 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
+        private string GetThumbnailImage(string metric)
+        {
+            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+            {
+                var skill = corruptosEntities.Skills.FirstOrDefault(x => x.Name.ToLower() == metric.ToLower());
+                if (skill != null && !string.IsNullOrEmpty(skill.Image))
+                {
+                    return skill.Image;
+                }
+            }
+            return "https://www.pngkey.com/png/full/406-4068714_free-icon-score-high-score-icon-png.png";
+        }
+
         private void AddImage(EmbedBuilder embedBuilder, string title)
         {
             //var titleLower = title.ToLower();
@@ -244,5 +240,3 @@ namespace CorruptOSBot.Modules
         }
     }
 }
-
-

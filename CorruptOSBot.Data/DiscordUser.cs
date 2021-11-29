@@ -27,10 +27,10 @@ namespace CorruptOSBot.Data
         public bool BlacklistedForPromotion { get; set; }
         public Nullable<System.DateTime> LeavingDate { get; set; }
         public int Points { get; set; }
-        public int RankId { get; set; }
+        public int RoleId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RunescapeAccount> RunescapeAccounts { get; set; }
-        public virtual Rank Rank { get; set; }
+        public virtual Role Role { get; set; }
     }
 }

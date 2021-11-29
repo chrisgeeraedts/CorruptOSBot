@@ -401,7 +401,7 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Admin)]
         [Command("fullcompare")]
         [Summary("!fullcompare - compares discordusers and database discord users")]
-        public async Task SayCompar2eAsync()
+        public async Task SayCompare2Async()
         {
             if (ToggleStateManager.GetToggleState("compare", Context.User))
             {
@@ -455,7 +455,7 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Admin)]
         [Command("post", false)]
         [Summary("!post {message} - posts message contents from the bot")]
-        public async Task PostMessage([Remainder]string message)
+        public async Task PostMessage([Remainder] string message)
         {
             await Context.Channel.SendMessageAsync(message);
 
@@ -472,11 +472,134 @@ namespace CorruptOSBot.Modules
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
+                    var users = corruptosEntities.DiscordUsers.ToList();
+
                     var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
 
                     if (user != null)
                     {
-                        user.Points += points;
+                        var newPoints = user.Points += points;
+
+                        user.Points = newPoints;
+
+                        await UpdateDiscordUserRole(user, newPoints, corruptosEntities);
+
+                        await corruptosEntities.SaveChangesAsync();
+                    }
+                }
+            }
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Admin)]
+        [Command("sub-points", false)]
+        [Summary("!sub-points {username} - subtracts specified member the specified points")]
+        public async Task SubPoints(string username, int points)
+        {
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
+            {
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
+
+                    if (user != null)
+                    {
+                        var newPoints = user.Points -= points;
+
+                        if (newPoints < 0)
+                        {
+                            newPoints = 0;
+                        }
+
+                        user.Points = newPoints;
+
+                        await UpdateDiscordUserRole(user, newPoints, corruptosEntities);
+
+                        await corruptosEntities.SaveChangesAsync();
+                    }
+                }
+            }
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Admin)]
+        [Command("set-points", false)]
+        [Summary("!set-points {username} - sets specified member the specified points")]
+        public async Task SetPoints(string username, int points)
+        {
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
+            {
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
+
+                    if (user != null)
+                    {
+                        var newPoints = user.Points = points;
+                        user.Points = newPoints;
+
+                        await corruptosEntities.SaveChangesAsync();
+
+                        await UpdateDiscordUserRole(user, newPoints, corruptosEntities);
+                    }
+                }
+            }
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Admin)]
+        [Command("set-role", false)]
+        [Summary("!set-role {username} - sets specified member the specified role")]
+        public async Task SetRank(string username, int roleId)
+        {
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User))
+            {
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
+                    var role = corruptosEntities.Roles.FirstOrDefault(x => x.Id == roleId);
+
+                    if (user != null && role != null)
+                    {
+                        user.RoleId = role.Id;
+
+                        await corruptosEntities.SaveChangesAsync();
+                    }
+                }
+            }
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Admin)]
+        [Command("dev", false)]
+        [Summary("!dev - Dev command")]
+        public async Task Dev()
+        {
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) &&
+                (Context.User.Id == 108710294049542144 || Context.User.Id == 391595176314798090))
+            {
+                var womClanMembers = new WiseOldManClient().GetClanMembers();
+
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    var dbClanMembers = corruptosEntities.RunescapeAccounts.ToList();
+
+                    foreach (var member in dbClanMembers)
+                    {
+                        var womClanMember = womClanMembers.FirstOrDefault(item => item.displayName.ToLower() == member.rsn.ToLower());
+
+                        if (womClanMember != null)
+                        {
+                            member.account_type = womClanMember.type;
+                        }
                     }
 
                     await corruptosEntities.SaveChangesAsync();
@@ -485,6 +608,26 @@ namespace CorruptOSBot.Modules
 
             // delete the command posted
             await Context.Message.DeleteAsync();
+        }
+
+        private static async Task UpdateDiscordUserRole(DiscordUser user, int newPoints, CorruptModel corruptosEntities)
+        {
+            var roles = corruptosEntities.Roles.ToList();
+            var channels = corruptosEntities.Channels.ToList();
+
+            var roleToBeApplied = roles.FirstOrDefault(item => newPoints >= item.PointsToReach && newPoints <= item.MaximumPoints);
+
+            if (roleToBeApplied.Id != user.RoleId)
+            {
+                user.RoleId = roleToBeApplied.Id;
+
+                var generalChannel = channels.FirstOrDefault(item => item.Name == "general");
+
+                await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("Rank promotion for {0}!", user.Username),
+                    string.Format("<@{0}> just got promoted to <@&{1}>!", user.DiscordId, "827967957107605530),
+                    user.Role.IconUrl, "https://static.wikia.nocookie.net/getsetgames/images/8/82/Level_up_icon.png/revision/latest?cb=20130804113035"));
+
+            }
         }
 
         private List<ComparisonResult> GetComparisonList(IReadOnlyCollection<IGuildUser> discordUsers, List<DiscordUser> databaseDiscordUsers)
@@ -839,7 +982,8 @@ namespace CorruptOSBot.Modules
         public bool ExistsInDB { get; set; }
         public bool ExistsInDiscord { get; set; }
         public UInt64? DiscordId { get; set; }
-        public bool IsInBoth { get { return ExistsInDB && ExistsInDiscord; } }
+        public bool IsInBoth
+        { get { return ExistsInDB && ExistsInDiscord; } }
     }
 
     public class FullComparisonResult
@@ -848,6 +992,7 @@ namespace CorruptOSBot.Modules
         public bool ExistsInDB { get; set; }
         public bool ExistsInDiscord { get; set; }
         public bool ExistsInWOM { get; set; }
-        public bool IsInBoth { get { return ExistsInDB && ExistsInDiscord && ExistsInWOM; } }
+        public bool IsInBoth
+        { get { return ExistsInDB && ExistsInDiscord && ExistsInWOM; } }
     }
 }

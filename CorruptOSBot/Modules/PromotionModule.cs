@@ -1,6 +1,5 @@
 ﻿using CorruptOSBot.Data;
 using CorruptOSBot.Extensions.WOM;
-using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
@@ -21,14 +20,13 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Staff)]
         [Command("promotions-blacklist")]
         [Summary("!promotions-blacklist {username} - Adds or remove a username to/from the promotion blacklist ")]
-        public async Task SayPromotionblacklistAsync([Remainder]string username)
+        public async Task SayPromotionblacklistAsync([Remainder] string username)
         {
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
                 (RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild)))
             {
                 try
                 {
-
                     IGuildUser user;
                     if (!username.StartsWith("<@!"))
                     {
@@ -41,7 +39,6 @@ namespace CorruptOSBot.Modules
 
                     if (user != null)
                     {
-
                         using (var database = new Data.CorruptModel())
                         {
                             var userid = Convert.ToInt64(user.Id);
@@ -60,15 +57,12 @@ namespace CorruptOSBot.Modules
                                 {
                                     await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} removed from promotion blacklist", username), string.Empty));
                                 }
-
                             }
                             else
                             {
                                 await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("User {0} not found in database - unable to blacklist", username), string.Empty));
                             }
                         }
-
-
                     }
                     else
                     {
@@ -77,7 +71,6 @@ namespace CorruptOSBot.Modules
 
                     // delete the command posted
                     await Context.Message.DeleteAsync();
-
                 }
                 catch (Exception e)
                 {
@@ -94,7 +87,6 @@ namespace CorruptOSBot.Modules
             if (ToggleStateManager.GetToggleState("promotion-blacklist", Context.User) &&
                 RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
             {
-
                 try
                 {
                     using (var database = new Data.CorruptModel())
@@ -118,47 +110,69 @@ namespace CorruptOSBot.Modules
                 {
                     await Program.Log(new LogMessage(LogSeverity.Error, "PromotionModule", "Database issue - " + e.Message));
                 }
-               
+
                 // delete the command posted
                 await Context.Message.DeleteAsync();
             }
         }
-        
+
         [Helpgroup(HelpGroup.Staff)]
         [Command("promotions")]
         [Summary("!promotions - Gets a list of accounts that need promotions")]
         public async Task SayPromotionsAsync()
         {
-            if (ToggleStateManager.GetToggleState("promotions", Context.User) &&
-                (RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild)))
-            {
+            await Context.Channel.SendMessageAsync("Currently down");
 
-                // get players 
-                await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
-                var guildId = ConfigHelper.GetGuildId();
-                var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
+            //if (ToggleStateManager.GetToggleState("promotions", Context.User) &&
+            //    (RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild)))
+            //{
+            //    // get players
+            //    await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
+            //    var guildId = ConfigHelper.GetGuildId();
+            //    var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
 
-                var allUsersFromDB = new List<DiscordUser>();
-                using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
-                {
-                    allUsersFromDB = corruptosEntities.DiscordUsers.ToList();
-                }
+            //    var allUsersFromDB = new List<DiscordUser>();
+            //    using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+            //    {
+            //        allUsersFromDB = corruptosEntities.DiscordUsers.ToList();
+            //    }
 
-                var promotionSet = GetSupposedRank(allUsersFromDB, guild);
-                var updatedPromotionSet = GetCurrentRank(promotionSet);
+            //    var promotionSet = GetSupposedRank(allUsersFromDB, guild);
+            //    var updatedPromotionSet = GetCurrentRank(promotionSet);
 
-                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 12)); //Cadet
-                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 11)); //Sergeant
-                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 10)); //Novice 
-                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 9)); //Corporal 
-                await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 8)); //Peon 
-                await SendInactivityEmbedMessage(updatedPromotionSet);
+            //    await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 12)); //Cadet
+            //    await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 11)); //Sergeant
+            //    await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 10)); //Novice
+            //    await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 9)); //Corporal
+            //    await SendEmbedMessages(updatedPromotionSet, RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 8)); //Peon
+            //    await SendInactivityEmbedMessage(updatedPromotionSet);
 
-                // delete the command posted
-                await Context.Message.DeleteAsync();
-            }
+            //    // delete the command posted
+            //    await Context.Message.DeleteAsync();
+            //}
         }
 
+        [Helpgroup(HelpGroup.Member)]
+        [Command("checkpoints")]
+        [Summary("!checkpoints - Shows memeber their points")]
+        public async Task CheckpointsAsync()
+        {
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
+            {
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == Context.User.Username.ToString().ToLower());
+
+                    if (user != null)
+                    {
+                        await Context.Channel.SendMessageAsync($"Rank: {user.Role.Name} \nPoints: {user.Points}");
+                    }
+                }
+            }
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
+        }
 
         private List<Embed> BuildMessageForBlacklist(IEnumerable<Data.DiscordUser> blacklistedDiscordUsers)
         {
@@ -221,7 +235,7 @@ namespace CorruptOSBot.Modules
             var sb = new StringBuilder();
             var usersWithChanges = differences.Where(x =>
                 x.ShouldHaveRank == rank &&
-                x.CurrentRank != x.ShouldHaveRank 
+                x.CurrentRank != x.ShouldHaveRank
                 //&& GetRoleRank(x.ShouldHaveRank) > GetRoleRank(x.CurrentRank) <-- use this for only upgrades
                 );
 
@@ -240,10 +254,10 @@ namespace CorruptOSBot.Modules
                     }
                     else
                     {
-                        sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days in Discord", 
-                            DiscordNameHelper.GetAccountNameOrNickname(item.User), 
-                            item.CurrentRank.Name, 
-                            item.ShouldHaveRank.Name, 
+                        sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days in Discord",
+                            DiscordNameHelper.GetAccountNameOrNickname(item.User),
+                            item.CurrentRank.Name,
+                            item.ShouldHaveRank.Name,
                             item.DaysInDiscord));
                     }
                 }
@@ -257,19 +271,19 @@ namespace CorruptOSBot.Modules
         {
             var sb = new StringBuilder();
             var inactiveRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 19); // Inactive
-            hasUsers = differences.Any(x => 
-            x.ShouldHaveRank.Id == inactiveRole.Id && 
+            hasUsers = differences.Any(x =>
+            x.ShouldHaveRank.Id == inactiveRole.Id &&
             x.CurrentRank != x.ShouldHaveRank);
             if (hasUsers)
             {
-                foreach (var item in differences.Where(x => 
-                x.ShouldHaveRank.Id == inactiveRole.Id && 
+                foreach (var item in differences.Where(x =>
+                x.ShouldHaveRank.Id == inactiveRole.Id &&
                 x.CurrentRank.Id != x.ShouldHaveRank.Id))
                 {
-                    sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days inactivity on WOM", 
-                        DiscordNameHelper.GetAccountNameOrNickname(item.User), 
-                        item.CurrentRank.Name, 
-                        item.ShouldHaveRank.Name, 
+                    sb.AppendLine(string.Format("**{0}** has **{1}** and should have **{2}** based on **{3}** days inactivity on WOM",
+                        DiscordNameHelper.GetAccountNameOrNickname(item.User),
+                        item.CurrentRank.Name,
+                        item.ShouldHaveRank.Name,
                         item.DaysInDiscord));
                 }
 
@@ -282,17 +296,15 @@ namespace CorruptOSBot.Modules
         }
 
         private List<PromotionSet> GetSupposedRank(List<DiscordUser> users, IGuild guild)
-        {  
+        {
             var result = new List<PromotionSet>();
             var availableRoles = RoleHelper.GetRoles().Where(x => x.CanUpgradeTo);
             var inactiveRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 19); // Inactive
             var clanFriendRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 20); //Clan friend
 
-
             var dateTimeCurrent = DateTime.Now; //GetLastDayOfMonth(DateTime.Now);
-                       
+
             var discordUsers = guild.GetUsersAsync().Result;
-        
 
             foreach (var user in users)
             {
@@ -318,17 +330,17 @@ namespace CorruptOSBot.Modules
                     if (!IsInactive(discordUser, out daysInactive))
                     {
                         var daysFromJoining = Convert.ToInt32(dateTimeCurrent.Subtract(joinDate).TotalDays);
-                        var shouldHaveThisRank = availableRoles.Where(x => daysFromJoining >= x.DaysToReach).OrderByDescending(x => x.DaysToReach).FirstOrDefault();
+                        //var shouldHaveThisRank = availableRoles.Where(x => daysFromJoining >= x.DaysToReach).OrderByDescending(x => x.DaysToReach).FirstOrDefault();
                         var baseRank = availableRoles.FirstOrDefault(x => x.Id == 7);
 
-                        if (shouldHaveThisRank != null)
-                        {
-                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = shouldHaveThisRank, DaystillRank = 9999, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
-                        }
-                        else
-                        {
-                            result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = baseRank, DaystillRank = baseRank.DaysToReach - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
-                        }
+                        //if (shouldHaveThisRank != null)
+                        //{
+                        //    result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = shouldHaveThisRank, DaystillRank = 9999, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
+                        //}
+                        //else
+                        //{
+                        //    result.Add(new PromotionSet() { User = discordUser, ShouldHaveRank = baseRank, DaystillRank = baseRank.DaysToReach - daysFromJoining, UserId = discordUser.Id, DaysInDiscord = daysFromJoining });
+                        //}
                     }
                     else
                     {
@@ -353,12 +365,12 @@ namespace CorruptOSBot.Modules
             {
                 foreach (var userRoles in user.User.RoleIds)
                 {
-                    var role = availableRoles.OrderByDescending(x => x.DaysToReach).FirstOrDefault(x => Convert.ToUInt64(x.DiscordRoleId) == userRoles);
-                    if (role != null)
-                    {
-                        user.CurrentRank = role;
-                        result.Add(user);
-                    }
+                    //var role = availableRoles.OrderByDescending(x => x.DaysToReach).FirstOrDefault(x => Convert.ToUInt64(x.DiscordRoleId) == userRoles);
+                    //if (role != null)
+                    //{
+                    //    user.CurrentRank = role;
+                    //    result.Add(user);
+                    //}
                 }
             }
             return result;
@@ -377,8 +389,6 @@ namespace CorruptOSBot.Modules
             }
             return false;
         }
-
-
     }
 
     public class PromotionSet

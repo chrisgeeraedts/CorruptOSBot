@@ -34,7 +34,6 @@ namespace CorruptOSBot.Data
         public virtual DbSet<DiscordUser> DiscordUsers { get; set; }
         public virtual DbSet<ErrorLog> ErrorLogs { get; set; }
         public virtual DbSet<PlayerPet> PlayerPets { get; set; }
-        public virtual DbSet<Rank> Ranks { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<RunescapeAccount> RunescapeAccounts { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }

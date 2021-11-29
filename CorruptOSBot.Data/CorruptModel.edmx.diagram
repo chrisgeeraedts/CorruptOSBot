@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="186dfa011545451ba57c6ae9e0d13689" Name="Diagram1" ZoomLevel="85">
-        <EntityTypeShape EntityType="corruptosModel.Activity" Width="1.5" PointX="5.25" PointY="11.125" />
+        <EntityTypeShape EntityType="corruptosModel.Activity" Width="1.5" PointX="5.25" PointY="8.375" />
         <EntityTypeShape EntityType="corruptosModel.Boss" Width="1.5" PointX="5.25" PointY="5.5" />
         <EntityTypeShape EntityType="corruptosModel.BotConfiguration" Width="1.5" PointX="0.75" PointY="5.75" />
         <EntityTypeShape EntityType="corruptosModel.Calendar" Width="1.5" PointX="7.75" PointY="5.75" />
@@ -14,15 +14,14 @@
         <EntityTypeShape EntityType="corruptosModel.DiscordUser" Width="1.5" PointX="3" PointY="1.125" />
         <EntityTypeShape EntityType="corruptosModel.ErrorLog" Width="1.5" PointX="9.75" PointY="0.75" />
         <EntityTypeShape EntityType="corruptosModel.PlayerPet" Width="1.5" PointX="7.5" PointY="1" />
-        <EntityTypeShape EntityType="corruptosModel.Rank" Width="1.5" PointX="0.75" PointY="1.5" />
-        <EntityTypeShape EntityType="corruptosModel.Role" Width="1.5" PointX="9.75" PointY="3.75" />
+        <EntityTypeShape EntityType="corruptosModel.Role" Width="1.5" PointX="0.75" PointY="1.125" />
         <EntityTypeShape EntityType="corruptosModel.RunescapeAccount" Width="1.5" PointX="5.25" PointY="1.375" />
-        <EntityTypeShape EntityType="corruptosModel.Skill" Width="1.5" PointX="5.25" PointY="8.375" />
-        <EntityTypeShape EntityType="corruptosModel.Toggle" Width="1.5" PointX="9.75" PointY="7.75" />
+        <EntityTypeShape EntityType="corruptosModel.Skill" Width="1.5" PointX="5.25" PointY="10.875" />
+        <EntityTypeShape EntityType="corruptosModel.Toggle" Width="1.5" PointX="9.75" PointY="3.75" />
         <AssociationConnector Association="corruptosModel.FK_Activity" />
         <AssociationConnector Association="corruptosModel.FK_Boss" />
         <AssociationConnector Association="corruptosModel.FK_DiscordUser" />
-        <AssociationConnector Association="corruptosModel.FK_DiscordUsers_Ranks" />
+        <AssociationConnector Association="corruptosModel.FK_DiscordUsers_Roles" />
         <AssociationConnector Association="corruptosModel.FK_RunescapeAccount" />
         <AssociationConnector Association="corruptosModel.FK_Skill" />
       </Diagram>

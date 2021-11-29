@@ -30,6 +30,7 @@ namespace CorruptOSBot.Helpers.Bot
 
             return builder.Build();
         }
+
         public static List<Embed> CreateDefaultFieldsEmbed(string title, Dictionary<string, string> fields)
         {
             var result = new List<Embed>();
@@ -111,7 +112,6 @@ namespace CorruptOSBot.Helpers.Bot
             return builder.Build();
         }
 
-
         public static Embed CreateWOMEmbed()
         {
             var client = new WiseOldManClient();
@@ -154,8 +154,9 @@ namespace CorruptOSBot.Helpers.Bot
 
                     builder.WithFooter(string.Format("Last updated: {0}", DateTime.Now.ToString("r")));
                     return builder.Build();
-                }                
+                }
             }
+
             return null;
         }
 
@@ -177,7 +178,6 @@ namespace CorruptOSBot.Helpers.Bot
 
             return builder.Build();
         }
-
 
         public static void BuildSet(IEnumerable<KcTopList> result, EmbedBuilder builder)
         {
@@ -223,7 +223,6 @@ namespace CorruptOSBot.Helpers.Bot
                 {
                     sb3.AppendLine(string.Format("{0} {1}", "\U0001f949", "---"));
                 }
-
             }
             builder.AddField("\u200b", sb3.ToString(), true);
         }

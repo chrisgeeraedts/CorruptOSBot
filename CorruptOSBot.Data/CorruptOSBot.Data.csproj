@@ -96,9 +96,6 @@
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rank.cs">
-      <DependentUpon>CorruptModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Role.cs">
       <DependentUpon>CorruptModel.tt</DependentUpon>
     </Compile>

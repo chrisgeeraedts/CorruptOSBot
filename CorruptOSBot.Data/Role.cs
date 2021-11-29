@@ -14,13 +14,23 @@ namespace CorruptOSBot.Data
     
     public partial class Role
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Role()
+        {
+            this.DiscordUsers = new HashSet<DiscordUser>();
+        }
+    
         public int Id { get; set; }
         public string Name { get; set; }
         public long DiscordRoleId { get; set; }
-        public int DaysToReach { get; set; }
         public bool CanUpgradeTo { get; set; }
-        public string IconUrl { get; set; }
         public bool IsStaff { get; set; }
+        public int PointsToReach { get; set; }
+        public int MaximumPoints { get; set; }
+        public string IconUrl { get; set; }
         public Nullable<long> EmojiId { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DiscordUser> DiscordUsers { get; set; }
     }
 }
