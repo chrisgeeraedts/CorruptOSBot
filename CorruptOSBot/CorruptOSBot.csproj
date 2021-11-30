@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>CorruptOSBot</RootNamespace>
     <AssemblyName>CorruptOSBot</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -30,6 +30,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -262,6 +263,7 @@
     <Compile Include="Services\PVMRoles\PVMRoleService.cs" />
     <Compile Include="Helpers\PVM\KcPlayer.cs" />
     <Compile Include="Helpers\PVM\KcTopList.cs" />
+    <Compile Include="Services\SotW\SotWService.cs" />
     <Compile Include="Services\TopKc\TopKCService.cs" />
   </ItemGroup>
   <ItemGroup>
