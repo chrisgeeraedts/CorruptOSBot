@@ -309,7 +309,7 @@ namespace CorruptOSBot.Modules
         [Summary("!getuser {username}(optional) - Gets a single user on discord, showing their available information.")]
         public async Task SayGetUserSelfAsync()
         {
-            if (ToggleStateManager.GetToggleState("getuser", Context.User) && RoleHelper.HasAnyRole(Context.User) && DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
+            if (ToggleStateManager.GetToggleState("getuser", Context.User) && RoleHelper.HasAnyRole(Context.User) && DiscordHelper.IsInChannel(Context.Channel.Id, "spam-bot-command", Context.User))
             {
                 try
                 {

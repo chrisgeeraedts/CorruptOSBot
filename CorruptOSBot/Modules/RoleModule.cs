@@ -2,6 +2,7 @@
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
@@ -115,30 +116,27 @@ namespace CorruptOSBot.Modules
         [Summary("!checkpoints - Shows memeber their points")]
         public async Task CheckpointsAsync()
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
+            using (CorruptModel corruptosEntities = new CorruptModel())
             {
-                using (CorruptModel corruptosEntities = new CorruptModel())
+                var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == Context.User.Username.ToString().ToLower());
+
+                if (user != null)
                 {
-                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == Context.User.Username.ToString().ToLower());
+                    var roles = corruptosEntities.Roles.Where(item => item.PointsToReach > user.Points).OrderBy(item => item.PointsToReach);
 
-                    if (user != null)
+                    var description = new StringBuilder();
+
+                    foreach (var role in roles)
                     {
-                        var roles = corruptosEntities.Roles.Where(item => item.PointsToReach > user.Points).OrderBy(item => item.PointsToReach);
+                        var pointsNeed = role.PointsToReach - user.Points;
 
-                        var description = new StringBuilder();
-
-                        foreach (var role in roles)
-                        {
-                            var pointsNeed = role.PointsToReach - user.Points;
-
-                            description.AppendLine($"{role.Name} requires {pointsNeed} points");
-                        }
-
-                        await Context.Channel.SendMessageAsync(
-                            embed: EmbedHelper.CreateDefaultEmbed(
-                                $"{Context.User.Username}\nCurrent Role: {user.Role.Name} Current Points: {user.Points}",
-                                description.ToString()));
+                        description.AppendLine($"{role.Name} requires {pointsNeed} points");
                     }
+
+                    await Context.Channel.SendMessageAsync(
+                        embed: EmbedHelper.CreateDefaultEmbed(
+                            $"{Context.User.Username}\nCurrent Role: {user.Role.Name} Current Points: {user.Points}",
+                            description.ToString()));
                 }
             }
 
@@ -150,7 +148,7 @@ namespace CorruptOSBot.Modules
         [Summary("!add-points {username} - gives specified member the specified points")]
         public async Task AddPoints(string username, int points)
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
@@ -179,7 +177,7 @@ namespace CorruptOSBot.Modules
         [Summary("!sub-points {username} - subtracts specified member the specified points")]
         public async Task SubPoints(string username, int points)
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
@@ -211,7 +209,7 @@ namespace CorruptOSBot.Modules
         [Summary("!set-points {username} - sets specified member the specified points")]
         public async Task SetPoints(string username, int points)
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
