@@ -476,6 +476,19 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && (Context.User.Id == 108710294049542144 || Context.User.Id == 391595176314798090))
             {
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    foreach (var user in corruptosEntities.DiscordUsers)
+                    {
+                        var roles = corruptosEntities.Roles.ToList();
+
+                        var roleToBeApplied = roles.FirstOrDefault(item => user.Points >= item.PointsToReach && user.Points <= item.MaximumPoints);
+
+                        user.RoleId = roleToBeApplied.Id;
+                    }
+
+                    await corruptosEntities.SaveChangesAsync();
+                }
             }
 
             await Context.Message.DeleteAsync();

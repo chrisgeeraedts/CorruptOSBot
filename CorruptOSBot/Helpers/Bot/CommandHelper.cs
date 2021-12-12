@@ -1,5 +1,6 @@
 ﻿using CorruptOSBot.Modules;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;

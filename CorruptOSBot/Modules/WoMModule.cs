@@ -1,5 +1,6 @@
 ﻿using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord.Commands;
 using System.Threading.Tasks;

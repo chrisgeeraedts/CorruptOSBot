@@ -3,6 +3,7 @@ using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord.Commands;
 using Discord.WebSocket;

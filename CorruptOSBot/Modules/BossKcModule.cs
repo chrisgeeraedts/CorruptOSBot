@@ -5,6 +5,7 @@ using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
 using CorruptOSBot.Services;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;

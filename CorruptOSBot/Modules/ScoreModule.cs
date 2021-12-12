@@ -2,6 +2,7 @@
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
+using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
