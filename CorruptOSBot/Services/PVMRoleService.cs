@@ -13,10 +13,10 @@ namespace CorruptOSBot.Services
 {
     public class PVMRoleService : IService
     {
-        public int TriggerTimeInMS { get => 1000 * 60 * 5; }
-        public int BeforeTriggerTimeInMS { get => 1000 * 60 * 5; } // 5 minute
-        private ulong GuildId;
+        public int TriggerTimeInMS { get => 1000 * 60 * 5; } // Every 5 minutes
+        public int BeforeTriggerTimeInMS { get => 1000 * 60 * 3; } // 5 minutes
 
+        private ulong GuildId;
 
         public PVMRoleService(Discord.IDiscordClient client)
         {
@@ -81,7 +81,6 @@ namespace CorruptOSBot.Services
                         }
                     }
 
-
                     await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Completed"));
                 }
                 catch (Exception e)
@@ -90,7 +89,6 @@ namespace CorruptOSBot.Services
                 }
             }
         }
-
 
         private async Task SetRolesCox(IGuildUser currentUser, IGuild guild, int kills)
         {

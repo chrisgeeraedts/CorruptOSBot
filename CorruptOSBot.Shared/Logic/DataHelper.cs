@@ -21,7 +21,6 @@ namespace CorruptOSBot.Shared
             {
                 return new List<BotConfiguration>();
             }
-
         }
 
         internal List<Role> GetRoles()
@@ -52,7 +51,6 @@ namespace CorruptOSBot.Shared
             {
                 return new List<Channel>();
             }
-
         }
 
         public List<Boss> GetBosses()

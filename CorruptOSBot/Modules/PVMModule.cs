@@ -1,5 +1,4 @@
-﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Extensions.WOM;
+﻿using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
@@ -58,10 +57,9 @@ namespace CorruptOSBot.Modules
                 {
                     await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!cox", "set-pvm-roles");
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Member)]
@@ -108,10 +106,9 @@ namespace CorruptOSBot.Modules
                 {
                     await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!tob", "set-pvm-roles");
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Member)]
@@ -158,10 +155,9 @@ namespace CorruptOSBot.Modules
                 {
                     await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!nm", "set-pvm-roles");
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Member)]
@@ -206,10 +202,9 @@ namespace CorruptOSBot.Modules
                 {
                     await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!cm", "set-pvm-roles");
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Member)]
@@ -251,12 +246,10 @@ namespace CorruptOSBot.Modules
                 {
                     await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!gwd", "set-pvm-roles");
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
-        }
 
+            await Context.Message.DeleteAsync();
+        }
 
         [Helpgroup(HelpGroup.Member)]
         [Command("corp")]
@@ -297,10 +290,9 @@ namespace CorruptOSBot.Modules
                 {
                     await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!corp", "set-pvm-roles");
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
     }
 }

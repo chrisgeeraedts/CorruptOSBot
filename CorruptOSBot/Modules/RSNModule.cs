@@ -1,10 +1,7 @@
 ﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Extensions.WOM;
-using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
-using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
@@ -21,7 +18,7 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Everybody)]
         [Command("rsn")]
         [Summary("!rsn {your name} - changes your nickname in the server and Wise Old Man.")]
-        public async Task SayRSNAsync([Remainder]string username)
+        public async Task SayRSNAsync([Remainder] string username)
         {
             if (ToggleStateManager.GetToggleState("rsn", Context.User))
             {
@@ -43,7 +40,6 @@ namespace CorruptOSBot.Modules
                     await NameChangeMember(currentUser, preferedNickname);
                 }
 
-
                 // delete the command posted
                 await Context.Message.DeleteAsync();
             }
@@ -52,7 +48,7 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Everybody)]
         [Command("rsncf")]
         [Summary("!rsncf {your name} - changes your nickname in the server and sets you as a Clanfriend.")]
-        public async Task SayRSNCFAsync([Remainder]string username)
+        public async Task SayRSNCFAsync([Remainder] string username)
         {
             if (ToggleStateManager.GetToggleState("rsncf", Context.User) &&
                 DiscordHelper.IsInChannel(Context.Channel.Id, "welcome", Context.User))
@@ -84,17 +80,15 @@ namespace CorruptOSBot.Modules
                     await ReplyAsync("Something broke with upgrading - please contact SGNathy");
                 }
 
-
                 // delete the command posted
                 await Context.Message.DeleteAsync();
             }
         }
 
-
         [Helpgroup(HelpGroup.Staff)]
         [Command("force-rsn")]
         [Summary("!force-rsn {your name} - changes your nickname in the server and Wise Old Man.")]
-        public async Task SaForceyRSNAsync([Remainder]string commandString)
+        public async Task SaForceyRSNAsync([Remainder] string commandString)
         {
             if (ToggleStateManager.GetToggleState("rsn", Context.User))
             {
@@ -104,7 +98,6 @@ namespace CorruptOSBot.Modules
                 {
                     var oldName = commands["oldName"];
                     var newName = commands["newName"];
-
 
                     using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
                     {
@@ -128,15 +121,13 @@ namespace CorruptOSBot.Modules
                             var message = await ReplyAsync("Discord User not found!");
                             await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
                         }
-                    }   
+                    }
                 }
 
                 // delete the command posted
                 await Context.Message.DeleteAsync();
             }
         }
-
-
 
         private async Task NameChangeMember(SocketUser currentUser, string preferedNickname, bool forced = false)
         {
@@ -149,7 +140,7 @@ namespace CorruptOSBot.Modules
             });
 
             // post to recruiting channel
-            var recruitingChannel =  Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+            var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member name change",
                 string.Format("{0} has changed their name to <@{1}> {2}", previousName, ((SocketGuildUser)currentUser).Id, (forced ? "(Forced by staff)" : string.Empty))));
 
@@ -158,7 +149,7 @@ namespace CorruptOSBot.Modules
 
             try
             {
-                using(var model = new Data.CorruptModel())
+                using (var model = new Data.CorruptModel())
                 {
                     // get the rsn account
                     var rsaccount = model.RunescapeAccounts.FirstOrDefault(x => x.rsn.ToLower() == previousName);
@@ -177,7 +168,7 @@ namespace CorruptOSBot.Modules
             catch (Exception e)
             {
                 await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to save discorduser in discord - " + e.Message));
-            }   
+            }
         }
 
         private async Task CreateNewMember(SocketUser currentUser, string preferedNickname)
@@ -217,7 +208,6 @@ namespace CorruptOSBot.Modules
                         await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to find General Channel"));
                     }
 
-
                     // post to recruitment channel
                     var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
                     if (recruitingChannel != null)
@@ -230,7 +220,7 @@ namespace CorruptOSBot.Modules
                     {
                         await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to find Changes Channel"));
                     }
-                   
+
                     // add to WOM
                     var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
 
@@ -270,7 +260,7 @@ namespace CorruptOSBot.Modules
                 else
                 {
                     await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to find Changes Channel"));
-                }   
+                }
             }
         }
 
@@ -306,13 +296,11 @@ namespace CorruptOSBot.Modules
 
                     // send welcome message
                     await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild, true);
-
                 }
                 else
                 {
                     await ReplyAsync("Something broke with upgrading - please contact SGNathy");
                 }
-
             }
             else
             {

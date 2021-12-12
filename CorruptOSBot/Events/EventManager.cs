@@ -1,6 +1,5 @@
 ﻿using CorruptOSBot.Data;
 using CorruptOSBot.Extensions;
-using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
@@ -25,7 +24,6 @@ namespace CorruptOSBot.Events
         public static async Task LeavingGuild(SocketGuildUser arg)
         {
             DiscordUser originalUser = null;
-            // get the original name
             using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
             {
                 var id = Convert.ToInt64(arg.Id);
@@ -62,7 +60,6 @@ namespace CorruptOSBot.Events
 
         public static async Task BannedFromGuild(SocketUser arg1, SocketGuild arg2)
         {
-
             DiscordUser originalUser = null;
             // get the original name
             using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
@@ -91,7 +88,7 @@ namespace CorruptOSBot.Events
 
             var sb = new StringBuilder();
             sb.AppendLine(string.Format("<@{0}>  ({1}) has been banned from the server", arg1.Id, originalUser?.Username));
-            sb.AppendLine(string.Format("Reason: {0}", reason));           
+            sb.AppendLine(string.Format("Reason: {0}", reason));
 
             // post to recruiting channel
             await ((IMessageChannel)wallOfShameChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member banned",

@@ -1,5 +1,4 @@
-﻿using CorruptOSBot.Shared.Helpers.Bot;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -12,7 +11,6 @@ namespace CorruptOSBot.Helpers
 
         public static string GetEmojiString(string emoji)
         {
-
             fillEmojiIfNeeded();
 
             if (_emojiStrings.ContainsKey(emoji))

@@ -6,29 +6,30 @@ namespace CorruptOSBot.Shared.Helpers.Bot
 {
     public static class ConfigHelper
     {
-        private static Dictionary<string, string> _configuration { get; set; }
+        private static Dictionary<string, string> Configuration { get; set; }
         public static bool IsDebugMode { get; set; }
 
         public static void Init()
         {
-            IsDebugMode = true;
+            IsDebugMode = false;
 
             var config = new DataHelper().GetConfiguration();
-            _configuration = new Dictionary<string, string>();
+            Configuration = new Dictionary<string, string>();
+
             foreach (var item in config)
             {
-                if (!_configuration.ContainsKey(item.PropertyName.ToLower()))
+                if (!Configuration.ContainsKey(item.PropertyName.ToLower()))
                 {
-                    _configuration.Add(item.PropertyName.ToLower(), item.PropertyValue);
+                    Configuration.Add(item.PropertyName.ToLower(), item.PropertyValue);
                 }
             }
         }
 
         public static string GetSettingProperty(string key)
         {
-            if (_configuration.ContainsKey(key.ToLower()))
+            if (Configuration.ContainsKey(key.ToLower()))
             {
-                return _configuration[key.ToLower()];
+                return Configuration[key.ToLower()];
             }
             else
             {
@@ -36,7 +37,7 @@ namespace CorruptOSBot.Shared.Helpers.Bot
                 var configValue = new DataHelper().GetConfiguration().FirstOrDefault(x => x.PropertyName.ToLower() == key.ToLower());
                 if (configValue != null)
                 {
-                    _configuration.Add(configValue.PropertyName.ToLower(), configValue.PropertyValue.ToLower());
+                    Configuration.Add(configValue.PropertyName.ToLower(), configValue.PropertyValue.ToLower());
                     return configValue.PropertyValue;
                 }
 
@@ -49,11 +50,11 @@ namespace CorruptOSBot.Shared.Helpers.Bot
         {
             if (!IsDebugMode)
             {
-                return Convert.ToUInt64(ConfigHelper.GetSettingProperty("GuildId"));
+                return Convert.ToUInt64(GetSettingProperty("GuildId"));
             }
             else
             {
-                return 887751832426930177; //Dev Discord Id
+                return 827967957094105108; //Dev Discord Id
             }
         }
     }

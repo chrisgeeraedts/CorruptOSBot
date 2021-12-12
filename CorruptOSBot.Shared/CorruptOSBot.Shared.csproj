@@ -99,7 +99,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataHelper.cs" />
+    <Compile Include="Logic\DataHelper.cs" />
     <Compile Include="Helpers\Bot\ConfigHelper.cs" />
     <Compile Include="Helpers\Bot\HelpgroupAttribute.cs" />
     <Compile Include="Helpers\Constants.cs" />
@@ -110,7 +110,7 @@
     <Compile Include="Helpers\Emoji\EmojiHelper.cs" />
     <Compile Include="Helpers\SettingsConstants.cs" />
     <Compile Include="Interceptors\IInterceptor.cs" />
-    <Compile Include="ToggleStateManager.cs" />
+    <Compile Include="Logic\ToggleStateManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

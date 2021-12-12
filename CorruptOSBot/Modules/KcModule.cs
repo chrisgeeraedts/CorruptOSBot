@@ -17,7 +17,7 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Member)]
         [Command("kc")]
         [Summary("!kc {player name}(optional) - Generates KC's for the specified player or, if left empty, your own. (Only allowed in **pvm-general**)")]
-        public async Task SayKcAsync([Remainder]string playerName)
+        public async Task SayKcAsync([Remainder] string playerName)
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "pvm-general", Context.User))
             {
@@ -30,8 +30,7 @@ namespace CorruptOSBot.Modules
             {
                 await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!kc", "pvm-general");
             }
-            
-            // delete the command posted
+
             await Context.Message.DeleteAsync();
         }
 
@@ -63,11 +62,8 @@ namespace CorruptOSBot.Modules
                 await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!kc", "pvm-general");
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
-
 
         private void AddLine(EmbedBuilder builder, Dictionary<string, int> bossAndKc)
         {
@@ -162,6 +158,5 @@ namespace CorruptOSBot.Modules
             }
             return null;
         }
-
     }
 }

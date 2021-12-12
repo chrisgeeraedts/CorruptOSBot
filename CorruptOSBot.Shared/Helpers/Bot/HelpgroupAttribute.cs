@@ -1,11 +1,13 @@
 ﻿using System;
 
-namespace CorruptOSBot.Shared
+namespace CorruptOSBot.Shared.Helpers.Bot
 {
     public class HelpgroupAttribute : Attribute
     {
         private HelpGroup _helpGroup { get; set; }
-        public HelpGroup HelpGroup { get { return _helpGroup; } }
+        public HelpGroup HelpGroup
+        { get { return _helpGroup; } }
+
         public HelpgroupAttribute(HelpGroup helpGroup)
         {
             _helpGroup = helpGroup;

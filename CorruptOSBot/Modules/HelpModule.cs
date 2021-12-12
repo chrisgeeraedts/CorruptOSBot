@@ -41,7 +41,7 @@ namespace CorruptOSBot.Modules
 
         private Dictionary<string, string> GetCommandsToShowInHelp(SocketUser user, SocketGuild guild)
         {
-            var isStaff = RoleHelper.HasStaffOrModOrOwnerRole(user, guild);
+            var isStaff = RoleHelper.IsStaff(user, guild);
             var isMember = RoleHelper.IsMember(user, guild);
 
             List<string> blackListedCommands = new List<string>();

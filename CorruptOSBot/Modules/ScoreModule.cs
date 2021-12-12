@@ -102,7 +102,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "event-leaderboard", Context.User))
             {
-                if (ToggleStateManager.GetToggleState("endscore", Context.User) && RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
+                if (ToggleStateManager.GetToggleState("endscore", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
                 {
                     // load current event
                     // First, get all comps
@@ -155,7 +155,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "leaderboard", Context.User))
             {
-                if (ToggleStateManager.GetToggleState("endscore", Context.User) && RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
+                if (ToggleStateManager.GetToggleState("endscore", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
                 {
                     // get details of this comp
                     CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(compId);

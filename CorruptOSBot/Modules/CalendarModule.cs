@@ -18,13 +18,11 @@ namespace CorruptOSBot.Modules
         [Summary("!calendar - Shows upcoming events")]
         public async Task SayWoMAsync()
         {
-            if (ToggleStateManager.GetToggleState("calendar", Context.User) && 
-                RoleHelper.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("calendar", Context.User) &&  RoleHelper.HasAnyRole(Context.User))
             {
                 await ReplyAsync(embed: CreateCalendarEmbed());
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
 

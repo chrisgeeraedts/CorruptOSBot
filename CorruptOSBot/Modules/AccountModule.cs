@@ -25,10 +25,8 @@ namespace CorruptOSBot.Modules
                 await AddAlt(Context, rsn, "alt");
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
 
         [Helpgroup(HelpGroup.Member)]
         [Command("add-iron")]
@@ -40,18 +38,15 @@ namespace CorruptOSBot.Modules
                 await AddAlt(Context, rsn, "iron");
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
 
         [Helpgroup(HelpGroup.Staff)]
         [Command("force-add-alt")]
         [Summary("!force-add-alt {discorduser}|{rsn} - Adds an runescape alt account to the given discord account")]
         public async Task SayForceAddAltBAsync([Remainder] string commandString)
         {
-            if (ToggleStateManager.GetToggleState("force-add-alt", Context.User) &&
-                RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
+            if (ToggleStateManager.GetToggleState("force-add-alt", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 Dictionary<string, string> commands;
                 if (DiscordHelper.TryGetEntireCommand(commandString, new string[] { "discorduser", "rsn" }, '|', out commands))
@@ -78,18 +73,15 @@ namespace CorruptOSBot.Modules
                 }
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
 
         [Helpgroup(HelpGroup.Staff)]
         [Command("force-add-iron")]
         [Summary("!force-add-iron {discorduser}|{rsn} - Adds an runescape alt account to the given discord account")]
         public async Task SayForceAddIronBAsync([Remainder] string commandString)
         {
-            if (ToggleStateManager.GetToggleState("force-add-alt", Context.User) &&
-                RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
+            if (ToggleStateManager.GetToggleState("force-add-alt", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 Dictionary<string, string> commands;
                 if (DiscordHelper.TryGetEntireCommand(commandString, new string[] { "discorduser", "rsn" }, '|', out commands))
@@ -116,10 +108,8 @@ namespace CorruptOSBot.Modules
                 }
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
 
         [Helpgroup(HelpGroup.Member)]
         [Command("change-alt")]
@@ -139,18 +129,15 @@ namespace CorruptOSBot.Modules
                 }
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
 
         [Helpgroup(HelpGroup.Staff)]
         [Command("force-change-alt")]
         [Summary("!force-change-alt {old name}|{new name} - changes an existing alt name from the old to a new one")]
         public async Task SayForceChangeAltBAsync([Remainder] string commandString)
         {
-            if (ToggleStateManager.GetToggleState("force-change-alt", Context.User) &&
-                RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
+            if (ToggleStateManager.GetToggleState("force-change-alt", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 // grab actual props
                 Dictionary<string, string> commands;
@@ -163,10 +150,8 @@ namespace CorruptOSBot.Modules
                 }
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
 
         [Helpgroup(HelpGroup.Member)]
         [Command("delete-alt")]
@@ -178,35 +163,30 @@ namespace CorruptOSBot.Modules
                 await DeleteAlt(Context, rsn);
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
 
         [Helpgroup(HelpGroup.Staff)]
         [Command("force-delete-account")]
         [Summary("!force-delete-account {rsn} - Removes this runescape account from the given discord account")]
         public async Task SayForceDeleteAltBAsync([Remainder] string rsn)
         {
-            if (ToggleStateManager.GetToggleState("force-delete-account", Context.User) &&
-                RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
+            if (ToggleStateManager.GetToggleState("force-delete-account", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 await DeleteAlt(Context, rsn, true);
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
 
-
-        private async Task AddAlt(SocketCommandContext context, string rsn, string type, Int64? overrideDiscordUserId = null)
+        private async Task AddAlt(SocketCommandContext context, string rsn, string type, long? overrideDiscordUserId = null)
         {
             try
             {
-                using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+                using (CorruptModel corruptosEntities = new CorruptModel())
                 {
                     // Find discord dataset
-                    long discordId = overrideDiscordUserId.HasValue ? overrideDiscordUserId.Value : Convert.ToInt64(context.User.Id);
+                    long discordId = overrideDiscordUserId ?? Convert.ToInt64(context.User.Id);
                     var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
 
                     var isRsnAlreadyLinked = corruptosEntities.RunescapeAccounts.Any(x =>
@@ -229,7 +209,7 @@ namespace CorruptOSBot.Modules
                         }
                         else
                         {
-                            // add it to WOM                
+                            // add it to WOM
                             var client = new WiseOldManClient();
                             var addedClanMember = client.AddGroupMember(rsn);
 
@@ -269,7 +249,6 @@ namespace CorruptOSBot.Modules
             {
                 await Program.Log(new LogMessage(LogSeverity.Error, "AddAlt", "Failed adding alt to database - " + e.Message));
             }
-
         }
 
         private async Task DeleteAlt(SocketCommandContext context, string rsn, bool forceOverride = false)
@@ -305,7 +284,7 @@ namespace CorruptOSBot.Modules
                     }
                     else
                     {
-                        // remove it from WOM                
+                        // remove it from WOM
                         var client = new WiseOldManClient();
                         client.RemoveGroupMember(rsn);
 
@@ -315,7 +294,6 @@ namespace CorruptOSBot.Modules
                         {
                             // add and message if it doesnt
                             await context.User.SendMessageAsync(String.Format("**{0}** was removed from your Affliction Discord account!", rsn));
-
 
                             var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
                             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
@@ -339,7 +317,6 @@ namespace CorruptOSBot.Modules
             {
                 await Program.Log(new LogMessage(LogSeverity.Error, "AddAlt", "Failed adding alt to database - " + e.Message));
             }
-
         }
 
         private async Task ChangeAlt(string oldName, string newName, bool forceOverride = false)
@@ -417,7 +394,6 @@ namespace CorruptOSBot.Modules
             {
                 await Program.Log(new LogMessage(LogSeverity.Error, "ChangeAlt", "Failed adding alt to database - " + e.Message));
             }
-
         }
     }
 }

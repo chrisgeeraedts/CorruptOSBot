@@ -1,25 +1,21 @@
-﻿using CorruptOSBot.Extensions.WOM;
-using CorruptOSBot.Helpers;
+﻿using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
-using CorruptOSBot.Services;
 using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.WebSocket;
-using System;
 using System.Threading.Tasks;
 
-namespace CorruptOSBot
+namespace CorruptOSBot.Services
 {
     internal class AchievementService : IService
     {
-        public int TriggerTimeInMS { get => 1000 * 60 * 60 * 24; } // every 3  days
+        public int TriggerTimeInMS { get => 1000 * 60 * 60 * 24; } // Once a day
         public int BeforeTriggerTimeInMS { get => 1000 * 60 * 3; } // 3 minute
         private ulong GuildId;
 
-
-        public AchievementService(Discord.IDiscordClient client)
+        public AchievementService(IDiscordClient client)
         {
             Program.Log(new LogMessage(LogSeverity.Info, "AchievementService", "Created, triggering every " + TriggerTimeInMS + "MS"));
             GuildId = ConfigHelper.GetGuildId();
@@ -41,7 +37,7 @@ namespace CorruptOSBot
                     var embed = EmbedHelper.CreateWOMEmbed();
                     if (embed != null)
                     {
-                        await (channel as SocketTextChannel).SendMessageAsync(embed: embed);
+                        await channel.SendMessageAsync(embed: embed);
                     }
                 }
             }

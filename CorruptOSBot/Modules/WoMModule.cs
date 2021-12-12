@@ -18,11 +18,7 @@ namespace CorruptOSBot.Modules
                 await ReplyAsync(embed: EmbedHelper.CreateWOMEmbed());
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
-
     }
 }
-
-

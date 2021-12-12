@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace CorruptOSBot.Services
 {
-
     public class HeartbeatService : IService
     {
         public TimeSpan TimeOnline { get; set; }

@@ -1,5 +1,4 @@
 ﻿using CorruptOSBot.Data;
-using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.WebSocket;
 using System;
@@ -42,7 +41,7 @@ namespace CorruptOSBot.Shared.Helpers.Discord
             return result;
         }
 
-        public static bool HasStaffOrModOrOwnerRole(IGuildUser user, IGuild guild)
+        public static bool IsStaff(SocketUser user, IGuild guild)
         {
             foreach (var item in GetRoles().Where(x => x.IsStaff))
             {
@@ -55,36 +54,18 @@ namespace CorruptOSBot.Shared.Helpers.Discord
             return false;
         }
 
-        public static bool HasStaffOrModOrOwnerRole(SocketUser user, IGuild guild)
-        {
-            return HasStaffOrModOrOwnerRole(((IGuildUser)user), guild);
-        }
-
-        public static bool HasRole(IGuildUser user, IGuild guild, Role role)
+        public static bool HasRole(SocketUser user, IGuild guild, Role role)
         {
             var discordRole = guild.Roles.FirstOrDefault(x => x.Id == Convert.ToUInt64(role.DiscordRoleId));
 
             if (discordRole != null)
             {
-                return user.RoleIds.ToList().Contains(discordRole.Id);
+                var guildUser = (IGuildUser)user;
+
+                return guildUser.RoleIds.ToList().Contains(discordRole.Id);
             }
 
             return false;
-        }
-
-        public static bool HasRole(SocketUser user, IGuild guild, Role role)
-        {
-            return HasRole(((IGuildUser)user), guild, role);
-        }
-
-        public static bool HasRole(SocketUser user, IGuild guild, long roleId)
-        {
-            var discordUser = (IGuildUser)user;
-
-            var dbDiscordRole = GetRoles().FirstOrDefault(x => x.Id == roleId);
-            var discordRole = guild.Roles.FirstOrDefault(x => x.Id == Convert.ToUInt64(dbDiscordRole.DiscordRoleId));
-
-            return discordUser.RoleIds.ToList().Contains(discordRole.Id) || ConfigHelper.IsDebugMode;
         }
 
         public static List<Role> GetRoles()

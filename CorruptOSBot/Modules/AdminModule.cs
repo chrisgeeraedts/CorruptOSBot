@@ -25,10 +25,12 @@ namespace CorruptOSBot.Modules
         [Summary("!initdb - initializes the DB")]
         public async Task SayInitDBAsync()
         {
-            if (ToggleStateManager.GetToggleState("initdb", Context.User))
+            if (ToggleStateManager.GetToggleState("initdb", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 await InitDB(Context);
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Staff)]
@@ -36,8 +38,7 @@ namespace CorruptOSBot.Modules
         [Summary("!poll {your question} - Creates a yes/no poll.")]
         public async Task SayPollAsync([Remainder] string pollquestion)
         {
-            if (ToggleStateManager.GetToggleState("poll", Context.User) &&
-                RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
+            if (ToggleStateManager.GetToggleState("poll", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 var currentUser = ((SocketGuildUser)Context.User);
                 var name = DiscordNameHelper.GetAccountNameOrNickname(currentUser);
@@ -57,10 +58,10 @@ namespace CorruptOSBot.Modules
                     var emojiDown = new Emoji("\uD83D\uDC4E");
                     await sent.AddReactionAsync(emojiDown);
 
-                    // delete the command posted
-                    await Context.Message.DeleteAsync();
                 }
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Admin)]
@@ -68,7 +69,7 @@ namespace CorruptOSBot.Modules
         [Summary("!postid - Gets the current post's Id")]
         public async Task SaypostidAsync()
         {
-            if (ToggleStateManager.GetToggleState("postid", Context.User))
+            if (ToggleStateManager.GetToggleState("postid", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 var messages = await Context.Channel
                    .GetMessagesAsync(Context.Message, Direction.Before, 1)
@@ -81,10 +82,9 @@ namespace CorruptOSBot.Modules
 
                     await ReplyAsync(messageId.ToString());
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Admin)]
@@ -92,15 +92,14 @@ namespace CorruptOSBot.Modules
         [Summary("!channelid - Gets the current channel's Id")]
         public async Task SaychannelIdAsync()
         {
-            if (ToggleStateManager.GetToggleState("channelid", Context.User))
+            if (ToggleStateManager.GetToggleState("channelid", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 var channel = Context.Channel.Id.ToString();
 
                 await ReplyAsync(channel);
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Admin)]
@@ -108,15 +107,14 @@ namespace CorruptOSBot.Modules
         [Summary("!guildid - Gets the current guild Id")]
         public async Task SayguildidAsync()
         {
-            if (ToggleStateManager.GetToggleState("guildid", Context.User))
+            if (ToggleStateManager.GetToggleState("guildid", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 var channel = Context.Guild.Id.ToString();
 
                 await ReplyAsync(channel);
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Admin)]
@@ -124,7 +122,7 @@ namespace CorruptOSBot.Modules
         [Summary("!serverip - Gets the current server's IP")]
         public async Task SayServerIdAsync()
         {
-            if (ToggleStateManager.GetToggleState("serverip", Context.User))
+            if (ToggleStateManager.GetToggleState("serverip", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); // `Dns.Resolve()` method is deprecated.
                 foreach (var item in ipHostInfo.AddressList)
@@ -132,10 +130,9 @@ namespace CorruptOSBot.Modules
                     var serverIp = item.ToString();
                     await ReplyAsync(string.Format("{0}", serverIp));
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Admin)]
@@ -143,54 +140,68 @@ namespace CorruptOSBot.Modules
         [Summary("!clear {number} - Clears posts above it. (max 10)")]
         public async Task SayClearAsync(int number)
         {
-            if (ToggleStateManager.GetToggleState("clear", Context.User))
+            if (ToggleStateManager.GetToggleState("clear", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
-                // max it
+                // Limit at 10, Thanks Zeke
                 if (number > 10)
                 {
                     number = 10;
                 }
 
                 var messages = await Context.Channel.GetMessagesAsync(number + 1).FlattenAsync();
-                await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
+
+                try
+                {
+                    await (Context.Channel as SocketTextChannel).DeleteMessagesAsync(messages);
+                }
+                catch (Exception ex)
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Error, "AdminModule", "Clear command issue - " + ex.Message.ToString()));
+                    await Context.Message.DeleteAsync();
+                }
             }
         }
 
         [Helpgroup(HelpGroup.Admin)]
         [Command("toggle")]
         [Summary("!toggle {command string} - Toggles a command to be available.")]
-        public async Task SayTogglecommandAsync(string command)
+        public async Task SayToggleCommandAsync(string command)
         {
-            var currentState = ToggleStateManager.GetToggleState(command);
-            await ToggleStateManager.ToggleModuleCommand(command, !currentState);
-            var newState = ToggleStateManager.GetToggleState(command);
-            await ReplyAsync(string.Format("command {0} was toggled from {1} to {2}", command, currentState, newState));
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
+            {
+                var currentState = ToggleStateManager.GetToggleState(command);
+                await ToggleStateManager.ToggleModuleCommand(command, !currentState);
+                var newState = ToggleStateManager.GetToggleState(command);
+                await ReplyAsync(string.Format("command {0} was toggled from {1} to {2}", command, currentState, newState));
+            }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Admin)]
         [Command("toggles")]
         [Summary("!toggles - Shows the current enabled and disabled commands")]
-        public async Task SaytogglestatescommandAsync()
+        public async Task SayToggleStatesCommandAsync()
         {
-            var states = ToggleStateManager.GetToggleStates();
-
-            var builder = new EmbedBuilder();
-            builder.Color = Color.Blue;
-            builder.WithFooter("Shows the current enabled and disabled commands, services and interceptors");
-            builder.Title = "Toggle states";
-            var sb = new StringBuilder();
-
-            foreach (var item in states.Take(25))
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
             {
-                sb.AppendLine(string.Format("**{0}**: {1}", item.Functionality, item.Toggled));
-            }
-            builder.Description = sb.ToString();
+                var states = ToggleStateManager.GetToggleStates();
 
-            await ReplyAsync(embed: builder.Build());
-            // delete the command posted
+                var builder = new EmbedBuilder();
+                builder.Color = Color.Blue;
+                builder.WithFooter("Shows the current enabled and disabled commands, services and interceptors");
+                builder.Title = "Toggle states";
+                var sb = new StringBuilder();
+
+                foreach (var item in states.Take(25))
+                {
+                    sb.AppendLine(string.Format("**{0}**: {1}", item.Functionality, item.Toggled));
+                }
+                builder.Description = sb.ToString();
+
+                await ReplyAsync(embed: builder.Build());
+            }
+
             await Context.Message.DeleteAsync();
         }
 
@@ -199,7 +210,7 @@ namespace CorruptOSBot.Modules
         [Summary("!getusers - Gets all users on discord, showing their name or nickname (if set). This can be split up in multiple messages in order to comply with the 2000 character length cap on discord.")]
         public async Task SayGetUsersAsync()
         {
-            if (ToggleStateManager.GetToggleState("getusers", Context.User))
+            if (ToggleStateManager.GetToggleState("getusers", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 try
                 {
@@ -237,10 +248,9 @@ namespace CorruptOSBot.Modules
                 {
                     await Program.Log(new LogMessage(LogSeverity.Info, nameof(SayGetUsersAsync), string.Format("Failed: {0}", e.Message)));
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Staff)]
@@ -248,7 +258,7 @@ namespace CorruptOSBot.Modules
         [Summary("!getuser {username}(optional) - Gets a single user on discord, showing their available information.")]
         public async Task SayGetUserAsync([Remainder] string username)
         {
-            if (ToggleStateManager.GetToggleState("getuser", Context.User) && RoleHelper.HasStaffOrModOrOwnerRole(Context.User, Context.Guild))
+            if (ToggleStateManager.GetToggleState("getuser", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 try
                 {
@@ -289,10 +299,9 @@ namespace CorruptOSBot.Modules
                 {
                     await Program.Log(new LogMessage(LogSeverity.Info, nameof(SayGetUserAsync), string.Format("Failed: {0}", e.Message)));
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Member)]
@@ -300,9 +309,7 @@ namespace CorruptOSBot.Modules
         [Summary("!getuser {username}(optional) - Gets a single user on discord, showing their available information.")]
         public async Task SayGetUserSelfAsync()
         {
-            if (ToggleStateManager.GetToggleState("getuser", Context.User) &&
-                RoleHelper.HasAnyRole(Context.User) &&
-                DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
+            if (ToggleStateManager.GetToggleState("getuser", Context.User) && RoleHelper.HasAnyRole(Context.User) && DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
             {
                 try
                 {
@@ -313,10 +320,9 @@ namespace CorruptOSBot.Modules
                 {
                     await Program.Log(new LogMessage(LogSeverity.Info, nameof(SayGetUserAsync), string.Format("Failed: {0}", e.Message)));
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Admin)]
@@ -324,7 +330,7 @@ namespace CorruptOSBot.Modules
         [Summary("!compare - compares discordusers and database discord users")]
         public async Task SayCompareAsync()
         {
-            if (ToggleStateManager.GetToggleState("compare", Context.User))
+            if (ToggleStateManager.GetToggleState("compare", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 // grab discordusers
                 var guildId = ConfigHelper.GetGuildId();
@@ -392,10 +398,9 @@ namespace CorruptOSBot.Modules
                     // reply the list
                     await ReplyAsync(embed: item);
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Admin)]
@@ -403,7 +408,7 @@ namespace CorruptOSBot.Modules
         [Summary("!fullcompare - compares discordusers and database discord users")]
         public async Task SayCompare2Async()
         {
-            if (ToggleStateManager.GetToggleState("compare", Context.User))
+            if (ToggleStateManager.GetToggleState("compare", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 // compare the discord users vs the database
                 var comparisonList = GetFullComparisonList();
@@ -446,10 +451,9 @@ namespace CorruptOSBot.Modules
                     // reply the list
                     await ReplyAsync(embed: item);
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
+
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Admin)]
@@ -457,124 +461,11 @@ namespace CorruptOSBot.Modules
         [Summary("!post {message} - posts message contents from the bot")]
         public async Task PostMessage([Remainder] string message)
         {
-            await Context.Channel.SendMessageAsync(message);
-
-            // delete the command posted
-            await Context.Message.DeleteAsync();
-        }
-
-        [Helpgroup(HelpGroup.Admin)]
-        [Command("add-points", false)]
-        [Summary("!add-points {username} - gives specified member the specified points")]
-        public async Task AddPoints(string username, int points)
-        {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
             {
-                using (CorruptModel corruptosEntities = new CorruptModel())
-                {
-                    var users = corruptosEntities.DiscordUsers.ToList();
-
-                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
-
-                    if (user != null)
-                    {
-                        var newPoints = user.Points += points;
-
-                        user.Points = newPoints;
-
-                        await UpdateDiscordUserRole(user, newPoints, corruptosEntities);
-
-                        await corruptosEntities.SaveChangesAsync();
-                    }
-                }
+                await Context.Channel.SendMessageAsync(message);
             }
 
-            // delete the command posted
-            await Context.Message.DeleteAsync();
-        }
-
-        [Helpgroup(HelpGroup.Admin)]
-        [Command("sub-points", false)]
-        [Summary("!sub-points {username} - subtracts specified member the specified points")]
-        public async Task SubPoints(string username, int points)
-        {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
-            {
-                using (CorruptModel corruptosEntities = new CorruptModel())
-                {
-                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
-
-                    if (user != null)
-                    {
-                        var newPoints = user.Points -= points;
-
-                        if (newPoints < 0)
-                        {
-                            newPoints = 0;
-                        }
-
-                        user.Points = newPoints;
-
-                        await UpdateDiscordUserRole(user, newPoints, corruptosEntities);
-
-                        await corruptosEntities.SaveChangesAsync();
-                    }
-                }
-            }
-
-            // delete the command posted
-            await Context.Message.DeleteAsync();
-        }
-
-        [Helpgroup(HelpGroup.Admin)]
-        [Command("set-points", false)]
-        [Summary("!set-points {username} - sets specified member the specified points")]
-        public async Task SetPoints(string username, int points)
-        {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "bot-command", Context.User))
-            {
-                using (CorruptModel corruptosEntities = new CorruptModel())
-                {
-                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
-
-                    if (user != null)
-                    {
-                        var newPoints = user.Points = points;
-                        user.Points = newPoints;
-
-                        await corruptosEntities.SaveChangesAsync();
-
-                        await UpdateDiscordUserRole(user, newPoints, corruptosEntities);
-                    }
-                }
-            }
-
-            // delete the command posted
-            await Context.Message.DeleteAsync();
-        }
-
-        [Helpgroup(HelpGroup.Admin)]
-        [Command("set-role", false)]
-        [Summary("!set-role {username} - sets specified member the specified role")]
-        public async Task SetRank(string username, int roleId)
-        {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User))
-            {
-                using (CorruptModel corruptosEntities = new CorruptModel())
-                {
-                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
-                    var role = corruptosEntities.Roles.FirstOrDefault(x => x.Id == roleId);
-
-                    if (user != null && role != null)
-                    {
-                        user.RoleId = role.Id;
-
-                        await corruptosEntities.SaveChangesAsync();
-                    }
-                }
-            }
-
-            // delete the command posted
             await Context.Message.DeleteAsync();
         }
 
@@ -583,51 +474,11 @@ namespace CorruptOSBot.Modules
         [Summary("!dev - Dev command")]
         public async Task Dev()
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) &&
-                (Context.User.Id == 108710294049542144 || Context.User.Id == 391595176314798090))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && (Context.User.Id == 108710294049542144 || Context.User.Id == 391595176314798090))
             {
-                var womClanMembers = new WiseOldManClient().GetClanMembers();
-
-                using (CorruptModel corruptosEntities = new CorruptModel())
-                {
-                    var dbClanMembers = corruptosEntities.RunescapeAccounts.ToList();
-
-                    foreach (var member in dbClanMembers)
-                    {
-                        var womClanMember = womClanMembers.FirstOrDefault(item => item.displayName.ToLower() == member.rsn.ToLower());
-
-                        if (womClanMember != null)
-                        {
-                            member.account_type = womClanMember.type;
-                        }
-                    }
-
-                    await corruptosEntities.SaveChangesAsync();
-                }
             }
 
-            // delete the command posted
             await Context.Message.DeleteAsync();
-        }
-
-        private static async Task UpdateDiscordUserRole(DiscordUser user, int newPoints, CorruptModel corruptosEntities)
-        {
-            var roles = corruptosEntities.Roles.ToList();
-            var channels = corruptosEntities.Channels.ToList();
-
-            var roleToBeApplied = roles.FirstOrDefault(item => newPoints >= item.PointsToReach && newPoints <= item.MaximumPoints);
-
-            if (roleToBeApplied.Id != user.RoleId)
-            {
-                user.RoleId = roleToBeApplied.Id;
-
-                var generalChannel = channels.FirstOrDefault(item => item.Name == "general");
-
-                await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("Rank promotion for {0}!", user.Username),
-                    string.Format("<@{0}> just got promoted to <@&{1}>!", user.DiscordId, "827967957107605530),
-                    user.Role.IconUrl, "https://static.wikia.nocookie.net/getsetgames/images/8/82/Level_up_icon.png/revision/latest?cb=20130804113035"));
-
-            }
         }
 
         private List<ComparisonResult> GetComparisonList(IReadOnlyCollection<IGuildUser> discordUsers, List<DiscordUser> databaseDiscordUsers)
@@ -982,6 +833,7 @@ namespace CorruptOSBot.Modules
         public bool ExistsInDB { get; set; }
         public bool ExistsInDiscord { get; set; }
         public UInt64? DiscordId { get; set; }
+
         public bool IsInBoth
         { get { return ExistsInDB && ExistsInDiscord; } }
     }
@@ -992,6 +844,7 @@ namespace CorruptOSBot.Modules
         public bool ExistsInDB { get; set; }
         public bool ExistsInDiscord { get; set; }
         public bool ExistsInWOM { get; set; }
+
         public bool IsInBoth
         { get { return ExistsInDB && ExistsInDiscord && ExistsInWOM; } }
     }

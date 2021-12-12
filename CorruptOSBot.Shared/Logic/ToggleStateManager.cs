@@ -1,6 +1,5 @@
 ﻿using CorruptOSBot.Data;
 using Discord.WebSocket;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ namespace CorruptOSBot.Shared
             {
                 return true;
             }
-            
+
             // default togglestate check
             using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
             {
