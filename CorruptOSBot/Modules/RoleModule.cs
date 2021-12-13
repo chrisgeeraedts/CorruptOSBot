@@ -152,17 +152,15 @@ namespace CorruptOSBot.Modules
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
-                    var users = corruptosEntities.DiscordUsers.ToList();
-
-                    var user = corruptosEntities.RunescapeAccounts.FirstOrDefault(x => x.rsn.ToLower() == username.ToLower());
+                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
 
                     if (user != null)
                     {
-                        var newPoints = user.DiscordUser.Points += points;
+                        var newPoints = user.Points += points;
 
-                        user.DiscordUser.Points = newPoints;
+                        user.Points = newPoints;
 
-                        await UpdateDiscordUserRole(user.DiscordUser, true, corruptosEntities, Context);
+                        await UpdateDiscordUserRole(user, true, corruptosEntities, Context);
 
                         await corruptosEntities.SaveChangesAsync();
                     }
