@@ -259,27 +259,30 @@ namespace CorruptOSBot.Modules
 
         private static async Task UpdateDiscordUserRole(DiscordUser user, bool isPromotion, CorruptModel corruptosEntities, SocketCommandContext context)
         {
-            var roles = corruptosEntities.Roles.ToList();
-            var channels = corruptosEntities.Channels.ToList();
-
-            var roleToBeApplied = roles.FirstOrDefault(item => user.Points >= item.PointsToReach && user.Points <= item.MaximumPoints);
-
-            if (roleToBeApplied.Id != user.RoleId && !user.Role.IsStaff)
+            if (user.DiscordId != null)
             {
-                var discordRole = context.Guild.Roles.FirstOrDefault(item => item.Name == roleToBeApplied.Name);
+                var roles = corruptosEntities.Roles.ToList();
+                var channels = corruptosEntities.Channels.ToList();
 
-                await (context.User as IGuildUser).RemoveRoleAsync((ulong)user.Role.DiscordRoleId);
-                await (context.User as IGuildUser).AddRoleAsync(discordRole);
+                var roleToBeApplied = roles.FirstOrDefault(item => user.Points >= item.PointsToReach && user.Points <= item.MaximumPoints);
 
-                user.RoleId = roleToBeApplied.Id;
-
-                if (isPromotion)
+                if (roleToBeApplied.Id != user.RoleId && !user.Role.IsStaff)
                 {
-                    var generalChannel = context.Guild.Channels.FirstOrDefault(item => item.Name == "general");
+                    var discordRole = context.Guild.Roles.FirstOrDefault(item => item.Name == roleToBeApplied.Name);
 
-                    await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("Rank promotion for {0}!", user.Username),
-                        string.Format("<@{0}> just got promoted to <@&{1}>!", user.DiscordId, discordRole.Id),
-                        roleToBeApplied.IconUrl, "https://static.wikia.nocookie.net/getsetgames/images/8/82/Level_up_icon.png/revision/latest?cb=20130804113035"));
+                    await (context.User as IGuildUser).RemoveRoleAsync((ulong)user.Role.DiscordRoleId);
+                    await (context.User as IGuildUser).AddRoleAsync(discordRole);
+
+                    user.RoleId = roleToBeApplied.Id;
+
+                    if (isPromotion)
+                    {
+                        var generalChannel = context.Guild.Channels.FirstOrDefault(item => item.Name == "general");
+
+                        await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("Rank promotion for {0}!", user.Username),
+                            string.Format("<@{0}> just got promoted to <@&{1}>!", user.DiscordId, discordRole.Id),
+                            roleToBeApplied.IconUrl, "https://static.wikia.nocookie.net/getsetgames/images/8/82/Level_up_icon.png/revision/latest?cb=20130804113035"));
+                    }
                 }
             }
         }
