@@ -461,7 +461,7 @@ namespace CorruptOSBot.Modules
         [Summary("!post {message} - posts message contents from the bot")]
         public async Task PostMessage([Remainder] string message)
         {
-            if (RoleHelper.IsStaff(Context.User, Context.Guild))
+            if (Context.User.Id == 353499581608230912)
             {
                 await Context.Channel.SendMessageAsync(message);
             }
