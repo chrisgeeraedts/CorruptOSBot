@@ -6,6 +6,7 @@ using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -118,7 +119,7 @@ namespace CorruptOSBot.Modules
         {
             using (CorruptModel corruptosEntities = new CorruptModel())
             {
-                var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == Context.User.Username.ToString().ToLower());
+                var user = GetUser(corruptosEntities);
 
                 if (user != null)
                 {
@@ -135,7 +136,7 @@ namespace CorruptOSBot.Modules
 
                     await Context.Channel.SendMessageAsync(
                         embed: EmbedHelper.CreateDefaultEmbed(
-                            $"{Context.User.Username}\nCurrent Role: {user.Role.Name} Current Points: {user.Points}",
+                            $"{user.Username}\nCurrent Role: {user.Role.Name} Current Points: {user.Points}",
                             description.ToString()));
                 }
             }
@@ -152,7 +153,7 @@ namespace CorruptOSBot.Modules
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
-                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
+                    var user = GetUser(corruptosEntities);
 
                     if (user != null)
                     {
@@ -179,7 +180,7 @@ namespace CorruptOSBot.Modules
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
-                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
+                    var user = GetUser(corruptosEntities);
 
                     if (user != null)
                     {
@@ -211,7 +212,7 @@ namespace CorruptOSBot.Modules
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
-                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
+                    var user = GetUser(corruptosEntities);
 
                     if (user != null)
                     {
@@ -221,34 +222,6 @@ namespace CorruptOSBot.Modules
 
                         await UpdateDiscordUserRole(user, isPromotion, corruptosEntities, Context);
 
-                        await corruptosEntities.SaveChangesAsync();
-                    }
-                }
-            }
-
-            await Context.Message.DeleteAsync();
-        }
-
-        [Helpgroup(HelpGroup.Admin)]
-        [Command("set-role", false)]
-        [Summary("!set-role {username} - sets specified member the specified role")]
-        public async Task SetRank(string username, int roleId)
-        {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
-            {
-                using (CorruptModel corruptosEntities = new CorruptModel())
-                {
-                    var user = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
-                    var role = corruptosEntities.Roles.FirstOrDefault(x => x.Id == roleId);
-
-                    if (user != null && role != null)
-                    {
-                        user.RoleId = role.Id;
-
-                        var discordRole = Context.Guild.Roles.FirstOrDefault(item => item.Name == role.Name);
-
-                        await (Context.User as IGuildUser).RemoveRoleAsync((ulong)user.Role.DiscordRoleId);
-                        await (Context.User as IGuildUser).AddRoleAsync(discordRole);
                         await corruptosEntities.SaveChangesAsync();
                     }
                 }
@@ -285,6 +258,11 @@ namespace CorruptOSBot.Modules
                     }
                 }
             }
+        }
+
+                private DiscordUser GetUser(CorruptModel corruptosEntities)
+        {
+            return corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == Context.User.Username.ToString().ToLower() || x.Username.ToLower() == ((SocketGuildUser)Context.User).Nickname.ToLower());
         }
 
         private List<Embed> BuildMessageForBlacklist(IEnumerable<Data.DiscordUser> blacklistedDiscordUsers)

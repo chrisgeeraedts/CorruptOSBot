@@ -17,7 +17,7 @@ namespace CorruptOSBot.Helpers.Discord
         internal static bool IsInChannel(ulong channelId, string channelName, SocketUser userAdditional = null)
         {
             // override for admin
-            if (userAdditional != null && userAdditional.Id == 108710294049542144) //GMKirby Discord ID
+            if (userAdditional != null && (userAdditional.Id == 108710294049542144 || userAdditional.Id == 391595176314798090)) //GMKirby and Carn3asada Discord ID's
             {
                 return true;
             }
