@@ -155,7 +155,7 @@ namespace CorruptOSBot.Modules
                 {
                     var user = GetUser(corruptosEntities);
 
-                    if (user != null)
+                    if (user != null && !user.BlacklistedForPromotion)
                     {
                         var newPoints = user.Points += points;
 
@@ -163,7 +163,13 @@ namespace CorruptOSBot.Modules
 
                         await UpdateDiscordUserRole(user, true, corruptosEntities, Context);
 
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"{points} added to {user.Username}, giving a total of {newPoints}", string.Empty));
+
                         await corruptosEntities.SaveChangesAsync();
+                    }
+                    else if (user != null && user.BlacklistedForPromotion)
+                    {
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"User {user.Username} is blacklisted from promotion", string.Empty));
                     }
                 }
             }
@@ -182,7 +188,7 @@ namespace CorruptOSBot.Modules
                 {
                     var user = GetUser(corruptosEntities);
 
-                    if (user != null)
+                    if (user != null && !user.BlacklistedForPromotion)
                     {
                         var newPoints = user.Points -= points;
 
@@ -195,7 +201,13 @@ namespace CorruptOSBot.Modules
 
                         await UpdateDiscordUserRole(user, false, corruptosEntities, Context);
 
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"{points} removed from {user.Username}, giving a total of {newPoints}", string.Empty));
+
                         await corruptosEntities.SaveChangesAsync();
+                    }
+                    else if (user != null && user.BlacklistedForPromotion)
+                    {
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"User {user.Username} is blacklisted from promotion", string.Empty));
                     }
                 }
             }
@@ -214,7 +226,7 @@ namespace CorruptOSBot.Modules
                 {
                     var user = GetUser(corruptosEntities);
 
-                    if (user != null)
+                    if (user != null && !user.BlacklistedForPromotion)
                     {
                         var isPromotion = points > user.Points;
 
@@ -222,7 +234,13 @@ namespace CorruptOSBot.Modules
 
                         await UpdateDiscordUserRole(user, isPromotion, corruptosEntities, Context);
 
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Set {user.Username} points to {points}", string.Empty));
+
                         await corruptosEntities.SaveChangesAsync();
+                    }
+                    else if (user != null && user.BlacklistedForPromotion)
+                    {
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"User {user.Username} is blacklisted from promotion", string.Empty));
                     }
                 }
             }
@@ -250,7 +268,7 @@ namespace CorruptOSBot.Modules
 
                     if (isPromotion)
                     {
-                        var generalChannel = context.Guild.Channels.FirstOrDefault(item => item.Name == "general");
+                        var generalChannel = context.Guild.Channels.FirstOrDefault(item => item.Name == "rank-requests");
 
                         await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("Rank promotion for {0}!", user.Username),
                             string.Format("<@{0}> just got promoted to <@&{1}>!", user.DiscordId, discordRole.Id),
@@ -260,7 +278,7 @@ namespace CorruptOSBot.Modules
             }
         }
 
-                private DiscordUser GetUser(CorruptModel corruptosEntities)
+        private DiscordUser GetUser(CorruptModel corruptosEntities)
         {
             return corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == Context.User.Username.ToString().ToLower() || x.Username.ToLower() == ((SocketGuildUser)Context.User).Nickname.ToLower());
         }
