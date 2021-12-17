@@ -295,5 +295,48 @@ namespace CorruptOSBot.Modules
 
             await Context.Message.DeleteAsync();
         }
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("nex")]
+        [Summary("!nex - Enables a player to earn the 'Nex' role (Only allowed in **set-pvm-roles**)")]
+        public async Task SayNexAsync()
+        {
+            if (ToggleStateManager.GetToggleState("nex", Context.User) && RoleHelper.HasAnyRole(Context.User))
+            {
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
+                {
+                    var currentUser = ((SocketGuildUser)Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
+
+                    if (!string.IsNullOrEmpty(rsn))
+                    {
+                        // Get KC in WOM
+                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
+                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
+
+                        if (clanMember != null)
+                        {
+                            // set the role appriate
+                            await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                            currentUser,
+                            Context.Guild,
+                            new PvmSetCM()
+                            {
+                                role = Constants.Nex,
+                                imageUrl = Constants.NexImage
+                            },
+                            false,
+                            true);
+                        }
+                    }
+                }
+                else
+                {
+                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!nex", "set-pvm-roles");
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
     }
 }

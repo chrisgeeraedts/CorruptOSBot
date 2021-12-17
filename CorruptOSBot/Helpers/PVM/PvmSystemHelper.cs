@@ -100,9 +100,8 @@ namespace CorruptOSBot.Helpers.PVM
 
             var hasRole = currentUser.RoleIds.Any(x => x == roleId.Id);
 
-            if (overrideTrigger || (hasRole))
+            if (overrideTrigger || hasRole)
             {
-
                 if (!hasRole)
                 {
                     // upgrade role
