@@ -17,7 +17,8 @@ namespace CorruptOSBot.Helpers
                 {
                     DiscordId = Convert.ToInt64(currentUser.Id),
                     Username = preferedNickname,
-                    OriginallyJoinedAt = DateTime.Now
+                    OriginallyJoinedAt = DateTime.Now,
+                    RoleId = 12
                 };
 
                 corruptosEntities.DiscordUsers.Add(discordUser);

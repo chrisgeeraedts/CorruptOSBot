@@ -40,9 +40,6 @@ namespace CorruptOSBot.Modules
                 {
                     await NameChangeMember(currentUser, preferedNickname);
                 }
-
-                // delete the command posted
-                await Context.Message.DeleteAsync();
             }
         }
 
@@ -183,7 +180,7 @@ namespace CorruptOSBot.Modules
             if (isSafeAccount)
             {
                 // update the role
-                var dbRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 7); //Recruit
+                var dbRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 12); //Helper
                 if (dbRole != null)
                 {
                     // update the role

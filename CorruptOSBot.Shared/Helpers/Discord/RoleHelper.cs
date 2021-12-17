@@ -33,7 +33,7 @@ namespace CorruptOSBot.Shared.Helpers.Discord
             var roles = GetRoles();
             var result = false;
 
-            for (var i = 1; i < 16; i++)
+            for (var i = 1; i < 13; i++)
             {
                 result = HasRole(user, guild, roles.FirstOrDefault(x => x.Id == i));
             }
