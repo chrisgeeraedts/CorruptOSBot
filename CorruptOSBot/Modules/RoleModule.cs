@@ -119,7 +119,9 @@ namespace CorruptOSBot.Modules
         {
             using (CorruptModel corruptosEntities = new CorruptModel())
             {
-                var user = GetUser(corruptosEntities);
+                var username = ((SocketGuildUser)Context.User).Nickname ?? Context.User.Username;
+
+                var user = GetUser(username, corruptosEntities);
 
                 if (user != null)
                 {
@@ -153,7 +155,7 @@ namespace CorruptOSBot.Modules
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
-                    var user = GetUser(corruptosEntities);
+                    var user = GetUser(username, corruptosEntities);
 
                     if (user != null && !user.BlacklistedForPromotion)
                     {
@@ -186,7 +188,7 @@ namespace CorruptOSBot.Modules
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
-                    var user = GetUser(corruptosEntities);
+                    var user = GetUser(username, corruptosEntities);
 
                     if (user != null && !user.BlacklistedForPromotion)
                     {
@@ -224,7 +226,7 @@ namespace CorruptOSBot.Modules
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
-                    var user = GetUser(corruptosEntities);
+                    var user = GetUser(username, corruptosEntities);
 
                     if (user != null && !user.BlacklistedForPromotion)
                     {
@@ -278,9 +280,9 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        private DiscordUser GetUser(CorruptModel corruptosEntities)
+        private DiscordUser GetUser(string username, CorruptModel corruptosEntities)
         {
-            return corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == Context.User.Username.ToString().ToLower() || x.Username.ToLower() == ((SocketGuildUser)Context.User).Nickname.ToLower());
+            return corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
         }
 
         private List<Embed> BuildMessageForBlacklist(IEnumerable<Data.DiscordUser> blacklistedDiscordUsers)

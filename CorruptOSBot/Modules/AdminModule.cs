@@ -57,7 +57,6 @@ namespace CorruptOSBot.Modules
                     // Add thumbs down emoji
                     var emojiDown = new Emoji("\uD83D\uDC4E");
                     await sent.AddReactionAsync(emojiDown);
-
                 }
             }
 
@@ -476,7 +475,6 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && (Context.User.Id == 108710294049542144 || Context.User.Id == 391595176314798090))
             {
-
             }
 
             await Context.Message.DeleteAsync();
@@ -707,15 +705,18 @@ namespace CorruptOSBot.Modules
             var rsAccounts = new List<RunescapeAccount>();
             var isBlackListed = false;
             var joinDate = user.JoinedAt?.DateTime;
+            var discordUser = new DiscordUser();
+
             using (CorruptModel corruptosEntities = new CorruptModel())
             {
                 var userId = Convert.ToInt64(user.Id);
                 rsAccounts = corruptosEntities.RunescapeAccounts.Where(x => x.DiscordUser.DiscordId == userId).ToList();
-                var discorduser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == userId);
-                if (discorduser != null)
+                discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == userId);
+
+                if (discordUser != null)
                 {
-                    isBlackListed = discorduser.BlacklistedForPromotion;
-                    joinDate = discorduser.OriginallyJoinedAt;
+                    isBlackListed = discordUser.BlacklistedForPromotion;
+                    joinDate = discordUser.OriginallyJoinedAt;
                 }
             }
             embedBuilder.Url = string.Format("https://wiseoldman.net/players/{0}", rsAccounts.FirstOrDefault(x => x.account_type == "main"));
@@ -739,6 +740,13 @@ namespace CorruptOSBot.Modules
                 foreach (var roleId in user.RoleIds)
                 {
                     sb.AppendLine(string.Format("- {0}", Context.Guild.GetRole(roleId).Name).Replace("@", string.Empty));
+                }
+
+                if (discordUser != null)
+                {
+                    sb.AppendLine(Environment.NewLine);
+                    sb.AppendLine("**Points:");
+                    sb.AppendLine($"**Current Points**: {discordUser.Points}");
                 }
             }
 
