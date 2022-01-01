@@ -55,11 +55,14 @@ namespace CorruptOSBot.Services
 
                                     user.Points += pointsGained;
 
-                                    var discordUser = await guild.GetUserAsync((ulong)user.DiscordId);
-
-                                    if (discordUser != null)
+                                    if (user.DiscordId.HasValue)
                                     {
-                                        await UpdateDiscordUserRole(user, corruptosEntities, guild, discordUser);
+                                        var discordUser = await guild.GetUserAsync((ulong)user.DiscordId);
+
+                                        if (discordUser != null)
+                                        {
+                                            await UpdateDiscordUserRole(user, corruptosEntities, guild, discordUser);
+                                        }
                                     }
                                 }
                             }
