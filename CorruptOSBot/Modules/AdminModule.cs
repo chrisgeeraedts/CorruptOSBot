@@ -741,13 +741,13 @@ namespace CorruptOSBot.Modules
                 {
                     sb.AppendLine(string.Format("- {0}", Context.Guild.GetRole(roleId).Name).Replace("@", string.Empty));
                 }
+            }
 
-                if (discordUser != null)
-                {
-                    sb.AppendLine(Environment.NewLine);
-                    sb.AppendLine("**Points:");
-                    sb.AppendLine($"**Current Points**: {discordUser.Points}");
-                }
+            if (discordUser != null)
+            {
+                sb.AppendLine(Environment.NewLine);
+                sb.AppendLine("**Points:");
+                sb.AppendLine($"**Current Points**: {discordUser.Points}");
             }
 
             sb.AppendLine(Environment.NewLine);
