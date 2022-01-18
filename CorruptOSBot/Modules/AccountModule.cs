@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Data;
+using CorruptOSBot.Extensions;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
@@ -324,29 +325,29 @@ namespace CorruptOSBot.Modules
                             rsAccount.rsn = newName;
 
                             // change in WOM
-                            //var client = new WiseOldManClient();
-                            //var result = client.PostNameChange(oldName, newName);
+                            var client = new WiseOldManClient();
+                            var result = client.PostNameChange(oldName, newName);
 
-                            //if (string.IsNullOrEmpty(result))
-                            //{
-                            // add and message if it doesnt
-                            if (!forceOverride)
+                            if (string.IsNullOrEmpty(result))
                             {
-                                await Context.User.SendMessageAsync(String.Format("Your runescape account linked to the Affliction Discord account was changed from **{0}** to **{1}**", oldName, newName));
+                                // add and message if it doesnt
+                                if (!forceOverride)
+                                {
+                                    await Context.User.SendMessageAsync(String.Format("Your runescape account linked to the Affliction Discord account was changed from **{0}** to **{1}**", oldName, newName));
+                                }
+
+                                var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+                                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
+                                    EmbedHelper.CreateDefaultEmbed(string.Format("Member changed {0}", oldName),
+                                    string.Format("The runescape account '**{0}**' was renamed to '**{1}**'", oldName, newName)));
+
+                                corruptosEntities.SaveChanges();
                             }
-
-                            var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
-                            await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
-                                EmbedHelper.CreateDefaultEmbed(string.Format("Member changed {0}", oldName),
-                                string.Format("The runescape account '**{0}**' was renamed to '**{1}**'", oldName, newName)));
-
-                            corruptosEntities.SaveChanges();
-                            //}
-                            //else
-                            //{
-                            //    await Context.User.SendMessageAsync(String.Format("Name change failed: {0}", result));
-                            //    await Program.Log(new LogMessage(LogSeverity.Error, "ChangeAlt", String.Format("Name change failed: {0} - {1} => {2}", result, oldName, newName)));
-                            //}
+                            else
+                            {
+                                await Context.User.SendMessageAsync(String.Format("Name change failed: {0}", result));
+                                await Program.Log(new LogMessage(LogSeverity.Error, "ChangeAlt", String.Format("Name change failed: {0} - {1} => {2}", result, oldName, newName)));
+                            }
                         }
                         else
                         {
