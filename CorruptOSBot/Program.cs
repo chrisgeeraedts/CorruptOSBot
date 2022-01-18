@@ -237,7 +237,7 @@ namespace CorruptOSBot
             // We don't want the bot to respond to itself or other bots.
             if (msg.Author.Id == client.CurrentUser.Id || msg.Author.IsBot) return;
 
-            await BlockMessageIfDebugMode(msg);
+            //await BlockMessageIfDebugMode(msg);
 
             try
             {

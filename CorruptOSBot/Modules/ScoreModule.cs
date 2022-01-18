@@ -23,8 +23,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "event-general", Context.User))
             {
-                if (ToggleStateManager.GetToggleState("score", Context.User)
-                    && RoleHelper.HasAnyRole(Context.User))
+                if (ToggleStateManager.GetToggleState("score", Context.User) && RoleHelper.HasAnyRole(Context.User))
                 {
                     // load current event
                     // First, get all comps

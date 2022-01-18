@@ -40,8 +40,9 @@ namespace CorruptOSBot.Modules
         {
             if (ToggleStateManager.GetToggleState("poll", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
-                var currentUser = ((SocketGuildUser)Context.User);
+                var currentUser = (SocketGuildUser)Context.User;
                 var name = DiscordNameHelper.GetAccountNameOrNickname(currentUser);
+
                 if (!string.IsNullOrEmpty(name))
                 {
                     string title = string.Format("{0} has started a poll", name);
@@ -75,6 +76,7 @@ namespace CorruptOSBot.Modules
                    .FlattenAsync();
 
                 var message = messages.FirstOrDefault();
+
                 if (message != null)
                 {
                     var messageId = ((IUserMessage)message).Id;
@@ -93,9 +95,7 @@ namespace CorruptOSBot.Modules
         {
             if (ToggleStateManager.GetToggleState("channelid", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
-                var channel = Context.Channel.Id.ToString();
-
-                await ReplyAsync(channel);
+                await ReplyAsync(Context.Channel.Id.ToString());
             }
 
             await Context.Message.DeleteAsync();
@@ -108,9 +108,7 @@ namespace CorruptOSBot.Modules
         {
             if (ToggleStateManager.GetToggleState("guildid", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
-                var channel = Context.Guild.Id.ToString();
-
-                await ReplyAsync(channel);
+                await ReplyAsync(Context.Guild.Id.ToString());
             }
 
             await Context.Message.DeleteAsync();
@@ -279,6 +277,10 @@ namespace CorruptOSBot.Modules
                                 }
                             }
                         }
+                        else
+                        {
+                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"User:{username} not found into database.", string.Empty));
+                        }
                     }
                     else
                     {
@@ -305,10 +307,10 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Member)]
         [Command("getuser")]
-        [Summary("!getuser {username}(optional) - Gets a single user on discord, showing their available information.")]
+        [Summary("!getuser - Displays info about user who send command")]
         public async Task SayGetUserSelfAsync()
         {
-            if (ToggleStateManager.GetToggleState("getuser", Context.User) && RoleHelper.HasAnyRole(Context.User) && DiscordHelper.IsInChannel(Context.Channel.Id, "spam-bot-command", Context.User))
+            if (ToggleStateManager.GetToggleState("getuser", Context.User) && DiscordHelper.IsInChannel(Context.Channel.Id, "spam-bot-command", Context.User))
             {
                 try
                 {
@@ -460,7 +462,7 @@ namespace CorruptOSBot.Modules
         [Summary("!post {message} - posts message contents from the bot")]
         public async Task PostMessage([Remainder] string message)
         {
-            if (Context.User.Id == 353499581608230912)
+            if (Context.User.Id == 353499581608230912) // SGNathy Discord ID
             {
                 await Context.Channel.SendMessageAsync(message);
             }
@@ -684,12 +686,12 @@ namespace CorruptOSBot.Modules
 
                     corruptosEntities.DiscordUsers.Add(discordUser);
 
-                    var womIdentity = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.username.ToLower() == DiscordNameHelper.GetAccountNameOrNickname(user).ToLower());
+                    //var womIdentity = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.username.ToLower() == DiscordNameHelper.GetAccountNameOrNickname(user).ToLower());
                     corruptosEntities.RunescapeAccounts.Add(new Data.RunescapeAccount()
                     {
                         DiscordUser = discordUser,
                         rsn = DiscordNameHelper.GetAccountNameOrNickname(user),
-                        wom_id = womIdentity?.id
+                        //wom_id = womIdentity?.id
                     });
                     result++;
                 }
@@ -841,10 +843,8 @@ namespace CorruptOSBot.Modules
         public string UsernameInDiscord { get; set; }
         public bool ExistsInDB { get; set; }
         public bool ExistsInDiscord { get; set; }
-        public UInt64? DiscordId { get; set; }
-
-        public bool IsInBoth
-        { get { return ExistsInDB && ExistsInDiscord; } }
+        public ulong? DiscordId { get; set; }
+        public bool IsInBoth { get { return ExistsInDB && ExistsInDiscord; } }
     }
 
     public class FullComparisonResult

@@ -1,9 +1,13 @@
 ﻿using CorruptOSBot.Data;
 using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
+using MoreLinq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Services
@@ -11,9 +15,13 @@ namespace CorruptOSBot.Services
     internal class PromotionService : IService
     {
         public int TriggerTimeInMS { get => 1000 * 60 * 60 * 24; } // Once a day
-        public int BeforeTriggerTimeInMS { get => 1000 * 60 * 3; } // 3 minutes
+        //public int BeforeTriggerTimeInMS { get => 1000 * 60 * 3; } // 3 minutes
+
+        public int BeforeTriggerTimeInMS { get => 1000 * 5; } // 3 minutes
 
         private ulong GuildId;
+
+        private static List<DiscordUser> PromotedUsers { get; set; } = new List<DiscordUser>();
 
         public PromotionService(IDiscordClient client)
         {
@@ -68,6 +76,27 @@ namespace CorruptOSBot.Services
                             }
                         }
 
+                        var rolesWithPromotions = PromotedUsers.DistinctBy(item => item.Role.Name).Select(item => item.Role);
+                        var channels = corruptosEntities.Channels.ToList();
+
+                        foreach (var role in rolesWithPromotions)
+                        {
+                            var promotedUsersInRole = PromotedUsers.Where(item => item.Role.Name == role.Name);
+
+                            var promotedString = new StringBuilder();
+
+                            promotedUsersInRole.ForEach(item => promotedString.AppendLine($"<@{item.DiscordId}>"));
+
+                            var rankRequestsChannel = channels.FirstOrDefault(item => item.Name == "rank-requests");
+                            var rankRequestsDiscordChannel = await guild.GetChannelAsync((ulong)rankRequestsChannel.DiscordChannelId);
+
+                            await ((IMessageChannel)rankRequestsDiscordChannel).SendMessageAsync(
+                                embed: EmbedHelper.CreateDefaultEmbed($"Users promoted to {role.Name}!",
+                                promotedString.ToString(),
+                                role.IconUrl, "https://static.wikia.nocookie.net/getsetgames/images/8/82/Level_up_icon.png/revision/latest?cb=20130804113035")
+                                );
+                        }
+
                         // dd/mm/yyyy
                         lastPromoRunConfig.PropertyValue = currentDateTime.ToString("d");
                     }
@@ -80,7 +109,6 @@ namespace CorruptOSBot.Services
         private static async Task UpdateDiscordUserRole(DiscordUser user, CorruptModel corruptosEntities, IGuild guild, IGuildUser discordUser)
         {
             var roles = corruptosEntities.Roles.ToList();
-            var channels = corruptosEntities.Channels.ToList();
 
             var roleToBeApplied = roles.FirstOrDefault(item => user.Points >= item.PointsToReach && user.Points <= item.MaximumPoints);
 
@@ -92,6 +120,8 @@ namespace CorruptOSBot.Services
                 await discordUser.AddRoleAsync(discordRole);
 
                 user.RoleId = roleToBeApplied.Id;
+
+                PromotedUsers.Add(user);
             }
         }
     }

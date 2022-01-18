@@ -1,5 +1,4 @@
 ﻿using CorruptOSBot.Data;
-using CorruptOSBot.Extensions;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
@@ -8,7 +7,6 @@ using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
 using Discord.Commands;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,7 +17,7 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Member)]
         [Command("add-alt")]
         [Summary("!add-alt {rsn} - Adds an runescape alt account to your discord account")]
-        public async Task SayAddAltBAsync([Remainder] string rsn)
+        public async Task SayAddAltBAsync(string rsn)
         {
             if (ToggleStateManager.GetToggleState("add-alt", Context.User))
             {
@@ -32,7 +30,7 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Member)]
         [Command("add-iron")]
         [Summary("!add-iron {rsn} - Adds an runescape iron account to your discord account")]
-        public async Task SayAddIronAsync([Remainder] string rsn)
+        public async Task SayAddIronAsync(string rsn)
         {
             if (ToggleStateManager.GetToggleState("add-iron", Context.User))
             {
@@ -44,33 +42,26 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Staff)]
         [Command("force-add-alt")]
-        [Summary("!force-add-alt {discorduser}|{rsn} - Adds an runescape alt account to the given discord account")]
-        public async Task SayForceAddAltBAsync([Remainder] string commandString)
+        [Summary("!force-add-alt {discorduser} {rsn} - Adds an runescape alt account to the given discord account")]
+        public async Task SayForceAddAltBAsync(string discordUsername, string rsn)
         {
             if (ToggleStateManager.GetToggleState("force-add-alt", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
-                Dictionary<string, string> commands;
-                if (DiscordHelper.TryGetEntireCommand(commandString, new string[] { "discorduser", "rsn" }, '|', out commands))
+                DiscordUser discordUser = null;
+
+                using (CorruptModel corruptosEntities = new Data.CorruptModel())
                 {
-                    var discorduser = commands["discorduser"];
-                    var rsn = commands["rsn"];
+                    discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == discordUsername.ToLower());
+                }
 
-                    DiscordUser discordUser = null;
-
-                    using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
-                    {
-                        discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == discorduser.ToLower());
-                    }
-
-                    if (discordUser != null)
-                    {
-                        await AddAlt(Context, rsn, "alt", discordUser.DiscordId);
-                    }
-                    else
-                    {
-                        var message = await ReplyAsync(string.Format("That discord user (**{0}**) is **not found**", discorduser));
-                        await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
-                    }
+                if (discordUser != null)
+                {
+                    await AddAlt(Context, rsn, "alt", discordUser.DiscordId);
+                }
+                else
+                {
+                    var message = await ReplyAsync(string.Format("That discord user (**{0}**) is **not found**", discordUsername));
+                    await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
                 }
             }
 
@@ -79,33 +70,26 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Staff)]
         [Command("force-add-iron")]
-        [Summary("!force-add-iron {discorduser}|{rsn} - Adds an runescape alt account to the given discord account")]
-        public async Task SayForceAddIronBAsync([Remainder] string commandString)
+        [Summary("!force-add-iron {discorduser} {rsn} - Adds an runescape alt account to the given discord account")]
+        public async Task SayForceAddIronBAsync(string discordUsername, string rsn)
         {
             if (ToggleStateManager.GetToggleState("force-add-alt", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
-                Dictionary<string, string> commands;
-                if (DiscordHelper.TryGetEntireCommand(commandString, new string[] { "discorduser", "rsn" }, '|', out commands))
+                DiscordUser discordUser = null;
+
+                using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
                 {
-                    var discorduser = commands["discorduser"];
-                    var rsn = commands["rsn"];
+                    discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == discordUsername.ToLower());
+                }
 
-                    DiscordUser discordUser = null;
-
-                    using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
-                    {
-                        discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == discorduser.ToLower());
-                    }
-
-                    if (discordUser != null)
-                    {
-                        await AddAlt(Context, rsn, "iron", discordUser.DiscordId);
-                    }
-                    else
-                    {
-                        var message = await ReplyAsync(string.Format("That discord user (**{0}**) is **not found**", discorduser));
-                        await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
-                    }
+                if (discordUser != null)
+                {
+                    await AddAlt(Context, rsn, "iron", discordUser.DiscordId);
+                }
+                else
+                {
+                    var message = await ReplyAsync(string.Format("That discord user (**{0}**) is **not found**", discordUsername));
+                    await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
                 }
             }
 
@@ -114,20 +98,12 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Member)]
         [Command("change-alt")]
-        [Summary("!change-alt {old name}|{new name} - changes an existing alt name from the old to a new one")]
-        public async Task SayChangeAltBAsync([Remainder] string commandString)
+        [Summary("!change-alt {old name} {new name} - changes an existing alt name from the old to a new one")]
+        public async Task SayChangeAltBAsync(string oldName, string newName)
         {
             if (ToggleStateManager.GetToggleState("change-alt", Context.User))
             {
-                // grab actual props
-                Dictionary<string, string> commands;
-                if (DiscordHelper.TryGetEntireCommand(commandString, new string[] { "oldName", "newName" }, '|', out commands))
-                {
-                    var oldName = commands["oldName"];
-                    var newName = commands["newName"];
-
-                    await ChangeAlt(oldName, newName);
-                }
+                await ChangeAlt(oldName, newName);
             }
 
             await Context.Message.DeleteAsync();
@@ -135,20 +111,12 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Staff)]
         [Command("force-change-alt")]
-        [Summary("!force-change-alt {old name}|{new name} - changes an existing alt name from the old to a new one")]
-        public async Task SayForceChangeAltBAsync([Remainder] string commandString)
+        [Summary("!force-change-alt {old name} {new name} - changes an existing alt name from the old to a new one")]
+        public async Task SayForceChangeAltBAsync(string oldName, string newName)
         {
             if (ToggleStateManager.GetToggleState("force-change-alt", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
-                // grab actual props
-                Dictionary<string, string> commands;
-                if (DiscordHelper.TryGetEntireCommand(commandString, new string[] { "oldName", "newName" }, '|', out commands))
-                {
-                    var oldName = commands["oldName"];
-                    var newName = commands["newName"];
-
-                    await ChangeAlt(oldName, newName, true);
-                }
+                await ChangeAlt(oldName, newName, true);
             }
 
             await Context.Message.DeleteAsync();
@@ -157,7 +125,7 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Member)]
         [Command("delete-alt")]
         [Summary("!delete-alt {rsn} - Removes this runescape account from your discord account")]
-        public async Task SayDeleteAltBAsync([Remainder] string rsn)
+        public async Task SayDeleteAltBAsync(string rsn)
         {
             if (ToggleStateManager.GetToggleState("delete-alt", Context.User))
             {
@@ -170,7 +138,7 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Staff)]
         [Command("force-delete-account")]
         [Summary("!force-delete-account {rsn} - Removes this runescape account from the given discord account")]
-        public async Task SayForceDeleteAltBAsync([Remainder] string rsn)
+        public async Task SayForceDeleteAltBAsync(string rsn)
         {
             if (ToggleStateManager.GetToggleState("force-delete-account", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
             {
@@ -191,8 +159,9 @@ namespace CorruptOSBot.Modules
                     var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(x => x.DiscordId == discordId);
 
                     var isRsnAlreadyLinked = corruptosEntities.RunescapeAccounts.Any(x =>
-                    x.rsn.ToLower() == rsn.ToLower()
-                    && x.DiscordUser != null && x.DiscordUserId != discordUser.Id);
+                    x.rsn.ToLower() == rsn.ToLower() &&
+                    x.DiscordUser != null &&
+                    x.DiscordUserId != discordUser.Id);
                     // check if account is linked to rsn
                     if (discordUser != null)
                     {
@@ -211,21 +180,21 @@ namespace CorruptOSBot.Modules
                         else
                         {
                             // add it to WOM
-                            var client = new WiseOldManClient();
-                            var addedClanMember = client.AddGroupMember(rsn);
+                            //var client = new WiseOldManClient();
+                            //var addedClanMember = client.AddGroupMember(rsn);
 
-                            if (addedClanMember == null)
-                            {
-                                // could be null as its already a member, try to load normally
-                                addedClanMember = client.SearchUsersByName(rsn).FirstOrDefault();
-                            }
+                            //if (addedClanMember == null)
+                            //{
+                            //    // could be null as its already a member, try to load normally
+                            //    addedClanMember = client.SearchUsersByName(rsn).FirstOrDefault();
+                            //}
 
                             // add it to db
                             corruptosEntities.RunescapeAccounts.Add(new Data.RunescapeAccount()
                             {
                                 DiscordUser = discordUser,
                                 rsn = rsn,
-                                wom_id = addedClanMember?.id,
+                                //wom_id = addedClanMember?.id,
                                 account_type = type,
                             });
 
@@ -256,7 +225,7 @@ namespace CorruptOSBot.Modules
         {
             try
             {
-                using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+                using (CorruptModel corruptosEntities = new CorruptModel())
                 {
                     // Find discord dataset
                     RunescapeAccount runescapeAccountDB = null;
@@ -281,13 +250,13 @@ namespace CorruptOSBot.Modules
                     // check if account is linked to rsn
                     if (runescapeAccountDB == null)
                     {
-                        await context.User.SendMessageAsync(String.Format("The RSN **{0}** is not linked to your Affliction Discord account!", rsn));
+                        await context.User.SendMessageAsync($"The RSN **{rsn}** is not linked to your Affliction Discord account!");
                     }
                     else
                     {
                         // remove it from WOM
-                        var client = new WiseOldManClient();
-                        client.RemoveGroupMember(rsn);
+                        //var client = new WiseOldManClient();
+                        //client.RemoveGroupMember(rsn);
 
                         corruptosEntities.RunescapeAccounts.Remove(runescapeAccountDB);
 
@@ -298,14 +267,14 @@ namespace CorruptOSBot.Modules
 
                             var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
                             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
-                                EmbedHelper.CreateDefaultEmbed(string.Format("runescape account was removed from discord user"),
+                                EmbedHelper.CreateDefaultEmbed(string.Format("Runescape account was removed from Discord user"),
                                 string.Format(" **'{1}'** was removed from **{0}**", discordUser.Username, rsn)));
                         }
                         else
                         {
                             var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
                             await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
-                                EmbedHelper.CreateDefaultEmbed(string.Format("runescape account was removed from discord user"),
+                                EmbedHelper.CreateDefaultEmbed(string.Format("Runescape account was removed from Discord user"),
                                 string.Format(" **'{1}'** was removed from **{0}**", runescapeAccountDB.DiscordUser.Username, rsn)));
                         }
                     }
@@ -325,7 +294,7 @@ namespace CorruptOSBot.Modules
             try
             {
                 // change in database
-                using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+                using (CorruptModel corruptosEntities = new CorruptModel())
                 {
                     // ensure this account is owner of the rsn
                     var discordId = Convert.ToInt64(Context.User.Id);
@@ -355,29 +324,29 @@ namespace CorruptOSBot.Modules
                             rsAccount.rsn = newName;
 
                             // change in WOM
-                            var client = new WiseOldManClient();
-                            var result = client.PostNameChange(oldName, newName);
+                            //var client = new WiseOldManClient();
+                            //var result = client.PostNameChange(oldName, newName);
 
-                            if (string.IsNullOrEmpty(result))
+                            //if (string.IsNullOrEmpty(result))
+                            //{
+                            // add and message if it doesnt
+                            if (!forceOverride)
                             {
-                                // add and message if it doesnt
-                                if (!forceOverride)
-                                {
-                                    await Context.User.SendMessageAsync(String.Format("Your runescape account linked to the Affliction Discord account was changed from **{0}** to **{1}**", oldName, newName));
-                                }
-
-                                var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
-                                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
-                                    EmbedHelper.CreateDefaultEmbed(string.Format("Member changed {0}", oldName),
-                                    string.Format("The runescape account '**{0}**' was renamed to '**{1}**'", oldName, newName)));
-
-                                corruptosEntities.SaveChanges();
+                                await Context.User.SendMessageAsync(String.Format("Your runescape account linked to the Affliction Discord account was changed from **{0}** to **{1}**", oldName, newName));
                             }
-                            else
-                            {
-                                await Context.User.SendMessageAsync(String.Format("Name change failed: {0}", result));
-                                await Program.Log(new LogMessage(LogSeverity.Error, "ChangeAlt", String.Format("Name change failed: {0} - {1} => {2}", result, oldName, newName)));
-                            }
+
+                            var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+                            await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
+                                EmbedHelper.CreateDefaultEmbed(string.Format("Member changed {0}", oldName),
+                                string.Format("The runescape account '**{0}**' was renamed to '**{1}**'", oldName, newName)));
+
+                            corruptosEntities.SaveChanges();
+                            //}
+                            //else
+                            //{
+                            //    await Context.User.SendMessageAsync(String.Format("Name change failed: {0}", result));
+                            //    await Program.Log(new LogMessage(LogSeverity.Error, "ChangeAlt", String.Format("Name change failed: {0} - {1} => {2}", result, oldName, newName)));
+                            //}
                         }
                         else
                         {

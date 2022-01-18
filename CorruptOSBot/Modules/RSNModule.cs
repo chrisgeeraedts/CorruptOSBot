@@ -143,7 +143,7 @@ namespace CorruptOSBot.Modules
                 string.Format("{0} has changed their name to <@{1}> {2}", previousName, ((SocketGuildUser)currentUser).Id, (forced ? "(Forced by staff)" : string.Empty))));
 
             // update WOM
-            new WiseOldManClient().PostNameChange(previousName, preferedNickname);
+            //new WiseOldManClient().PostNameChange(previousName, preferedNickname);
 
             try
             {
@@ -220,7 +220,7 @@ namespace CorruptOSBot.Modules
                     }
 
                     // add to WOM
-                    var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
+                    //var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
 
                     // send welcome message
                     await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild, false);

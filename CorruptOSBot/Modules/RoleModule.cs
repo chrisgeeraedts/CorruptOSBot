@@ -151,7 +151,7 @@ namespace CorruptOSBot.Modules
         [Summary("!add-points {username} - gives specified member the specified points")]
         public async Task AddPoints(string username, int points)
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
@@ -173,6 +173,10 @@ namespace CorruptOSBot.Modules
                     {
                         await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"User {user.Username} is blacklisted from promotion", string.Empty));
                     }
+                    else
+                    {
+                        await SendUserNotFoundMessage(username);
+                    }
                 }
             }
 
@@ -184,7 +188,7 @@ namespace CorruptOSBot.Modules
         [Summary("!sub-points {username} - subtracts specified member the specified points")]
         public async Task SubPoints(string username, int points)
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
@@ -211,6 +215,10 @@ namespace CorruptOSBot.Modules
                     {
                         await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"User {user.Username} is blacklisted from promotion", string.Empty));
                     }
+                    else
+                    {
+                        await SendUserNotFoundMessage(username);
+                    }
                 }
             }
 
@@ -222,7 +230,7 @@ namespace CorruptOSBot.Modules
         [Summary("!set-points {username} - sets specified member the specified points")]
         public async Task SetPoints(string username, int points)
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 using (CorruptModel corruptosEntities = new CorruptModel())
                 {
@@ -243,6 +251,10 @@ namespace CorruptOSBot.Modules
                     else if (user != null && user.BlacklistedForPromotion)
                     {
                         await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"User {user.Username} is blacklisted from promotion", string.Empty));
+                    }
+                    else
+                    {
+                        await SendUserNotFoundMessage(username);
                     }
                 }
             }
@@ -270,19 +282,33 @@ namespace CorruptOSBot.Modules
 
                     if (isPromotion)
                     {
-                        var generalChannel = context.Guild.Channels.FirstOrDefault(item => item.Name == "rank-requests");
+                        var rankRequestsChannel = context.Guild.Channels.FirstOrDefault(item => item.Name == "rank-requests");
 
-                        await ((IMessageChannel)generalChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("Rank promotion for {0}!", user.Username),
-                            string.Format("<@{0}> just got promoted to <@&{1}>!", user.DiscordId, discordRole.Id),
+                        await ((IMessageChannel)rankRequestsChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format("Rank promotion for {0}!", user.Username),
+                            string.Format($"<@{user.DiscordId}> just got promoted to {discordRole.Name}!"),
                             roleToBeApplied.IconUrl, "https://static.wikia.nocookie.net/getsetgames/images/8/82/Level_up_icon.png/revision/latest?cb=20130804113035"));
                     }
                 }
             }
         }
 
+        private async Task SendUserNotFoundMessage(string username)
+        {
+            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format($"User {username} not found"), string.Empty));
+        }
+
         private DiscordUser GetUser(string username, CorruptModel corruptosEntities)
         {
-            return corruptosEntities.DiscordUsers.FirstOrDefault(x => x.Username.ToLower() == username.ToLower());
+            DiscordUser result = null;
+
+            var runescapeAcc = corruptosEntities.RunescapeAccounts.FirstOrDefault(item => item.rsn.ToLower() == username.ToLower());
+
+            if (runescapeAcc != null)
+            {
+                return runescapeAcc.DiscordUser;
+            }
+
+            return result;
         }
 
         private List<Embed> BuildMessageForBlacklist(IEnumerable<Data.DiscordUser> blacklistedDiscordUsers)

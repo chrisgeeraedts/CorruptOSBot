@@ -27,7 +27,7 @@ namespace CorruptOSBot.Helpers
                 {
                     DiscordUser = discordUser,
                     rsn = preferedNickname,
-                    wom_id = groupMember?.id,
+                    //wom_id = groupMember?.id,
                     account_type = "main"
                 });
 
