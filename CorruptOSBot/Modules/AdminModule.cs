@@ -462,7 +462,7 @@ namespace CorruptOSBot.Modules
         [Summary("!post {message} - posts message contents from the bot")]
         public async Task PostMessage([Remainder] string message)
         {
-            if (Context.User.Id == 353499581608230912) // SGNathy Discord ID
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
             {
                 await Context.Channel.SendMessageAsync(message);
             }
@@ -812,22 +812,21 @@ namespace CorruptOSBot.Modules
         [Summary("Prepare!")]
         public async Task SayOverthrowNathanAsync()
         {
-            if (ToggleStateManager.GetToggleState("overthrownathan", Context.User))
-            {
-                var message = await Context.Channel.SendMessageAsync("**Now is not yet the time...** | this message will selfdestruct in 5 seconds... ;)");
-
-                await Context.Message.DeleteAsync();
-                await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
-            }
+            await OverthrowNath();
         }
 
         [Command("overthrownath")]
         [Summary("Prepare!")]
         public async Task SayOverthrowNathAsync()
         {
+            await OverthrowNath();
+        }
+
+        private async Task OverthrowNath()
+        {
             if (ToggleStateManager.GetToggleState("overthrownathan", Context.User))
             {
-                var message = await Context.Channel.SendMessageAsync("**Now is not yet the time...** | this message will selfdestruct in 5 seconds... ;)");
+                var message = await Context.Channel.SendMessageAsync("Operation Completed");
 
                 await Context.Message.DeleteAsync();
                 await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
