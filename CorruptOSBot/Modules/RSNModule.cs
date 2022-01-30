@@ -41,6 +41,9 @@ namespace CorruptOSBot.Modules
                     await NameChangeMember(currentUser, preferedNickname);
                 }
             }
+
+            // delete the command posted
+            await Context.Message.DeleteAsync();
         }
 
         [Helpgroup(HelpGroup.Everybody)]
@@ -150,7 +153,7 @@ namespace CorruptOSBot.Modules
                 using (var model = new Data.CorruptModel())
                 {
                     // get the rsn account
-                    var rsaccount = model.RunescapeAccounts.FirstOrDefault(x => x.rsn.ToLower() == previousName);
+                    var rsaccount = model.RunescapeAccounts.FirstOrDefault(x => x.rsn.ToLower() == previousName.ToLower());
 
                     // make sure he is owner
                     var userId = Convert.ToInt64(currentUser.Id);
@@ -220,7 +223,7 @@ namespace CorruptOSBot.Modules
                     }
 
                     // add to WOM
-                    //var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
+                    var groupMember = new WiseOldManClient().AddGroupMember(preferedNickname);
 
                     // send welcome message
                     await DiscordHelper.SendWelcomeMessageToUser(Context.User, Context.Guild, false);
