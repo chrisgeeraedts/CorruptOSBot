@@ -313,7 +313,7 @@ namespace CorruptOSBot.Modules
 
         private List<Embed> BuildMessageForBlacklist(IEnumerable<Data.DiscordUser> blacklistedDiscordUsers)
         {
-            var result = new List<Discord.Embed>();
+            var result = new List<Embed>();
             var sb = new StringBuilder();
 
             if (blacklistedDiscordUsers.Any())

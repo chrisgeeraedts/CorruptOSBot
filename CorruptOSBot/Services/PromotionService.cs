@@ -15,9 +15,7 @@ namespace CorruptOSBot.Services
     internal class PromotionService : IService
     {
         public int TriggerTimeInMS { get => 1000 * 60 * 60 * 24; } // Once a day
-        //public int BeforeTriggerTimeInMS { get => 1000 * 60 * 3; } // 3 minutes
-
-        public int BeforeTriggerTimeInMS { get => 1000 * 5; } // 3 minutes
+        public int BeforeTriggerTimeInMS { get => 1000 * 60 * 3; } // 3 minutes
 
         private ulong GuildId;
 
@@ -120,6 +118,7 @@ namespace CorruptOSBot.Services
                 await discordUser.AddRoleAsync(discordRole);
 
                 user.RoleId = roleToBeApplied.Id;
+                user.Role = roleToBeApplied;
 
                 PromotedUsers.Add(user);
             }
