@@ -272,7 +272,7 @@ namespace CorruptOSBot
 
         private async Task BlockMessageIfDebugMode(SocketUserMessage msg)
         {
-            var isDeveloper = msg.Author.Id == 108710294049542144 || msg.Author.Id == 391595176314798090; //GMKirby | Carn3asada Discord Id
+            var isDeveloper = msg.Author.Id == SettingsConstants.GMKirbyDiscordId;
 
             if (ConfigHelper.IsDebugMode && !isDeveloper)
             {

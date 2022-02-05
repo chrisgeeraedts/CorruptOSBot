@@ -9,5 +9,7 @@
         public const int NormalPointsPerMonth = 50;
 
         public const string LastPromotionRun = "LastPromotionRun";
+
+        public const long GMKirbyDiscordId = 108710294049542144;
     }
 }

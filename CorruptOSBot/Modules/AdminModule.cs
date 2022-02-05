@@ -1,6 +1,7 @@
 ﻿using CorruptOSBot.Data;
 using CorruptOSBot.Extensions;
 using CorruptOSBot.Extensions.WOM;
+using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
@@ -475,7 +476,7 @@ namespace CorruptOSBot.Modules
         [Summary("!dev - Dev command")]
         public async Task Dev()
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && (Context.User.Id == 108710294049542144 || Context.User.Id == 391595176314798090))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && Context.User.Id == SettingsConstants.GMKirbyDiscordId )
             {
             }
 
@@ -806,7 +807,7 @@ namespace CorruptOSBot.Modules
             return embedBuilder;
         }
 
-        #region April first
+        #region Joke Commands
 
         [Command("overthrownathan")]
         [Summary("Prepare!")]

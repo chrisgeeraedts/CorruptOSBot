@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Data;
+using CorruptOSBot.Helpers;
 using Discord.WebSocket;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,13 @@ namespace CorruptOSBot.Shared
     {
         public static bool GetToggleState(string command, SocketUser userAdditional = null)
         {
-            if (userAdditional != null && (userAdditional.Id == 108710294049542144 || userAdditional.Id == 391595176314798090)) //GMKirby and Carn3asada Discord ID's
+            if (userAdditional != null && userAdditional.Id == SettingsConstants.GMKirbyDiscordId)
             {
                 return true;
             }
 
             // default togglestate check
-            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+            using (CorruptModel corruptosEntities = new CorruptModel())
             {
                 var toggled = false;
                 var toggleState = corruptosEntities.Toggles.FirstOrDefault(x => x.Functionality == command);
@@ -32,7 +33,7 @@ namespace CorruptOSBot.Shared
 
         public static async Task ToggleModuleCommand(string command, bool toggleState)
         {
-            using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
+            using (CorruptModel corruptosEntities = new CorruptModel())
             {
                 var toggleFromDb = corruptosEntities.Toggles.FirstOrDefault(x => x.Functionality == command);
                 if (toggleFromDb != null)
