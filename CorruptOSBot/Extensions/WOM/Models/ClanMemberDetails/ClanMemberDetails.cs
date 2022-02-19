@@ -1,11 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
+﻿namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
 {
-
     public class Bryophyta : IBossKc
     {
         public int rank { get; set; }
@@ -250,6 +244,7 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public int kills { get; set; }
         public double ehb { get; set; }
     }
+
     public class PhosanisNightmare : IBossKc
     {
         public int rank { get; set; }

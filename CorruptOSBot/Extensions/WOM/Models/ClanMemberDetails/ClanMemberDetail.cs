@@ -24,6 +24,4 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public LatestSnapshot latestSnapshot { get; set; }
         public DateTime LastUpdated { get; set; }
     }
-
-
 }

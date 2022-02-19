@@ -6,6 +6,4 @@
         public int kills { get; set; }
         public double ehb { get; set; }
     }
-
-
 }

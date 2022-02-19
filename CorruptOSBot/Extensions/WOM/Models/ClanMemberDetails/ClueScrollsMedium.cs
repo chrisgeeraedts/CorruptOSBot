@@ -5,6 +5,4 @@
         public int rank { get; set; }
         public int score { get; set; }
     }
-
-
 }

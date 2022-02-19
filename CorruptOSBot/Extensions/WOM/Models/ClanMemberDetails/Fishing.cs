@@ -6,6 +6,4 @@
         public int experience { get; set; }
         public double ehp { get; set; }
     }
-
-
 }

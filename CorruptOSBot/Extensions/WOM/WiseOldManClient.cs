@@ -12,10 +12,11 @@ namespace CorruptOSBot.Extensions
 {
     public class WiseOldManClient : IDisposable
     {
-        int clanId;
-        HttpClient client;
-        string path;
-        string verificationCode;
+        private int clanId;
+        private HttpClient client;
+        private string path;
+        private string verificationCode;
+
         public WiseOldManClient()
         {
             client = new HttpClient();
@@ -78,9 +79,6 @@ namespace CorruptOSBot.Extensions
             {
                 Program.Log(new LogMessage(LogSeverity.Error, "RemoveGroupMember", "Failed to change WOM - " + e.Message));
             }
-
-
-            
         }
 
         public ClanMember AddGroupMember(string rsn)
@@ -217,11 +215,11 @@ namespace CorruptOSBot.Extensions
                     Program.Log(new LogMessage(LogSeverity.Info, "UpdateAllParticipants", "Update Call Success"));
                     return true;
                 }
-                else 
+                else
                 {
                     Program.Log(new LogMessage(LogSeverity.Info, "UpdateAllParticipants", "Update Call Failed."));
                 }
-            } 
+            }
             else
             {
                 Program.Log(new LogMessage(LogSeverity.Info, "UpdateAllParticipants", "No active event is running at this moment."));
@@ -282,7 +280,6 @@ namespace CorruptOSBot.Extensions
         {
             client = null;
         }
-
 
         public class AddMemberRoot
         {
