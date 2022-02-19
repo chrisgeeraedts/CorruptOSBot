@@ -44,8 +44,11 @@ namespace CorruptOSBot.Modules
             var isStaff = RoleHelper.IsStaff(user, guild);
             var isMember = RoleHelper.IsMember(user, guild);
 
-            List<string> blackListedCommands = new List<string>();
-            blackListedCommands.Add("!overthrownathan");
+            List<string> blackListedCommands = new List<string>
+            {
+                "!overthrownathan",
+                "!dev"
+            };
 
             Dictionary<string, string> result = new Dictionary<string, string>();
 

@@ -472,13 +472,74 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Admin)]
+        [Command("AuditUsers", false)]
+        [Summary("!auditusers - ")]
+        public async Task AuditUsers()
+        {
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
+            {
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    var WOMClient = new WiseOldManClient();
+
+                    var dbUsers = corruptosEntities.DiscordUsers.ToList();
+                    var discordUsers = Context.Guild.Users.ToList();
+                    var womUsers = WOMClient.GetClanMembers();
+                    var roles = corruptosEntities.Roles.ToList();
+
+                    var mismatchedNamesStringBuilder = new StringBuilder();
+                    var mismatchedRolesStringBuilder = new StringBuilder();
+                    var mismatchedRolesAndPointsStringBuilder = new StringBuilder();
+                    var mismatchedRolesInGameUsers = new StringBuilder();
+                    var notExisitingStringBuilder = new StringBuilder();
+
+                    foreach (var discordUser in discordUsers.Where(item => !item.Roles.Any(x => x.Name.Contains("Bot"))))
+                    {
+                        var dbUser = dbUsers.FirstOrDefault(item => (ulong)item.DiscordId == discordUser.Id);
+
+                        if (dbUser != null)
+                        {
+                            var womUser = womUsers.FirstOrDefault(item => item.displayName == dbUser.Username);
+
+                            mismatchedNamesStringBuilder.AppendLine(MismatchedNames(discordUser, dbUser));
+                            mismatchedRolesStringBuilder.AppendLine(MismatchedRoles(discordUser, dbUser));
+                            mismatchedRolesInGameUsers.AppendLine(MismatchedRolesIngame(dbUser, womUser));
+                            mismatchedRolesAndPointsStringBuilder.AppendLine(MismatchedRolesAndPoints(roles, dbUser));
+                        }
+                        else
+                        {
+                            notExisitingStringBuilder.AppendLine(string.IsNullOrEmpty(discordUser.Nickname) ? $"{discordUser.Username}" : $"{discordUser.Username} ({discordUser.Nickname})");
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(mismatchedNamesStringBuilder.ToString()))
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users with mismatched names in Database", mismatchedNamesStringBuilder.ToString()));
+
+                    if (!string.IsNullOrEmpty(mismatchedRolesStringBuilder.ToString()))
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users with mismatched roles in Database", mismatchedRolesStringBuilder.ToString()));
+
+                    if (!string.IsNullOrEmpty(notExisitingStringBuilder.ToString()))
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users with mismatched roles in-game", mismatchedRolesInGameUsers.ToString()));
+
+                    if (!string.IsNullOrEmpty(notExisitingStringBuilder.ToString()))
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Database Users with mismatched roles and points", mismatchedRolesAndPointsStringBuilder.ToString()));
+
+                    if (!string.IsNullOrEmpty(notExisitingStringBuilder.ToString()))
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users not existing in Database", notExisitingStringBuilder.ToString()));
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Admin)]
         [Command("dev", false)]
         [Summary("!dev - Dev command")]
         public async Task Dev()
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && Context.User.Id == SettingsConstants.GMKirbyDiscordId )
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && Context.User.Id == SettingsConstants.GMKirbyDiscordId)
             {
-                //await Context.Channel.SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(1000));
+                await Context.Channel.SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(1000));
             }
 
             await Context.Message.DeleteAsync();
@@ -808,6 +869,70 @@ namespace CorruptOSBot.Modules
             return embedBuilder;
         }
 
+        private static string MismatchedRolesAndPoints(List<Role> roles, DiscordUser dbUser)
+        {
+            var result = string.Empty;
+
+            var calculatedRole = roles.FirstOrDefault(item => item.PointsToReach <= dbUser.Points && item.MaximumPoints > dbUser.Points);
+
+            if (calculatedRole != null && calculatedRole.Id != dbUser.RoleId)
+            {
+                result = $"{dbUser.Username} is {dbUser.Role.Name} in the Database but has {dbUser.Points} points which is {calculatedRole.Name}";
+            }
+
+            return result;
+        }
+
+        private static string MismatchedRolesIngame(DiscordUser dbUser, ClanMember womUser)
+        {
+            var result = string.Empty;
+
+            if (womUser != null && (dbUser.Role.Name != "Staff" || dbUser.Role.Name != "Owner" || dbUser.Role.Name != "Co-Owner") && womUser.role.ToLower() != dbUser.Role.Name.ToLower())
+            {
+                result = $"{dbUser.Username} is {dbUser.Role.Name} in Discord and {womUser.role} in-game";
+            }
+
+            return result;
+        }
+
+        private static string MismatchedRoles(SocketGuildUser discordUser, DiscordUser dbUser)
+        {
+            var result = string.Empty;
+
+            if (!discordUser.Roles.Any(item => item.Id == (ulong)dbUser.RoleId))
+            {
+                if (string.IsNullOrEmpty(discordUser.Nickname))
+                {
+                    result = $"{discordUser.Username} - Does not have role {dbUser.Role.Name} assigned";
+                }
+                else
+                {
+                    result = $"{discordUser.Username} ({discordUser.Nickname}) - Does not have role {dbUser.Role.Name} assigned";
+                }
+            }
+
+            return result;
+        }
+
+        private static string MismatchedNames(SocketGuildUser discordUser, DiscordUser dbUser)
+        {
+            var result = string.Empty;
+
+            if (discordUser.Nickname != dbUser.Username || discordUser.Username != dbUser.Username)
+            {
+                if (string.IsNullOrEmpty(discordUser.Nickname))
+                {
+                    result = $"{discordUser.Username} - Name in Database is set as {dbUser.Username}";
+                }
+                else
+                {
+                    result = $"{discordUser.Username} ({discordUser.Nickname}) - Name in Database is set as {dbUser.Username}";
+                }
+            }
+
+            return result;
+        }
+
         #region Joke Commands
 
         [Command("overthrownathan")]
@@ -835,7 +960,7 @@ namespace CorruptOSBot.Modules
             }
         }
 
-        #endregion April first
+        #endregion Joke Commands
     }
 
     public class ComparisonResult
@@ -845,7 +970,8 @@ namespace CorruptOSBot.Modules
         public bool ExistsInDB { get; set; }
         public bool ExistsInDiscord { get; set; }
         public ulong? DiscordId { get; set; }
-        public bool IsInBoth { get { return ExistsInDB && ExistsInDiscord; } }
+        public bool IsInBoth
+        { get { return ExistsInDB && ExistsInDiscord; } }
     }
 
     public class FullComparisonResult

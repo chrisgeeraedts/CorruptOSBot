@@ -30,7 +30,7 @@ namespace CorruptOSBot.Helpers.Bot
         private static Dictionary<string, CommandHelp> LoadCommandsFromCode()
         {
             var result = new Dictionary<string, CommandHelp>();
-            var blacklist = new List<string>() { "!overthrownathan" };
+            var blacklist = new List<string>() { "!overthrownathan", "!dev" };
 
             var commandMethods = AppDomain.CurrentDomain.GetAssemblies()
                        .SelectMany(assembly => assembly.GetTypes())

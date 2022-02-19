@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Data;
+using CorruptOSBot.Extensions;
 using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared;
@@ -148,7 +149,7 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Admin)]
         [Command("add-points", false)]
-        [Summary("!add-points {username} - gives specified member the specified points")]
+        [Summary("!add-points {username} {points} - gives specified member the specified points")]
         public async Task AddPoints(string username, int points)
         {
             if (RoleHelper.IsStaff(Context.User, Context.Guild))
@@ -185,7 +186,7 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Admin)]
         [Command("sub-points", false)]
-        [Summary("!sub-points {username} - subtracts specified member the specified points")]
+        [Summary("!sub-points {username} {points} - subtracts specified member the specified points")]
         public async Task SubPoints(string username, int points)
         {
             if (RoleHelper.IsStaff(Context.User, Context.Guild))
@@ -227,7 +228,7 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Admin)]
         [Command("set-points", false)]
-        [Summary("!set-points {username} - sets specified member the specified points")]
+        [Summary("!set-points {username} {points} - sets specified member the specified points")]
         public async Task SetPoints(string username, int points)
         {
             if (RoleHelper.IsStaff(Context.User, Context.Guild))
@@ -262,6 +263,42 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
+        [Helpgroup(HelpGroup.Admin)]
+        [Command("set-role", false)]
+        [Summary("!set-role {username} {role} - sets specified member the specified points")]
+        public async Task SetRole(string username, string roleName)
+        {
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
+            {
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    var user = GetUser(username, corruptosEntities);
+
+                    if (user != null && !user.BlacklistedForPromotion)
+                    {
+                        var roleToAssign = corruptosEntities.Roles.FirstOrDefault(item => item.Name == roleName);
+
+                        if (roleToAssign != null)
+                        {
+                            user.RoleId = roleToAssign.Id;
+                        }
+
+                        await corruptosEntities.SaveChangesAsync();
+                    }
+                    else if (user != null && user.BlacklistedForPromotion)
+                    {
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"User {user.Username} is blacklisted from promotion", string.Empty));
+                    }
+                    else
+                    {
+                        await SendUserNotFoundMessage(username);
+                    }
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
+
         private static async Task UpdateDiscordUserRole(DiscordUser user, bool isPromotion, CorruptModel corruptosEntities, SocketCommandContext context)
         {
             if (user.DiscordId != null)
@@ -275,7 +312,9 @@ namespace CorruptOSBot.Modules
                 {
                     var discordRole = context.Guild.Roles.FirstOrDefault(item => item.Name == roleToBeApplied.Name);
 
+                    await Program.Log(new LogMessage(LogSeverity.Info, "RoleModule", $"Removing role: {user.Role.Name} with DiscordRoleId: {user.Role.DiscordRoleId} from user: {user.Username}"));
                     await (context.User as IGuildUser).RemoveRoleAsync((ulong)user.Role.DiscordRoleId);
+                    await Program.Log(new LogMessage(LogSeverity.Info, "RoleModule", $"Add role: {roleToBeApplied.Name} with DiscordRoleId: {roleToBeApplied.DiscordRoleId} to user: {user.Username}"));
                     await (context.User as IGuildUser).AddRoleAsync(discordRole);
 
                     user.RoleId = roleToBeApplied.Id;
