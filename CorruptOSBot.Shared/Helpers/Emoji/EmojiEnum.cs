@@ -48,6 +48,7 @@
         zalcano,
         zulrah,
         phosanis,
-        tobhardmode
+        tobhardmode,
+        nex
     }
 }

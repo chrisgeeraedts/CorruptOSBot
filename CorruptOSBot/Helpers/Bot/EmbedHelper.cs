@@ -15,10 +15,12 @@ namespace CorruptOSBot.Helpers.Bot
     {
         public static Embed CreateDefaultFieldsEmbed(string title, string description, Dictionary<string, string> fields)
         {
-            var builder = new EmbedBuilder();
-            builder.Color = Color.Blue;
-            builder.Description = description;
-            builder.Title = title;
+            var builder = new EmbedBuilder
+            {
+                Color = Color.Blue,
+                Description = description,
+                Title = title
+            };
 
             if (fields != null)
             {
@@ -34,9 +36,12 @@ namespace CorruptOSBot.Helpers.Bot
         public static List<Embed> CreateDefaultFieldsEmbed(string title, Dictionary<string, string> fields)
         {
             var result = new List<Embed>();
-            var builder = new EmbedBuilder();
-            builder.Color = Color.Blue;
-            builder.Title = title;
+
+            var builder = new EmbedBuilder
+            {
+                Color = Color.Blue,
+                Title = title
+            };
 
             if (fields != null)
             {
@@ -55,8 +60,10 @@ namespace CorruptOSBot.Helpers.Bot
                         index = 0;
 
                         // create new builder
-                        builder = new EmbedBuilder();
-                        builder.Color = Color.Blue;
+                        builder = new EmbedBuilder
+                        {
+                            Color = Color.Blue
+                        };
                     }
                 }
                 // Add the remainder
@@ -68,47 +75,49 @@ namespace CorruptOSBot.Helpers.Bot
 
         public static Embed CreateDefaultEmbed(string title, string message, string imageUrl = null, string thumbnailUrl = null)
         {
-            var builder = new EmbedBuilder();
-            builder.Color = Color.Blue;
-            builder.Title = title;
-            if (!string.IsNullOrEmpty(imageUrl))
+            var builder = new EmbedBuilder
             {
-                builder.ImageUrl = imageUrl;
-            }
+                Color = Color.Blue,
+                Title = title,
+                ImageUrl = imageUrl ?? null,
+                ThumbnailUrl = thumbnailUrl ?? null,
+                Description = message
+            };
 
-            if (!string.IsNullOrEmpty(thumbnailUrl))
-            {
-                builder.ThumbnailUrl = thumbnailUrl;
-            }
-            builder.Description = message;
             return builder.Build();
         }
 
         public static Embed CreateDefaultPollEmbed(string title, string message)
         {
-            var builder = new EmbedBuilder();
-            builder.Color = Color.Blue;
-            builder.ThumbnailUrl = Constants.PollIcon;
-            builder.Title = title;
-            builder.Footer = new EmbedFooterBuilder()
+            var builder = new EmbedBuilder
             {
-                Text = string.Format("{0} Yeah | {1} Nah - {2}", "👍", "👎", DateTime.Now.ToString("r"))
+                Color = Color.Blue,
+                ThumbnailUrl = Constants.PollIcon,
+                Title = title,
+                Description = message,
+
+                Footer = new EmbedFooterBuilder()
+                {
+                    Text = string.Format("{0} Yeah | {1} Nah - {2}", "👍", "👎", DateTime.Now.ToString("r"))
+                }
             };
-            builder.Description = message;
             return builder.Build();
         }
 
         public static Embed CreateDefaultSuggestionEmbed(string title, string message, string imageUri)
         {
-            var builder = new EmbedBuilder();
-            builder.Color = Color.Blue;
-            builder.ThumbnailUrl = imageUri;
-            builder.Title = title;
-            builder.Footer = new EmbedFooterBuilder()
+            var builder = new EmbedBuilder
             {
-                Text = string.Format("Do not reply via text - {0}", DateTime.Now.ToString("r"))
+                Color = Color.Blue,
+                ThumbnailUrl = imageUri,
+                Title = title,
+                Description = message,
+                Footer = new EmbedFooterBuilder()
+                {
+                    Text = string.Format("Do not reply via text - {0}", DateTime.Now.ToString("r"))
+                }
             };
-            builder.Description = message;
+
             return builder.Build();
         }
 
@@ -121,11 +130,13 @@ namespace CorruptOSBot.Helpers.Bot
 
             if (clan != null)
             {
-                var builder = new EmbedBuilder();
-                builder.Color = Color.Blue;
-                builder.Title = "Affliction | Wise Old Man";
-                builder.Url = string.Format("https://wiseoldman.net/groups/{0}", clanId);
-                builder.ThumbnailUrl = "https://wiseoldman.net/img/logo.png";
+                var builder = new EmbedBuilder
+                {
+                    Color = Color.Blue,
+                    Title = "Affliction | Wise Old Man",
+                    Url = string.Format("https://wiseoldman.net/groups/{0}", clanId),
+                    ThumbnailUrl = "https://wiseoldman.net/img/logo.png",
+                };
 
                 var sb = new StringBuilder();
                 sb.AppendLine("\u200b");
@@ -148,7 +159,6 @@ namespace CorruptOSBot.Helpers.Bot
                     sb2.AppendLine("\u200b");
 
                     builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Recent achievements").WithValue(sb2).WithIsInline(false));
-
                     builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Homeworld").WithValue(clan.homeworld).WithIsInline(true));
                     builder.Fields.Add(new EmbedFieldBuilder().WithIsInline(true).WithName("Members").WithValue(clan.memberCount).WithIsInline(true));
 
@@ -160,72 +170,25 @@ namespace CorruptOSBot.Helpers.Bot
             return null;
         }
 
-
         public static async Task<Embed> CreateFullLeaderboardEmbed(int triggerTimeInMS)
         {
             // connect the kcs per boss
             var result = await BossKCHelper.GetTopBossKC(WOMMemoryCache.OneDayMS);
 
-            var builder = new EmbedBuilder();
-            builder.Color = Color.DarkGreen;
+            var builder = new EmbedBuilder
+            {
+                Color = Color.DarkGreen,
+                Title = "Top boss KC"
+            };
 
             BuildSet(result.Take(15), builder);
             BuildSet(result.Skip(15).Take(15), builder);
             BuildSet(result.Skip(30).Take(15), builder);
             BuildSet(result.Skip(45).Take(2), builder);
 
-            builder.Title = "Top boss KC";
             builder.WithFooter(string.Format("Last updated: {0} | next update at: {1}", DateTime.Now, DateTime.Now.Add(TimeSpan.FromMilliseconds(triggerTimeInMS))));
 
             return builder.Build();
-        }
-
-        public static void BuildSet(IEnumerable<KcTopList> result, EmbedBuilder builder)
-        {
-            // First column
-            var sb = new StringBuilder();
-            foreach (var item in result)
-            {
-                if (item.KcPlayers.Count() > 0)
-                {
-                    sb.AppendLine(string.Format("{0} {1} {2} **({3})**", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc));
-                }
-                else
-                {
-                    sb.AppendLine(string.Format("{0} {1} {2}", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", "---"));
-                }
-            }
-            builder.AddField("\u200b", sb.ToString(), true);
-
-            // Second column
-            var sb2 = new StringBuilder();
-            foreach (var item in result)
-            {
-                if (item.KcPlayers.Count() > 1)
-                {
-                    sb2.AppendLine(string.Format("{0} {1} ({2})", "\U0001f948", item.KcPlayers.Skip(1).First().Player, item.KcPlayers.Skip(1).First().Kc));
-                }
-                else
-                {
-                    sb2.AppendLine(string.Format("{0} {1}", "\U0001f948", "---"));
-                }
-            }
-            builder.AddField("\u200b", sb2.ToString(), true);
-
-            // Second column
-            var sb3 = new StringBuilder();
-            foreach (var item in result)
-            {
-                if (item.KcPlayers.Count() > 2)
-                {
-                    sb3.AppendLine(string.Format("{0} {1} ({2})", "\U0001f949", item.KcPlayers.Skip(2).First().Player, item.KcPlayers.Skip(2).First().Kc));
-                }
-                else
-                {
-                    sb3.AppendLine(string.Format("{0} {1}", "\U0001f949", "---"));
-                }
-            }
-            builder.AddField("\u200b", sb3.ToString(), true);
         }
 
         public static Embed CreateWOMEmbedSotw()
@@ -273,6 +236,55 @@ namespace CorruptOSBot.Helpers.Bot
             }
             return null;
         }
+
+        private static void BuildSet(IEnumerable<KcTopList> result, EmbedBuilder builder)
+        {
+            // First column
+            var sb = new StringBuilder();
+            foreach (var item in result)
+            {
+                if (item.KcPlayers.Count() > 0)
+                {
+                    sb.AppendLine(string.Format("{0} {1} {2} **({3})**", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc));
+                }
+                else
+                {
+                    sb.AppendLine(string.Format("{0} {1} {2}", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", "---"));
+                }
+            }
+            builder.AddField("\u200b", sb.ToString(), true);
+
+            // Second column
+            var sb2 = new StringBuilder();
+            foreach (var item in result)
+            {
+                if (item.KcPlayers.Count() > 1)
+                {
+                    sb2.AppendLine(string.Format("{0} {1} ({2})", "\U0001f948", item.KcPlayers.Skip(1).First().Player, item.KcPlayers.Skip(1).First().Kc));
+                }
+                else
+                {
+                    sb2.AppendLine(string.Format("{0} {1}", "\U0001f948", "---"));
+                }
+            }
+            builder.AddField("\u200b", sb2.ToString(), true);
+
+            // Second column
+            var sb3 = new StringBuilder();
+            foreach (var item in result)
+            {
+                if (item.KcPlayers.Count() > 2)
+                {
+                    sb3.AppendLine(string.Format("{0} {1} ({2})", "\U0001f949", item.KcPlayers.Skip(2).First().Player, item.KcPlayers.Skip(2).First().Kc));
+                }
+                else
+                {
+                    sb3.AppendLine(string.Format("{0} {1}", "\U0001f949", "---"));
+                }
+            }
+            builder.AddField("\u200b", sb3.ToString(), true);
+        }
+
         private static string GetImage(string metric)
         {
             using (Data.CorruptModel corruptosEntities = new Data.CorruptModel())
