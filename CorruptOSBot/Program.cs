@@ -80,7 +80,7 @@ namespace CorruptOSBot
         private static IServiceProvider ConfigureServices()
         {
             var map = new ServiceCollection();
-            
+
             return map.BuildServiceProvider();
         }
 
@@ -188,6 +188,34 @@ namespace CorruptOSBot
             client.UserBanned += Client_UserBanned;
             client.ReactionAdded += Client_ReactionAdded;
             client.CurrentUserUpdated += Client_CurrentUserUpdated;
+
+            client.UserVoiceStateUpdated += Client_UserVoiceStateUpdated;
+        }
+
+        private async Task Client_UserVoiceStateUpdated(SocketUser user, SocketVoiceState state1, SocketVoiceState state2)
+        {
+            var guild = client.GetGuild(ConfigHelper.GetGuildId());
+
+            if (state1.VoiceChannel?.Name != "Join to create a VC" && state2.VoiceChannel?.Name == "Join to create a VC")
+            {
+                var category = guild.CategoryChannels.FirstOrDefault(item => item.Name == "Voice Channels");
+                var privateVoiceChannel = await guild.CreateVoiceChannelAsync($"Private {user.Username}", prop => prop.CategoryId = category.Id);
+
+                var socketUser = (SocketGuildUser)user;
+                await socketUser.ModifyAsync(prop => prop.ChannelId = privateVoiceChannel.Id);
+
+            }
+            else if (state1.VoiceChannel != null && state1.VoiceChannel.Name.StartsWith("Private") && state2.VoiceChannel?.Name != state1.VoiceChannel.Name)
+            {
+                var channel = guild.Channels.FirstOrDefault(item => item.Name == state1.VoiceChannel.Name);
+
+                if (channel.Users.Count == 0)
+                {
+                    await channel.DeleteAsync();
+                }
+            }
+
+            await Log(new LogMessage(LogSeverity.Info, "Users", "_client_UserVoiceStateUpdated"));
         }
 
         private async Task Client_CurrentUserUpdated(SocketSelfUser arg1, SocketSelfUser arg2)
