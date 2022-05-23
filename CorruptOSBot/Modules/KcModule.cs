@@ -29,7 +29,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!kc", "pvm-general");
+                await DiscordHelper.NotAlloweddMessageToUser(Context, "!kc", "pvm-general");
             }
 
             await Context.Message.DeleteAsync();
@@ -60,7 +60,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!kc", "pvm-general");
+                await DiscordHelper.NotAlloweddMessageToUser(Context, "!kc", "pvm-general");
             }
 
             await Context.Message.DeleteAsync();

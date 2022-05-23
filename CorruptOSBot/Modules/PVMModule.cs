@@ -56,7 +56,7 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!cox", "set-pvm-roles");
+                    await DiscordHelper.NotAlloweddMessageToUser(Context, "!cox", "set-pvm-roles");
                 }
             }
 
@@ -105,7 +105,7 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!tob", "set-pvm-roles");
+                    await DiscordHelper.NotAlloweddMessageToUser(Context, "!tob", "set-pvm-roles");
                 }
             }
 
@@ -154,7 +154,7 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!nm", "set-pvm-roles");
+                    await DiscordHelper.NotAlloweddMessageToUser(Context, "!nm", "set-pvm-roles");
                 }
             }
 
@@ -201,7 +201,7 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!cm", "set-pvm-roles");
+                    await DiscordHelper.NotAlloweddMessageToUser(Context, "!cm", "set-pvm-roles");
                 }
             }
 
@@ -245,7 +245,7 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!gwd", "set-pvm-roles");
+                    await DiscordHelper.NotAlloweddMessageToUser(Context, "!gwd", "set-pvm-roles");
                 }
             }
 
@@ -289,7 +289,7 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!corp", "set-pvm-roles");
+                    await DiscordHelper.NotAlloweddMessageToUser(Context, "!corp", "set-pvm-roles");
                 }
             }
 
@@ -332,7 +332,7 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await DiscordHelper.NotAlloweddMessageToUser(Context.User, "!nex", "set-pvm-roles");
+                    await DiscordHelper.NotAlloweddMessageToUser(Context, "!nex", "set-pvm-roles");
                 }
             }
 

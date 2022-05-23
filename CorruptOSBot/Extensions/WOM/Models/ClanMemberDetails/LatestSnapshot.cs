@@ -69,6 +69,7 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public Kreearra kreearra { get; set; }
         public KrilTsutsaroth kril_tsutsaroth { get; set; }
         public Mimic mimic { get; set; }
+        public Nex nex { get; set; }
         public Nightmare nightmare { get; set; }
         public PhosanisNightmare phosanis_nightmare { get; set; }
         public Obor obor { get; set; }

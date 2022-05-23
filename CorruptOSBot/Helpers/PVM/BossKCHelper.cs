@@ -50,7 +50,9 @@ namespace CorruptOSBot.Helpers.PVM
             result.Add(new KcTopList() { Boss = EmojiEnum.kree, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.kril, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.mimic, KcPlayers = new List<KcPlayer>() });
+            result.Add(new KcTopList() { Boss = EmojiEnum.nex, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.nightmare, KcPlayers = new List<KcPlayer>() });
+            result.Add(new KcTopList() { Boss = EmojiEnum.phosanis, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.obor, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.sarachnis, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.scorpia, KcPlayers = new List<KcPlayer>() });
@@ -59,6 +61,7 @@ namespace CorruptOSBot.Helpers.PVM
             result.Add(new KcTopList() { Boss = EmojiEnum.gaunt, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.corruptgaunt, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.tob, KcPlayers = new List<KcPlayer>() });
+            result.Add(new KcTopList() { Boss = EmojiEnum.tobhardmode, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.thermy, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.zuk, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.jad, KcPlayers = new List<KcPlayer>() });
@@ -68,9 +71,6 @@ namespace CorruptOSBot.Helpers.PVM
             result.Add(new KcTopList() { Boss = EmojiEnum.todt, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.zalcano, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.zulrah, KcPlayers = new List<KcPlayer>() });
-            result.Add(new KcTopList() { Boss = EmojiEnum.phosanis, KcPlayers = new List<KcPlayer>() });
-            result.Add(new KcTopList() { Boss = EmojiEnum.tobhardmode, KcPlayers = new List<KcPlayer>() });
-            result.Add(new KcTopList() { Boss = EmojiEnum.nex, KcPlayers = new List<KcPlayer>() });
         }
 
         private static void UpdateListWithKc(List<KcTopList> result, List<ClanMemberDetail> clanMembers)
@@ -102,7 +102,9 @@ namespace CorruptOSBot.Helpers.PVM
             result.FirstOrDefault(x => x.Boss == EmojiEnum.kree).KcPlayers.AddRange(GetTopKc(typeof(Kreearra), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.kril).KcPlayers.AddRange(GetTopKc(typeof(KrilTsutsaroth), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.mimic).KcPlayers.AddRange(GetTopKc(typeof(Mimic), clanMembers));
+            result.FirstOrDefault(x => x.Boss == EmojiEnum.nex).KcPlayers.AddRange(GetTopKc(typeof(Nex), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.nightmare).KcPlayers.AddRange(GetTopKc(typeof(Nightmare), clanMembers));
+            result.FirstOrDefault(x => x.Boss == EmojiEnum.phosanis).KcPlayers.AddRange(GetTopKc(typeof(PhosanisNightmare), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.obor).KcPlayers.AddRange(GetTopKc(typeof(Obor), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.sarachnis).KcPlayers.AddRange(GetTopKc(typeof(Sarachnis), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.scorpia).KcPlayers.AddRange(GetTopKc(typeof(Scorpia), clanMembers));
@@ -111,6 +113,7 @@ namespace CorruptOSBot.Helpers.PVM
             result.FirstOrDefault(x => x.Boss == EmojiEnum.gaunt).KcPlayers.AddRange(GetTopKc(typeof(TheGauntlet), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.corruptgaunt).KcPlayers.AddRange(GetTopKc(typeof(TheCorruptedGauntlet), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.tob).KcPlayers.AddRange(GetTopKc(typeof(TheatreOfBlood), clanMembers));
+            result.FirstOrDefault(x => x.Boss == EmojiEnum.tobhardmode).KcPlayers.AddRange(GetTopKc(typeof(TheatreOfBloodHardMode), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.thermy).KcPlayers.AddRange(GetTopKc(typeof(ThermonuclearSmokeDevil), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.zuk).KcPlayers.AddRange(GetTopKc(typeof(TzkalZuk), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.jad).KcPlayers.AddRange(GetTopKc(typeof(TztokJad), clanMembers));
@@ -120,9 +123,6 @@ namespace CorruptOSBot.Helpers.PVM
             result.FirstOrDefault(x => x.Boss == EmojiEnum.todt).KcPlayers.AddRange(GetTopKc(typeof(Wintertodt), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.zalcano).KcPlayers.AddRange(GetTopKc(typeof(Zalcano), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.zulrah).KcPlayers.AddRange(GetTopKc(typeof(Zulrah), clanMembers));
-            result.FirstOrDefault(x => x.Boss == EmojiEnum.phosanis).KcPlayers.AddRange(GetTopKc(typeof(PhosanisNightmare), clanMembers));
-            result.FirstOrDefault(x => x.Boss == EmojiEnum.tobhardmode).KcPlayers.AddRange(GetTopKc(typeof(TheatreOfBloodHardMode), clanMembers));
-            result.FirstOrDefault(x => x.Boss == EmojiEnum.nex).KcPlayers.AddRange(GetTopKc(typeof(Nex), clanMembers));
         }
 
         private static List<KcPlayer> GetTopKc(Type type, List<ClanMemberDetail> clanMemberDetails)

@@ -30,6 +30,7 @@
         kril,
         mimic,
         nightmare,
+        phosanis,
         obor,
         sarachnis,
         scorpia,
@@ -38,6 +39,7 @@
         gaunt,
         corruptgaunt,
         tob,
+        tobhardmode,
         thermy,
         zuk,
         jad,
@@ -47,8 +49,6 @@
         todt,
         zalcano,
         zulrah,
-        phosanis,
-        tobhardmode,
         nex
     }
 }

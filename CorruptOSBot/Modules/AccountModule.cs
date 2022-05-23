@@ -18,11 +18,18 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Member)]
         [Command("add-alt")]
         [Summary("!add-alt {rsn} - Adds an runescape alt account to your discord account")]
-        public async Task SayAddAltBAsync(string rsn)
+        public async Task SayAddAltBAsync([Remainder] string rsn)
         {
-            if (ToggleStateManager.GetToggleState("add-alt", Context.User))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "spam-bot-commands", Context.User))
             {
-                await AddAlt(Context, rsn, "alt");
+                if (ToggleStateManager.GetToggleState("add-alt", Context.User))
+                {
+                    await AddAlt(Context, rsn, "alt");
+                }
+            }
+            else
+            {
+                await DiscordHelper.NotAlloweddMessageToUser(Context, "!add-alt", "spam-bot-commands");
             }
 
             await Context.Message.DeleteAsync();
@@ -31,12 +38,20 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Member)]
         [Command("add-iron")]
         [Summary("!add-iron {rsn} - Adds an runescape iron account to your discord account")]
-        public async Task SayAddIronAsync(string rsn)
+        public async Task SayAddIronAsync([Remainder] string rsn)
         {
-            if (ToggleStateManager.GetToggleState("add-iron", Context.User))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "spam-bot-commands", Context.User))
             {
-                await AddAlt(Context, rsn, "iron");
+                if (ToggleStateManager.GetToggleState("add-iron", Context.User))
+                {
+                    await AddAlt(Context, rsn, "iron");
+                }
             }
+            else
+            {
+                await DiscordHelper.NotAlloweddMessageToUser(Context, "!add-iron", "spam-bot-commands");
+            }
+
 
             await Context.Message.DeleteAsync();
         }
@@ -102,9 +117,16 @@ namespace CorruptOSBot.Modules
         [Summary("!change-alt {old name} {new name} - changes an existing alt name from the old to a new one")]
         public async Task SayChangeAltBAsync(string oldName, string newName)
         {
-            if (ToggleStateManager.GetToggleState("change-alt", Context.User))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "spam-bot-commands", Context.User))
             {
-                await ChangeAlt(oldName, newName);
+                if (ToggleStateManager.GetToggleState("change-alt", Context.User))
+                {
+                    await ChangeAlt(oldName, newName);
+                }
+            }
+            else
+            {
+                await DiscordHelper.NotAlloweddMessageToUser(Context, "!change-alt", "spam-bot-commands");
             }
 
             await Context.Message.DeleteAsync();
@@ -126,11 +148,18 @@ namespace CorruptOSBot.Modules
         [Helpgroup(HelpGroup.Member)]
         [Command("delete-alt")]
         [Summary("!delete-alt {rsn} - Removes this runescape account from your discord account")]
-        public async Task SayDeleteAltBAsync(string rsn)
+        public async Task SayDeleteAltBAsync([Remainder] string rsn)
         {
-            if (ToggleStateManager.GetToggleState("delete-alt", Context.User))
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "spam-bot-commands", Context.User))
             {
-                await DeleteAlt(Context, rsn);
+                if (ToggleStateManager.GetToggleState("delete-alt", Context.User))
+                {
+                    await DeleteAlt(Context, rsn);
+                }
+            }
+            else
+            {
+                await DiscordHelper.NotAlloweddMessageToUser(Context, "!delete-alt", "spam-bot-commands");
             }
 
             await Context.Message.DeleteAsync();

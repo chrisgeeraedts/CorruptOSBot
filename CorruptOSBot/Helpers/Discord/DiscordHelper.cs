@@ -1,6 +1,7 @@
 ﻿using CorruptOSBot.Shared;
 using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
+using Discord.Commands;
 using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,11 @@ namespace CorruptOSBot.Helpers.Discord
     public static partial class DiscordHelper
     {
         public static List<string> DiscordUsers { get; set; }
+        public static SocketGuild Guild { get; set; }
 
         internal static bool IsInChannel(ulong channelId, string channelName, SocketUser userAdditional = null)
         {
-             //override for admin
+            //override for admin
             if (userAdditional != null && userAdditional.Id == SettingsConstants.GMKirbyDiscordId)
             {
                 return true;
@@ -51,9 +53,9 @@ namespace CorruptOSBot.Helpers.Discord
         }
 
         
-        internal static async Task NotAlloweddMessageToUser(SocketUser user, string command, string allowedChannel)
+        internal static async Task NotAlloweddMessageToUser(SocketCommandContext context, string command, string allowedChannel)
         {
-            await ((SocketGuildUser)user).SendMessageAsync(string.Format("That command (**{0}**) is **not allowed** in this channel but only in the following channel(s): **{1}**!", command, allowedChannel));
+            await context.Channel.SendMessageAsync($"That command (**{command}**) is **not allowed** in this channel but only in the following channel(s): **{allowedChannel}**!");
         }
 
         internal static async Task SendWelcomeMessageToUser(SocketUser user, SocketGuild guild, bool isClanFriend)

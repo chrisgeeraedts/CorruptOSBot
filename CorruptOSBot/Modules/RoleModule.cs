@@ -71,7 +71,7 @@ namespace CorruptOSBot.Modules
                 }
                 catch (Exception e)
                 {
-                    await Program.Log(new LogMessage(LogSeverity.Error, "PromotionModule", "Database issue - " + e.ToString()));
+                    await Program.Log(new LogMessage(LogSeverity.Error, "RoleModule", "Database issue - " + e.ToString()));
                 }
             }
 
@@ -118,30 +118,42 @@ namespace CorruptOSBot.Modules
         [Summary("!checkpoints - Shows memeber their points")]
         public async Task CheckpointsAsync()
         {
-            using (CorruptModel corruptosEntities = new CorruptModel())
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "spam-bot-commands", Context.User))
             {
-                var username = ((SocketGuildUser)Context.User).Nickname ?? Context.User.Username;
-
-                var user = GetUser(username, corruptosEntities);
-
-                if (user != null)
+                using (CorruptModel corruptosEntities = new CorruptModel())
                 {
-                    var roles = corruptosEntities.Roles.Where(item => item.PointsToReach > user.Points).OrderBy(item => item.PointsToReach);
+                    var userDiscordId = ((SocketGuildUser)Context.User).Id;
 
-                    var description = new StringBuilder();
+                    var discordAcc = corruptosEntities.DiscordUsers.FirstOrDefault(item => item.DiscordId == (long?)userDiscordId);
 
-                    foreach (var role in roles)
+                    if (discordAcc != null)
                     {
-                        var pointsNeed = role.PointsToReach - user.Points;
+                        var roles = corruptosEntities.Roles.Where(item => item.PointsToReach > discordAcc.Points).OrderBy(item => item.PointsToReach);
 
-                        description.AppendLine($"{role.Name} requires {pointsNeed} points");
+                        var description = new StringBuilder();
+
+                        foreach (var role in roles)
+                        {
+                            var pointsNeed = role.PointsToReach - discordAcc.Points;
+
+                            description.AppendLine($"{role.Name} requires {pointsNeed} points");
+                        }
+
+                        await Context.Channel.SendMessageAsync(
+                            embed: EmbedHelper.CreateDefaultEmbed(
+                                $"{discordAcc.Username}\nCurrent Role: {discordAcc.Role.Name} Current Points: {discordAcc.Points}",
+                                description.ToString()));
                     }
-
-                    await Context.Channel.SendMessageAsync(
-                        embed: EmbedHelper.CreateDefaultEmbed(
-                            $"{user.Username}\nCurrent Role: {user.Role.Name} Current Points: {user.Points}",
-                            description.ToString()));
+                    else
+                    {
+                        await Program.Log(new LogMessage(LogSeverity.Error, "RoleModule", $"Unable to find user {Context.User.Username} - Discord ID {Context.User.Id}"));
+                        await Context.Channel.SendMessageAsync($"Unable to find user {Context.User.Username} - Discord ID {Context.User.Id}");
+                    }
                 }
+            }
+            else
+            {
+                await DiscordHelper.NotAlloweddMessageToUser(Context, "!checkpoints", "spam-bot-commands");
             }
 
             await Context.Message.DeleteAsync();
@@ -265,7 +277,7 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Admin)]
         [Command("set-role", false)]
-        [Summary("!set-role {username} {role} - sets specified member the specified points")]
+        [Summary("!set-role {username} {role} - sets specified member the specified role")]
         public async Task SetRole(string username, string roleName)
         {
             if (RoleHelper.IsStaff(Context.User, Context.Guild))
