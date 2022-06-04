@@ -37,7 +37,7 @@ namespace CorruptOSBot.Services
 
                     var guild = await client.GetGuildAsync(GuildId);
 
-                    var channel = (SocketTextChannel)await guild.GetChannelAsync(ChannelHelper.GetChannelId(SettingsConstants.ChannelEventGeneral));
+                    var channel = (SocketTextChannel)await guild.GetChannelAsync(ChannelHelper.GetChannelId(SettingsConstants.ChannelEventLeaderboard));
 
                     if (channel != null)
                     {
