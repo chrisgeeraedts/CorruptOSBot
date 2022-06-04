@@ -4,6 +4,7 @@
     {
         public const string ChannelAchievements = "achievements";
         public const string ChannelEventGeneral = "event-general";
+        public const string ChannelEventLeaderboard = "event-leaderboard";
 
         public const int StaffPointsPerMonth = 150;
         public const int NormalPointsPerMonth = 50;
