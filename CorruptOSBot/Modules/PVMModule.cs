@@ -338,5 +338,48 @@ namespace CorruptOSBot.Modules
 
             await Context.Message.DeleteAsync();
         }
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("toa")]
+        [Summary("!toa - Enables a player to earn the 'Toa' role (Only allowed in **set-pvm-roles**)")]
+        public async Task SayToAAsync()
+        {
+            if (ToggleStateManager.GetToggleState("toa", Context.User) && RoleHelper.HasAnyRole(Context.User))
+            {
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
+                {
+                    var currentUser = ((SocketGuildUser)Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
+
+                    if (!string.IsNullOrEmpty(rsn))
+                    {
+                        // Get KC in WOM
+                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
+                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
+
+                        if (clanMember != null)
+                        {
+                            // set the role appriate
+                            await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                            currentUser,
+                            Context.Guild,
+                            new PvmSetCM()
+                            {
+                                role = Constants.TOA,
+                                imageUrl = Constants.ToAImage
+                            },
+                            false,
+                            true);
+                        }
+                    }
+                }
+                else
+                {
+                    await DiscordHelper.NotAlloweddMessageToUser(Context, "!toa", "set-pvm-roles");
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
     }
 }
