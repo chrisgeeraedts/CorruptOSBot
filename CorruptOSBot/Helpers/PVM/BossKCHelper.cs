@@ -63,6 +63,8 @@ namespace CorruptOSBot.Helpers.PVM
             result.Add(new KcTopList() { Boss = EmojiEnum.tob, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.tobhardmode, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.thermy, KcPlayers = new List<KcPlayer>() });
+            result.Add(new KcTopList() { Boss = EmojiEnum.toanormalmode, KcPlayers = new List<KcPlayer>() });
+            result.Add(new KcTopList() { Boss = EmojiEnum.toaexpertmode, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.zuk, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.jad, KcPlayers = new List<KcPlayer>() });
             result.Add(new KcTopList() { Boss = EmojiEnum.venny, KcPlayers = new List<KcPlayer>() });
@@ -115,6 +117,8 @@ namespace CorruptOSBot.Helpers.PVM
             result.FirstOrDefault(x => x.Boss == EmojiEnum.tob).KcPlayers.AddRange(GetTopKc(typeof(TheatreOfBlood), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.tobhardmode).KcPlayers.AddRange(GetTopKc(typeof(TheatreOfBloodHardMode), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.thermy).KcPlayers.AddRange(GetTopKc(typeof(ThermonuclearSmokeDevil), clanMembers));
+            result.FirstOrDefault(x => x.Boss == EmojiEnum.toanormalmode).KcPlayers.AddRange(GetTopKc(typeof(TombsOfAmascut), clanMembers));
+            result.FirstOrDefault(x => x.Boss == EmojiEnum.toaexpertmode).KcPlayers.AddRange(GetTopKc(typeof(TombsOfAmascutExpertMode), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.zuk).KcPlayers.AddRange(GetTopKc(typeof(TzkalZuk), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.jad).KcPlayers.AddRange(GetTopKc(typeof(TztokJad), clanMembers));
             result.FirstOrDefault(x => x.Boss == EmojiEnum.venny).KcPlayers.AddRange(GetTopKc(typeof(Venenatis), clanMembers));
@@ -131,6 +135,8 @@ namespace CorruptOSBot.Helpers.PVM
             foreach (var clanMemberDetail in clanMemberDetails.Where(x => x.latestSnapshot != null))
             {
                 var props = clanMemberDetail.latestSnapshot.GetType().GetProperties();
+
+                //clanMemberDetail.latestSnapshot.the_corrupted_gauntlet
                 foreach (var prop in props)
                 {
                     var typeOfProp = prop.PropertyType;

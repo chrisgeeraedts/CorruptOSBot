@@ -149,9 +149,12 @@ namespace CorruptOSBot.Modules
                     { EmojiHelper.GetFullEmojiString(EmojiEnum.sarachnis.ToString()), clanMember.latestSnapshot.sarachnis.kills },
                     { EmojiHelper.GetFullEmojiString(EmojiEnum.tempor.ToString()), clanMember.latestSnapshot.tempoross.kills },
                     { EmojiHelper.GetFullEmojiString(EmojiEnum.tob.ToString()), clanMember.latestSnapshot.theatre_of_blood.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.tobhardmode.ToString()), clanMember.latestSnapshot.theatre_of_blood_hard_mode.kills },
                     { EmojiHelper.GetFullEmojiString(EmojiEnum.jad.ToString()), clanMember.latestSnapshot.tztok_jad.kills },
                     { EmojiHelper.GetFullEmojiString(EmojiEnum.vorkath.ToString()), clanMember.latestSnapshot.vorkath.kills },
-                    { EmojiHelper.GetFullEmojiString(EmojiEnum.zulrah.ToString()), clanMember.latestSnapshot.zulrah.kills }
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.zulrah.ToString()), clanMember.latestSnapshot.zulrah.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.toanormalmode.ToString()), clanMember.latestSnapshot.tombs_of_amascut.kills },
+                    { EmojiHelper.GetFullEmojiString(EmojiEnum.toaexpertmode.ToString()), clanMember.latestSnapshot.tombs_of_amascut_expert.kills },
                 });
 
                 var result = builder.Build();

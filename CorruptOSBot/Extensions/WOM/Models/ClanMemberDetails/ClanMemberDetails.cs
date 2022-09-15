@@ -258,4 +258,16 @@
         public int kills { get; set; }
         public double ehb { get; set; }
     }
+    public class TombsOfAmascut : IBossKc
+    {
+        public int rank { get; set; }
+        public int kills { get; set; }
+        public double ehb { get; set; }
+    }
+    public class TombsOfAmascutExpertMode : IBossKc
+    {
+        public int rank { get; set; }
+        public int kills { get; set; }
+        public double ehb { get; set; }
+    }
 }

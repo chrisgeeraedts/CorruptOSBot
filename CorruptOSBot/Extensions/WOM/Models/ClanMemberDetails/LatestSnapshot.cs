@@ -82,6 +82,8 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public TheatreOfBlood theatre_of_blood { get; set; }
         public TheatreOfBloodHardMode theatre_of_blood_hard_mode { get; set; }
         public ThermonuclearSmokeDevil thermonuclear_smoke_devil { get; set; }
+        public TombsOfAmascut tombs_of_amascut { get; set; }
+        public TombsOfAmascutExpertMode tombs_of_amascut_expert { get; set; }
         public TzkalZuk tzkal_zuk { get; set; }
         public TztokJad tztok_jad { get; set; }
         public Venenatis venenatis { get; set; }

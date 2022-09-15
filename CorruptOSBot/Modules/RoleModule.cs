@@ -327,7 +327,7 @@ namespace CorruptOSBot.Modules
                     await Program.Log(new LogMessage(LogSeverity.Info, "RoleModule", $"Removing role: {user.Role.Name} with DiscordRoleId: {user.Role.DiscordRoleId} from user: {user.Username}"));
                     await (context.User as IGuildUser).RemoveRoleAsync((ulong)user.Role.DiscordRoleId);
                     await Program.Log(new LogMessage(LogSeverity.Info, "RoleModule", $"Add role: {roleToBeApplied.Name} with DiscordRoleId: {roleToBeApplied.DiscordRoleId} to user: {user.Username}"));
-                    await (context.User as IGuildUser).AddRoleAsync(discordRole);
+                    await (context.User as IGuildUser).AddRoleAsync((ulong)roleToBeApplied.DiscordRoleId);
 
                     user.RoleId = roleToBeApplied.Id;
 

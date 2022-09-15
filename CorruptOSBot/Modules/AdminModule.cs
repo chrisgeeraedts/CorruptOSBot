@@ -583,7 +583,7 @@ namespace CorruptOSBot.Modules
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && Context.User.Id == SettingsConstants.GMKirbyDiscordId)
             {
-                await Context.Channel.SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(1000));
+                await Context.Channel.SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(10));
             }
 
             await Context.Message.DeleteAsync();

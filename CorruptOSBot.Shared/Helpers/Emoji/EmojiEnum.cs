@@ -41,6 +41,8 @@
         tob,
         tobhardmode,
         thermy,
+        toanormalmode,
+        toaexpertmode,
         zuk,
         jad,
         venny,
