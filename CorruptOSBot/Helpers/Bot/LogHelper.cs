@@ -7,11 +7,8 @@ using System.Threading.Tasks;
 
 namespace CorruptOSBot.Helpers.Bot
 {
-
     public static class LogHelper
     {
-
-
         public static Task Log(LogMessage message)
         {
             var messageString = string.Format($"{DateTime.Now,-19} [{message.Severity,8}] {message.Source}: {message.Message} {message.Exception}");

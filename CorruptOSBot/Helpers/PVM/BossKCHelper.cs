@@ -136,7 +136,6 @@ namespace CorruptOSBot.Helpers.PVM
             {
                 var props = clanMemberDetail.latestSnapshot.GetType().GetProperties();
 
-                //clanMemberDetail.latestSnapshot.the_corrupted_gauntlet
                 foreach (var prop in props)
                 {
                     var typeOfProp = prop.PropertyType;

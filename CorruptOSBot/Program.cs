@@ -1,4 +1,5 @@
-﻿using CorruptOSBot.Events;
+﻿using CorruptOSBot.Data;
+using CorruptOSBot.Events;
 using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
@@ -266,6 +267,20 @@ namespace CorruptOSBot
             if (msg.Author.Id == client.CurrentUser.Id || msg.Author.IsBot) return;
 
             //await BlockMessageIfDebugMode(msg);
+
+            if (msg.Channel.Name.Contains("#"))
+            {
+                var guildId = ConfigHelper.GetGuildId();
+                var guild = client.GetGuild(guildId);
+                if (guild != null)
+                {
+                    var clanBotChannel = (IMessageChannel)guild.GetChannel(869515940155518996);
+                    if (clanBotChannel != null)
+                    {
+                        await clanBotChannel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Direct Message from {msg.Author.Username} - @{msg.Author.Id}", msg.Content));
+                    }
+                }
+            }
 
             try
             {

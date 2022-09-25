@@ -472,6 +472,50 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Admin)]
+        [Command("DM", false)]
+        [Summary("!dm {user} {message} - posts message contents from the bot")]
+        public async Task PrivateMessage(string username, [Remainder] string message)
+        {
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
+            {
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    var rsAccount = corruptosEntities.RunescapeAccounts.FirstOrDefault(item => item.rsn.ToLower() == username.ToLower());
+
+                    if (rsAccount != null)
+                    {
+                        var discordUser = rsAccount.DiscordUser;
+
+                        if (discordUser != null && discordUser.DiscordId != null)
+                        {
+                            var discordProfile = Context.Guild.Users.FirstOrDefault(item => item.Id == (ulong)discordUser.DiscordId);
+
+                            if (discordProfile != null)
+                            {
+                                await discordProfile.SendMessageAsync(message);
+                                await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Message sent to {discordProfile.Username} - @{discordProfile.Id}", message));
+                            }
+                            else
+                            {
+                                await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format($"Could not find a discord account in the server with the ID: {discordUser.DiscordId}"), string.Empty));
+                            }
+                        }
+                        else
+                        {
+                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format($"Database issue for {username}"), string.Empty));
+                        }
+                    }
+                    else
+                    {
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed(string.Format($"User {username} not found"), string.Empty));
+                    }
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Admin)]
         [Command("AuditUsers", false)]
         [Summary("!auditusers - ")]
         public async Task AuditUsers()

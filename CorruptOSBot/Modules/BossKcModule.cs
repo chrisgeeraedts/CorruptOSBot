@@ -99,7 +99,7 @@ namespace CorruptOSBot.Modules
                     await channel.DeleteMessagesAsync(messages);
 
                     // Add new message
-                    await (channel as SocketTextChannel).SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(1000 * 60 * 60 * 24 * 3));
+                    await channel.SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(1000 * 60 * 60 * 24 * 3));
                 }
             }
         }

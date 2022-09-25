@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Text;
 
 namespace CorruptOSBot.Extensions
@@ -171,6 +172,10 @@ namespace CorruptOSBot.Extensions
             {
                 var result = response.Content.ReadAsStringAsync().Result;
                 clanMemberDetail = JsonConvert.DeserializeObject<ClanMemberDetail>(result);
+            }
+            else
+            {
+                Console.WriteLine($"Failed to get WOM defailts for ID:{id}");
             }
             return clanMemberDetail;
         }
