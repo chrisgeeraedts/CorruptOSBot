@@ -153,7 +153,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context, "!checkpoints", "spam-bot-commands");
+                await DiscordHelper.NotAllowedMessageToUser(Context, "!checkpoints", "spam-bot-commands");
             }
 
             await Context.Message.DeleteAsync();

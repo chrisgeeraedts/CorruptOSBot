@@ -51,9 +51,8 @@ namespace CorruptOSBot.Helpers.Discord
         {
             await (channel).SendMessageAsync(string.Format("Bot (v{2}) online since {3} for **{0}** minutes | **Heartbeat** : [{1}] ", Convert.ToInt64(timeOnline.TotalMinutes), DateTime.Now, RootAdminManager.GetBotVersion(), Program.OnlineFrom.ToString("r")));
         }
-
         
-        internal static async Task NotAlloweddMessageToUser(SocketCommandContext context, string command, string allowedChannel)
+        internal static async Task NotAllowedMessageToUser(SocketCommandContext context, string command, string allowedChannel)
         {
             await context.Channel.SendMessageAsync($"That command (**{command}**) is **not allowed** in this channel but only in the following channel(s): **{allowedChannel}**!");
         }

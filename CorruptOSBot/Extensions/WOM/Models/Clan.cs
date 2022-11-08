@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CorruptOSBot.Extensions
 {
@@ -14,5 +15,6 @@ namespace CorruptOSBot.Extensions
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; }
         public int memberCount { get; set; }
+        public List<ClanMember> memberships { get; set; }
     }
 }

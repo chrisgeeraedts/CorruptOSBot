@@ -1,4 +1,5 @@
 ﻿using CorruptOSBot.Extensions.WOM.ClanMemberDetails;
+using CorruptOSBot.Helpers;
 using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Newtonsoft.Json;
@@ -6,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Text;
 
 namespace CorruptOSBot.Extensions
@@ -21,31 +21,49 @@ namespace CorruptOSBot.Extensions
         public WiseOldManClient()
         {
             client = new HttpClient();
-            path = "https://api.wiseoldman.net";
+            client.DefaultRequestHeaders.Add("x-api-key", SettingsConstants.WOMApiKey);
+            client.DefaultRequestHeaders.Add("User-Agent", SettingsConstants.GMKirbyDiscordTag);
+            path = "https://api.wiseoldman.net/v2";
             clanId = Convert.ToInt32(ConfigHelper.GetSettingProperty("WOMClanId"));
             verificationCode = ConfigHelper.GetSettingProperty("WOMCode");
+        }
+
+        #region Clan Endpoints
+
+        public Clan GetClan()
+        {
+            Clan clanDetails = null;
+            HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                clanDetails = JsonConvert.DeserializeObject<Clan>(result);
+            }
+            return clanDetails;
+        }
+
+        public List<ClanMember> GetClanMembers()
+        {
+            List<ClanMember> clanMembers = null;
+            HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                var clan = JsonConvert.DeserializeObject<Clan>(result);
+
+                clanMembers = clan.memberships;
+            }
+            return clanMembers;
         }
 
         public List<Competition> GetClanCompetitions()
         {
             List<Competition> product = null;
-            HttpResponseMessage response = client.GetAsync(path + string.Format("/groups/{0}/competitions", clanId)).Result;
+            HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}/competitions").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
                 product = JsonConvert.DeserializeObject<List<Competition>>(result);
-            }
-            return product;
-        }
-
-        public CompetitionDetail GetCompetition(int compId)
-        {
-            CompetitionDetail product = null;
-            HttpResponseMessage response = client.GetAsync(path + string.Format("/competitions/{0}", compId)).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                product = JsonConvert.DeserializeObject<CompetitionDetail>(result);
             }
             return product;
         }
@@ -63,9 +81,9 @@ namespace CorruptOSBot.Extensions
                 }
                 });
 
-                HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+                HttpContent payload = new StringContent(content, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = client.PostAsync(path + string.Format("/groups/{0}/remove-members", clanId), c).Result;
+                HttpResponseMessage response = client.PostAsync($"{path}/groups/{clanId}/remove-members", payload).Result;
                 if (response.IsSuccessStatusCode)
                 {
                     response.Content.ReadAsStringAsync();
@@ -89,61 +107,27 @@ namespace CorruptOSBot.Extensions
                 verificationCode = verificationCode,
                 members = new List<Member>()
                 {
-                    new Member() {username = rsn, role = "Member"}
+                    new Member() {username = rsn, role = "helper"}
                 }
             });
 
-            HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+            HttpContent payload = new StringContent(content, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = client.PostAsync(path + string.Format("/groups/{0}/add-members", clanId), c).Result;
+            HttpResponseMessage response = client.PostAsync($"{path}/groups/{clanId}/add-members", payload).Result;
 
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
                 var clanMembers = JsonConvert.DeserializeObject<AddMemberRoot>(result);
-                return clanMembers.members.FirstOrDefault(x => x.username.ToLower() == rsn.ToLower());
+                return clanMembers.members.FirstOrDefault(x => x.player.username.ToLower() == rsn.ToLower());
             }
             return null;
-        }
-
-        public string PostNameChange(string oldName, string newName)
-        {
-            var content = JsonConvert.SerializeObject(new NameChangeRoot()
-            {
-                newName = newName,
-                oldName = oldName
-            });
-
-            HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
-
-            HttpResponseMessage response = client.PostAsync(path + string.Format("/names", clanId), c).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                return string.Empty;
-            }
-            else
-            {
-                return response.Content.ReadAsStringAsync().Result;
-            }
-        }
-
-        public Clan GetClan()
-        {
-            Clan product = null;
-            HttpResponseMessage response = client.GetAsync(path + string.Format("/groups/{0}", clanId)).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                product = JsonConvert.DeserializeObject<Clan>(result);
-            }
-            return product;
         }
 
         public List<ClanRecentAchievementsRoot> GetClanRecentAchievements()
         {
             List<ClanRecentAchievementsRoot> product = null;
-            HttpResponseMessage response = client.GetAsync(path + string.Format("/groups/{0}/achievements", clanId)).Result;
+            HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}/achievements").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
@@ -152,47 +136,35 @@ namespace CorruptOSBot.Extensions
             return product;
         }
 
-        public List<ClanMember> GetClanMembers()
+        public List<ClanHiscoreEntry> GetClanHiscores(string metric, int limit)
         {
-            List<ClanMember> clanMembers = null;
-            HttpResponseMessage response = client.GetAsync(path + string.Format("/groups/{0}/members", clanId)).Result;
+            List<ClanHiscoreEntry> clanHiscores = null;
+            HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}/hiscores?metric={metric}&limit={limit}").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                clanMembers = JsonConvert.DeserializeObject<List<ClanMember>>(result);
+                clanHiscores = JsonConvert.DeserializeObject<List<ClanHiscoreEntry>>(result);
             }
-            return clanMembers;
+            return clanHiscores;
         }
 
-        internal ClanMemberDetail GetPlayerDetails(int id)
+        #endregion
+
+        #region Competition Endpoints
+
+        public CompetitionDetail GetCompetition(int compId)
         {
-            ClanMemberDetail clanMemberDetail = null;
-            HttpResponseMessage response = client.GetAsync(path + string.Format("/players/{0}", id)).Result;
+            CompetitionDetail product = null;
+            HttpResponseMessage response = client.GetAsync($"{path}/competitions/{compId}").Result;
             if (response.IsSuccessStatusCode)
             {
                 var result = response.Content.ReadAsStringAsync().Result;
-                clanMemberDetail = JsonConvert.DeserializeObject<ClanMemberDetail>(result);
+                product = JsonConvert.DeserializeObject<CompetitionDetail>(result);
             }
-            else
-            {
-                Console.WriteLine($"Failed to get WOM defailts for ID:{id}");
-            }
-            return clanMemberDetail;
+            return product;
         }
 
-        public List<ClanMember> SearchUsersByName(string clanMemberRsn)
-        {
-            List<ClanMember> foundClanMembers = null;
-            HttpResponseMessage response = client.GetAsync(path + string.Format("/players/search?username={0}", clanMemberRsn)).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                var result = response.Content.ReadAsStringAsync().Result;
-                foundClanMembers = JsonConvert.DeserializeObject<List<ClanMember>>(result);
-            }
-            return foundClanMembers;
-        }
-
-        public Boolean UpdateAllParticipants()
+        public bool UpdateAllParticipants()
         {
             List<Competition> Competetions = GetClanCompetitions();
 
@@ -202,18 +174,17 @@ namespace CorruptOSBot.Extensions
 
             if (CompList.Any())
             {
-                var CurrentComp = CompList.OrderBy(x => x.id).First();
-
+                var currentComp = CompList.OrderBy(x => x.id).First();
                 var content = JsonConvert.SerializeObject(new Root()
                 {
                     verificationCode = verificationCode
                 });
 
-                HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+                HttpContent payload = new StringContent(content, Encoding.UTF8, "application/json");
 
-                Program.Log(new LogMessage(LogSeverity.Info, "CompId", CurrentComp.id.ToString()));
+                Program.Log(new LogMessage(LogSeverity.Info, "CompId", currentComp.id.ToString()));
 
-                HttpResponseMessage response = client.PostAsync(path + string.Format("/competitions/{0}/update-all", CurrentComp.id), c).Result;
+                HttpResponseMessage response = client.PostAsync($"{path}/competitions/{currentComp.id}/update-all", payload).Result;
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -232,63 +203,71 @@ namespace CorruptOSBot.Extensions
             return false;
         }
 
-        //public List<Achievement> GetAchievements(int id)
-        //{
-        //    List<Achievement> achievements = null;
-        //    HttpResponseMessage response = client.GetAsync(path + string.Format("/players/{0}/achievements", clanId)).Result;
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var result = response.Content.ReadAsStringAsync().Result;
-        //        achievements = JsonConvert.DeserializeObject<List<Achievement>>(result);
-        //    }
-        //    return achievements;
-        //}
+        #endregion
 
-        //public void AddCompParticipant(Competition competition, Participation participation)
-        //{
-        //    throw new NotImplementedException();
-        //    //Competition product = null;
 
-        //    //var content = JsonConvert.SerializeObject(participation);
+        #region Misc Endpoints
 
-        //    //HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+        public string PostNameChange(string oldName, string newName)
+        {
+            var content = JsonConvert.SerializeObject(new NameChangeRoot()
+            {
+                newName = newName,
+                oldName = oldName
+            });
 
-        //    //HttpResponseMessage response = client.PostAsync(path + string.Format("/competitions/{0}/add-participants", competition.id), c).Result;
-        //    //if (response.IsSuccessStatusCode)
-        //    //{
-        //    //    var result = response.Content.ReadAsStringAsync().Result;
-        //    //}
-        //    //else
-        //    //{
-        //    //    var result = response.ReasonPhrase;
-        //    //}
-        //}
+            HttpContent payload = new StringContent(content, Encoding.UTF8, "application/json");
 
-        //public void AddTeamCompParticipant(Competition competition, TeamCompParticipation.Root participation)
-        //{
-        //    var content = JsonConvert.SerializeObject(participation);
+            HttpResponseMessage response = client.PostAsync($"{path}/names", payload).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                return string.Empty;
+            }
+            else
+            {
+                return response.Content.ReadAsStringAsync().Result;
+            }
+        }
 
-        //    HttpContent c = new StringContent(content, Encoding.UTF8, "application/json");
+        internal ClanMemberDetail GetPlayerDetails(string username)
+        {
+            ClanMemberDetail clanMemberDetail = null;
+            HttpResponseMessage response = client.GetAsync($"{path}/players/{username}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                clanMemberDetail = JsonConvert.DeserializeObject<ClanMemberDetail>(result);
+            }
+            else
+            {
+                Console.WriteLine($"Failed to get WOM details for: {username}");
+            }
+            return clanMemberDetail;
+        }
 
-        //    HttpResponseMessage response = client.PostAsync(path + string.Format("/competitions/{0}/add-teams", competition.id), c).Result;
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var result = response.Content.ReadAsStringAsync().Result;
-        //    }
-        //    else
-        //    {
-        //        var result = response.ReasonPhrase;
-        //    }
-        //}
+        public List<ClanMember> SearchUsersByName(string clanMemberRsn)
+        {
+            List<ClanMember> foundClanMembers = null;
+            HttpResponseMessage response = client.GetAsync($"{path}/players/search?username={clanMemberRsn}").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                foundClanMembers = JsonConvert.DeserializeObject<List<ClanMember>>(result);
+            }
+            return foundClanMembers;
+        }
+
+        #endregion
+
+        private class AddMemberRoot
+        {
+            public List<ClanMember> members { get; set; }
+        }
 
         public void Dispose()
         {
             client = null;
-        }
-
-        public class AddMemberRoot
-        {
-            public List<ClanMember> members { get; set; }
         }
     }
 }

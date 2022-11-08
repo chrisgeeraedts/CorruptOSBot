@@ -4,7 +4,7 @@ namespace CorruptOSBot.Helpers.PVM
 {
     public class KcTopList
     {
-        public EmojiEnum Boss { get; set; }
+        public BossEnum Boss { get; set; }
         public string postId { get; set; }
         public List<KcPlayer> KcPlayers { get; set; }
     }

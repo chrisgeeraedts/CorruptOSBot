@@ -543,7 +543,7 @@ namespace CorruptOSBot.Modules
 
                         if (dbUser != null && dbUser.BlacklistedForPromotion == false)
                         {
-                            var womUser = womUsers.FirstOrDefault(item => item.displayName == dbUser.Username);
+                            var womUser = womUsers.FirstOrDefault(item => item.player.displayName == dbUser.Username);
 
                             MismatchedNames(mismatchedNamesStringBuilder, discordUser, dbUser);
                             MismatchedRoles(mismatchedRolesStringBuilder, discordUser, dbUser);
@@ -713,7 +713,7 @@ namespace CorruptOSBot.Modules
             var discordUsers = guild.GetUsersAsync().Result;
             AppendCompareListForDiscord(result, discordUsers);
 
-            // grab database discord suers
+            // grab database discord users
             var databaseDiscordUsers = new List<DiscordUser>();
             using (CorruptModel corruptosEntities = new CorruptModel())
             {
@@ -735,9 +735,11 @@ namespace CorruptOSBot.Modules
             {
                 if (!result.ContainsKey(item.Username.ToLower()))
                 {
-                    var newEntry = new FullComparisonResult();
-                    newEntry.ExistsInDiscord = true;
-                    newEntry.Username = item.Username;
+                    var newEntry = new FullComparisonResult
+                    {
+                        ExistsInDiscord = true,
+                        Username = item.Username
+                    };
                     result.Add(item.Username.ToLower(), newEntry);
                 }
                 else
@@ -755,9 +757,11 @@ namespace CorruptOSBot.Modules
             {
                 if (!result.ContainsKey(item.Username.ToLower()))
                 {
-                    var newEntry = new FullComparisonResult();
-                    newEntry.ExistsInDB = true;
-                    newEntry.Username = item.Username;
+                    var newEntry = new FullComparisonResult
+                    {
+                        ExistsInDB = true,
+                        Username = item.Username
+                    };
                     result.Add(item.Username.ToLower(), newEntry);
                 }
                 else
@@ -773,16 +777,18 @@ namespace CorruptOSBot.Modules
 
             foreach (var item in filteredList)
             {
-                if (!result.ContainsKey(item.username.ToLower()))
+                if (!result.ContainsKey(item.player.username.ToLower()))
                 {
-                    var newEntry = new FullComparisonResult();
-                    newEntry.ExistsInWOM = true;
-                    newEntry.Username = item.username;
-                    result.Add(item.username.ToLower(), newEntry);
+                    var newEntry = new FullComparisonResult
+                    {
+                        ExistsInWOM = true,
+                        Username = item.player.username
+                    };
+                    result.Add(item.player.username.ToLower(), newEntry);
                 }
                 else
                 {
-                    result[item.username.ToLower()].ExistsInWOM = true;
+                    result[item.player.username.ToLower()].ExistsInWOM = true;
                 }
             }
         }
@@ -820,7 +826,7 @@ namespace CorruptOSBot.Modules
             var result = 0;
             await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
             var guildId = ConfigHelper.GetGuildId();
-            var guild = ((Discord.IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
+            var guild = ((IDiscordClient)Context.Client).GetGuildAsync(guildId).Result;
             // iterate through all discord users
             var allUsers = guild.GetUsersAsync().Result;
 

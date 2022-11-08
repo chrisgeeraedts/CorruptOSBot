@@ -153,10 +153,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\WOM\Models\ClanHiscoreEntry.cs" />
     <Compile Include="Extensions\WOM\Models\ClanRecentAchievementsRoot.cs" />
     <Compile Include="Extensions\WOM\Models\Player.cs" />
     <Compile Include="Helpers\Bot\EmbedHelper.cs" />
     <Compile Include="Helpers\DataHelper.cs" />
+    <Compile Include="Helpers\PVM\BossEnum.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Modules\AccountModule.cs" />
     <Compile Include="Modules\CalendarModule.cs" />

@@ -29,7 +29,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context, "!add-alt", "spam-bot-commands");
+                await DiscordHelper.NotAllowedMessageToUser(Context, "!add-alt", "spam-bot-commands");
             }
 
             await Context.Message.DeleteAsync();
@@ -49,7 +49,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context, "!add-iron", "spam-bot-commands");
+                await DiscordHelper.NotAllowedMessageToUser(Context, "!add-iron", "spam-bot-commands");
             }
 
 
@@ -126,7 +126,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context, "!change-alt", "spam-bot-commands");
+                await DiscordHelper.NotAllowedMessageToUser(Context, "!change-alt", "spam-bot-commands");
             }
 
             await Context.Message.DeleteAsync();
@@ -159,7 +159,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAlloweddMessageToUser(Context, "!delete-alt", "spam-bot-commands");
+                await DiscordHelper.NotAllowedMessageToUser(Context, "!delete-alt", "spam-bot-commands");
             }
 
             await Context.Message.DeleteAsync();

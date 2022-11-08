@@ -173,7 +173,7 @@ namespace CorruptOSBot.Helpers.Bot
         public static async Task<Embed> CreateFullLeaderboardEmbed(int triggerTimeInMS)
         {
             // connect the kcs per boss
-            var result = await BossKCHelper.GetTopBossKC(WOMMemoryCache.OneDayMS);
+            var result = await BossKCHelper.GetTopBossKC();
 
             var builder = new EmbedBuilder
             {

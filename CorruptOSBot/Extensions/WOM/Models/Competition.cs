@@ -15,6 +15,5 @@ namespace CorruptOSBot.Extensions
         public DateTime createdAt { get; set; }
         public DateTime updatedAt { get; set; }
         public int participantCount { get; set; }
-        public string duration { get; set; }
     }
 }
