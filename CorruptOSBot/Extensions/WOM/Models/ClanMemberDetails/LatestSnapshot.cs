@@ -1,11 +1,28 @@
-﻿using System;
+﻿using CorruptOSBot.Data;
+using System;
+using System.Collections.Generic;
 
 namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
 {
     public class LatestSnapshot
     {
+        public int id { get; set; } 
+        public int playerId { get; set; }
         public DateTime createdAt { get; set; }
-        public object importedAt { get; set; }
+        public DateTime? importedAt { get; set; }
+        public PlayerDetailsData data { get; set; }
+    }
+
+    public class PlayerDetailsData
+    {
+        public PlayerDetailsSkill Skills { get; set; }
+        public PlayerDetailsBosses Bosses { get; set; }
+        public PlayerDetailsActivities Activities { get; set; }
+        public PlayerDetailsComputed Computed { get; set; }
+
+    }
+    public class PlayerDetailsSkill
+    {
         public Overall overall { get; set; }
         public Attack attack { get; set; }
         public Defence defence { get; set; }
@@ -30,18 +47,9 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public Runecrafting runecrafting { get; set; }
         public Hunter hunter { get; set; }
         public Construction construction { get; set; }
-        public LeaguePoints league_points { get; set; }
-        public BountyHunterHunter bounty_hunter_hunter { get; set; }
-        public BountyHunterRogue bounty_hunter_rogue { get; set; }
-        public ClueScrollsAll clue_scrolls_all { get; set; }
-        public ClueScrollsBeginner clue_scrolls_beginner { get; set; }
-        public ClueScrollsEasy clue_scrolls_easy { get; set; }
-        public ClueScrollsMedium clue_scrolls_medium { get; set; }
-        public ClueScrollsHard clue_scrolls_hard { get; set; }
-        public ClueScrollsElite clue_scrolls_elite { get; set; }
-        public ClueScrollsMaster clue_scrolls_master { get; set; }
-        public LastManStanding last_man_standing { get; set; }
-        public SoulWarsZeal soul_wars_zeal { get; set; }
+    }
+    public class PlayerDetailsBosses
+    {
         public AbyssalSire abyssal_sire { get; set; }
         public AlchemicalHydra alchemical_hydra { get; set; }
         public BarrowsChests barrows_chests { get; set; }
@@ -92,6 +100,24 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public Wintertodt wintertodt { get; set; }
         public Zalcano zalcano { get; set; }
         public Zulrah zulrah { get; set; }
+    }
+    public class PlayerDetailsActivities
+    {
+        public LeaguePoints league_points { get; set; }
+        public BountyHunterHunter bounty_hunter_hunter { get; set; }
+        public BountyHunterRogue bounty_hunter_rogue { get; set; }
+        public ClueScrollsAll clue_scrolls_all { get; set; }
+        public ClueScrollsBeginner clue_scrolls_beginner { get; set; }
+        public ClueScrollsEasy clue_scrolls_easy { get; set; }
+        public ClueScrollsMedium clue_scrolls_medium { get; set; }
+        public ClueScrollsHard clue_scrolls_hard { get; set; }
+        public ClueScrollsElite clue_scrolls_elite { get; set; }
+        public ClueScrollsMaster clue_scrolls_master { get; set; }
+        public LastManStanding last_man_standing { get; set; }
+        public SoulWarsZeal soul_wars_zeal { get; set; }
+    }
+    public class PlayerDetailsComputed
+    {
         public Ehp ehp { get; set; }
         public Ehb ehb { get; set; }
     }

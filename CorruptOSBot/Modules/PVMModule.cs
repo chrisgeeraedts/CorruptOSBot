@@ -35,7 +35,7 @@ namespace CorruptOSBot.Modules
 
                         if (clanMember != null)
                         {
-                            var kills = clanMember.latestSnapshot.chambers_of_xeric_challenge_mode.kills + clanMember.latestSnapshot.chambers_of_xeric.kills;
+                            var kills = clanMember.latestSnapshot.data.Bosses.chambers_of_xeric_challenge_mode.kills + clanMember.latestSnapshot.data.Bosses.chambers_of_xeric.kills;
 
                             // set the role appriate
                             await PvmSystemHelper.CheckAndUpdateAccountAsync(
@@ -84,7 +84,7 @@ namespace CorruptOSBot.Modules
 
                         if (clanMember != null)
                         {
-                            var kills = clanMember.latestSnapshot.theatre_of_blood.kills;
+                            var kills = clanMember.latestSnapshot.data.Bosses.theatre_of_blood.kills;
 
                             // set the role appriate
                             await PvmSystemHelper.CheckAndUpdateAccountAsync(
@@ -133,7 +133,7 @@ namespace CorruptOSBot.Modules
 
                         if (clanMember != null)
                         {
-                            var kills = clanMember.latestSnapshot.nightmare.kills;
+                            var kills = clanMember.latestSnapshot.data.Bosses.nightmare.kills;
 
                             // set the role appriate
                             await PvmSystemHelper.CheckAndUpdateAccountAsync(
@@ -182,7 +182,7 @@ namespace CorruptOSBot.Modules
 
                         if (clanMember != null)
                         {
-                            var kills = clanMember.latestSnapshot.chambers_of_xeric_challenge_mode.kills;
+                            var kills = clanMember.latestSnapshot.data.Bosses.chambers_of_xeric_challenge_mode.kills;
 
                             // set the role appriate
                             await PvmSystemHelper.CheckAndUpdateAccountCMAsync(

@@ -14,7 +14,7 @@ namespace CorruptOSBot.Services
     public class PVMRoleService : IService
     {
         public int TriggerTimeInMS { get => 1000 * 60 * 5; } // Every 5 minutes
-        public int BeforeTriggerTimeInMS { get => 1000 * 60 * 3; } // 5 minutes
+        public int BeforeTriggerTimeInMS { get => 1000 * 60 * 5; } // 5 minutes
 
         private ulong GuildId;
 
@@ -53,7 +53,7 @@ namespace CorruptOSBot.Services
                             {
                                 try
                                 {
-                                    await SetRolesCox(discordUser, guild, clanMemberWom.latestSnapshot.chambers_of_xeric.kills);
+                                    await SetRolesCox(discordUser, guild, clanMemberWom.latestSnapshot.data.Bosses.chambers_of_xeric.kills);
                                 }
                                 catch (Exception e)
                                 {
@@ -62,7 +62,7 @@ namespace CorruptOSBot.Services
 
                                 try
                                 {
-                                    await SetRolesTob(discordUser, guild, clanMemberWom.latestSnapshot.theatre_of_blood.kills);
+                                    await SetRolesTob(discordUser, guild, clanMemberWom.latestSnapshot.data.Bosses.theatre_of_blood.kills);
                                 }
                                 catch (Exception e)
                                 {
@@ -71,7 +71,7 @@ namespace CorruptOSBot.Services
 
                                 try
                                 {
-                                    await SetRolesNm(discordUser, guild, clanMemberWom.latestSnapshot.nightmare.kills);
+                                    await SetRolesNm(discordUser, guild, clanMemberWom.latestSnapshot.data.Bosses.nightmare.kills);
                                 }
                                 catch (Exception e)
                                 {

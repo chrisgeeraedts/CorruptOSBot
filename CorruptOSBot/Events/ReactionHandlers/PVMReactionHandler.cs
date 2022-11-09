@@ -16,15 +16,15 @@ namespace CorruptOSBot.Events.ReactionHandlers
         {
             // do something with this specific emoji. For example, if the post is the PVM thing, execute effectively the !tob command
             var emojiId = ((Emote)arg3.Emote).Id;
-            if (emojiId == EmojiHelper.GetEmojiId(EmojiEnum.tob.ToString()))
+            if (emojiId == EmojiHelper.GetEmojiId(BossEnum.theatre_of_blood.ToString()))
             {
                 await HandleToB(client, guildId, arg3);
             }
-            if (emojiId == EmojiHelper.GetEmojiId(EmojiEnum.chamber.ToString()))
+            if (emojiId == EmojiHelper.GetEmojiId(BossEnum.chambers_of_xeric.ToString()))
             {
                 await HandleCoX(client, guildId, arg3);
             }
-            if (emojiId == EmojiHelper.GetEmojiId(EmojiEnum.nightmare.ToString()))
+            if (emojiId == EmojiHelper.GetEmojiId(BossEnum.nightmare.ToString()))
             {
                 await HandleNm(client, guildId, arg3);
             }
@@ -46,7 +46,7 @@ namespace CorruptOSBot.Events.ReactionHandlers
 
                     if (clanMember != null)
                     {
-                        var kills = clanMember.latestSnapshot.theatre_of_blood.kills;
+                        var kills = clanMember.latestSnapshot.data.Bosses.theatre_of_blood.kills;
 
                         // set the role appriate
                         await PvmSystemHelper.CheckAndUpdateAccountAsync(
@@ -83,7 +83,7 @@ namespace CorruptOSBot.Events.ReactionHandlers
 
                     if (clanMember != null)
                     {
-                        var kills = clanMember.latestSnapshot.chambers_of_xeric.kills + clanMember.latestSnapshot.chambers_of_xeric_challenge_mode.kills;
+                        var kills = clanMember.latestSnapshot.data.Bosses.chambers_of_xeric.kills + clanMember.latestSnapshot.data.Bosses.chambers_of_xeric_challenge_mode.kills;
 
                         // set the role appriate
                         await PvmSystemHelper.CheckAndUpdateAccountAsync(
@@ -120,7 +120,7 @@ namespace CorruptOSBot.Events.ReactionHandlers
 
                     if (clanMember != null)
                     {
-                        var kills = clanMember.latestSnapshot.nightmare.kills;
+                        var kills = clanMember.latestSnapshot.data.Bosses.nightmare.kills;
 
                         // set the role appriate
                         await PvmSystemHelper.CheckAndUpdateAccountAsync(
