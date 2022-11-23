@@ -17,7 +17,6 @@ namespace CorruptOSBot.Extensions
         public DateTime? updatedAt { get; set; }
         public object group { get; set; }
         public string duration { get; set; }
-        public int totalGained { get; set; }
-        public List<Participant> participants { get; set; }
+        public List<Participant> participations { get; set; }
     }
 }

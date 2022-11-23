@@ -44,7 +44,7 @@ namespace CorruptOSBot.Modules
                         // get details of this comp
                         CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
 
-                        string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
+                        var totalGainedString = detailedComp.participations.Sum(item => item.progress.gained).ToString("n0");
 
                         // create embed with data
                         var embedBuilder = new EmbedBuilder
@@ -52,7 +52,7 @@ namespace CorruptOSBot.Modules
                             Color = Color.Green,
                             Title = f2.title,
                             Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id),
-                            Description = string.Format("**Total XP: {0}**", s),
+                            Description = $"**Total XP: {totalGainedString}**",
                             ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png",
                             ThumbnailUrl = GetThumbnailImage(f2.metric),
                             Footer = new EmbedFooterBuilder()
@@ -61,7 +61,7 @@ namespace CorruptOSBot.Modules
                             }
                         };
 
-                        AddFields(embedBuilder, detailedComp.participants);
+                        AddFields(embedBuilder, detailedComp.participations);
                         AddImage(embedBuilder, detailedComp.title);
 
                         await ReplyAsync(string.Format("Current results for **{0}**", detailedComp.title), embed: embedBuilder.Build());
@@ -125,7 +125,7 @@ namespace CorruptOSBot.Modules
                             // get details of this comp
                             CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(f2.id);
 
-                            string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
+                            var totalGainedString = detailedComp.participations.Sum(item => item.progress.gained).ToString("n0");
 
                             // create embed with data
                             EmbedBuilder embedBuilder = new EmbedBuilder
@@ -133,7 +133,7 @@ namespace CorruptOSBot.Modules
                                 Color = Color.Green,
                                 Title = f2.title,
                                 Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id),
-                                Description = string.Format("**Total XP: {0}**", s),
+                                Description = string.Format("**Total XP: {0}**", totalGainedString),
                                 ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png",
                                 ThumbnailUrl = GetThumbnailImage(detailedComp.metric)
                             };
@@ -141,7 +141,7 @@ namespace CorruptOSBot.Modules
                             embedBuilder.WithFooter(string.Format("Event ran from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
 
                             // get top 3 partipants
-                            AddFields(embedBuilder, detailedComp.participants);
+                            AddFields(embedBuilder, detailedComp.participations);
                             AddImage(embedBuilder, detailedComp.title);
 
                             await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
@@ -172,19 +172,20 @@ namespace CorruptOSBot.Modules
 
                     if (detailedComp != null)
                     {
+                        var totalGainedString = detailedComp.participations.Sum(item => item.progress.gained).ToString("n0");
+
                         // create embed with data
                         var embedBuilder = new EmbedBuilder();
                         embedBuilder.Color = Color.Gold;
                         embedBuilder.Title = detailedComp.title;
                         embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", detailedComp.id);
-                        string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
-                        embedBuilder.Description = string.Format("**Total XP: {0}**", s);
+                        embedBuilder.Description = string.Format("**Total XP: {0}**", totalGainedString);
                         embedBuilder.WithFooter(string.Format("Event ran from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
                         embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
                         embedBuilder.ThumbnailUrl = "https://oldschool.runescape.wiki/w/Trailblazer_dragon_trophy#/media/File:Trailblazer_dragon_trophy_detail.png";
 
                         // get top 3 partipants
-                        AddFields(embedBuilder, detailedComp.participants);
+                        AddFields(embedBuilder, detailedComp.participations);
                         AddImage(embedBuilder, detailedComp.title);
 
                         await ReplyAsync(string.Format("**{0}** has ended", detailedComp.title), embed: embedBuilder.Build());
@@ -227,15 +228,15 @@ namespace CorruptOSBot.Modules
 
             if (orderedParticipants.Count > 0)
             {
-                AddField(embedBuilder, "\U0001f947", participants[0].displayName, participants[0].progress.gained);
+                AddField(embedBuilder, "\U0001f947", participants[0].player.displayName, participants[0].progress.gained);
             }
             if (orderedParticipants.Count > 1)
             {
-                AddField(embedBuilder, "\U0001f948", participants[1].displayName, participants[1].progress.gained);
+                AddField(embedBuilder, "\U0001f948", participants[1].player.displayName, participants[1].progress.gained);
             }
             if (orderedParticipants.Count > 2)
             {
-                AddField(embedBuilder, "\U0001f949", participants[2].displayName, participants[2].progress.gained);
+                AddField(embedBuilder, "\U0001f949", participants[2].player.displayName, participants[2].progress.gained);
             }
         }
 

@@ -620,19 +620,6 @@ namespace CorruptOSBot.Modules
             await Context.Message.DeleteAsync();
         }
 
-        [Helpgroup(HelpGroup.Admin)]
-        [Command("dev", false)]
-        [Summary("!dev - Dev command")]
-        public async Task Dev()
-        {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && Context.User.Id == SettingsConstants.GMKirbyDiscordId)
-            {
-                await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
-            }
-
-            await Context.Message.DeleteAsync();
-        }
-
         private List<ComparisonResult> GetComparisonList(IReadOnlyCollection<IGuildUser> discordUsers, List<DiscordUser> databaseDiscordUsers)
         {
             var comparisonList = new List<ComparisonResult>();

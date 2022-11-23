@@ -217,18 +217,19 @@ namespace CorruptOSBot.Helpers.Bot
                     // get details of this comp
                     CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(CurrentComp.id);
 
+                    var totalGainedString = detailedComp.participations.Sum(item => item.progress.gained).ToString("n0");
+
                     // create embed with data
                     var embedBuilder = new EmbedBuilder();
                     embedBuilder.Color = Color.Green;
                     embedBuilder.Title = CurrentComp.title;
                     embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", CurrentComp.id);
-                    string s = detailedComp.totalGained >= 10000 ? detailedComp.totalGained.ToString("n0") : detailedComp.totalGained.ToString("d");
-                    embedBuilder.Description = string.Format("**Total XP: {0}**", s);
+                    embedBuilder.Description = string.Format("**Total XP: {0}**", totalGainedString);
                     embedBuilder.WithFooter(string.Format("Event runs from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
                     embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
                     embedBuilder.ThumbnailUrl = GetImage(CurrentComp.metric);
 
-                    AddFields(embedBuilder, detailedComp.participants);
+                    AddFields(embedBuilder, detailedComp.participations);
 
                     return embedBuilder.Build();
                 }
@@ -304,15 +305,15 @@ namespace CorruptOSBot.Helpers.Bot
 
             if (orderedParticipants.Count > 0)
             {
-                AddField(embedBuilder, "\U0001f947", participants[0].displayName, participants[0].progress.gained);
+                AddField(embedBuilder, "\U0001f947", participants[0].player.displayName, participants[0].progress.gained);
             }
             if (orderedParticipants.Count > 1)
             {
-                AddField(embedBuilder, "\U0001f948", participants[1].displayName, participants[1].progress.gained);
+                AddField(embedBuilder, "\U0001f948", participants[1].player.displayName, participants[1].progress.gained);
             }
             if (orderedParticipants.Count > 2)
             {
-                AddField(embedBuilder, "\U0001f949", participants[2].displayName, participants[2].progress.gained);
+                AddField(embedBuilder, "\U0001f949", participants[2].player.displayName, participants[2].progress.gained);
             }
         }
 

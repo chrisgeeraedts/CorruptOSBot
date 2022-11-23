@@ -8,39 +8,46 @@ namespace CorruptOSBot.Helpers.PVM
 {
     public static class BossKCHelper
     {
+        public static List<KcTopList> cachedBosses = new List<KcTopList>();
+
         public static async Task<List<KcTopList>> GetTopBossKC()
         {
             var result = new List<KcTopList>();
 
             var womClient = new WiseOldManClient();
 
-            await Task.Run(() =>
+            if (!cachedBosses.Any())
             {
-                var bosses = ((BossEnum[])Enum.GetValues(typeof(BossEnum))).ToList();
-
-                foreach (var boss in bosses)
+                await Task.Run(() =>
                 {
-                    var hiscores = womClient.GetClanHiscores(boss.ToString(), 3);
-                    var kcPlayers = new List<KcPlayer>();
+                    var bosses = ((BossEnum[])Enum.GetValues(typeof(BossEnum))).ToList();
 
-                    foreach (var hiscore in hiscores)
+                    foreach (var boss in bosses)
                     {
-                        kcPlayers.Add(new KcPlayer()
+                        var hiscores = womClient.GetClanHiscores(boss.ToString(), 3);
+                        var kcPlayers = new List<KcPlayer>();
+
+                        foreach (var hiscore in hiscores)
                         {
-                            Player = hiscore.player.displayName,
-                            Kc = hiscore.data.kills
+                            kcPlayers.Add(new KcPlayer()
+                            {
+                                Player = hiscore.player.displayName,
+                                Kc = hiscore.data.kills
+                            });
+                        }
+
+                        result.Add(new KcTopList()
+                        {
+                            Boss = boss,
+                            KcPlayers = kcPlayers
                         });
                     }
+                });
 
-                    result.Add(new KcTopList()
-                    {
-                        Boss = boss,
-                        KcPlayers = kcPlayers
-                    });
-                }
-            });
+                cachedBosses = result;
+            }
 
-            return result;
+            return cachedBosses;
         }
     }
 }

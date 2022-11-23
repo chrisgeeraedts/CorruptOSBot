@@ -323,11 +323,12 @@ namespace CorruptOSBot.Modules
                 if (roleToBeApplied.Id != user.RoleId && !user.Role.IsStaff)
                 {
                     var discordRole = context.Guild.Roles.FirstOrDefault(item => item.Name == roleToBeApplied.Name);
+                    var discordUser = context.Guild.Users.FirstOrDefault(item => item.Id == (ulong)user.DiscordId);
 
                     await Program.Log(new LogMessage(LogSeverity.Info, "RoleModule", $"Removing role: {user.Role.Name} with DiscordRoleId: {user.Role.DiscordRoleId} from user: {user.Username}"));
-                    await (context.User as IGuildUser).RemoveRoleAsync((ulong)user.Role.DiscordRoleId);
+                    await discordUser.RemoveRoleAsync((ulong)user.Role.DiscordRoleId);
                     await Program.Log(new LogMessage(LogSeverity.Info, "RoleModule", $"Add role: {roleToBeApplied.Name} with DiscordRoleId: {roleToBeApplied.DiscordRoleId} to user: {user.Username}"));
-                    await (context.User as IGuildUser).AddRoleAsync((ulong)roleToBeApplied.DiscordRoleId);
+                    await discordUser.AddRoleAsync((ulong)roleToBeApplied.DiscordRoleId);
 
                     user.RoleId = roleToBeApplied.Id;
 

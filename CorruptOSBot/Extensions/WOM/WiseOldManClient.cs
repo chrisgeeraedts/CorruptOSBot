@@ -68,6 +68,37 @@ namespace CorruptOSBot.Extensions
             return product;
         }
 
+        public List<Competition> GetOffsetClanCompetitions()
+        {
+            List<Competition> product = new List<Competition>();
+            var isComplete = false;
+            var offset = 0;
+
+            do
+            {
+                HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}/competitions?limit=20&offset={offset}").Result;
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().Result;
+
+                    if(JsonConvert.DeserializeObject<List<Competition>>(result).Count < 1)
+                    {
+                        isComplete = true;
+                    }
+
+                    product.AddRange(JsonConvert.DeserializeObject<List<Competition>>(result));
+                    offset += 20;
+                }
+                else
+                {
+                    isComplete = true;
+                }
+            } while (!isComplete);
+
+            return product;
+        }
+
         public void RemoveGroupMember(string rsn)
         {
             try

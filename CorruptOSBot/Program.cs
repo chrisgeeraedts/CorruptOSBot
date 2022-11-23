@@ -171,6 +171,7 @@ namespace CorruptOSBot
 
         private async Task InitCommands()
         {
+            await commands.AddModuleAsync<DevModule>(services);
             await commands.AddModuleAsync<AdminModule>(services);
             await commands.AddModuleAsync<AccountModule>(services);
             await commands.AddModuleAsync<HelpModule>(services);
