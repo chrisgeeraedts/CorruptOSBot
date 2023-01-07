@@ -175,7 +175,7 @@
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Modules\AccountModule.cs" />
     <Compile Include="Modules\DevModule.cs" />
-    <Compile Include="Modules\CalendarModule.cs" />
+    <Compile Include="Modules\MiscModule.cs" />
     <Compile Include="RootAdminManager.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\ReactionHandlers\PVMReactionHandler.cs" />

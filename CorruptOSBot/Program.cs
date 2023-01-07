@@ -182,7 +182,7 @@ namespace CorruptOSBot
             await commands.AddModuleAsync<WoMModule>(services);
             await commands.AddModuleAsync<PVMModule>(services);
             await commands.AddModuleAsync<RoleModule>(services);
-            await commands.AddModuleAsync<CalendarModule>(services);
+            await commands.AddModuleAsync<MiscModule>(services);
 
             client.MessageReceived += HandleCommandAsync;
             client.UserJoined += Client_UserJoined;

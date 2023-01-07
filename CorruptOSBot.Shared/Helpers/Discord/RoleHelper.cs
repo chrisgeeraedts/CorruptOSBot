@@ -28,17 +28,9 @@ namespace CorruptOSBot.Shared.Helpers.Discord
             return 0;
         }
 
-        public static bool IsMember(SocketUser user, SocketGuild guild)
+        public static bool IsMember(SocketUser user)
         {
-            var roles = GetRoles();
-            var result = false;
-
-            for (var i = 1; i < 13; i++)
-            {
-                result = HasRole(user, guild, roles.FirstOrDefault(x => x.Id == i));
-            }
-
-            return result;
+            return HasAnyRole(user);
         }
 
         public static bool IsStaff(SocketUser user, IGuild guild)

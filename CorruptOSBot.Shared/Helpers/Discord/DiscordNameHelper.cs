@@ -21,7 +21,6 @@ namespace CorruptOSBot.Helpers.Discord
                 var name = currentUser.Nickname ?? user.Username;
                 return name;
             }
-            return string.Empty;
         }
 
         public static string GetAccountNameOrNickname(SocketGuildUser user)

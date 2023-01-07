@@ -30,7 +30,7 @@ namespace CorruptOSBot.Modules
                 var preferedNickname = username;
 
                 // check rank, if he has a proper rank, its a namechange, otherwise, a new member
-                var isMember = RoleHelper.IsMember(Context.User, Context.Guild);
+                var isMember = RoleHelper.IsMember(Context.User);
 
                 if (!isMember)
                 {
@@ -78,7 +78,7 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await ReplyAsync("Something broke with upgrading - please contact SGNathy");
+                    await ReplyAsync("Something broke with upgrading - please contact Staff");
                 }
 
                 // delete the command posted
@@ -135,10 +135,12 @@ namespace CorruptOSBot.Modules
             string previousName = ((SocketGuildUser)currentUser).Nickname;
 
             // change nickname
-            await ((SocketGuildUser)currentUser).ModifyAsync(x =>
-            {
-                x.Nickname = preferedNickname;
-            });
+            //await ((SocketGuildUser)currentUser).ModifyAsync(x =>
+            //{
+            //    x.Nickname = preferedNickname;
+            //});
+
+            await ((SocketGuildUser)currentUser).ModifyAsync(item => item.Nickname = preferedNickname);
 
             // post to recruiting channel
             var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
@@ -300,7 +302,7 @@ namespace CorruptOSBot.Modules
                 }
                 else
                 {
-                    await ReplyAsync("Something broke with upgrading - please contact SGNathy");
+                    await ReplyAsync("Something broke with upgrading - please contact Staff");
                 }
             }
             else

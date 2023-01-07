@@ -197,14 +197,15 @@ namespace CorruptOSBot.Modules
                     {
                         if (isRsnAlreadyLinked)
                         {
-                            await context.User.SendMessageAsync(String.Format("The RSN **{0}** is already linked to an Affliction Discord account!", rsn));
+                            await context.Channel.SendMessageAsync(string.Format("The RSN **{0}** is already linked to an Affliction Discord account!", rsn));
+
                         }
                         else if (discordUser.RunescapeAccounts.Any(x => x.rsn.ToLower() == rsn.ToLower()))
                         {
                             if (!overrideDiscordUserId.HasValue)
                             {
                                 // message if it does
-                                await context.User.SendMessageAsync(String.Format("You already have linked the RSN **{0}** to your Affliction Discord account!", rsn));
+                                await context.Channel.SendMessageAsync(String.Format("You already have linked the RSN **{0}** to your Affliction Discord account!", rsn));
                             }
                         }
                         else
@@ -220,7 +221,7 @@ namespace CorruptOSBot.Modules
                             //}
 
                             // add it to db
-                            corruptosEntities.RunescapeAccounts.Add(new Data.RunescapeAccount()
+                            corruptosEntities.RunescapeAccounts.Add(new RunescapeAccount()
                             {
                                 DiscordUser = discordUser,
                                 rsn = rsn,
@@ -231,7 +232,14 @@ namespace CorruptOSBot.Modules
                             if (!overrideDiscordUserId.HasValue)
                             {
                                 // add and message if it doesnt
-                                await context.User.SendMessageAsync(String.Format("**{0}** was linked to your Affliction Discord account!", rsn));
+                                try
+                                {
+                                    await context.User.SendMessageAsync(String.Format("**{0}** was linked to your Affliction Discord account!", rsn));
+                                }
+                                catch(Exception ex)
+                                {
+                                    await Program.Log(new LogMessage(LogSeverity.Error, "AddAlt", "Added Alt but failed to send DM to user - " + ex.Message));
+                                }
                             }
 
                             var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
