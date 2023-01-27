@@ -24,7 +24,7 @@ namespace CorruptOSBot.Modules
             {
                 var random = new Random();
 
-                int randomInt = random.Next(0, 6);
+                int randomInt = random.Next(1, 6);
 
                 await Context.Channel.SendMessageAsync($"{DiscordNameHelper.GetAccountNameOrNickname(Context.User)} rolled a {randomInt}! (1 - 6)");
             }
