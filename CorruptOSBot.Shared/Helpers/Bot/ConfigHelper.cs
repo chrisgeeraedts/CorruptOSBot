@@ -11,7 +11,7 @@ namespace CorruptOSBot.Shared.Helpers.Bot
 
         public static void Init()
         {
-            IsDebugMode = true;
+            IsDebugMode = false;
 
             var config = new DataHelper().GetConfiguration();
             Configuration = new Dictionary<string, string>();

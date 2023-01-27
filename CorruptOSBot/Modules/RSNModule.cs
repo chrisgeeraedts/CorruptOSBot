@@ -30,7 +30,7 @@ namespace CorruptOSBot.Modules
                 var preferedNickname = username;
 
                 // check rank, if he has a proper rank, its a namechange, otherwise, a new member
-                var isMember = RoleHelper.IsMember(Context.User);
+                var isMember = RoleHelper.IsMember(Context.User, Context.Guild);
 
                 if (!isMember)
                 {
@@ -176,11 +176,29 @@ namespace CorruptOSBot.Modules
 
         private async Task CreateNewMember(SocketUser currentUser, string preferedNickname)
         {
+            var isSafeAccount = false;
+            var runewatchEntry = new RunewatchEntry();
             // check runewatch
-            var runewatchEntries = new RunewatchClient().GetRunewatchEntries();
+            try
+            {
+                var runewatchEntries = new RunewatchClient().GetRunewatchEntries();
 
-            var runewatchEntry = runewatchEntries.FirstOrDefault(x => x.accused_rsn == preferedNickname);
-            bool isSafeAccount = runewatchEntry == null;
+                runewatchEntry = runewatchEntries.FirstOrDefault(x => x.accused_rsn == preferedNickname);
+                isSafeAccount = runewatchEntry == null;
+            }
+            catch(Exception ex)
+            {
+                var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+                if (recruitingChannel != null)
+                {
+                    await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("RuneWatch Failure",
+                    $"Unable to validate {preferedNickname} against RuneWatch. Adding to DB but potential risk."));
+                }
+                else
+                {
+                    await Program.Log(new LogMessage(LogSeverity.Error, "RSNModule", "Failed to find Changes Channel"));
+                }
+            }
 
             if (isSafeAccount)
             {
