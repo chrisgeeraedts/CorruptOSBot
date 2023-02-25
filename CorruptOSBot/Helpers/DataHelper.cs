@@ -51,6 +51,8 @@ namespace CorruptOSBot.Helpers
                         discordUser.LeavingDate = DateTime.Now;
                     }
 
+                    discordUser.BlacklistedForPromotion = true;
+
                     await corruptosEntities.SaveChangesAsync();
                 }
             }

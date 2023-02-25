@@ -233,9 +233,20 @@ namespace CorruptOSBot.Modules
                     var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
                     if (recruitingChannel != null)
                     {
-                        await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
-                            EmbedHelper.CreateDefaultEmbed("Member joined",
-                            string.Format("<@{0}> ({1}) has set their RSN to **{1}**!", currentUser.Id, preferedNickname)));
+                        var womAccount = new WiseOldManClient().GetPlayerDetails(preferedNickname);
+
+                        if (womAccount != null)
+                        {
+                            await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
+                                EmbedHelper.CreateDefaultEmbed("Member joined",
+                                $"<@{currentUser.Id}> ({preferedNickname}) has set their RSN to **{preferedNickname}**! \n Total Level: {womAccount.latestSnapshot.data.Skills.overall.level} \n Type: {womAccount.type}"));
+                        }
+                        else
+                        {
+                            await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed:
+                                EmbedHelper.CreateDefaultEmbed("Member joined",
+                                string.Format("<@{0}> ({1}) has set their RSN to **{1}** but could not be found on WiseOldMan", currentUser.Id, preferedNickname)));
+                        }
                     }
                     else
                     {

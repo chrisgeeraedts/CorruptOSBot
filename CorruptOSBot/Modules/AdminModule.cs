@@ -536,6 +536,7 @@ namespace CorruptOSBot.Modules
                     var mismatchedRolesAndPointsStringBuilder = new StringBuilder();
                     var mismatchedRolesInGameUsers = new StringBuilder();
                     var notExistingStringBuilder = new StringBuilder();
+                    var clanFriendStringBuilder = new StringBuilder();
 
                     foreach (var discordUser in discordUsers.Where(item => !item.Roles.Any(x => x.Name.Contains("Bot"))))
                     {
@@ -619,6 +620,35 @@ namespace CorruptOSBot.Modules
 
             await Context.Message.DeleteAsync();
         }
+
+        [Helpgroup(HelpGroup.Admin)]
+        [Command("DM", false)]
+        [Summary("!blacklistuser {user} - Sets user to be blacklisted from gaining points")]
+        public async Task BlacklistUser(string username)
+        {
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
+            {
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    var rsAccount = corruptosEntities.RunescapeAccounts.FirstOrDefault(item => item.rsn.ToLower() == username.ToLower());
+
+                    if (rsAccount != null)
+                    {
+                        rsAccount.DiscordUser.BlacklistedForPromotion = true;
+
+                        await corruptosEntities.SaveChangesAsync();
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"{rsAccount.rsn} has been blacklisted for promotion", string.Empty));
+                    }
+                    else
+                    {
+                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Could not find record for {rsAccount.rsn}", string.Empty));
+                    }
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
+
 
         private List<ComparisonResult> GetComparisonList(IReadOnlyCollection<IGuildUser> discordUsers, List<DiscordUser> databaseDiscordUsers)
         {
@@ -979,6 +1009,10 @@ namespace CorruptOSBot.Modules
                         stringBuilder.AppendLine($"{dbUser.Username} is {dbUser.Role.Name} in Discord and {womUser.role} in-game");
                     }
                 }
+            }
+            else
+            {
+                stringBuilder.AppendLine($"{dbUser.Username} is in the Discord but not in WOM and isn't currently blacklisted for promotion (Possible ClanFriend)");
             }
         }
 

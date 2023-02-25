@@ -184,7 +184,7 @@ namespace CorruptOSBot.Helpers.Bot
             BuildSet(result.Take(15), builder);
             BuildSet(result.Skip(15).Take(15), builder);
             BuildSet(result.Skip(30).Take(15), builder);
-            BuildSet(result.Skip(45).Take(5), builder);
+            BuildSet(result.Skip(45).Take(15), builder);
 
             builder.WithFooter(string.Format("Last updated: {0} | next update at: {1}", DateTime.Now, DateTime.Now.Add(TimeSpan.FromMilliseconds(triggerTimeInMS))));
 

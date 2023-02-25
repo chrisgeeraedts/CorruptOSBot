@@ -136,7 +136,7 @@ namespace CorruptOSBot.Modules
                         {
                             var pointsNeed = role.PointsToReach - discordAcc.Points;
 
-                            description.AppendLine($"{role.Name} requires {pointsNeed} points");
+                            description.AppendLine($"{role.Name} requires {pointsNeed} more points");
                         }
 
                         await Context.Channel.SendMessageAsync(
