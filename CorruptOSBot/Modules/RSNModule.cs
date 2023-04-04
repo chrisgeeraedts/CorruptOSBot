@@ -188,6 +188,8 @@ namespace CorruptOSBot.Modules
             }
             catch(Exception ex)
             {
+                isSafeAccount = true;
+
                 var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
                 if (recruitingChannel != null)
                 {

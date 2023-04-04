@@ -83,7 +83,7 @@ namespace CorruptOSBot.Services
 
                             var promotedString = new StringBuilder();
 
-                            promotedUsersInRole.ForEach(item => promotedString.AppendLine($"<@{item.DiscordId}>"));
+                            promotedUsersInRole.ForEach(item => promotedString.AppendLine($"<@{item.DiscordId}> ({item.Username})"));
 
                             var rankRequestsChannel = channels.FirstOrDefault(item => item.Name == "rank-requests");
                             var rankRequestsDiscordChannel = await guild.GetChannelAsync((ulong)rankRequestsChannel.DiscordChannelId);

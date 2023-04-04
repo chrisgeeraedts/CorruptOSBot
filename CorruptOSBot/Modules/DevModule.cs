@@ -1,6 +1,8 @@
-﻿using CorruptOSBot.Extensions;
+﻿using CorruptOSBot.Data;
+using CorruptOSBot.Extensions;
 using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
+using CorruptOSBot.Helpers.Bot;
 using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Helpers.PVM;
 using CorruptOSBot.Shared.Helpers.Bot;
@@ -24,24 +26,7 @@ namespace CorruptOSBot.Modules
         [Summary("!dev - Dev command")]
         public async Task Dev()
         {
-            if (DiscordHelper.IsInChannel(Context.Channel.Id, "clan-bot", Context.User) && Context.User.Id == SettingsConstants.GMKirbyDiscordId)
-            {
-                var clanComps = new WiseOldManClient().GetOffsetClanCompetitions();
-
-                foreach (var clanComp in clanComps)
-                {
-                    CompetitionDetail detailedComp = new WiseOldManClient().GetCompetition(clanComp.id);
-
-                    if (detailedComp != null)
-                    {
-                        await Context.Channel.SendMessageAsync($"Event: {detailedComp.title} - Skill: {detailedComp.metric} - Winner: {detailedComp.participations.First().player.displayName}");
-                    }
-                    else
-                    {
-                        await Context.Channel.SendMessageAsync($"Event: {clanComp.title} - Skill: {clanComp.metric} - Failed to get more detail");
-                    }
-                }
-            }
+            await Context.Channel.SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(30));
 
             await Context.Message.DeleteAsync();
         }

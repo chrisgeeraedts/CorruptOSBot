@@ -123,11 +123,11 @@ namespace CorruptOSBot.Extensions.WOM
             {
                 if (clanMember == null)
                 {
-                    // we dont have him yet (why?!?) Find player by username
-                    var baseClanmember = womClient.SearchUsersByName(clanMemberRsn).Where(x => x.player.displayName.ToLower() == clanMemberRsn.ToLower()).ToList();
-                    if (baseClanmember.Count == 1)
+                    var playerDetails = womClient.GetPlayerDetails(clanMemberRsn);
+
+                    if (playerDetails != null)
                     {
-                        await TryAndUpdateClanMember(womClient, baseClanmember[0].player.username);
+                        await TryAndUpdateClanMember(womClient, playerDetails.displayName);
                     }
                 }
                 else
