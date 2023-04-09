@@ -58,6 +58,48 @@ namespace CorruptOSBot.Events
             await new CorruptOSBot.Helpers.DataHelper().SetDiscorduserLeaving(arg.Id);
         }
 
+        public static async Task UpdatedNickname(SocketGuildUser oldUserDetails, SocketGuildUser updatedUserDetails)
+        {
+            using (CorruptModel corruptosEntities = new CorruptModel())
+            {
+                var recruitingChannel = oldUserDetails.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
+                var discordUser = corruptosEntities.DiscordUsers.FirstOrDefault(item => (long)item.DiscordId == (long)oldUserDetails.Id);
+
+                var oldNickname = oldUserDetails?.Nickname ?? oldUserDetails.Username;
+                var updatedNickname = updatedUserDetails?.Nickname ?? updatedUserDetails.Username;
+
+                var sb = new StringBuilder();
+                sb.AppendLine($"<@{oldUserDetails.Id}> ({oldNickname}) has updated their Discord nickname to {updatedNickname}");
+                sb.AppendLine($"{Environment.NewLine}");
+
+                if (discordUser != null)
+                {
+                    discordUser.Username = updatedNickname;
+                    await corruptosEntities.SaveChangesAsync();
+
+                    var runescapeAccount = corruptosEntities.RunescapeAccounts.FirstOrDefault(item => item.rsn.ToLower() == oldNickname.ToLower());
+
+                    if (runescapeAccount != null)
+                    {
+                        runescapeAccount.rsn = updatedNickname;
+                        await corruptosEntities.SaveChangesAsync();
+
+                        sb.AppendLine($"The bot has automatically updated the database enteries for DiscordUser and RunescapeAccount.");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"Unable to find a record relating to this user in the RunescapeAccounts table for the previous nickname.");
+                    }
+                }
+                else
+                {
+                    sb.AppendLine($"Unable to find a record relating to this user in the databas DiscordUsers table.");
+                }
+
+                await ((IMessageChannel)recruitingChannel).SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed("Member Nickname Update", sb.ToString()));
+            }
+        }
+
         public static async Task BannedFromGuild(SocketUser arg1, SocketGuild arg2)
         {
             DiscordUser originalUser = null;

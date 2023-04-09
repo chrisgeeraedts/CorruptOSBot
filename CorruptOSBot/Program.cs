@@ -192,6 +192,23 @@ namespace CorruptOSBot
             client.CurrentUserUpdated += Client_CurrentUserUpdated;
 
             client.UserVoiceStateUpdated += Client_UserVoiceStateUpdated;
+
+            client.GuildMemberUpdated += Client_GuildMemberUpdated;
+        }
+
+        private async Task Client_GuildMemberUpdated(SocketGuildUser oldUserDetails, SocketGuildUser updatedUserDetails)
+        {
+            if (oldUserDetails.IsBot || oldUserDetails.IsWebhook) return;
+
+            if (oldUserDetails.Nickname != updatedUserDetails.Nickname)
+            {
+                var oldNickname = oldUserDetails?.Nickname ?? oldUserDetails.Username;
+                var updatedNickname = updatedUserDetails?.Nickname ?? updatedUserDetails.Username;
+
+                await Log(new LogMessage(LogSeverity.Info, "Users", $"User updated nickname: {oldNickname} to {updatedNickname}"));
+
+                await EventManager.UpdatedNickname(oldUserDetails, updatedUserDetails);
+            }
         }
 
         private async Task Client_UserVoiceStateUpdated(SocketUser user, SocketVoiceState state1, SocketVoiceState state2)
