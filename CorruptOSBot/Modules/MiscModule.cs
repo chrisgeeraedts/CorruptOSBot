@@ -167,6 +167,29 @@ namespace CorruptOSBot.Modules
                 await Context.Channel.SendMessageAsync($"Congratulations! \n{wheelOptionsList[randomInt]}");
             }
         }
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("create-vc")]
+        [Summary("!create-vc - Creates a voice channel for with a limited amount of users allowed in the VC")]
+        public async Task CreateVCAsync(int maxUsers)
+        {
+            if (DiscordHelper.IsInChannel(Context.Channel.Id, "spam-bot-commands", Context.User))
+            {
+                var category = Context.Guild.CategoryChannels.FirstOrDefault(item => item.Name == "Voice Channels");
+
+                var privateVoiceChannel = await Context.Guild.CreateVoiceChannelAsync($"Private {Context.User.Username}", prop =>
+                {
+                    prop.CategoryId = category.Id;
+                    prop.UserLimit = maxUsers;
+                });
+            }
+            else
+            {
+                await DiscordHelper.NotAllowedMessageToUser(Context, "!create-vc", "spam-bot-commands");
+            }
+
+            await Context.Message.DeleteAsync();
+        }
     }
 }
 

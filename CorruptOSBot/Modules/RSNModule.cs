@@ -235,7 +235,7 @@ namespace CorruptOSBot.Modules
                     var recruitingChannel = Context.Guild.Channels.FirstOrDefault(x => x.Id == ChannelHelper.GetChannelId("recruiting"));
                     if (recruitingChannel != null)
                     {
-                        var womAccount = new WiseOldManClient().GetPlayerDetails(preferedNickname);
+                        var womAccount = new WiseOldManClient().UpdatePlayer(preferedNickname);
 
                         if (womAccount != null)
                         {

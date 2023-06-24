@@ -289,6 +289,25 @@ namespace CorruptOSBot.Extensions
             return foundClanMembers;
         }
 
+        public ClanMemberDetail UpdatePlayer(string username)
+        {
+            ClanMemberDetail clanMemberDetail = null;
+            HttpContent payload = new StringContent(string.Empty, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = client.PostAsync($"{path}/players/{username}", payload).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var result = response.Content.ReadAsStringAsync().Result;
+                clanMemberDetail = JsonConvert.DeserializeObject<ClanMemberDetail>(result);
+            }
+            else
+            {
+                Console.WriteLine($"Failed to update WOM details for: {username}");
+            }
+            return clanMemberDetail;
+
+        }
+
         #endregion
 
         private class AddMemberRoot
