@@ -134,8 +134,8 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Admin)]
-        [Command("clear")]
-        [Summary("!clear {number} - Clears posts above it. (max 10)")]
+        [Command("clear-messages")]
+        [Summary("!clear-messages {number} - Clears posts above it. (max 10)")]
         public async Task SayClearAsync(int number)
         {
             if (ToggleStateManager.GetToggleState("clear", Context.User) && RoleHelper.IsStaff(Context.User, Context.Guild))
