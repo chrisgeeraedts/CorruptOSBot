@@ -224,7 +224,7 @@ namespace CorruptOSBot.Helpers.Bot
                     embedBuilder.Color = Color.Green;
                     embedBuilder.Title = CurrentComp.title;
                     embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", CurrentComp.id);
-                    embedBuilder.Description = string.Format("**Total XP: {0}**", totalGainedString);
+                    embedBuilder.Description = detailedComp.title.Contains("SOTW") ? $"**Total XP: {totalGainedString}**" : $"**Total KC: {totalGainedString}**";
                     embedBuilder.WithFooter(string.Format("Event runs from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
                     embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
                     embedBuilder.ThumbnailUrl = GetImage(CurrentComp.metric);
@@ -315,6 +315,10 @@ namespace CorruptOSBot.Helpers.Bot
             {
                 AddField(embedBuilder, "\U0001f949", participants[2].player.displayName, participants[2].progress.gained);
             }
+            if (orderedParticipants.Count > 3)
+            {
+                AddField(embedBuilder, participants);
+            }
         }
 
         private static void AddField(EmbedBuilder embedBuilder, string icon, string player, double score)
@@ -324,6 +328,22 @@ namespace CorruptOSBot.Helpers.Bot
             sb.AppendLine(string.Format("**{0}**", player));
             string s = score >= 10000 ? Convert.ToInt32(score).ToString("n0") : Convert.ToInt32(score).ToString("d");
             sb.AppendLine(s);
+            embedBuilder.AddField("\u200b", sb.ToString(), true);
+        }
+
+        private static void AddField(EmbedBuilder embedBuilder, List<Participant> participants)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("```");
+
+            foreach (var participant in participants.Where(item => item.progress.gained > 0).OrderByDescending(item => item.progress.gained).Skip(3).Take(7))
+            {
+                sb.AppendLine($"{participants.FindIndex(item => item == participant) + 1,2}\t{participant.player.displayName,15}\t{participant.progress.gained}");
+            }
+
+            sb.AppendLine("```");
+
             embedBuilder.AddField("\u200b", sb.ToString(), true);
         }
     }

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CorruptOSBot.Modules
 {
@@ -52,7 +53,7 @@ namespace CorruptOSBot.Modules
                             Color = Color.Green,
                             Title = f2.title,
                             Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id),
-                            Description = $"**Total XP: {totalGainedString}**",
+                            Description = detailedComp.title.Contains("SOTW") ? $"**Total XP: {totalGainedString}**" : $"**Total KC: {totalGainedString}**",
                             ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png",
                             ThumbnailUrl = GetThumbnailImage(f2.metric),
                             Footer = new EmbedFooterBuilder()
@@ -133,7 +134,7 @@ namespace CorruptOSBot.Modules
                                 Color = Color.Green,
                                 Title = f2.title,
                                 Url = string.Format("https://wiseoldman.net/competitions/{0}", f2.id),
-                                Description = string.Format("**Total XP: {0}**", totalGainedString),
+                                Description = detailedComp.title.Contains("SOTW") ? $"**Total XP: {totalGainedString}**" : $"**Total KC: {totalGainedString}**",
                                 ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png",
                                 ThumbnailUrl = GetThumbnailImage(detailedComp.metric)
                             };
@@ -179,12 +180,11 @@ namespace CorruptOSBot.Modules
                         embedBuilder.Color = Color.Gold;
                         embedBuilder.Title = detailedComp.title;
                         embedBuilder.Url = string.Format("https://wiseoldman.net/competitions/{0}", detailedComp.id);
-                        embedBuilder.Description = string.Format("**Total XP: {0}**", totalGainedString);
+                        embedBuilder.Description = detailedComp.title.Contains("SOTW") ? $"**Total XP: {totalGainedString}**" : $"**Total KC: {totalGainedString}**";
                         embedBuilder.WithFooter(string.Format("Event ran from {0} till {1}", detailedComp.startsAt?.ToString("r"), detailedComp.endsAt?.ToString("r")));
                         embedBuilder.ImageUrl = "https://cdn.discordapp.com/attachments/790605695150063646/829015595395055616/Line_Ext.png";
                         embedBuilder.ThumbnailUrl = "https://oldschool.runescape.wiki/w/Trailblazer_dragon_trophy#/media/File:Trailblazer_dragon_trophy_detail.png";
 
-                        // get top 3 partipants
                         AddFields(embedBuilder, detailedComp.participations);
                         AddImage(embedBuilder, detailedComp.title);
 
@@ -238,6 +238,10 @@ namespace CorruptOSBot.Modules
             {
                 AddField(embedBuilder, "\U0001f949", participants[2].player.displayName, participants[2].progress.gained);
             }
+            if (orderedParticipants.Count > 3)
+            {
+                AddField(embedBuilder, participants);
+            }
         }
 
         private void AddField(EmbedBuilder embedBuilder, string icon, string player, double score)
@@ -247,6 +251,22 @@ namespace CorruptOSBot.Modules
             sb.AppendLine(string.Format("**{0}**", player));
             string s = score >= 10000 ? Convert.ToInt32(score).ToString("n0") : Convert.ToInt32(score).ToString("d");
             sb.AppendLine(s);
+            embedBuilder.AddField("\u200b", sb.ToString(), true);
+        }
+
+        private void AddField(EmbedBuilder embedBuilder, List<Participant> participants)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("```");
+
+            foreach(var participant in participants.Where(item => item.progress.gained > 0).OrderByDescending(item => item.progress.gained).Skip(3).Take(7))
+            {
+                sb.AppendLine($"{participants.FindIndex(item => item == participant) + 1, 2}\t{participant.player.displayName,15}\t{participant.progress.gained}");
+            }
+
+            sb.AppendLine("```");
+
             embedBuilder.AddField("\u200b", sb.ToString(), true);
         }
     }

@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -72,7 +73,8 @@ namespace CorruptOSBot
                 new TopKCService(client),
                 new HeartbeatService(client),
                 new SotWService(client),
-                new PromotionService(client)
+                new PromotionService(client),
+                new CleanUpService(client)
             };
 
             return result;
@@ -218,7 +220,15 @@ namespace CorruptOSBot
             if (state1.VoiceChannel?.Name != "Join to create a VC" && state2.VoiceChannel?.Name == "Join to create a VC")
             {
                 var category = guild.CategoryChannels.FirstOrDefault(item => item.Name == "Voice Channels");
-                var privateVoiceChannel = await guild.CreateVoiceChannelAsync($"Private {user.Username}", prop => prop.CategoryId = category.Id);
+                var userPerms = new List<Overwrite>
+                {
+                    new Overwrite(user.Id, PermissionTarget.User, new OverwritePermissions(manageChannel: PermValue.Allow))
+                };
+
+                var privateVoiceChannel = await guild.CreateVoiceChannelAsync($"Private {user.Username}", prop => {
+                    prop.CategoryId = category.Id;
+                    prop.PermissionOverwrites = userPerms;
+                });
 
                 var socketUser = (SocketGuildUser)user;
                 await socketUser.ModifyAsync(prop => prop.ChannelId = privateVoiceChannel.Id);
@@ -333,7 +343,7 @@ namespace CorruptOSBot
 
         private async Task BlockMessageIfDebugMode(SocketUserMessage msg)
         {
-            var isDeveloper = msg.Author.Id == SettingsConstants.GMKirbyDiscordId;
+            var isDeveloper = msg.Author.Id == SettingsConstants.GMKirbyDiscordId || msg.Author.Id == SettingsConstants.DevTestingDiscordId;
 
             if (ConfigHelper.IsDebugMode && !isDeveloper)
             {

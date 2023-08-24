@@ -14,6 +14,8 @@
         public const long GMKirbyDiscordId = 108710294049542144;
         public const string GMKirbyDiscordTag = "Kirby#7682";
 
+        public const long DevTestingDiscordId = 899061403623780402;
+
         public const string WOMApiKey = "cla5zmtp1000008mq3d9594bs";
     }
 }

@@ -35,7 +35,7 @@ namespace CorruptOSBot.Modules
                 {
                     int randomInt = random.Next(1, 4);
 
-                    if(randomInt == 1)
+                    if (randomInt == 1)
                     {
                         amountOfOnes++;
                     }
@@ -162,7 +162,7 @@ namespace CorruptOSBot.Modules
 
                 var random = new Random();
 
-                int randomInt = random.Next(0, wheelOptionsList.Count-1);
+                int randomInt = random.Next(0, wheelOptionsList.Count - 1);
 
                 await Context.Channel.SendMessageAsync($"Congratulations! \n{wheelOptionsList[randomInt]}");
             }
@@ -177,10 +177,16 @@ namespace CorruptOSBot.Modules
             {
                 var category = Context.Guild.CategoryChannels.FirstOrDefault(item => item.Name == "Voice Channels");
 
+                var userPerms = new List<Overwrite>
+                {
+                    new Overwrite(Context.User.Id, PermissionTarget.User, new OverwritePermissions(manageChannel: PermValue.Allow))
+                };
+
                 var privateVoiceChannel = await Context.Guild.CreateVoiceChannelAsync($"Private {Context.User.Username}", prop =>
                 {
                     prop.CategoryId = category.Id;
                     prop.UserLimit = maxUsers;
+                    prop.PermissionOverwrites = userPerms;
                 });
             }
             else
