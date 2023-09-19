@@ -157,12 +157,12 @@ namespace CorruptOSBot.Modules
                     "Additional Reroll for your team",
                     "Select a team who will only be able to roll an odd number on their next turn",
                     "Next turn you can use a 6 sided dice",
-                    "Pick a team who will be forced to reroll their name turn",
+                    "Wheel of Fortune",
                 };
 
                 var random = new Random();
 
-                int randomInt = random.Next(0, wheelOptionsList.Count - 1);
+                int randomInt = random.Next(0, wheelOptionsList.Count);
 
                 await Context.Channel.SendMessageAsync($"Congratulations! \n{wheelOptionsList[randomInt]}");
             }
@@ -188,6 +188,8 @@ namespace CorruptOSBot.Modules
                     prop.UserLimit = maxUsers;
                     prop.PermissionOverwrites = userPerms;
                 });
+
+                await Context.User.SendMessageAsync($"You have created {privateVoiceChannel.Name}. If you wish to change settings for this channel please right click the channel > Edit Channel.");
             }
             else
             {

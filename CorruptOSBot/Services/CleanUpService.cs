@@ -25,17 +25,16 @@ namespace CorruptOSBot.Services
             var guild = await client.GetGuildAsync(GuildId);
 
             var currentVoiceChannels = await guild.GetVoiceChannelsAsync();
-            var constantVoiceChannels = new List<string>()
+            var constantVoiceChannelIds = new List<string>()
             {
-                "Staff",
-                "General",
-                "COX",
-                "TOA",
-                "TOB",
-                "Join to create a VC"
+                "865744431456845867",       // General
+                "1143951172466655373",      // COX
+                "1143951335797035059",      // TOA
+                "1143951367996706897",      // TOB
+                "1062329792776650782"       // Join to create a VC
             };
 
-            foreach (var channel in currentVoiceChannels.Where(item => !constantVoiceChannels.Any(item.Name.Contains)))
+            foreach (var channel in currentVoiceChannels.Where(item => item.CategoryId == 865744431456845865 && !constantVoiceChannelIds.Any(item.Id.ToString().Contains)))
             {
                 if ((channel as SocketGuildChannel).Users.Count == 0)
                 {

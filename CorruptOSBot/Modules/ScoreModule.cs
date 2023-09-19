@@ -19,7 +19,7 @@ namespace CorruptOSBot.Modules
     {
         [Helpgroup(HelpGroup.Member)]
         [Command("score")]
-        [Summary("!score - Generates a leaderboard for the current SOTW event. (Only allowed in **event-general**)")]
+        [Summary("!score - Generates a leaderboard for the current SOTW event. (Only allowed in **event-leaderboard**)")]
         public async Task SayScoreAsync()
         {
             if (DiscordHelper.IsInChannel(Context.Channel.Id, "event-leaderboard", Context.User))
@@ -95,7 +95,7 @@ namespace CorruptOSBot.Modules
             }
             else
             {
-                await DiscordHelper.NotAllowedMessageToUser(Context, "!score", "event-general");
+                await DiscordHelper.NotAllowedMessageToUser(Context, "!score", "event-leaderboard");
             }
 
             // delete the command posted
