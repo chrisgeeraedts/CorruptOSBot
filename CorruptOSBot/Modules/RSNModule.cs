@@ -54,7 +54,7 @@ namespace CorruptOSBot.Modules
             if (ToggleStateManager.GetToggleState("rsncf", Context.User) &&
                 DiscordHelper.IsInChannel(Context.Channel.Id, "welcome", Context.User))
             {
-                var dbRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 20); //Clan friend
+                var dbRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 13); //Clan friend
 
                 if (dbRole != null)
                 {
@@ -309,7 +309,7 @@ namespace CorruptOSBot.Modules
             if (isSafeAccount)
             {
                 // update the role
-                var dbRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 20); //clan friend
+                var dbRole = RoleHelper.GetRoles().FirstOrDefault(x => x.Id == 13); //clan friend
 
                 if (dbRole != null)
                 {

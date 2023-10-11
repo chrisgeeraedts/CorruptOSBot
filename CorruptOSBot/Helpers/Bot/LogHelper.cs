@@ -3,6 +3,7 @@ using CorruptOSBot.Helpers.Discord;
 using Discord;
 using Discord.WebSocket;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Helpers.Bot
@@ -69,19 +70,42 @@ namespace CorruptOSBot.Helpers.Bot
             {
                 using (CorruptModel data = new CorruptModel())
                 {
-                    var chatLog = new ChatLog()
+                    if (arg.Attachments.Any())
                     {
-                        Message = arg.Content,
-                        Author = DiscordNameHelper.GetAccountNameOrNickname(arg.Author),
-                        Severity = "chat",
-                        Datetime = DateTime.Now,
-                        Channel = arg.Channel.Name,
-                        ChannelId = Convert.ToInt64(arg.Channel.Id),
-                        AuthorId = Convert.ToInt64(arg.Author.Id),
-                        PostId = Convert.ToInt64(arg.Id)
-                    };
-                    data.ChatLogs.Add(chatLog);
-                    data.SaveChanges();
+                        foreach (var attachment in arg.Attachments)
+                        {
+                            var imageLog = new ChatLog()
+                            {
+                                Message = attachment.Url,
+                                Author = DiscordNameHelper.GetAccountNameOrNickname(arg.Author),
+                                Severity = "chat",
+                                Datetime = DateTime.Now,
+                                Channel = arg.Channel.Name,
+                                ChannelId = Convert.ToInt64(arg.Channel.Id),
+                                AuthorId = Convert.ToInt64(arg.Author.Id),
+                                PostId = Convert.ToInt64(arg.Id)
+                            };
+                            data.ChatLogs.Add(imageLog);
+                            data.SaveChanges();
+                        }
+                    }
+
+                    if (arg.Content != null)
+                    {
+                        var chatLog = new ChatLog()
+                        {
+                            Message = arg.Content,
+                            Author = DiscordNameHelper.GetAccountNameOrNickname(arg.Author),
+                            Severity = "chat",
+                            Datetime = DateTime.Now,
+                            Channel = arg.Channel.Name,
+                            ChannelId = Convert.ToInt64(arg.Channel.Id),
+                            AuthorId = Convert.ToInt64(arg.Author.Id),
+                            PostId = Convert.ToInt64(arg.Id)
+                        };
+                        data.ChatLogs.Add(chatLog);
+                        data.SaveChanges();
+                    }
                 }
             }
             catch (Exception e)

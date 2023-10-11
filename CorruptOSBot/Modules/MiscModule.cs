@@ -113,7 +113,7 @@ namespace CorruptOSBot.Modules
                         randomInt = ans - 1;
                 }
 
-                await Context.Channel.SendMessageAsync($"{DiscordNameHelper.GetAccountNameOrNickname(Context.User)} rolled a {randomInt}! (1 - 4)");
+                await Context.Channel.SendMessageAsync($"{DiscordNameHelper.GetAccountNameOrNickname(Context.User)} rolled a {randomInt}! (1 / 3)");
             }
         }
 
@@ -140,7 +140,7 @@ namespace CorruptOSBot.Modules
                         randomInt = ans - 1;
                 }
 
-                await Context.Channel.SendMessageAsync($"{DiscordNameHelper.GetAccountNameOrNickname(Context.User)} rolled a {randomInt}! (1 - 4)");
+                await Context.Channel.SendMessageAsync($"{DiscordNameHelper.GetAccountNameOrNickname(Context.User)} rolled a {randomInt}! (2 / 4)");
             }
         }
 

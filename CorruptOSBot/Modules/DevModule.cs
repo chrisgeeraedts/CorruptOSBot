@@ -26,7 +26,14 @@ namespace CorruptOSBot.Modules
         [Summary("!dev - Dev command")]
         public async Task Dev()
         {
-            await Context.Channel.SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(30));
+            var embedMessageList = await EmbedHelper.CreateFullLeaderboardEmbed(30);
+
+
+            foreach (var embedMessage in embedMessageList)
+            {
+                await Context.Channel.SendMessageAsync(embed: embedMessage);
+            }
+
 
             await Context.Message.DeleteAsync();
         }

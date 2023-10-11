@@ -170,25 +170,21 @@ namespace CorruptOSBot.Helpers.Bot
             return null;
         }
 
-        public static async Task<Embed> CreateFullLeaderboardEmbed(int triggerTimeInMS)
+        public static async Task<List<Embed>> CreateFullLeaderboardEmbed(int triggerTimeInMS)
         {
-            // connect the kcs per boss
-            var result = await BossKCHelper.GetTopBossKC();
+            var result = new List<Embed>();
+            var bosses = await BossKCHelper.GetTopBossKC();
 
-            var builder = new EmbedBuilder
+            var i = 0;
+            var increment = 6;
+
+            while(i < bosses.Count)
             {
-                Color = Color.DarkGreen,
-                Title = "Top boss KC"
-            };
+                result.Add(BuildSet(bosses.Skip(i).Take(increment).ToList()));
+                i += increment;
+            }
 
-            BuildSet(result.Take(15), builder);
-            BuildSet(result.Skip(15).Take(15), builder);
-            BuildSet(result.Skip(30).Take(15), builder);
-            BuildSet(result.Skip(45).Take(15), builder);
-
-            builder.WithFooter(string.Format("Last updated: {0} | next update at: {1}", DateTime.Now, DateTime.Now.Add(TimeSpan.FromMilliseconds(triggerTimeInMS))));
-
-            return builder.Build();
+            return result;
         }
 
         public static Embed CreateWOMEmbedSotw()
@@ -238,52 +234,29 @@ namespace CorruptOSBot.Helpers.Bot
             return null;
         }
 
-        private static void BuildSet(IEnumerable<KcTopList> result, EmbedBuilder builder)
+        private static Embed BuildSet(IEnumerable<KcTopList> bosses, int? triggerTimeInMS = null)
         {
-            // First column
-            var sb = new StringBuilder();
-            foreach (var item in result)
+            var builder = new EmbedBuilder
             {
-                if (item.KcPlayers.Count() > 0)
-                {
-                    sb.AppendLine(string.Format("{0} {1} {2} **({3})**", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", item.KcPlayers.Skip(0).First().Player, item.KcPlayers.Skip(0).First().Kc));
-                }
-                else
-                {
-                    sb.AppendLine(string.Format("{0} {1} {2}", EmojiHelper.GetFullEmojiString(item.Boss.ToString()), "\U0001f947", "---"));
-                }
-            }
-            builder.AddField("\u200b", sb.ToString(), true);
+                Color = Color.Red,
+                Title = "Top boss KC",
+                Description = "-------------------------------------------------------------------------------------" //To force max width of the embed
+            };
 
-            // Second column
-            var sb2 = new StringBuilder();
-            foreach (var item in result)
+            foreach (var boss in bosses)
             {
-                if (item.KcPlayers.Count() > 1)
-                {
-                    sb2.AppendLine(string.Format("{0} {1} ({2})", "\U0001f948", item.KcPlayers.Skip(1).First().Player, item.KcPlayers.Skip(1).First().Kc));
-                }
-                else
-                {
-                    sb2.AppendLine(string.Format("{0} {1}", "\U0001f948", "---"));
-                }
+                builder.AddField(" \u200b ", $"​{EmojiHelper.GetFullEmojiString(boss.Boss.ToString())}");
+                builder.AddField($" \U0001f947 {boss.KcPlayers.Skip(0).First().Player}", $"{boss.KcPlayers.Skip(0).First().Kc}", true);
+                builder.AddField($" \U0001f948 {boss.KcPlayers.Skip(1).First().Player}", $"{boss.KcPlayers.Skip(1).First().Kc}", true);
+                builder.AddField($" \U0001f949 {boss.KcPlayers.Skip(2).First().Player}", $"{boss.KcPlayers.Skip(2).First().Kc}", true);
             }
-            builder.AddField("\u200b", sb2.ToString(), true);
 
-            // Second column
-            var sb3 = new StringBuilder();
-            foreach (var item in result)
+            if (triggerTimeInMS != null)
             {
-                if (item.KcPlayers.Count() > 2)
-                {
-                    sb3.AppendLine(string.Format("{0} {1} ({2})", "\U0001f949", item.KcPlayers.Skip(2).First().Player, item.KcPlayers.Skip(2).First().Kc));
-                }
-                else
-                {
-                    sb3.AppendLine(string.Format("{0} {1}", "\U0001f949", "---"));
-                }
+                builder.WithFooter($"Last updated: {DateTime.Now} | next update at: {DateTime.Now.Add(TimeSpan.FromMilliseconds(triggerTimeInMS.Value))}");
             }
-            builder.AddField("\u200b", sb3.ToString(), true);
+
+            return builder.Build();
         }
 
         private static string GetImage(string metric)

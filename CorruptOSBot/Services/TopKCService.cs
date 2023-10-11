@@ -42,7 +42,12 @@ namespace CorruptOSBot.Services
                     await channel.DeleteMessagesAsync(messages);
 
                     // Add new message
-                    await channel.SendMessageAsync(embed: await EmbedHelper.CreateFullLeaderboardEmbed(TriggerTimeInMS));
+                    var embedMessageList = await EmbedHelper.CreateFullLeaderboardEmbed(TriggerTimeInMS);
+
+                    foreach(var embedMessage in embedMessageList)
+                    {
+                        await channel.SendMessageAsync(embed: embedMessage);
+                    }
                 }
                 else
                 {
