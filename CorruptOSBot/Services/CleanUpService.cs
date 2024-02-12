@@ -31,7 +31,7 @@ namespace CorruptOSBot.Services
                 "1143951172466655373",      // COX
                 "1143951335797035059",      // TOA
                 "1143951367996706897",      // TOB
-                "1062329792776650782"       // Join to create a VC
+                "1062329792776650782",      // Join to create a VC
             };
 
             foreach (var channel in currentVoiceChannels.Where(item => item.CategoryId == 865744431456845865 && !constantVoiceChannelIds.Any(item.Id.ToString().Contains)))

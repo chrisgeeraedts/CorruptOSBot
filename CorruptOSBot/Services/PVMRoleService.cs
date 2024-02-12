@@ -13,7 +13,7 @@ namespace CorruptOSBot.Services
 {
     public class PVMRoleService : IService
     {
-        public int TriggerTimeInMS { get => 1000 * 60 * 5; } // Every 5 minutes
+        public int TriggerTimeInMS { get => 1000 * 60 * 60 * 3; } // Every 3 Hours
         public int BeforeTriggerTimeInMS { get => 1000 * 60 * 5; } // 5 minutes
 
         private ulong GuildId;
@@ -35,7 +35,7 @@ namespace CorruptOSBot.Services
                     var guild = client.GetGuildAsync(GuildId).Result;
 
                     // Get all players in WOM
-                    await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneHourMS);
+                    await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
                     var clanMembers = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails;
                     await Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Loaded clanmembers"));
 

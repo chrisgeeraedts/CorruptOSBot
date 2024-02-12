@@ -48,7 +48,9 @@ namespace CorruptOSBot.Services
                     // Incase of reboot on first day of the month
                     if (lastPromoRunDateTime.Date != currentDateTime.Date)
                     {
-                        foreach (var user in corruptosEntities.DiscordUsers.Where(item => !item.BlacklistedForPromotion))
+                        var usersToUpdate = corruptosEntities.DiscordUsers.Where(item => !item.BlacklistedForPromotion).ToList();
+
+                        foreach (var user in usersToUpdate)
                         {
                             if (user.OriginallyJoinedAt.HasValue)
                             {

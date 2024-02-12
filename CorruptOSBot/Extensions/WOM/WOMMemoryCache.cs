@@ -3,6 +3,7 @@ using Discord;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CorruptOSBot.Extensions.WOM
@@ -83,8 +84,16 @@ namespace CorruptOSBot.Extensions.WOM
                         var tempList = new List<ClanMemberDetail>();
                         int index = 1;
                         int max = updatedClanMembers.Count;
+
                         foreach (var updatedClanMember in updatedClanMembers)
                         {
+                            var indexOfClanMember = updatedClanMembers.IndexOf(updatedClanMember);
+
+                            if (indexOfClanMember % 100 == 0)
+                            {
+                                Thread.Sleep(1000 * 60); // Waits for 1 Minute
+                            }
+
                             var data = WomClient.GetPlayerDetails(updatedClanMember.player.username);
                             if (data != null)
                             {
@@ -95,7 +104,7 @@ namespace CorruptOSBot.Extensions.WOM
                         }
                         ClanMemberDetails.ClanMemberDetails = tempList;
                         ClanMemberDetails.LastUpdated = DateTime.Now;
-                        await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", string.Format("Completed reloading memory Clanmembers cache")));
+                        await Program.Log(new LogMessage(LogSeverity.Info, "WOMMemoryCache", $"Completed reloading memory Clanmembers cache. Updated {index} members at {DateTime.Now}."));
                     }
                     else
                     {
@@ -134,7 +143,6 @@ namespace CorruptOSBot.Extensions.WOM
                 {
                     await TryAndUpdateClanMember(womClient, clanMember.username);
                 }
-                //welp - quess not
             }
             catch (Exception e)
             {

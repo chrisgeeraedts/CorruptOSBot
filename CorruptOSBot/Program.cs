@@ -232,6 +232,7 @@ namespace CorruptOSBot
 
                 var socketUser = (SocketGuildUser)user;
                 await socketUser.ModifyAsync(prop => prop.ChannelId = privateVoiceChannel.Id);
+                await socketUser.SendMessageAsync($"You have created {privateVoiceChannel.Name}. If you wish to change settings for this channel please right click the channel > Edit Channel.");
 
             }
             else if (state1.VoiceChannel != null && state1.VoiceChannel.Name.StartsWith("Private") && state2.VoiceChannel?.Name != state1.VoiceChannel.Name)
