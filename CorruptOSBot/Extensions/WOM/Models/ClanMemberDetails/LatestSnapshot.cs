@@ -100,6 +100,9 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public Wintertodt wintertodt { get; set; }
         public Zalcano zalcano { get; set; }
         public Zulrah zulrah { get; set; }
+        public LunarChests lunar_chests { get; set; }
+        public Scurrius scurrius { get; set; }
+        public SolHeredit sol_heredit { get; set; }
     }
     public class PlayerDetailsActivities
     {
@@ -115,6 +118,7 @@ namespace CorruptOSBot.Extensions.WOM.ClanMemberDetails
         public ClueScrollsMaster clue_scrolls_master { get; set; }
         public LastManStanding last_man_standing { get; set; }
         public SoulWarsZeal soul_wars_zeal { get; set; }
+        public ColosseumGlory colosseum_glory { get; set; }
     }
     public class PlayerDetailsComputed
     {

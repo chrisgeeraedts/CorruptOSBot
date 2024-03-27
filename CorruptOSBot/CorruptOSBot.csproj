@@ -167,6 +167,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\WOM\Models\ClanHiscoreEntry.cs" />
+    <Compile Include="Extensions\WOM\Models\ClanMemberDetails\ColosseumGlory.cs" />
+    <Compile Include="Extensions\WOM\Models\ClanMemberDetails\LunarChests.cs" />
+    <Compile Include="Extensions\WOM\Models\ClanMemberDetails\Scurrius.cs" />
+    <Compile Include="Extensions\WOM\Models\ClanMemberDetails\SoloHeredit.cs" />
     <Compile Include="Extensions\WOM\Models\ClanRecentAchievementsRoot.cs" />
     <Compile Include="Extensions\WOM\Models\Player.cs" />
     <Compile Include="Helpers\Bot\EmbedHelper.cs" />
