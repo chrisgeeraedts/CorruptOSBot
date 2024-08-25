@@ -516,7 +516,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Admin)]
-        [Command("AuditUsers", false)]
+        [Command("DevAuditUsers", false)]
         [Summary("!auditusers - ")]
         public async Task AuditUsers()
         {
@@ -559,13 +559,14 @@ namespace CorruptOSBot.Modules
 
                     if (!string.IsNullOrEmpty(mismatchedNamesStringBuilder.ToString()))
                     {
+
                         if (mismatchedNamesStringBuilder.ToString().Length > 2000)
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users with mismatched names in Database", mismatchedNamesStringBuilder.ToString().Substring(0, 2000)));
+                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched names in Database \n ``` {mismatchedNamesStringBuilder.ToString().Substring(0, 1900)} ```");
                         }
                         else
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users with mismatched names in Database", mismatchedNamesStringBuilder.ToString()));
+                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched names in Database \n ``` {mismatchedNamesStringBuilder.ToString()} ```");
                         }
                     }
 
@@ -573,22 +574,22 @@ namespace CorruptOSBot.Modules
                     {
                         if (mismatchedRolesStringBuilder.ToString().Length > 2000)
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users with mismatched roles in Database", mismatchedRolesStringBuilder.ToString().Substring(0, 2000)));
+                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched roles in Database \n ``` {mismatchedRolesStringBuilder.ToString().Substring(0, 1900)} ```");
                         }
                         else
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users with mismatched roles in Database", mismatchedRolesStringBuilder.ToString()));
+                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched roles in Database \n ``` {mismatchedRolesStringBuilder.ToString()} ```");
                         }
                     }
 
                     if (!string.IsNullOrEmpty(mismatchedRolesInGameUsers.ToString()))
                     {
-                        if (mismatchedRolesInGameUsers.ToString().Length > 2000)
+                        if (mismatchedRolesInGameUsers.Length > 2000)
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users with mismatched roles in-game", mismatchedRolesInGameUsers.ToString().Substring(0, 2000)));
+                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched roles in-game \n ``` {mismatchedRolesInGameUsers.ToString().Substring(0, 1900)} ```");
                         }
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users with mismatched roles in-game", mismatchedRolesInGameUsers.ToString()));
+                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched roles in-game \n ``` {mismatchedRolesInGameUsers.ToString().Substring(0, 1900)} ```");
                         }
                     }
 
@@ -596,11 +597,11 @@ namespace CorruptOSBot.Modules
                     {
                         if (mismatchedRolesAndPointsStringBuilder.ToString().Length > 2000)
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Database Users with mismatched roles and points", mismatchedRolesAndPointsStringBuilder.ToString().Substring(0, 2000)));
+                            await Context.Channel.SendMessageAsync($"Database Users with mismatched roles and points \n ``` {mismatchedRolesAndPointsStringBuilder.ToString().Substring(0, 1900)} ```");
                         }
                         else
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Database Users with mismatched roles and points", mismatchedRolesAndPointsStringBuilder.ToString()));
+                            await Context.Channel.SendMessageAsync($"Database Users with mismatched roles and points \n ``` {mismatchedRolesAndPointsStringBuilder.ToString()} ```");
                         }
                     }
 
@@ -608,11 +609,11 @@ namespace CorruptOSBot.Modules
                     {
                         if (notExistingStringBuilder.ToString().Length > 2000)
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users not existing in Database", notExistingStringBuilder.ToString().Substring(0, 2000)));
+                            await Context.Channel.SendMessageAsync($"Discord Users not existing in Database \n ``` {notExistingStringBuilder.ToString().Substring(0, 1900)} ```");
                         }
                         else
                         {
-                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Discord Users not existing in Database", notExistingStringBuilder.ToString()));
+                            await Context.Channel.SendMessageAsync($"Discord Users not existing in Database \n ``` {notExistingStringBuilder.ToString()} ```");
                         }
                     }
                 }

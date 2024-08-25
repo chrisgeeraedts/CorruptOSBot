@@ -38,7 +38,7 @@ namespace CorruptOSBot.Services
                     await WOMMemoryCache.UpdateClanMembers(WOMMemoryCache.OneDayMS);
 
                     // clear messages in channel
-                    var messages = await channel.GetMessagesAsync(10).FlattenAsync();
+                    var messages = await channel.GetMessagesAsync(11).FlattenAsync();
                     await channel.DeleteMessagesAsync(messages);
 
                     // Add new message

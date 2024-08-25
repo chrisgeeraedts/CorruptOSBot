@@ -1,7 +1,4 @@
-﻿using CorruptOSBot.Extensions;
-using CorruptOSBot.Helpers.Bot;
-using CorruptOSBot.Helpers.Discord;
-using CorruptOSBot.Shared;
+﻿using CorruptOSBot.Helpers.Discord;
 using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord;
@@ -9,31 +6,120 @@ using Discord.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Text;
 using System.Threading.Tasks;
-using static QuestPDF.Helpers.Colors;
 
 namespace CorruptOSBot.Modules
 {
     public class MiscModule : ModuleBase<SocketCommandContext>
     {
         [Helpgroup(HelpGroup.Member)]
+        [Command("validate-roll-reward")]
+        [Summary("!roll - Rolls a random number")]
+        public async Task ValidateRollRewardAsync(int total)
+        {
+            if (RoleHelper.HasAnyRole(Context.User))
+            {
+                var random = new Random();
+                
+                var amountOfOnes = 0;
+                var amountOfTwos = 0;
+                var amountOfThrees = 0;
+                var amountOfFours = 0;
+                var amountOfFives = 0;
+                var amountOfSixes = 0;
+                var amountOfSevens = 0;
+                var amountOfEights = 0;
+
+                var reward = string.Empty;
+
+                WeightedChanceExecutor weightedChanceExecutor = new WeightedChanceExecutor(
+                    new WeightedChanceParam(() => { reward = "1"; }, 20),
+                    new WeightedChanceParam(() => { reward = "2"; }, 20),
+                    new WeightedChanceParam(() => { reward = "3"; }, 10),
+                    new WeightedChanceParam(() => { reward = "4"; }, 10),
+                    new WeightedChanceParam(() => { reward = "5"; }, 10),
+                    new WeightedChanceParam(() => { reward = "6"; }, 10),
+                    new WeightedChanceParam(() => { reward = "7"; }, 10),
+                    new WeightedChanceParam(() => { reward = "8"; }, 10));
+
+                for (var i = 0; i < total; i++)
+                {
+                    weightedChanceExecutor.Execute();
+
+                    if (reward == "1")
+                    {
+                        amountOfOnes++;
+                    }
+                    else if (reward == "2")
+                    {
+                        amountOfTwos++;
+                    }
+                    else if (reward == "3")
+                    {
+                        amountOfThrees++;
+                    }
+                    else if (reward == "4")
+                    {
+                        amountOfFours++;
+                    }
+                    else if (reward == "5")
+                    {
+                        amountOfFives++;
+                    }
+                    else if (reward == "6")
+                    {
+                        amountOfSixes++;
+                    }
+                    else if (reward == "7")
+                    {
+                        amountOfSevens++;
+                    }
+                    else
+                    {
+                        amountOfEights++;
+                    }
+                }
+
+                var percentOfOnes = (int)(0.5f + ((100f * amountOfOnes) / total));
+                var percentOfTwos = (int)(0.5f + ((100f * amountOfTwos) / total));
+                var percentOfThrees = (int)(0.5f + ((100f * amountOfThrees) / total));
+                var percentOfFours = (int)(0.5f + ((100f * amountOfFours) / total));
+                var percentOfFives = (int)(0.5f + ((100f * amountOfFives) / total));
+                var percentOfSixes = (int)(0.5f + ((100f * amountOfSixes) / total));
+                var percentOfSevens = (int)(0.5f + ((100f * amountOfSevens) / total));
+                var percentOfEights = (int)(0.5f + ((100f * amountOfEights) / total));
+
+                var results = $"Out of {total} rolls. " +
+                    $"There were {amountOfOnes} Ones Rolled ({percentOfOnes}). " +
+                    $"{amountOfTwos} Twos Rolled ({percentOfTwos}). " +
+                    $"{amountOfThrees} Threes Rolled ({percentOfThrees}). " +
+                    $"{amountOfFours} Fours Rolled ({percentOfFours}). " +
+                    $"{amountOfFives} Fives Rolled ({percentOfFives}). " +
+                    $"{amountOfSixes} Sixes Rolled ({percentOfSixes}). " +
+                    $"{amountOfSevens} Sevens Rolled ({percentOfSevens}). " +
+                    $"{amountOfEights} Eights Rolled ({percentOfEights})";
+
+                await Context.Channel.SendMessageAsync($"{results}");
+            }
+        }
+
+        [Helpgroup(HelpGroup.Member)]
         [Command("validate-roll")]
         [Summary("!roll - Rolls a random number")]
-        public async Task ValidateRollAsync(int sides, int total)
+        public async Task ValidateRollAsync(int total)
         {
             if (RoleHelper.HasAnyRole(Context.User))
             {
                 var amountOfOnes = 0;
                 var amountOfTwos = 0;
                 var amountOfThrees = 0;
+                var amountOfFours = 0;
+                
                 var random = new Random();
-
 
                 for (var i = 0; i < total; i++)
                 {
-                    int randomInt = random.Next(1, 4);
+                    int randomInt = random.Next(1, 5);
 
                     if (randomInt == 1)
                     {
@@ -43,22 +129,26 @@ namespace CorruptOSBot.Modules
                     {
                         amountOfTwos++;
                     }
-                    else
+                    else if (randomInt == 3)
                     {
                         amountOfThrees++;
+                    }
+                    else
+                    {
+                        amountOfFours++;
                     }
                 }
 
                 var percentOfOnes = (int)(0.5f + ((100f * amountOfOnes) / total));
                 var percentOfTwos = (int)(0.5f + ((100f * amountOfTwos) / total));
                 var percentOfThrees = (int)(0.5f + ((100f * amountOfThrees) / total));
+                var percentOfFours = (int)(0.5f + ((100f * amountOfFours) / total));
 
-                var results = $"Out of {total} rolls. There were {amountOfOnes} Ones Rolled ({percentOfOnes}). {amountOfTwos} Twos Rolled ({percentOfTwos}). {amountOfThrees} Threes Rolled ({percentOfThrees})";
+                var results = $"Out of {total} rolls. There were {amountOfOnes} Ones Rolled ({percentOfOnes}). {amountOfTwos} Twos Rolled ({percentOfTwos}). {amountOfThrees} Threes Rolled ({percentOfThrees}). {amountOfFours} Fours Rolled ({percentOfFours})";
 
                 await Context.Channel.SendMessageAsync($"{results}");
             }
         }
-
 
         [Helpgroup(HelpGroup.Member)]
         [Command("roll")]
@@ -145,26 +235,27 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Member)]
-        [Command("purple-spin")]
-        [Summary("!purple-spin - Randomly picks an option from a predefined list")]
+        [Command("roll-reward")]
+        [Summary("!roll-reward - Randomly picks an option from a predefined list")]
         public async Task PurpleSpinAsync()
         {
             if (RoleHelper.HasAnyRole(Context.User))
             {
-                var wheelOptionsList = new List<string>()
-                {
-                    "Select a team who will only be able to roll an even number on their next turn",
-                    "Additional Reroll for your team",
-                    "Select a team who will only be able to roll an odd number on their next turn",
-                    "Next turn you can use a 6 sided dice",
-                    "Wheel of Fortune",
-                };
+                var reward = string.Empty;
 
-                var random = new Random();
+                WeightedChanceExecutor weightedChanceExecutor = new WeightedChanceExecutor(
+                    new WeightedChanceParam(() => { reward = "Odd Dice Role"; }, 20),
+                    new WeightedChanceParam(() => { reward = "Even Dice Role"; }, 20),
+                    new WeightedChanceParam(() => { reward = "6 Sided Dice Role"; }, 10),
+                    new WeightedChanceParam(() => { reward = "Custom Dice Role"; }, 10),
+                    new WeightedChanceParam(() => { reward = "Freeze"; }, 10),
+                    new WeightedChanceParam(() => { reward = "Reroll"; }, 10),
+                    new WeightedChanceParam(() => { reward = "Steal"; }, 10),
+                    new WeightedChanceParam(() => { reward = "Block"; }, 10));
 
-                int randomInt = random.Next(0, wheelOptionsList.Count);
+                weightedChanceExecutor.Execute();
 
-                await Context.Channel.SendMessageAsync($"Congratulations! \n{wheelOptionsList[randomInt]}");
+                await Context.Channel.SendMessageAsync($"Congratulations! \n{reward}");
             }
         }
 
@@ -198,7 +289,75 @@ namespace CorruptOSBot.Modules
 
             await Context.Message.DeleteAsync();
         }
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("lumbridge")]
+        [Summary("!lumbridge")]
+        public async Task MazeEventLumbridge()
+        {
+            if (Context.Message.Author.Id == 108710294049542144 || Context.Message.Id == 412813330458083356)
+            {
+                await Context.User.SendMessageAsync($"Lumbridge Maze Test");
+                await Context.User.SendMessageAsync($"https://i.imgur.com/lEIRhSZ.png");
+            }
+        }
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("varrock")]
+        [Summary("!varrock")]
+        public async Task MazeEventVarrock()
+        {
+            if (Context.Message.Author.Id == 108710294049542144 || Context.Message.Id == 412813330458083356)
+            {
+                await Context.User.SendMessageAsync($"Lumbridge Maze Test");
+                await Context.User.SendMessageAsync($"https://i.imgur.com/lEIRhSZ.png");
+            }
+        }
+    }
+
+    public class WeightedChanceParam
+    {
+        public Action Func { get; }
+        public double Ratio { get; }
+
+        public WeightedChanceParam(Action func, double ratio)
+        {
+            Func = func;
+            Ratio = ratio;
+        }
+    }
+
+    public class WeightedChanceExecutor
+    {
+        public WeightedChanceParam[] Parameters { get; }
+        private Random r;
+
+        public double RatioSum
+        {
+            get { return Parameters.Sum(p => p.Ratio); }
+        }
+
+        public WeightedChanceExecutor(params WeightedChanceParam[] parameters)
+        {
+            Parameters = parameters;
+            r = new Random();
+        }
+
+        public void Execute()
+        {
+            double numericValue = r.NextDouble() * RatioSum;
+
+            foreach (var parameter in Parameters)
+            {
+                numericValue -= parameter.Ratio;
+
+                if (!(numericValue <= 0))
+                    continue;
+
+                parameter.Func();
+                return;
+            }
+
+        }
     }
 }
-
-

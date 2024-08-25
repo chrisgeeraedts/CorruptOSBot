@@ -104,6 +104,7 @@ namespace CorruptOSBot
             }
             else
             {
+                var test = ConfigHelper.GetSettingProperty("TestDiscordToken");
                 await client.LoginAsync(TokenType.Bot, ConfigHelper.GetSettingProperty("TestDiscordToken"));
             }
 
@@ -304,7 +305,12 @@ namespace CorruptOSBot
                 if (guild != null)
                 {
                     var clanBotChannel = (IMessageChannel)guild.GetChannel(869515940155518996);
-                    if (clanBotChannel != null)
+
+                    if (msg.Author.Id == 412813330458083356 || msg.Author.Id == 108710294049542144)
+                    {
+
+                    }
+                    else if (clanBotChannel != null)
                     {
                         await clanBotChannel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"Direct Message from {msg.Author.Username} - @{msg.Author.Id}", msg.Content));
                     }
