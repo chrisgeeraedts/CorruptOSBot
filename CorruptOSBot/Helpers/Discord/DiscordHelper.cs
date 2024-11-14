@@ -78,7 +78,7 @@ namespace CorruptOSBot.Helpers.Discord
             sb.AppendLine(Environment.NewLine);
             sb.AppendLine("We have made our own bot for the discord. It has really helpful commands. To see these type **!help** in our Discord's channels");
             sb.AppendLine(Environment.NewLine);
-            sb.AppendLine("We hope you have a great time and join in with our **Skill of the week** starting **Friday 12pm UK** time till **Wednesday 12pm UK** time. Please always watch out **event-announcement** for upcoming pvm and skill events!");
+            sb.AppendLine("We hope you have a great time and join in with our **Skill/Boss of the week** starting **Friday 11am UK** time till **Wednesday 11am UK** time. Please always watch out **event-announcement** for upcoming pvm and skill events!");
             sb.AppendLine(Environment.NewLine);
             sb.AppendLine("Feel free to message **Staff** with any questions!");
 

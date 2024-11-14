@@ -24,10 +24,6 @@ namespace CorruptOSBot.Events.ReactionHandlers
             {
                 await HandleCoX(client, guildId, arg3);
             }
-            if (emojiId == EmojiHelper.GetEmojiId(BossEnum.nightmare.ToString()))
-            {
-                await HandleNm(client, guildId, arg3);
-            }
         }
 
         private static async Task HandleToB(DiscordSocketClient client, ulong guildId, SocketReaction arg3)
@@ -96,43 +92,6 @@ namespace CorruptOSBot.Events.ReactionHandlers
                             intermediate = Constants.CoxIntermediate,
                             advanced = Constants.CoxAdvanced,
                             imageUrl = Constants.CoxImage
-                        },
-                        false,
-                        true);
-                    }
-                }
-            }
-        }
-
-        private static async Task HandleNm(DiscordSocketClient client, ulong guildId, SocketReaction arg3)
-        {
-            var guild = client.GetGuild(guildId);
-            var currentUser = guild.Users.FirstOrDefault(x => x.Id == arg3.UserId);
-            if (currentUser != null)
-            {
-                var rsn = DiscordNameHelper.GetAccountNameOrNickname(currentUser);
-
-                if (!string.IsNullOrEmpty(rsn))
-                {
-                    // Get KC in WOM
-                    await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
-                    var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
-
-                    if (clanMember != null)
-                    {
-                        var kills = clanMember.latestSnapshot.data.Bosses.nightmare.kills;
-
-                        // set the role appriate
-                        await PvmSystemHelper.CheckAndUpdateAccountAsync(
-                        currentUser,
-                        guild,
-                        kills,
-                        new PvmSet()
-                        {
-                            learner = Constants.NmLearner,
-                            intermediate = Constants.NmIntermediate,
-                            advanced = Constants.NmAdvanced,
-                            imageUrl = Constants.nmImage
                         },
                         false,
                         true);

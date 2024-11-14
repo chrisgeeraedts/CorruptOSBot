@@ -33,25 +33,44 @@ namespace CorruptOSBot.Extensions
         public Clan GetClan()
         {
             Clan clanDetails = null;
-            HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}").Result;
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var result = response.Content.ReadAsStringAsync().Result;
-                clanDetails = JsonConvert.DeserializeObject<Clan>(result);
+                HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    clanDetails = JsonConvert.DeserializeObject<Clan>(result);
+                }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(ex));
+            }
+
             return clanDetails;
         }
 
         public List<ClanMember> GetClanMembers()
         {
             List<ClanMember> clanMembers = null;
-            HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}").Result;
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var result = response.Content.ReadAsStringAsync().Result;
-                var clan = JsonConvert.DeserializeObject<Clan>(result);
+                HttpResponseMessage response = client.GetAsync($"{path}/groups/{clanId}").Result;
 
-                clanMembers = clan.memberships;
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = response.Content.ReadAsStringAsync().Result;
+                    var clan = JsonConvert.DeserializeObject<Clan>(result);
+
+                    clanMembers = clan.memberships;
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(JsonConvert.SerializeObject(ex));
             }
             return clanMembers;
         }
@@ -82,7 +101,7 @@ namespace CorruptOSBot.Extensions
                 {
                     var result = response.Content.ReadAsStringAsync().Result;
 
-                    if(JsonConvert.DeserializeObject<List<Competition>>(result).Count < 1)
+                    if (JsonConvert.DeserializeObject<List<Competition>>(result).Count < 1)
                     {
                         isComplete = true;
                     }

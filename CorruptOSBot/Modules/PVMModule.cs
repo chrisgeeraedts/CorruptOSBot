@@ -7,6 +7,7 @@ using CorruptOSBot.Shared.Helpers.Bot;
 using CorruptOSBot.Shared.Helpers.Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -133,18 +134,13 @@ namespace CorruptOSBot.Modules
 
                         if (clanMember != null)
                         {
-                            var kills = clanMember.latestSnapshot.data.Bosses.nightmare.kills;
-
                             // set the role appriate
-                            await PvmSystemHelper.CheckAndUpdateAccountAsync(
+                            await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
                             currentUser,
                             Context.Guild,
-                            kills,
-                            new PvmSet()
+                            new PvmSetCM()
                             {
-                                learner = Constants.NmLearner,
-                                intermediate = Constants.NmIntermediate,
-                                advanced = Constants.NmAdvanced,
+                                role = Constants.Nightmare,
                                 imageUrl = Constants.nmImage
                             },
                             false,
@@ -163,7 +159,7 @@ namespace CorruptOSBot.Modules
 
         [Helpgroup(HelpGroup.Member)]
         [Command("cm")]
-        [Summary("!cm - Enables a player to earn the 'Challenge Mode' role (Only allowed in **set-pvm-roles**)")]
+        [Summary("!cm - Enables a player to earn the 'Cox Challenge Mode' role (Only allowed in **set-pvm-roles**)")]
         public async Task SayCMAsync()
         {
             if (ToggleStateManager.GetToggleState("cm", Context.User) && RoleHelper.HasAnyRole(Context.User))
@@ -209,11 +205,11 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Member)]
-        [Command("gwd")]
-        [Summary("!gwd - Enables a player to earn the 'GWD' role (Only allowed in **set-pvm-roles**)")]
-        public async Task SayGWDAsync()
+        [Command("hmt")]
+        [Summary("!hmt - Enables a player to earn the 'Tob Hard Mode' role (Only allowed in **set-pvm-roles**)")]
+        public async Task SayHMTAsync()
         {
-            if (ToggleStateManager.GetToggleState("gwd", Context.User) && RoleHelper.HasAnyRole(Context.User))
+            if (ToggleStateManager.GetToggleState("hmt", Context.User) && RoleHelper.HasAnyRole(Context.User))
             {
                 if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
                 {
@@ -229,18 +225,57 @@ namespace CorruptOSBot.Modules
 
                         if (clanMember != null)
                         {
+                            var kills = clanMember.latestSnapshot.data.Bosses.theatre_of_blood_hard_mode.kills;
+
                             // set the role appriate
-                            await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                            await PvmSystemHelper.CheckAndUpdateAccountCMAsync(
                             currentUser,
                             Context.Guild,
+                            kills,
                             new PvmSetCM()
                             {
-                                role = Constants.GWD,
-                                imageUrl = Constants.GWDImage
+                                role = Constants.HMT,
+                                imageUrl = Constants.TobImage
                             },
                             false,
                             true);
                         }
+                    }
+                }
+                else
+                {
+                    await DiscordHelper.NotAllowedMessageToUser(Context, "!hmt", "set-pvm-roles");
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("gwd")]
+        [Summary("!gwd - Enables a player to earn the 'GWD' role (Only allowed in **set-pvm-roles**)")]
+        public async Task SayGWDAsync()
+        {
+            if (ToggleStateManager.GetToggleState("gwd", Context.User) && RoleHelper.HasAnyRole(Context.User))
+            {
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
+                {
+                    // check if user has learner/intermediate/advanced
+                    var currentUser = ((SocketGuildUser)Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
+
+                    if (!string.IsNullOrEmpty(rsn))
+                    {
+                        await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                        currentUser,
+                        Context.Guild,
+                        new PvmSetCM()
+                        {
+                            role = Constants.GWD,
+                            imageUrl = Constants.GWDImage
+                        },
+                        false,
+                        true);
                     }
                 }
                 else
@@ -267,24 +302,17 @@ namespace CorruptOSBot.Modules
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
-                        // Get KC in WOM
-                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
-                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
-
-                        if (clanMember != null)
+                        // set the role appriate
+                        await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                        currentUser,
+                        Context.Guild,
+                        new PvmSetCM()
                         {
-                            // set the role appriate
-                            await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
-                            currentUser,
-                            Context.Guild,
-                            new PvmSetCM()
-                            {
-                                role = Constants.Corp,
-                                imageUrl = Constants.CorpImage
-                            },
-                            false,
-                            true);
-                        }
+                            role = Constants.Corp,
+                            imageUrl = Constants.CorpImage
+                        },
+                        false,
+                        true);
                     }
                 }
                 else
@@ -310,24 +338,17 @@ namespace CorruptOSBot.Modules
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
-                        // Get KC in WOM
-                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
-                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
-
-                        if (clanMember != null)
+                        // set the role appriate
+                        await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                        currentUser,
+                        Context.Guild,
+                        new PvmSetCM()
                         {
-                            // set the role appriate
-                            await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
-                            currentUser,
-                            Context.Guild,
-                            new PvmSetCM()
-                            {
-                                role = Constants.Nex,
-                                imageUrl = Constants.NexImage
-                            },
-                            false,
-                            true);
-                        }
+                            role = Constants.Nex,
+                            imageUrl = Constants.NexImage
+                        },
+                        false,
+                        true);
                     }
                 }
                 else
@@ -353,29 +374,103 @@ namespace CorruptOSBot.Modules
 
                     if (!string.IsNullOrEmpty(rsn))
                     {
-                        // Get KC in WOM
-                        await WOMMemoryCache.UpdateClanMember(WOMMemoryCache.OneHourMS, rsn);
-                        var clanMember = WOMMemoryCache.ClanMemberDetails.ClanMemberDetails.FirstOrDefault(x => x.displayName.ToLower() == rsn.ToLower());
-
-                        if (clanMember != null)
+                        // set the role appriate
+                        await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                        currentUser,
+                        Context.Guild,
+                        new PvmSetCM()
                         {
-                            // set the role appriate
-                            await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
-                            currentUser,
-                            Context.Guild,
-                            new PvmSetCM()
-                            {
-                                role = Constants.TOA,
-                                imageUrl = Constants.ToAImage
-                            },
-                            false,
-                            true);
-                        }
+                            role = Constants.TOA,
+                            imageUrl = Constants.ToAImage
+                        },
+                        false,
+                        true);
                     }
                 }
                 else
                 {
                     await DiscordHelper.NotAllowedMessageToUser(Context, "!toa", "set-pvm-roles");
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("wildybosses")]
+        [Summary("!wildybosses - Enables a player to earn the 'WildyBosses' role (Only allowed in **set-pvm-roles**)")]
+        public async Task SayWildyBossesAsync()
+        {
+            if (ToggleStateManager.GetToggleState("wildybosses", Context.User) && RoleHelper.HasAnyRole(Context.User))
+            {
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
+                {
+                    var currentUser = ((SocketGuildUser)Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
+
+                    if (!string.IsNullOrEmpty(rsn))
+                    {
+                        // set the role appriate
+                        await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                        currentUser,
+                        Context.Guild,
+                        new PvmSetCM()
+                        {
+                            role = Constants.WildyBosses,
+                            imageUrl = Constants.WildyBossesImage
+                        },
+                        false,
+                        true);
+                    }
+                }
+                else
+                {
+                    await DiscordHelper.NotAllowedMessageToUser(Context, "!wildybosses", "set-pvm-roles");
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Member)]
+        [Command("removePVMRole")]
+        [Summary("!removePVMRole - Enables a player to remove a pvm role(Only allowed in **set-pvm-roles**)")]
+        public async Task SayRemovePVMRoleAsync([Remainder] string roleName)
+        {
+            if (RoleHelper.HasAnyRole(Context.User))
+            {
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
+                {
+                    var currentUser = ((SocketGuildUser)Context.User);
+
+                    var role = Context.Guild.Roles.FirstOrDefault(x => x.Name.ToLower() == roleName.ToLower());
+                    var hasRole = currentUser.Roles.Any(item => item.Id == role.Id);
+                    var pvmRoles = new List<string>()
+                    {
+                        "Cox Advanced",
+                        "Cox Intermediate",
+                        "Cox Learner",
+                        "Cox Challenge Mode",
+                        "Tob Advanced",
+                        "Tob Intermediate",
+                        "Tob Learner",
+                        "Tob Hard Mode",
+                        "Nex",
+                        "Nightmare",
+                        "GWD",
+                        "Corp",
+                        "TOA",
+                        "Wildy Bosses"
+                    };
+
+                    if (hasRole && pvmRoles.Any(item => item.ToLower() == roleName))
+                    {
+                        await currentUser.RemoveRoleAsync(role);
+                    }
+                }
+                else
+                {
+                    await DiscordHelper.NotAllowedMessageToUser(Context, "!removePVMRole", "set-pvm-roles");
                 }
             }
 

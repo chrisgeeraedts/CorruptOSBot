@@ -623,7 +623,7 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Admin)]
-        [Command("DM", false)]
+        [Command("blacklistuser", false)]
         [Summary("!blacklistuser {user} - Sets user to be blacklisted from gaining points")]
         public async Task BlacklistUser(string username)
         {
@@ -635,10 +635,19 @@ namespace CorruptOSBot.Modules
 
                     if (rsAccount != null)
                     {
-                        rsAccount.DiscordUser.BlacklistedForPromotion = true;
+                        rsAccount.DiscordUser.BlacklistedForPromotion = !rsAccount.DiscordUser.BlacklistedForPromotion;
 
                         await corruptosEntities.SaveChangesAsync();
-                        await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"{rsAccount.rsn} has been blacklisted for promotion", string.Empty));
+
+                        if (rsAccount.DiscordUser.BlacklistedForPromotion)
+                        {
+                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"{rsAccount.rsn} has been blacklisted for promotion", string.Empty));
+                        }
+                        else
+                        {
+                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"{rsAccount.rsn} has been removed from the blacklisted for promotion", string.Empty));
+                        }
+
                     }
                     else
                     {

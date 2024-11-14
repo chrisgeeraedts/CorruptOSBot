@@ -4,6 +4,7 @@
     {
         abyssal_sire,
         alchemical_hydra,
+        araxxor,
         artio,
         barrows_chests,
         bryophyta,

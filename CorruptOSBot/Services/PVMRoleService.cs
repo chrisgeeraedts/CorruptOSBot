@@ -13,18 +13,18 @@ namespace CorruptOSBot.Services
 {
     public class PVMRoleService : IService
     {
-        public int TriggerTimeInMS { get => 1000 * 60 * 60 * 3; } // Every 3 Hours
+        public int TriggerTimeInMS { get => 1000 * 60 * 60 * 6; } // Every 3 Hours
         public int BeforeTriggerTimeInMS { get => 1000 * 60 * 5; } // 5 minutes
 
         private ulong GuildId;
 
-        public PVMRoleService(Discord.IDiscordClient client)
+        public PVMRoleService(IDiscordClient client)
         {
             Program.Log(new LogMessage(LogSeverity.Info, "PVMRoleService", "Created, trigering every " + TriggerTimeInMS + "MS"));
             GuildId = ConfigHelper.GetGuildId();
         }
 
-        public async Task Trigger(Discord.IDiscordClient client)
+        public async Task Trigger(IDiscordClient client)
         {
             if (ToggleStateManager.GetToggleState(nameof(PVMRoleService)))
             {
@@ -68,15 +68,6 @@ namespace CorruptOSBot.Services
                                 {
                                     await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "Failed at Tob roles: " + e.Message));
                                 }
-
-                                try
-                                {
-                                    await SetRolesNm(discordUser, guild, clanMemberWom.latestSnapshot.data.Bosses.nightmare.kills);
-                                }
-                                catch (Exception e)
-                                {
-                                    await Program.Log(new LogMessage(LogSeverity.Error, "PVMRoleService", "Failed at Nm roles: " + e.Message));
-                                }
                             }
                         }
                     }
@@ -119,23 +110,6 @@ namespace CorruptOSBot.Services
                     intermediate = Constants.ToBIntermediate,
                     advanced = Constants.ToBAdvanced,
                     imageUrl = Constants.TobImage
-                },
-                true,
-                false);
-        }
-
-        private async Task SetRolesNm(IGuildUser currentUser, IGuild guild, int kills)
-        {
-            await PvmSystemHelper.CheckAndUpdateAccountAsync(
-                currentUser,
-                guild,
-                kills,
-                new PvmSet()
-                {
-                    learner = Constants.NmLearner,
-                    intermediate = Constants.NmIntermediate,
-                    advanced = Constants.NmAdvanced,
-                    imageUrl = Constants.nmImage
                 },
                 true,
                 false);
