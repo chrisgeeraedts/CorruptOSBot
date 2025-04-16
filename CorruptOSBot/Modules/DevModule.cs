@@ -30,60 +30,15 @@ namespace CorruptOSBot.Modules
         [Summary("!dev - Dev command")]
         public async Task Dev()
         {
-            //var embedMessageList = await EmbedHelper.CreateFullLeaderboardEmbed(30);
+            var embedMessageList = await EmbedHelper.CreateFullLeaderboardEmbed(30);
 
 
-            //foreach (var embedMessage in embedMessageList)
-            //{
-            //    await Context.Channel.SendMessageAsync(embed: embedMessage);
-            //}
+            foreach (var embedMessage in embedMessageList)
+            {
+                await Context.Channel.SendMessageAsync(embed: embedMessage);
+            }
 
-            //var looper = true;
-
-            //while (looper)
-            //{
-            //    var livedrops = Context.Guild.GetChannel(869521931379019796) as SocketTextChannel;
-            //    var messages = await livedrops.GetMessagesAsync(100).FlattenAsync();
-
-            //    var messagesList = messages.ToList();
-            //    foreach (var message in messages.ToList())
-            //    {
-            //        var messagePostion = messagesList.IndexOf(message);
-            //        if (messagePostion == 0 || messagePostion == 99)
-            //        {
-
-            //        }
-            //        else
-            //        {
-            //            var previousMessage = messagesList[messagePostion - 1];
-
-            //            if (string.IsNullOrEmpty(message.Content) && message.Embeds.Count == 0 &&
-            //                string.IsNullOrEmpty(previousMessage.Content) && previousMessage.Embeds.Count == 0)
-            //            {
-            //                await livedrops.DeleteMessageAsync(message);
-            //            }
-            //        }
-            //    }
-
-            //    var groupedMessages = messages.Where(item => item.Embeds.Count > 0 &&
-            //    ((item.Embeds.FirstOrDefault().Title != null && (item.Embeds.FirstOrDefault().Title.Contains("Seasonal")) ||
-            //    item.Embeds.Any(x => x.Author.HasValue && x.Author.Value.Name.Contains("ltrn")) ||
-            //    item.Embeds.Any(x => x.Author.HasValue && x.Author.Value.Name.Contains("GPH00KZ")) ||
-            //    item.Embeds.Any(x => x.Author.HasValue && x.Author.Value.Name.Contains("o RICK o")) ||
-            //    item.Embeds.Any(x => x.Author.HasValue && x.Author.Value.Name.Contains("srdn")) ||
-            //    item.Embeds.Any(x => x.Author.HasValue && x.Author.Value.Name.Contains("Alien45678")) ||
-            //    item.Embeds.Any(x => x.Author.HasValue && x.Author.Value.Name.Contains("HawaiianSuns")) ||
-            //    item.Embeds.Any(x => x.Author.HasValue && x.Author.Value.Name.Contains("IronAustinz")) ||
-            //    item.Embeds.Any(x => x.Author.HasValue && x.Author.Value.Name.Contains("Fake Charter")) ||
-            //    item.Embeds.Any(x => x.Author.HasValue && x.Author.Value.Name.Contains("kingwalker12")))));
-
-            //    await livedrops.DeleteMessagesAsync(groupedMessages);
-
-            //    var latestMessage = await livedrops.GetMessagesAsync(1).FlattenAsync();
-            //    looper = latestMessage.FirstOrDefault().CreatedAt > new DateTimeOffset(2024, 11, 27, 13, 0, 0, new TimeSpan());
-            //}
-
-            //await Context.Message.DeleteAsync();
+            await Context.Message.DeleteAsync();
         }
 
 
