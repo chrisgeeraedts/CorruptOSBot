@@ -65,6 +65,7 @@
         vetion,
         vorkath,
         wintertodt,
+        yama,
         zalcano,
         zulrah
     }

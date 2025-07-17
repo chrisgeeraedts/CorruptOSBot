@@ -544,14 +544,14 @@ namespace CorruptOSBot.Modules
 
                         if (dbUser != null && dbUser.BlacklistedForPromotion == false)
                         {
-                            var womUser = womUsers.FirstOrDefault(item => item.player.displayName == dbUser.Username);
+                            var womUser = womUsers.FirstOrDefault(item => item.player.displayName.ToLower() == dbUser.Username.ToLower() || item.player.displayName.ToLower() == discordUser.Nickname?.ToLower());
 
                             MismatchedNames(mismatchedNamesStringBuilder, discordUser, dbUser);
                             MismatchedRoles(mismatchedRolesStringBuilder, discordUser, dbUser);
                             MismatchedRolesIngame(mismatchedRolesInGameUsers, dbUser, womUser);
                             MismatchedRolesAndPoints(mismatchedRolesAndPointsStringBuilder, roles, dbUser);
                         }
-                        else
+                        else if (!discordUser.Roles.Any(item => item.Id == 892510083932618855))
                         {
                             notExistingStringBuilder.AppendLine(string.IsNullOrEmpty(discordUser.Nickname) ? $"{discordUser.Username}" : $"{discordUser.Username} ({discordUser.Nickname})");
                         }
@@ -559,61 +559,96 @@ namespace CorruptOSBot.Modules
 
                     if (!string.IsNullOrEmpty(mismatchedNamesStringBuilder.ToString()))
                     {
+                        var fullText = mismatchedNamesStringBuilder.ToString();
+                        const int chunkSize = 1900;
+                        for (int offset = 0; offset < fullText.Length; offset += chunkSize)
+                        {
+                            // Calculate how big this slice should be
+                            int length = Math.Min(chunkSize, fullText.Length - offset);
 
-                        if (mismatchedNamesStringBuilder.ToString().Length > 2000)
-                        {
-                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched names in Database \n ``` {mismatchedNamesStringBuilder.ToString().Substring(0, 1900)} ```");
-                        }
-                        else
-                        {
-                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched names in Database \n ``` {mismatchedNamesStringBuilder.ToString()} ```");
+                            // Extract the slice
+                            var slice = fullText.Substring(offset, length);
+
+                            // Send it as a code block
+                            await Context.Channel.SendMessageAsync(
+                                $"Discord Users with mismatched names in Database \n```{slice}```"
+                            );
                         }
                     }
 
                     if (!string.IsNullOrEmpty(mismatchedRolesStringBuilder.ToString()))
                     {
-                        if (mismatchedRolesStringBuilder.ToString().Length > 2000)
+                        var fullText = mismatchedRolesStringBuilder.ToString();
+                        const int chunkSize = 1900;
+                        for (int offset = 0; offset < fullText.Length; offset += chunkSize)
                         {
-                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched roles in Database \n ``` {mismatchedRolesStringBuilder.ToString().Substring(0, 1900)} ```");
-                        }
-                        else
-                        {
-                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched roles in Database \n ``` {mismatchedRolesStringBuilder.ToString()} ```");
+                            // Calculate how big this slice should be
+                            int length = Math.Min(chunkSize, fullText.Length - offset);
+
+                            // Extract the slice
+                            var slice = fullText.Substring(offset, length);
+
+                            // Send it as a code block
+                            await Context.Channel.SendMessageAsync(
+                                $"Discord Users with mismatched roles in Database\n```{slice}```"
+                            );
                         }
                     }
 
                     if (!string.IsNullOrEmpty(mismatchedRolesInGameUsers.ToString()))
                     {
-                        if (mismatchedRolesInGameUsers.Length > 2000)
+                        var fullText = mismatchedRolesInGameUsers.ToString();
+                        const int chunkSize = 1900;
+                        for (int offset = 0; offset < fullText.Length; offset += chunkSize)
                         {
-                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched roles in-game \n ``` {mismatchedRolesInGameUsers.ToString().Substring(0, 1900)} ```");
-                        }
-                        {
-                            await Context.Channel.SendMessageAsync($"Discord Users with mismatched roles in-game \n ``` {mismatchedRolesInGameUsers.ToString().Substring(0, 1900)} ```");
+                            // Calculate how big this slice should be
+                            int length = Math.Min(chunkSize, fullText.Length - offset);
+
+                            // Extract the slice
+                            var slice = fullText.Substring(offset, length);
+
+                            // Send it as a code block
+                            await Context.Channel.SendMessageAsync(
+                                $"Discord Users with mismatched roles in-game\n```{slice}```"
+                            );
                         }
                     }
 
                     if (!string.IsNullOrEmpty(mismatchedRolesAndPointsStringBuilder.ToString()))
                     {
-                        if (mismatchedRolesAndPointsStringBuilder.ToString().Length > 2000)
+                        var fullText = mismatchedRolesAndPointsStringBuilder.ToString();
+                        const int chunkSize = 1900;
+                        for (int offset = 0; offset < fullText.Length; offset += chunkSize)
                         {
-                            await Context.Channel.SendMessageAsync($"Database Users with mismatched roles and points \n ``` {mismatchedRolesAndPointsStringBuilder.ToString().Substring(0, 1900)} ```");
-                        }
-                        else
-                        {
-                            await Context.Channel.SendMessageAsync($"Database Users with mismatched roles and points \n ``` {mismatchedRolesAndPointsStringBuilder.ToString()} ```");
+                            // Calculate how big this slice should be
+                            int length = Math.Min(chunkSize, fullText.Length - offset);
+
+                            // Extract the slice
+                            var slice = fullText.Substring(offset, length);
+
+                            // Send it as a code block
+                            await Context.Channel.SendMessageAsync(
+                                $"Database Users with mismatched roles and points\n```{slice}```"
+                            );
                         }
                     }
 
                     if (!string.IsNullOrEmpty(notExistingStringBuilder.ToString()))
                     {
-                        if (notExistingStringBuilder.ToString().Length > 2000)
+                        var fullText = notExistingStringBuilder.ToString();
+                        const int chunkSize = 1900;
+                        for (int offset = 0; offset < fullText.Length; offset += chunkSize)
                         {
-                            await Context.Channel.SendMessageAsync($"Discord Users not existing in Database \n ``` {notExistingStringBuilder.ToString().Substring(0, 1900)} ```");
-                        }
-                        else
-                        {
-                            await Context.Channel.SendMessageAsync($"Discord Users not existing in Database \n ``` {notExistingStringBuilder.ToString()} ```");
+                            // Calculate how big this slice should be
+                            int length = Math.Min(chunkSize, fullText.Length - offset);
+
+                            // Extract the slice
+                            var slice = fullText.Substring(offset, length);
+
+                            // Send it as a code block
+                            await Context.Channel.SendMessageAsync(
+                                $"Discord Users not existing in Database\n```{slice}```"
+                            );
                         }
                     }
                 }
@@ -1043,47 +1078,19 @@ namespace CorruptOSBot.Modules
 
         private static void MismatchedNames(StringBuilder stringBuilder, SocketGuildUser discordUser, DiscordUser dbUser)
         {
-            if (discordUser.Nickname?.ToLower() != dbUser.Username.ToLower() && discordUser.Username.ToLower() != dbUser.Username.ToLower())
+            if (!string.IsNullOrEmpty(discordUser.Nickname) && !discordUser.Nickname.Trim().Equals(dbUser.Username.Trim(), StringComparison.OrdinalIgnoreCase))
             {
-                if (string.IsNullOrEmpty(discordUser.Nickname))
-                {
-                    stringBuilder.AppendLine($"{discordUser.Username} - Name in Database is set as {dbUser.Username}");
-                }
-                else
-                {
-                    stringBuilder.AppendLine($"{discordUser.Username} ({discordUser.Nickname}) - Name in Database is set as {dbUser.Username}");
-                }
+                // nickname exists and is wrong
+                stringBuilder.AppendLine($"{discordUser.Username} - Name in Database is set as {dbUser.Username}");
             }
-        }
-
-        #region Joke Commands
-
-        [Command("overthrownathan")]
-        [Summary("Prepare!")]
-        public async Task SayOverthrowNathanAsync()
-        {
-            await OverthrowNath();
-        }
-
-        [Command("overthrownath")]
-        [Summary("Prepare!")]
-        public async Task SayOverthrowNathAsync()
-        {
-            await OverthrowNath();
-        }
-
-        private async Task OverthrowNath()
-        {
-            if (ToggleStateManager.GetToggleState("overthrownathan", Context.User))
+            else if (string.IsNullOrEmpty(discordUser.Nickname) && !discordUser.Username.Equals(dbUser.Username, StringComparison.OrdinalIgnoreCase))
             {
-                var message = await Context.Channel.SendMessageAsync("Operation Completed");
-
-                await Context.Message.DeleteAsync();
-                await Task.Delay(5000).ContinueWith(t => message.DeleteAsync());
+                // only if they have NO nickname, compare their actual username
+                stringBuilder.AppendLine($"{discordUser.Username} - Name in Database is set as {dbUser.Username}");
             }
+
         }
 
-        #endregion Joke Commands
     }
 
     public class ComparisonResult

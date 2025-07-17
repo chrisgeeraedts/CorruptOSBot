@@ -433,6 +433,42 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Member)]
+        [Command("yama")]
+        [Summary("!yama - Enables a player to earn the 'Yama' role (Only allowed in **set-pvm-roles**)")]
+        public async Task SayYamaAsync()
+        {
+            if (RoleHelper.HasAnyRole(Context.User))
+            {
+                if (DiscordHelper.IsInChannel(Context.Channel.Id, "set-pvm-roles", Context.User))
+                {
+                    var currentUser = ((SocketGuildUser)Context.User);
+                    var rsn = DiscordNameHelper.GetAccountNameOrNickname(Context.User);
+
+                    if (!string.IsNullOrEmpty(rsn))
+                    {
+                        // set the role appriate
+                        await PvmSystemHelper.CheckAndUpdateAccountNoKCAsync(
+                        currentUser,
+                        Context.Guild,
+                        new PvmSetCM()
+                        {
+                            role = Constants.Yama,
+                            imageUrl = Constants.YamaImage
+                        },
+                        false,
+                        true);
+                    }
+                }
+                else
+                {
+                    await DiscordHelper.NotAllowedMessageToUser(Context, "!yama", "set-pvm-roles");
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Member)]
         [Command("removePVMRole")]
         [Summary("!removePVMRole - Enables a player to remove a pvm role(Only allowed in **set-pvm-roles**)")]
         public async Task SayRemovePVMRoleAsync([Remainder] string roleName)

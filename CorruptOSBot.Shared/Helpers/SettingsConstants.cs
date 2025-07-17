@@ -8,6 +8,7 @@
 
         public const int StaffPointsPerMonth = 150;
         public const int NormalPointsPerMonth = 50;
+        public const int ServerBoosterPointsPerMonth = 50;
 
         public const string LastPromotionRun = "LastPromotionRun";
 
@@ -17,5 +18,7 @@
         public const long DevTestingDiscordId = 899061403623780402;
 
         public const string WOMApiKey = "cla5zmtp1000008mq3d9594bs";
+
+        public const long DiscordServerBoosterRoleId = 867779713597571083;
     }
 }

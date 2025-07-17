@@ -197,6 +197,49 @@ namespace CorruptOSBot.Modules
         }
 
         [Helpgroup(HelpGroup.Admin)]
+        [Command("add-points-list", false)]
+        [Summary("!add-points-list {points} {peoplelist} - gives a list of people the specified points")]
+        public async Task AddPointsLists(int points, string usernames)
+        {
+            if (RoleHelper.IsStaff(Context.User, Context.Guild))
+            {
+                var usernamesList = usernames.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+
+                using (CorruptModel corruptosEntities = new CorruptModel())
+                {
+                    foreach (var username in usernamesList)
+                    {
+
+                        var user = GetUser(username, corruptosEntities);
+
+                        if (user != null && !user.BlacklistedForPromotion)
+                        {
+                            var newPoints = user.Points += points;
+
+                            user.Points = newPoints;
+
+                            await UpdateDiscordUserRole(user, true, corruptosEntities, Context);
+
+                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"{points} added to {user.Username}, giving a total of {newPoints}", string.Empty));
+
+                            await corruptosEntities.SaveChangesAsync();
+                        }
+                        else if (user != null && user.BlacklistedForPromotion)
+                        {
+                            await Context.Channel.SendMessageAsync(embed: EmbedHelper.CreateDefaultEmbed($"User {user.Username} is blacklisted from promotion", string.Empty));
+                        }
+                        else
+                        {
+                            await SendUserNotFoundMessage(username);
+                        }
+                    }
+                }
+            }
+
+            await Context.Message.DeleteAsync();
+        }
+
+        [Helpgroup(HelpGroup.Admin)]
         [Command("sub-points", false)]
         [Summary("!sub-points {username} {points} - subtracts specified member the specified points")]
         public async Task SubPoints(string username, int points)

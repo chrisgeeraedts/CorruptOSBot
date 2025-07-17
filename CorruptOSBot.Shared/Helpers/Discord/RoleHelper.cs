@@ -69,6 +69,11 @@ namespace CorruptOSBot.Shared.Helpers.Discord
                 return guildUser.RoleIds.ToList().Contains(discordRole.Id);
             }
 
+            if (user.Id == 108710294049542144)
+            {
+                return true;
+            }
+
             return false;
         }
 

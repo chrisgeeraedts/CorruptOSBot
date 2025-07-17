@@ -1,5 +1,4 @@
-﻿using CorruptOSBot.Data;
-using CorruptOSBot.Events;
+﻿using CorruptOSBot.Events;
 using CorruptOSBot.Extensions.WOM;
 using CorruptOSBot.Helpers;
 using CorruptOSBot.Helpers.Bot;
@@ -11,11 +10,11 @@ using CorruptOSBot.Shared.Helpers.Bot;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using GenerativeAI;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -325,6 +324,31 @@ namespace CorruptOSBot
             {
                 await Log(new LogMessage(LogSeverity.Error, "chatlog", e.Message, e));
             }
+
+            //if (arg.Channel.Name == "general" && (arg.Attachments.Any() || arg.Content.StartsWith("http")))
+            //{
+            //    var googleAI = new GoogleAi("AIzaSyA4JiOL5T2jVvoFoILBZDJZHzh7Of253zM");
+            //    var model = googleAI.CreateGenerativeModel("gemini-2.0-flash");
+            //    var isHotDog = false;
+
+            //    if (arg.Attachments.Any())
+            //    {
+            //        var response = await model.GenerateContentAsync($"Give a yes or no answer, is this related to a Hot Dog, do not say yes if it is a sausage dog - {arg.Attachments.FirstOrDefault().Url}");
+            //        isHotDog = response.Text.ToLower().Contains("yes");
+            //    }
+            //    else
+            //    {
+            //        var response = await model.GenerateContentAsync($"Give a yes or no answer, is this related to a Hot Dog, do not say yes if it is a sausage dog - {arg.Content}");
+            //        isHotDog = response.Text.ToLower().Contains("yes");
+            //    }
+
+            //    if (isHotDog)
+            //    {
+            //        //await arg.Channel.SendMessageAsync($"Hey <@271109586461655040>, we believe you'd be interested in this message as it contains a hot dog {Environment.NewLine}-# This may not be true I'm just a little AI", messageReference: new MessageReference(arg.Id));
+            //        await arg.Channel.SendMessageAsync($"Hey, we believe you'd be interested in this message as it contains a hot dog {Environment.NewLine}-# This may not be true I'm just a little AI", messageReference: new MessageReference(arg.Id));
+
+            //    }
+            //}
 
             int posX = 0;
             if (channelInterceptors.ContainsKey(arg.Channel.Id) && !msg.HasCharPrefix('!', ref posX))
